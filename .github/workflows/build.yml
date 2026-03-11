@@ -1,0 +1,53 @@
+name: Build Android App
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Creates a dummy package.json so Cordova doesn't throw errors
+      - name: Initialize NPM
+        run: npm init -y
+
+      - name: Install Cordova
+        run: npm install -g cordova
+
+      - name: Add Android Platform
+        run: cordova platform add android
+
+      - name: Build Debug APK (For Hardware Testing)
+        run: cordova build android --debug
+
+      - name: Build Release AAB (For Google Play Store)
+        run: cordova build android --release -- --packageType=bundle
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-mcq-apk
+          path: platforms/android/app/build/outputs/apk/debug/*.apk
+
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-mcq-aab
+          path: platforms/android/app/build/outputs/bundle/release/*.aab
