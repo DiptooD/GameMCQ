@@ -1,4 +1,4 @@
-name: Build Android App
+name: Build Release Android App
 
 on:
   push:
@@ -24,7 +24,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Creates a dummy package.json so Cordova doesn't throw errors
       - name: Initialize NPM
         run: npm init -y
 
@@ -34,20 +33,21 @@ jobs:
       - name: Add Android Platform
         run: cordova platform add android
 
-      - name: Build Debug APK (For Hardware Testing)
-        run: cordova build android --debug
+      # This step creates a real keystore file on the server using your secret text
+      - name: Decode Keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > my-release-key.keystore
 
-      - name: Build Release AAB (For Google Play Store)
-        run: cordova build android --release -- --packageType=bundle
+      # Builds the AAB and signs it automatically using your passwords
+      - name: Build and Sign Release AAB
+        run: |
+          cordova build android --release -- --packageType=bundle \
+          --keystore=my-release-key.keystore \
+          --alias=${{ secrets.KEY_ALIAS }} \
+          --storePassword=${{ secrets.KEY_PASSWORD }} \
+          --password=${{ secrets.KEY_PASSWORD }}
 
-      - name: Upload APK
+      - name: Upload Release AAB
         uses: actions/upload-artifact@v4
         with:
-          name: game-mcq-apk
-          path: platforms/android/app/build/outputs/apk/debug/*.apk
-
-      - name: Upload AAB
-        uses: actions/upload-artifact@v4
-        with:
-          name: game-mcq-aab
+          name: game-mcq-release-aab
           path: platforms/android/app/build/outputs/bundle/release/*.aab
