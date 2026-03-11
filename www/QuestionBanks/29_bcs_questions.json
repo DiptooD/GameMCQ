@@ -1,0 +1,1302 @@
+[
+  {
+    "id": 1,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা বর্ণমালার স্বরবর্ণ কয়টি?",
+    "options": [
+      "১৩টি",
+      "১০টি",
+      "১২টি",
+      "১১টি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 2,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যের আদি কবি কে?",
+    "options": [
+      "কাহ্নপা",
+      "চেণ্ডনপা",
+      "লুইপা",
+      "ভূসুকুপা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 3,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "‘তৎসম’ শব্দের ব্যবহার কোন রীতিতে বেশি হয়?",
+    "options": [
+      "চলিত রীতি",
+      "সাধু রীতি",
+      "মিশ্র রীতি",
+      "আঞ্চলিক রীতি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 4,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা ভাষায় প্রথম ব্যাকরণ রচনা করেন কে?",
+    "options": [
+      "অক্ষয় দত্ত",
+      "মার্শম্যান",
+      "ব্রাশি হ্যালহেড",
+      "রাজা রামমোহন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 5,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "ফররুখ আহমদের শ্রেষ্ঠ কাব্যগ্রন্থের নাম কি?",
+    "options": [
+      "সাত সাগরের মাঝি",
+      "পাখির বাসা",
+      "হাতেমতাই",
+      "নৌফেল ও হাতেম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 6,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "প্রাচীনতম বাঙালি মুসলমান কবি কে?",
+    "options": [
+      "আলাওল",
+      "সৈয়দ সুলতান",
+      "মুহম্মদ খান",
+      "শাহ মুহম্মদ সগীর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘চাচা কাহিনির’র লেখক কে?",
+    "options": [
+      "সৈয়দ শামসুল হক",
+      "শওকত ওসমান",
+      "সৈয়দ মুজতবা আলী",
+      "ফররুখ আহমদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 8,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুসলমান নারী জাগরণের কবি-",
+    "options": [
+      "ফজিলাতুন্নেছা",
+      "ফয়জুন্নেছা",
+      "বেগম রোকেয়া",
+      "সামসুন্নাহার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 9,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘শ্রীকৃষ্ণকীর্তন’ এর রচয়িতা কে?",
+    "options": [
+      "জ্ঞানদাস",
+      "দীন চণ্ডীদাস",
+      "বড়ু চণ্ডীদাস",
+      "দীনহীন চণ্ডীদাস"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 10,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা কথ্য ভাষার আদি গ্রন্থ কোনটি?",
+    "options": [
+      "প্রভু যিশুর বাণী",
+      "কৃপার শাস্ত্রের অর্থভেদ",
+      "ফুলমণি ও করুণার বিবরণ",
+      "মিশনারি জীবন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "কবি আলাওলের জন্মস্থান কোনটি?",
+    "options": [
+      "ফরিদপুরের সুরেশ্বর",
+      "চট্টগ্রামের জোব্রা",
+      "বার্মার আরাকান",
+      "চট্টগ্রামের পটিয়া"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 12,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘অনল-প্রবাহ’ রচনা করেন-",
+    "options": [
+      "সৈয়দ ইসমাইল হোসেন সিরাজি",
+      "মোজাম্মেল হক",
+      "এয়াকুব আলী চৌধুরী",
+      "মুনিরুজ্জামান ইসলামাবাদী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 13,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘অগ্নিবীণা’ কাব্যের প্রথম কবিতা কোনটি?",
+    "options": [
+      "ধূমকেতু",
+      "বিদ্রোহী",
+      "প্রলয়োল্লাস",
+      "অগ্রপথিক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 14,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যে কথ্যরীতির প্রচলনে কোন পত্রিকার অবদান বেশি?",
+    "options": [
+      "কল্লোল",
+      "সবুজপত্র",
+      "বঙ্গদর্শন",
+      "কালিকলম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 15,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "‘জনৈক’ শব্দটির সন্ধি বিচ্ছেদ -",
+    "options": [
+      "জন + ইক",
+      "জন + এক",
+      "জনৈ + এক",
+      "জন + ঈক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 16,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "বাক্যের তিনটি গুণ কি কি?",
+    "options": [
+      "আকাঙ্ক্ষা, আসক্তি ও বিধেয়",
+      "আকাঙ্ক্ষা, আসত্তি ও যোগ্যতা",
+      "যোগ্যতা, উদ্দেশ্য ও বিধেয়",
+      "কোনোটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 17,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘একাত্তরের চিঠি’ কোন জাতীয় রচনা?",
+    "options": [
+      "মুক্তিযুদ্ধের বিবরণ",
+      "মুক্তিযুদ্ধভিত্তিক উপন্যাস",
+      "মুক্তিযোদ্ধাদের পত্র সংকলন",
+      "ভিন্নধর্মী ডায়েরি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 18,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা একাডেমি কোন বছর প্রতিষ্ঠিত হয়?",
+    "options": [
+      "১৯৫৫ খ্রি.",
+      "১৩৫৫ বঙ্গাব্দ",
+      "১৯৫২ খ্রি.",
+      "১৩৫২ বঙ্গাব্দ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 19,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "সনেট কবিতার প্রবর্তক কে?",
+    "options": [
+      "দ্বিজেন্দ্র লাল রায়",
+      "রজনীকান্ত সেন",
+      "মাইকেল মধুসূদন দত্ত",
+      "অতুলপ্রসাদ সেন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 20,
+    "bank": "29th BCS",
+    "subject": "Bangla Language",
+    "question": "সমাস ভাষাকে কি করে?",
+    "options": [
+      "সংক্ষেপ করে",
+      "বিস্তৃত করে",
+      "অর্থপূর্ণ করে",
+      "অর্থের রূপান্তর ঘটায়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 21,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "I have not heard from him -",
+    "options": [
+      "long since",
+      "for a long time",
+      "since long",
+      "for long"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 22,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "Honey is _____ sweet.",
+    "options": [
+      "very",
+      "too much",
+      "much too",
+      "excessive"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 23,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "Your conduct admits ____ no excuse.",
+    "options": [
+      "to",
+      "for",
+      "of",
+      "at"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 24,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "He had a ____ headache.",
+    "options": [
+      "strong",
+      "acute",
+      "serious",
+      "bad"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 25,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "I shall no ____ the examination this year.",
+    "options": [
+      "give",
+      "appear at",
+      "sit",
+      "go for"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 26,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "They travelled to Savar-",
+    "options": [
+      "on foot",
+      "by walking",
+      "on their feet",
+      "by foot"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 27,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "He said that he ____ be unable to come.",
+    "options": [
+      "will",
+      "shall",
+      "should",
+      "would"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 28,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "Neither Rini nor Simi ____ qualified for the job.",
+    "options": [
+      "are",
+      "is",
+      "were",
+      "had"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 29,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "He said that he ____ the previous day.",
+    "options": [
+      "has come",
+      "had come",
+      "came",
+      "arrived"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 30,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "He watched the boat ____ down the river.",
+    "options": [
+      "to float",
+      "floating",
+      "was floating",
+      "had floated"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 31,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "'Sky' is to 'bird' as 'water' is to-",
+    "options": [
+      "feather",
+      "fish",
+      "boat",
+      "lotus"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 32,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "'Good' is to 'bad' as 'white' is to-",
+    "options": [
+      "dark",
+      "black",
+      "grey",
+      "ebony"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 33,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "'Botany' is to 'plants' as 'Zoology' is to-",
+    "options": [
+      "flowers",
+      "trees",
+      "dear",
+      "animals"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 34,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "The bad news struck him like a bolt from the-",
+    "options": [
+      "sky",
+      "heavens",
+      "firmament",
+      "blue"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 35,
+    "bank": "29th BCS",
+    "subject": "English Language",
+    "question": "When one is 'pragmatic' he is being-",
+    "options": [
+      "wasteful",
+      "productive",
+      "practical",
+      "fussy"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 36,
+    "bank": "29th BCS",
+    "subject": "English Literature",
+    "question": "\"Into the ____ of death rode the six hundred\".",
+    "options": [
+      "city",
+      "tunnel",
+      "road",
+      "valley"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 37,
+    "bank": "29th BCS",
+    "subject": "English Literature",
+    "question": "\"To be or not to be, that is the ____.\"",
+    "options": [
+      "meaning",
+      "question",
+      "answer",
+      "issue"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 38,
+    "bank": "29th BCS",
+    "subject": "English Literature",
+    "question": "\"I have a ____ that one day this nation will live out the true meaning of its creed that all men are created equal.\"",
+    "options": [
+      "desire",
+      "hope",
+      "dream",
+      "wish"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 39,
+    "bank": "29th BCS",
+    "subject": "English Literature",
+    "question": "Who wrote the two famous novels, 'David Copperfield' and 'The Tale of two Cities'?",
+    "options": [
+      "Thomas Hardy",
+      "Jane Austen",
+      "George Eliot",
+      "Charles Dickens"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 40,
+    "bank": "29th BCS",
+    "subject": "English Literature",
+    "question": "Who wrote the plays, 'The Tempest' and 'The Mid Summer Night's Dream?",
+    "options": [
+      "Ben Johnson",
+      "Christopher Marlowe",
+      "John Dryden",
+      "William Shakespeare"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 41,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঢাকা বিশ্ববিদ্যালয় কত সালে প্রতিষ্ঠিত হয়েছে?",
+    "options": [
+      "১৯১১ সালে",
+      "১৯২১ সালে",
+      "১৯৩১ সালে",
+      "১৯৪১ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 42,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে কয়টি সরকারি বিশ্ববিদ্যালয় রয়েছে?",
+    "options": [
+      "১৪টি",
+      "২৪টি",
+      "৩৪টি",
+      "৫০টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 43,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বঙ্গভঙ্গের সময় ভারতের গভর্নর জেনারেল কে ছিলেন?",
+    "options": [
+      "লর্ড কার্জন",
+      "লর্ড ওয়েলেসলি",
+      "লর্ড ডালহৌসি",
+      "লর্ড মাউন্টব্যাটেন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 44,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের ক্ষুদ্রতম ইউনিয়ন পরিষদ কোনটি?",
+    "options": [
+      "সেন্টমার্টিন",
+      "সাতগ্রাম",
+      "মুজিবনগর",
+      "চৌদ্দগ্রাম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 45,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "আইএলও-র সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "লন্ডন",
+      "জেনেভা",
+      "নিউইয়র্ক",
+      "দিল্লী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 46,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "এসকাপের সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "ব্যাংকক",
+      "সিঙ্গাপুর",
+      "দিল্লী",
+      "কলম্বো"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 47,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "ইউরোপীয় ইউনিয়নের সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "লন্ডন",
+      "ব্রাসেলস",
+      "বন",
+      "প্যারিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 48,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশকে প্রথম স্বীকৃতিদানকারী দেশ কোনটি?",
+    "options": [
+      "ভারত",
+      "শ্রীলংকা",
+      "মায়ানমার",
+      "রাশিয়া"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 49,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম রাষ্ট্রপতির নাম কি?",
+    "options": [
+      "সৈয়দ নজরুল ইসলাম",
+      "তাজউদ্দীন আহমদ",
+      "শেখ মুজিবুর রহমান",
+      "ক্যাপটেন মনসুর আলী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 50,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সুলতানী আমলে বাংলার রাজধানীর নাম কি?",
+    "options": [
+      "সোনারগাঁ",
+      "জাহাঙ্গীরনগর",
+      "ঢাকা",
+      "গৌড়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 51,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের মুক্তিযুদ্ধের প্রধান সেনাপতি কে ছিলেন?",
+    "options": [
+      "শেখ মুজিবুর রহমান",
+      "জেনারেল আতাউল গনি ওসমানি",
+      "তাজউদ্দিন আহমদ",
+      "ক্যাপটেন মনসুর আলী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 52,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "পার্বত্য চট্টগ্রামে কয়টি জেলা আছে?",
+    "options": [
+      "৩টি",
+      "৫টি",
+      "৭টি",
+      "৯টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 53,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "East London কোথায় অবস্থিত?",
+    "options": [
+      "ইংল্যান্ডে",
+      "জার্মানিতে",
+      "আমেরিকায়",
+      "দক্ষিণ আফ্রিকায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 54,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "ব্রিটিশ ভারতের শেষ ভাইসরয় কে ছিলেন?",
+    "options": [
+      "লর্ড কার্জন",
+      "লর্ড মাউন্টব্যাটেন",
+      "লর্ড বেন্টিঙ্ক",
+      "লর্ড ওয়াভেল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 55,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মুক্তিযুদ্ধের সময় বাংলাদেশকে কয়টি সেক্টরে ভাগ করা হয়েছিল?",
+    "options": [
+      "৪টি",
+      "৭টি",
+      "১১টি",
+      "১৪টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 56,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "মার্কিন যুক্তরাষ্ট্রের বর্তমান পররাষ্ট্রমন্ত্রীর নাম কি?",
+    "options": [
+      "জর্জ বুশ",
+      "হিলারী ক্লিনটন",
+      "রবার্ট গেইট",
+      "কন্ডালিসা রাইস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 57,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "ভারতের বর্তমান প্রধানমন্ত্রীর নাম কি?",
+    "options": [
+      "সোনিয়া গান্ধী",
+      "ড. মনমোহন সিং",
+      "মমতা ব্যানার্জী",
+      "রাহুল গান্ধী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 58,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘের সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "লন্ডন",
+      "নিউইয়র্ক",
+      "প্যারিস",
+      "মস্কো"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 59,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "সার্কের সচিবালয় কোথায় অবস্থিত?",
+    "options": [
+      "দিল্লী",
+      "ইসলামাবাদ",
+      "কাঠমান্ডু",
+      "ঢাকা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 60,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "টেকনাফ কোন নদীর তীরে অবস্থিত?",
+    "options": [
+      "পদ্মা",
+      "যমুনা",
+      "নাফ",
+      "কর্ণফুলী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 61,
+    "bank": "29th BCS",
+    "subject": "ICT",
+    "question": "কম্পিউটারের স্থায়ী স্মৃতিশক্তিকে কি বলে?",
+    "options": [
+      "RAM",
+      "ROM",
+      "হার্ডওয়্যার",
+      "সফ্টওয়্যার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 62,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "সবচেয়ে শক্তিশালী সৌরচুল্লি তৈরি করা হয়েছে কোন দেশে?",
+    "options": [
+      "যুক্তরাষ্ট্র",
+      "ভারত",
+      "জাপান",
+      "নেপাল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 63,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "ফটোইলেকট্রিক কোষের উপর আলো পড়লে কি উৎপন্ন হয়?",
+    "options": [
+      "বিদ্যুৎ",
+      "তাপ",
+      "চুম্বক",
+      "কিছুই হয় না"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 64,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "যে সকল নিউক্লিয়াসের নিউট্রন সংখ্যা সমান কিন্তু ভর সংখ্যা সমান নয়, তাদের কি বলা হয়?",
+    "options": [
+      "আইসোটোপ",
+      "আইসোটোন",
+      "আইসোমার",
+      "আইসোবার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 65,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "চাঁদ দিগন্তের কাছে অনেক বড় দেখায় কেন?",
+    "options": [
+      "বায়ুমণ্ডলীয় প্রতিসরণে",
+      "আলোর বিচ্ছুরণে",
+      "অপাবর্তনে",
+      "দৃষ্টিভ্রমে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 66,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "লাল আলোতে নীল রঙের বস্তু কেমন দেখায়?",
+    "options": [
+      "বেগুনী",
+      "সবুজ",
+      "হলুদ",
+      "কালো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 67,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "বৈদ্যুতিক বাল্বের ফিলামেন্ট কি ধাতু দিয়ে তৈরি?",
+    "options": [
+      "সংকর ধাতু",
+      "সীসা",
+      "টাংস্টেন",
+      "তামা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 68,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "জারণ বিক্রিয়ায় কি ঘটে?",
+    "options": [
+      "ইলেক্ট্রন গ্রহণ",
+      "ইলেক্ট্রন আদান-প্রদান",
+      "ইলেক্ট্রন বর্জন",
+      "শুধু তাপ উৎপন্ন হয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 69,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "নিচের কোনটি ক্ষারকীয় অক্সাইড?",
+    "options": [
+      "P_4 O_10",
+      "MgO",
+      "CO",
+      "ZnO"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 70,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "কোন ধাতু পানি অপেক্ষা হালকা?",
+    "options": [
+      "ম্যাগনেসিয়াম",
+      "ক্যালসিয়াম",
+      "সোডিয়াম",
+      "পটাসিয়াম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 71,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "পারমাণবিক চুল্লীতে তাপ পরিবাহক হিসেবে কোন ধাতু ব্যবহৃত হয়?",
+    "options": [
+      "সোডিয়াম",
+      "পটাসিয়াম",
+      "ম্যাগনেসিয়াম",
+      "জিংক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 72,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "কোন বিজ্ঞানী রোগজীবাণু তত্ত্ব উদ্ভাবন করেন?",
+    "options": [
+      "ডারউইন",
+      "লুইপাস্তুর",
+      "প্রিস্টলী",
+      "ল্যাভয়সিয়ে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "সুষম খাদ্যের উপাদান কয়টি?",
+    "options": [
+      "৪টি",
+      "৫টি",
+      "৬টি",
+      "৮টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 74,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "গ্রীন হাউজে গাছ লাগানো হয় কেন?",
+    "options": [
+      "উষ্ণতা থেকে রক্ষার জন্য",
+      "অত্যধিক ঠাণ্ডা থেকে রক্ষার জন্য",
+      "আলো থেকে রক্ষার জন্য",
+      "ঝড়-বৃষ্টি থেকে রক্ষার জন্য"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 75,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "পৃথিবীর প্রথম বাণিজ্যিক যোগাযোগ কৃত্রিম উপগ্রহ কোনটি?",
+    "options": [
+      "আর্লিবার্ড হল",
+      "এস্ট্রোলার হল",
+      "ওবেরী হল",
+      "কসমস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "সূর্য পৃষ্ঠের উত্তাপ কত?",
+    "options": [
+      "৬০০০ ডিগ্রি সেন্টিগ্রেড",
+      "৮০০০ ডিগ্রি সেন্টিগ্রেড",
+      "১০০০০ ডিগ্রি সেন্টিগ্রেড",
+      "১২০০০ ডিগ্রি সেন্টিগ্রেড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 77,
+    "bank": "29th BCS",
+    "subject": "Geography",
+    "question": "জোয়ারের কত সময় পর ভাঁটার সৃষ্টি হয়?",
+    "options": [
+      "৬ ঘণ্টা ১৩ মি.",
+      "৮ ঘণ্টা",
+      "১২ ঘণ্টা",
+      "১৩ ঘণ্টা ১৫ মি."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 78,
+    "bank": "29th BCS",
+    "subject": "Geography",
+    "question": "কোনটি বায়ুর উপাদান নহে?",
+    "options": [
+      "নাইট্রোজেন",
+      "হাইড্রোজেন",
+      "কার্বন",
+      "ফসফরাস"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 79,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "অ্যালিউমিনিয়াম সালফেটকে চলতি বাংলায় কি বলে?",
+    "options": [
+      "চুন",
+      "সেভিং সোপ",
+      "ফিটকিরি",
+      "কস্টিক সোডা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 80,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "কোন কোন স্থানে সলিড ফিনাইল ব্যবহার করা হয়?",
+    "options": [
+      "পায়খানা, প্রস্রাবখানায়",
+      "গোসলখানায়",
+      "পুকুরে",
+      "নালায়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 81,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "১০ থেকে ৬০ পর্যন্ত যে সকল মৌলিক সংখ্যার একই স্থানীয় অংক ৯ তাদের সমষ্টি কত?",
+    "options": [
+      "১৪৬",
+      "৯৯",
+      "১০৫",
+      "১০৭"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 82,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "৪০ সংখ্যাটি a হতে ১১ কম। গাণিতিক আকারে প্রকাশ করলে কি হবে?",
+    "options": [
+      "a + ১১ = ৪০",
+      "a + ৪০ = ১১",
+      "a = ৪০ + ১১",
+      "a = ৪০ + ১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 83,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "পাঁচ অঙ্কের ক্ষুদ্রতম সংখ্যা ও চার অঙ্কের বৃহত্তম সংখ্যার অন্তর কত?",
+    "options": [
+      "৯",
+      "১০",
+      "১",
+      "-১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 84,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "১.১, .০১, ও .০০১১ এর সমষ্টি কত?",
+    "options": [
+      "০.০১১১১",
+      "১.১১১১",
+      "১১.১১০১",
+      "১.১০১১১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "১.১৬ এর সাধারণ ভগ্নাংশ কোনটি?",
+    "options": [
+      "১১/ ৬",
+      "১৮/ ৪৫",
+      "১১৬/ ৯৯",
+      "১৪/ ২৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 86,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "৪টি ১ টাকার নোট ও ৮টি ২ টাকার নোট একত্রে ৮টি ৫ টাকার নোটের কত অংশ?",
+    "options": [
+      "১/ ৪",
+      "১/ ২",
+      "১/ ৮",
+      "১/ ১৬"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 87,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "পরপর তিনটি সংখ্যার গুণফল ১২০ হলে তাদের যোগফল হবে -",
+    "options": [
+      "৯",
+      "১২",
+      "১৪",
+      "১৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 88,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "Which of the following integers has the most divisors?",
+    "options": [
+      "88",
+      "91",
+      "95",
+      "99"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 89,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "Successive discount of 20% and 15% are equal to a single discount of -",
+    "options": [
+      "30%",
+      "32%",
+      "34%",
+      "35%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 90,
+    "bank": "29th BCS",
+    "subject": "Math",
+    "question": "City B is 5 miles east of city A. City C is 10 miles southeast of city B. Which of the following is the closest to the distance from city A to City C?",
+    "options": [
+      "11 miles",
+      "12 miles",
+      "13 miles",
+      "14 miles"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 91,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘আবদুল্লাহ’ উপন্যাসের রচয়িতা কে?",
+    "options": [
+      "মোহাম্মদ নজীবর রহমান",
+      "কাজী ইমদাদুল হক",
+      "শেক ফজলুল করিম",
+      "মমতাজ উদ্দিন আহম্মেদ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 92,
+    "bank": "29th BCS",
+    "subject": "Bangla Literature",
+    "question": "বঙ্কিমচন্দ্রের প্রথম উপন্যাসের নাম -",
+    "options": [
+      "দুর্গেশনন্দিনী",
+      "কপালকুণ্ডলা",
+      "কৃষ্ণকান্তের উইল",
+      "রজনী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 93,
+    "bank": "29th BCS",
+    "subject": "Geography",
+    "question": "দক্ষিণ তালপট্টি কোন নদীর মোহনায় অবস্থিত?",
+    "options": [
+      "নাফ",
+      "তেতুলিয়া",
+      "আড়িয়াল খাঁ",
+      "হাড়িয়াভাঙ্গা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 94,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "খাদ্য ও কৃষি সংস্থার প্রধান কার্যালয় কোথায় অবস্থিত?",
+    "options": [
+      "নিউইয়র্কে",
+      "রোমে",
+      "জেনেভায়",
+      "অটোয়ায়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 95,
+    "bank": "29th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "গৌড়ের সোনা মসজিদ কার আমলে নির্মিত হয়?",
+    "options": [
+      "ফখরুদ্দিন মোবারক শাহ",
+      "হোসেন শাহ্",
+      "শায়েস্তা খাঁ",
+      "ঈশা খাঁ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 96,
+    "bank": "29th BCS",
+    "subject": "International Affairs",
+    "question": "ডেভিস কাপ কোন খেলায় দেয়া হয়?",
+    "options": [
+      "ব্যাডমিন্টন",
+      "লন টেনিস",
+      "টেবিল টেনিস",
+      "ক্রিকেট"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 97,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "পৃথিবীতে সবচেয়ে বেশি ধাতু কোনটি?",
+    "options": [
+      "লোহা",
+      "সিলিকন",
+      "পারদ",
+      "তামা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 98,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "অন্ধদের জন্য লিখনরীতির উদ্ভাবন করেন -",
+    "options": [
+      "ব্রেইল",
+      "কপার্নিকাস",
+      "ডেভিটবোর",
+      "টমাস আলভা এডিসন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 99,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "পারমাণবিক চুল্লীতে কোন মৌল জ্বালানি হিসাবে ব্যবহৃত হয়?",
+    "options": [
+      "পেট্রোলিয়াম",
+      "ইউরেনিয়াম-২৩৫",
+      "অক্সিজেন",
+      "হাইড্রোজেন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 100,
+    "bank": "29th BCS",
+    "subject": "Science",
+    "question": "বৈদ্যুতিক হিটার ও ইস্ত্রিতে কোন ধাতুর তার ব্যবহার করা হয়?",
+    "options": [
+      "তামা",
+      "নাইক্রোম",
+      "স্টেনিয়াম",
+      "প্লাটিনাম"
+    ],
+    "answer": 1
+  }
+]

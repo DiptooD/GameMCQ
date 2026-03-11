@@ -1,0 +1,11 @@
+{
+  "name": "Game MCQ",
+  "short_name": "Game MCQ",
+  "id": "com.gamemcq.game",
+  "version": "1.0.0",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "index.html",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}

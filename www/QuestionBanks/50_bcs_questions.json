@@ -1,0 +1,2602 @@
+[
+  {
+    "id": 1,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "জারিনের জন্ম ২৯ ফেব্রুয়ারী। তার জন্মগ্রহণের সাল কোনটি হতে পারে?",
+    "options": [
+      "২০০২",
+      "২০০৪",
+      "২০০৬",
+      "২০১০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "পারমাণবিক চুল্লিতে ‘মডারেটরের’ প্রাথমিক কাজ হলো:",
+    "options": [
+      "অতিরিক্ত নিউট্রন শোষণ এবং চেইন বিক্রিয়া নিয়ন্ত্রণ",
+      "চুল্লির কেন্দ্রে উৎপন্ন তাপ স্থানান্তর করে শীতল করা",
+      "দ্রুতগতি সম্পন্ন নিউট্রনগুলোকে ধীরগতি করে ফিশনের সম্ভাবনা বাড়ানো",
+      "ক্ষতিকারক গামা বিকিরণ থেকে সুরক্ষা প্রদান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 3,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোন বিষয়টি মুদ্রাপাচারের অন্তর্ভুক্ত নয়?",
+    "options": [
+      "রপ্তানী পণ্যের অবমূল্যায়ন",
+      "আমদানী পণ্যের অধিক মূল্য নির্ধারণ",
+      "আয়কর ফাঁকি দেয়া",
+      "অবৈধ চ্যানেলে বিদেশে টাকা পাঠানো"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 4,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "একটা 4-bit বাইনারি সিস্টেমে শূণ্য এর 2's complement এর ডেসিম্যাল মান কত হবে?",
+    "options": [
+      "১৬",
+      "০",
+      "১৫",
+      "কোনটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 5,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "40 থেকে 50 এর মধ্যে একটি সংখ্যা দৈবভাবে নেয়া হলে এটি মৌলিক (Prime) হওয়ার সম্ভাবনা কত?",
+    "options": [
+      "3/11",
+      "1/2",
+      "5/11",
+      "4/11"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 6,
+    "bank": "50th BCS",
+    "subject": "Geography",
+    "question": "ঘূর্ণিঝড় ‘সিডর’ ও ‘আইলা’ বাংলাদেশে আঘাত হানে ___ এবং ____ সালে।",
+    "options": [
+      "২০০৭, ২০০৮",
+      "২০০৮, ২০০৯",
+      "২০০৭, ২০০৯",
+      "২০০৭, ২০০৬"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 7,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "মোবাইল ফোন অপারেটররা কোন অ্যালগরিদম ব্যবহার করে লোকেশন ট্র্যাক করে?",
+    "options": [
+      "Shortest Path",
+      "Triangulation",
+      "Nearest-neighbour",
+      "Encryption"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 8,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "একটি স্বরধ্বনির প্রভাবে শব্দে অপর স্বরের পরিবর্তন ঘটলে তাকে বলে-",
+    "options": [
+      "অভিশ্রুতি",
+      "অপিনিহিতি",
+      "সমীভবন",
+      "স্বরসঙ্গতি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 9,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘ফিকা কমলা রং’- এখানে ফিকা অর্থ কী?",
+    "options": [
+      "অনুজ্জ্বল",
+      "উজ্জ্বল",
+      "তীব্র",
+      "ঝাঁঝালো"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 10,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "2, 3, 4 এবং 7 সংখ্যাগুলির গড় বিচ্যুতি কত?",
+    "options": [
+      "0",
+      "2/3",
+      "3/2",
+      "4"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 11,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "‘বিশ্ব বাণিজ্য সংস্থা’ (WTO) প্রতিষ্ঠিত হয়েছিল ____ চুক্তির মাধ্যমে।",
+    "options": [
+      "ব্রেটন উডস",
+      "লিসবন",
+      "জেনেভা",
+      "মারাকেশ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 12,
+    "bank": "50th BCS",
+    "subject": "Geography",
+    "question": "এভারেস্ট শৃঙ্গের তিব্বতী ও চীনা নাম কী কী?",
+    "options": [
+      "দালাইলামা এবং চিংলু",
+      "চোমোলাংমা এবং কোমোলাংমা",
+      "কোমোলাংমা এবং চিংলু",
+      "চোমোলাংমা এবং এলবার্গ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 13,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "দুর্বল শাসন ব্যবস্থায় উন্নয়ন প্রকল্প ব্যর্থ হয় কারন-",
+    "options": [
+      "সম্পদের অভাব",
+      "নাগরিকের বিরোধিতা",
+      "সিদ্ধান্ত গ্রহনে স্বচ্ছতা ও সততার অভাব",
+      "প্রযুক্তির অভাব"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 14,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "‘এপিকালচার’ কোন বিষয় নিয়ে আলোচনা করে?",
+    "options": [
+      "গুটিপোকা এবং রেশম",
+      "মৌমাছি এবং মধু",
+      "মৎস চাষ",
+      "তামাক চাষ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 15,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "Which play is filled with nonsensical conversations, meaningless dialogues, and characters who often become forgetful?",
+    "options": [
+      "Pygmalion",
+      "The Skin Game",
+      "Waiting for Godot",
+      "Candida"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 16,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "In Gulliver’s Travels, which of these traits Swift does not show in his depiction of the land of the Lilliput?",
+    "options": [
+      "pride",
+      "lies",
+      "peace & wisdom",
+      "silly rules"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 17,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "Let me not to the marriage of true minds/Admit impediments, love is not love/Which alters when it alteration finds’. Lines taken from a sonnet by_____.",
+    "options": [
+      "Spencer",
+      "Petrarch",
+      "Shakespeare",
+      "Donne"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 18,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোন ভূ-রাজনৈতিক তত্ত্ব বিশ্ব আধিপত্যের চাবিকাঠি হিসাবে ইউরেশিয়ার নিয়ন্ত্রণকে সমর্থন করে?",
+    "options": [
+      "হার্টল্যান্ড তত্ত্ব",
+      "ডমিনো তত্ত্ব",
+      "রিমল্যান্ড তত্ত্ব",
+      "কন্টেইনমেন্ট তত্ত্ব"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 19,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "HTTPS কোন বৈশিষ্ট্য HTTP-এর সাথে যোগ করে?",
+    "options": [
+      "Security",
+      "Standardization",
+      "Software",
+      "Sense"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 20,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "কোনটি সুশাসনের আদর্শকে সবচেয়ে ভালোভাবে প্রকাশ করে?",
+    "options": [
+      "এটি শুধুমাত্র পরিমাপযোগ্য ফলাফলের উপর নির্ভরশীল",
+      "এটি মূল্যবোধ-নিরপেক্ষ",
+      "এটি নৈতিক মানদন্ড ও জনস্বার্থ দ্বারা পরিচালিত",
+      "এটি কেবল অর্থনৈতিক প্রবৃদ্ধিকে অগ্রাধিকার দেয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 21,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "জলবায়ু পরিবর্তন সংক্রান্ত জাতিসংঘ ফ্রেমওয়ার্ক কনভেনশনের (UNFCCC) প্রথম কনফারেন্স অফ দ্য পার্টিস (COP) কোন শহরে অনুষ্ঠিত হয়েছিল?",
+    "options": [
+      "কোপেনহেগেন",
+      "প্যারিস",
+      "ওয়ারশ",
+      "বন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 22,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "লিথিয়াম-আয়ন ব্যাটারির সম্পর্কে কোন বিবৃতিটি মিথ্যা?",
+    "options": [
+      "Ni-Cd ব্যাটারির তুলনায় এদের শক্তির ঘনত্ব বেশি",
+      "এতে লিথিয়াম কোবাল্ট অক্সাইড ক্যাথোড ব্যবহার করা হয়",
+      "‘মেমরি এফেক্ট’-এর কারণে এদের পর্যায়ক্রমিক সম্পূর্ণ ডিসচার্জের প্রয়োজন হয়",
+      "এখানে অতিরিক্ত চার্জিং-এর ফলে আগুন লাগতে পারে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 23,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "যদি একটি গাড়ীর গতি দ্বিগুণ করা হয়, তবে গাড়ীটির গতিশক্তি পূর্বের গতিশক্তির কতগুণ হবে?",
+    "options": [
+      "০.৫",
+      "২",
+      "০.২৫",
+      "৪"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 24,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "-1+1/2-1/4+1/8-1/16+ অসীম ধারাটির যোগফল হবে:",
+    "options": [
+      "-2/3",
+      "-3/2",
+      "2/3",
+      "3/2"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 25,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোন প্রাক্তন রাষ্ট্রপ্রধান প্রথম ‘ইন্দো-প্যাসিফিক’ (Indo-Pacific) শব্দটি জনপ্রিয় করেন?",
+    "options": [
+      "ডোনাল্ড ট্রাম্প",
+      "শিনজো অ্যাবে",
+      "বারাক ওবামা",
+      "জর্জ ডব্লিউ বুশ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 26,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "The saying ‘Every cloud has its silver lining’ means:",
+    "options": [
+      "bad weather is often replaced by good weather",
+      "clouds often have shining surroundings",
+      "every difficult situation has a more hopeful aspect though not apparent at the beginning",
+      "clouds and sunshine go hand in hand"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 27,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সংবিধান কার্যকর হয়-",
+    "options": [
+      "১৬ ডিসেম্বর, ১৯৭১",
+      "১৬ ডিসেম্বর, ১৯৭২",
+      "২৬ মার্চ, ১৯৭২",
+      "২৬ মার্চ, ১৯৭৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 28,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি কাজী নজরুল ইসলামের প্রবন্ধ গ্রন্থ?",
+    "options": [
+      "মৃত্যুক্ষুধা",
+      "সিন্ধু হিন্দোল",
+      "যুগবাণী",
+      "অগ্নিবীণা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 29,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সংস্কার কমিশন নতুন সংস্কার প্রস্তাবে বাংলাদেশ সংসদের উচ্চ কক্ষে ____ টি আসন প্রস্থাব করে।",
+    "options": [
+      "২৫",
+      "৫০",
+      "৭৫",
+      "১০০"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 30,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "জীবনের তিনটি শ্রেষ্ঠ মূল্যবোধ কী কী?",
+    "options": [
+      "সম্পদ, ক্ষমতা ও সদগুন",
+      "সত্য, আনন্দ ও সদগুন",
+      "সত্য, সুন্দর ও সদগুন",
+      "আনন্দ, বিবেক ও সাহস"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 31,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "পুঁথি সাহিত্যে প্রাচীনতম লেখক কে?",
+    "options": [
+      "ভারত চন্দ্র রায়",
+      "কাজী দৌলত",
+      "আবদুল হাকিম",
+      "ফকির গরীবুল্লাহ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "‘গ্রে-হাইড্রোজেন’-এর তুলনায় ‘গ্রীন-হাইড্রোজেনের’ সুবিধা হল-",
+    "options": [
+      "এটি উৎপাদন করা সস্তা",
+      "এতে কার্বন নিঃসরণ প্রায় শূন্য হয়",
+      "এটি সংরক্ষণ এবং পরিবহন করা সহজ",
+      "প্রতি একক আয়তনে এর শক্তি ঘনত্ব বেশি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 33,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "একটি NPN ট্রানজিস্টরে, প্রধান চার্জ বাহক হলো-",
+    "options": [
+      "হোল",
+      "ইলেকট্রন",
+      "প্রোটন",
+      "আয়ন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 34,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের পদ্মা ও যমুনা নদীর শাখা নদীগুলো কোনগুলো?",
+    "options": [
+      "গড়াই ও মধুমতী",
+      "মহানন্দা ও বংশী",
+      "মহানন্দা ও আত্রাই",
+      "গড়াই ও ধলেশ্বরী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 35,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "সেট 2,3,4 এর প্রকৃত উপসেট কয়টি:",
+    "options": [
+      "3",
+      "7",
+      "8",
+      "9"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 36,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "আধুনিক বাংলা নাটক মূলত কয়টি পর্বে বিভক্ত?",
+    "options": [
+      "৬টি",
+      "৪টি",
+      "৫টি",
+      "৭টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 37,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "Which of these is not characteristic of English Romantic Poetry?",
+    "options": [
+      "Ordinary life",
+      "Everyday language",
+      "Expression of feelings rather than action or plot",
+      "Inane and gaudy phraseology"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 38,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "What is the antonym of ‘percipience’?",
+    "options": [
+      "shrewdness",
+      "dullness",
+      "discerning",
+      "astuteness"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 39,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "বিশ্বব্যাংক বর্ণিত সুশাসন সূচকে কোনো দেশের সূচক ০.০০ হলে, সে দেশের সু-শাসনের অবস্থা কি বলে পরিগনিত হবে?",
+    "options": [
+      "নিচু মানের",
+      "উচু মানের",
+      "মাঝারি মানের",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 40,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "____জেলায় রেল যোগাযোগ নেই।",
+    "options": [
+      "জামালপুর",
+      "পটুয়াখালী",
+      "নাটোর",
+      "নেত্রকোনা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 41,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "ডেটাবেস হল-",
+    "options": [
+      "তথ্য রাখার হার্ডওয়্যারসমূহ",
+      "তথ্য রাখার প্রোগ্রামসমুহ",
+      "তথ্যসমূহের সুসঙ্গঠিত রূপ",
+      "তথ্য স্থানান্তরের জন্য ইন্টারনেট পরিষেবা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 42,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বানানটি শুদ্ধ?",
+    "options": [
+      "নিশিথিনি",
+      "কথোপকথন",
+      "পিপিলিকা",
+      "সমিচিন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 43,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "গণতান্ত্রিক ব্যবস্থার ফলপ্রসূতার জন্য অগ্রাধিকার পাবে ____ ।",
+    "options": [
+      "আইনসমূহ",
+      "টাকা",
+      "গুণগত শিক্ষা",
+      "অবকাঠামোগত সুবিধাসমূহ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 44,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "প্রত্যয়ন বায়ু উত্তর গোলার্ধে ___দিক থেকে ___দিকে প্রবাহিত হয়?",
+    "options": [
+      "পূর্ব, পশ্চিম",
+      "দক্ষিণপশ্চিম, উত্তরপূর্ব",
+      "উত্তর, দক্ষিণ",
+      "উত্তর, পশ্চিম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 45,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোনটি ব্রিকস (BRICS)-এর প্রধান লক্ষ্য?",
+    "options": [
+      "ন্যাটোর সম্প্রসারণে সহায়তা প্রদান",
+      "বিশ্ব আর্থিক প্রতিষ্ঠানগুলোর সংস্কার পূর্বক উদীয়মান অর্থনৈতিক দেশগুলোর স্বার্থরক্ষা",
+      "ইউরোপের জন্য একক মুদ্রা প্রতিষ্ঠা করা",
+      "জি-৭ এর সদস্য সংখা বৃদ্ধি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 46,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘পরমেশ’ শব্দটির সঠিক সন্ধি বিচ্ছেদ কোনটি?",
+    "options": [
+      "পরম + এশ",
+      "পরম + ঈশ",
+      "পরম + ইশ",
+      "পরম + ইশ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "এহসান টেবিলের উপর চায়ের কাপের হ্যান্ডেলটি পূর্বদিকে করে রাখল। সে ঘড়ির কাঁটা যেদিকে ঘোরে সেদিকে চায়ের কাপটি ১৮০^circ ঘোরালো। এখন চায়ের কাপের হ্যান্ডলটি থাকবে:",
+    "options": [
+      "পশ্চিম দিকে",
+      "দক্ষিণ দিকে",
+      "উত্তর দিকে",
+      "পূর্ব দিকে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 48,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "(x^2-2+1/x^2)^7 এর বিস্তৃতিতে মধ্যপদ কততম পদটি?",
+    "options": [
+      "পঞ্চম",
+      "সপ্তম",
+      "অষ্টম",
+      "নবম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 49,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সংবিধানের রক্ষাকর্তা কে?",
+    "options": [
+      "প্রধান বিচারপতি",
+      "প্রধানমন্ত্রী",
+      "সেনাবাহিনী প্রধান",
+      "রাষ্ট্রপতি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 50,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "ডলারের বিপরীতে টাকার অবমূল্যায়নের অন্যতম প্রভাব কি?",
+    "options": [
+      "বিদেশে বিনিয়োগে উৎসাহ প্রদান",
+      "তারল্য সংকট কাটিয়ে উঠা",
+      "খেলাপী ঋণের পরিমান কমিয়ে আনা",
+      "রপ্তানী বাড়ানো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 51,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "মিয়ানমারে পরিচালিত স্ক্যাম সেন্টারগুলো মোকাবিলায় সম্প্রতি কোন দেশ ‘স্ক্যাম সেন্টার স্ট্রাইক ফোর্স’ চালু করেছে?",
+    "options": [
+      "রাশিয়া",
+      "চীন",
+      "মার্কিন যুক্তরাষ্ট্র",
+      "থাইল্যান্ড"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 52,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রাচীন ‘হরিকেল জনপদটি’ কোন কোন বিভাগ সমন্বয়ে গঠিত?",
+    "options": [
+      "রাজশাহী ও রংপুর",
+      "চট্টগ্রাম ও সিলেট",
+      "রাজশাহী ও খুলনা",
+      "খুলনা ও ঢাকা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 53,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "k এর কোন মানের জন্য 5x+4y-1=0 এবং 2x+Ky-7=0 সরলরেখা দুটি সমান্তরাল?",
+    "options": [
+      "-8/5",
+      "8/5",
+      "5/2",
+      "-8/5"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 54,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "জসীমউদ্দিনের ‘কবর’ কবিতাটি কোন পত্রিকায় প্রথম প্রকাশিত হয়?",
+    "options": [
+      "তত্ত্ব-বোধিনী",
+      "ধূমকেতু",
+      "কালি ও কলম",
+      "কল্লোল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 55,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বাক্যটি প্রয়োগগত দিক থেকে শুদ্ধ?",
+    "options": [
+      "মাছ আকাশে উড়ে",
+      "তাঁর খুব আনন্দ পেল",
+      "আবশ্যক ব্যয়ে কার্পণ্য অনুচিত",
+      "সকল ছাত্রগণ পাঠে মনোযোগী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 56,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "In which of these poems did Matthew Arnold express a pessimistic worldview, reflecting on a world full of conflicts and lacking in joy, evincing an implicit criticism of Victorian era’s aggressive spirit?",
+    "options": [
+      "Scholar Gipsy",
+      "Dover Beach",
+      "Rugby Chapel",
+      "Immortality"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 57,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "Poetry is the spontaneous overflow of powerful feeling: it takes its origin from emotion recollected in tranquility’ is a statement ascribed to-",
+    "options": [
+      "Coleridge",
+      "William Wordsworth",
+      "TS Eliot",
+      "IA Richards"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "‘কোভিড-১৯’-এর জন্য তৈরি টিকা কীভাবে কাজ করে?",
+    "options": [
+      "রোগ প্রতিরোধ ক্ষমতা উদ্দীপিত করার জন্য দুর্বল ভাইরাসের একটি রূপ প্রবর্তন করে",
+      "পরিশোধিত ভাইরাল প্রোটিনের সাবইউনিট প্রবিষ্ট করানোর মাধ্যমে",
+      "হোস্ট কোষে জেনেটিক উপাদান বহন করার জন্য একটি ভাইরাস ঘটিত বাহক ব্যবহার করে",
+      "mRNA সরবরাহ করে যা হোস্ট কোষ গুলোকে একটি ভাইরাল প্রোটিন তৈরির নির্দেশ দেয়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 59,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "ক্লাউড কম্পিউটিং কোন পরিষেবা প্রদান করে?",
+    "options": [
+      "শুধুমাত্র লোকাল স্টোরেজ",
+      "ভার্চুয়াল কম্পিউটিং রিসোর্সেস",
+      "শুধুমাত্র ভার্চুয়াল স্টোরেজ",
+      "উপরের সবগুলো"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 60,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি বাউল গানের বৈশিষ্ট্য?",
+    "options": [
+      "বীরত্বগাথা ও ভক্তিমূলক",
+      "মানবিক আবেগ ও দৈনন্দিন জীবন",
+      "আধ্যাত্মিক প্রেম ও অন্তর্গত অনুসন্ধান",
+      "পল্লী জীবনের সুখ দুঃখ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 61,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘বিষণ্ন’ শব্দটির সঠিক বিশেষ্য রূপ কোনটি?",
+    "options": [
+      "বিষাদ",
+      "বিষণ্ন",
+      "বিষাক্ত",
+      "বিষয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 62,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "0x1234 শব্দটির বাইনারিরূপ কোনটি?",
+    "options": [
+      "001010011100",
+      "0010010010100",
+      "1110101111001011",
+      "0001001000110100"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 63,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "Identify the incorrect spelling:",
+    "options": [
+      "diletante",
+      "homonym",
+      "cromulent",
+      "accubation"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 64,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "শাসন ব্যবস্থায় মূল্যবোধ প্রাতিষ্ঠানিক করার সবচেয়ে কার্যকর কৌশল কোনটি?",
+    "options": [
+      "ঘন ঘন আইনের সংস্কার",
+      "নিয়মিত বেতন বৃদ্ধি",
+      "নৈতিক শিক্ষা ও প্রাতিষ্ঠানিক শিক্ষার সমন্বয়",
+      "আমলাতান্ত্রিক নিয়ন্ত্রণ বৃদ্ধি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 65,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "এখন জানুয়ারী মাস হলে এখন থেকে ১০০ মাস পর কোন মাস হবে?",
+    "options": [
+      "মে",
+      "মার্চ",
+      "এপ্রিল",
+      "ফেব্রুয়ারী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 66,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "বস্তুর ওজন পৃথিবীর কোন স্থানে সবচেয়ে বেশি?",
+    "options": [
+      "মেরু অঞ্চল",
+      "নিরক্ষীয় অঞ্চল",
+      "একটি পাহাড়ের চূড়ায়",
+      "পৃথিবীর কেন্দ্রে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 67,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "A very large building in which aircraft are housed is called a/an-",
+    "options": [
+      "terminal",
+      "aerodrome",
+      "hanger",
+      "hangar"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 68,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "কোনটি ই-কমার্সের প্লাটফর্ম হিসাবে কাজ করতে পারে?",
+    "options": [
+      "Facebook",
+      "Amazon",
+      "YouTube",
+      "All of the above"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 69,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "কিশোর পত্রিকা ‘বালক’ প্রতিষ্ঠা কার অমর কীর্তি?",
+    "options": [
+      "স্বর্ণকুমারী দেবী",
+      "সেলিনা হোসেন",
+      "আল মাহমুদ",
+      "কাদম্বরী দেবী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 70,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "2x^2+3x+1 এর ক্ষুদ্রতম মান হবে:",
+    "options": [
+      "-3/4",
+      "-1/8",
+      "1/8",
+      "3/4"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 71,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন সংস্থা বাংলাদেশের GDP হিসাব করে?",
+    "options": [
+      "বাংলাদেশ পরিসংখ্যান ব্যুরো",
+      "বাংলাদেশ ব্যাংক",
+      "অর্থ বিভাগ",
+      "বাংলাদেশ পরিকল্পনা কমিশন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 72,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে রপ্তানী আয়ের প্রধান উৎস কোনটি?",
+    "options": [
+      "জনশক্তি রপ্তানী",
+      "তৈরি পোশাক রপ্তানী",
+      "জাতিসংঘ শান্তি মিশনে শান্তিরক্ষী প্রেরণ",
+      "চামড়া জাতীয় পণ্য রপ্তানী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "তারাশঙ্কর বন্দ্যোপাধ্যায়ের ‘কবি’ গ্রন্থটিতে কোন বিষয়টি প্রাধান্য পেয়েছে?",
+    "options": [
+      "অসম ভালোবাসা",
+      "আদিবাসীদের জীবন চিত্র",
+      "ডোম সম্প্রদায়ের জীবন কাহিনী",
+      "পঞ্চাশের মন্বন্তর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 74,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "কোন বাংগালি বিজ্ঞানী কৃষ্ণগহ্বর নিয়ে গবেষণা করেছেন?",
+    "options": [
+      "ড. কুদরত-ই-খুদা",
+      "কাজী মোতাহার হোসেন",
+      "জামাল নজরুল ইসলাম",
+      "অতীশ দীপংকর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 75,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের বাহিরে প্রথম শহীদ মিনার স্থাপিত হয়-------।",
+    "options": [
+      "যুক্তরাজ্যে",
+      "যুক্তরাষ্ট্রে",
+      "ভারতে",
+      "পাকিস্তানে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসন কোন বিষয়টির প্রতিশ্রুতি দেয়?",
+    "options": [
+      "শুধুমাত্র কঠোর আইন প্রয়োগের",
+      "রাজনৈতিক প্রাধান্য ও প্রশাসনিক নিয়ন্ত্রনের",
+      "সংস্কার ছাড়া ঐতিহ্য সংরক্ষণের",
+      "স্বচ্ছতা, জবাবদিহিতা ও নৈতিক নেতৃত্বের"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 77,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "A synonym of the word ‘crepuscular’ is-",
+    "options": [
+      "nocturnal",
+      "diurnal",
+      "cathemeral",
+      "twilit"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 78,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের মধ্যম আয়ের ফাঁদে (Middle-Income Trap) পড়ার ঝুঁকি মূলত কোন কাঠামোগত প্রতিবন্ধকতার সঙ্গে যুক্ত?",
+    "options": [
+      "কৃষি রপ্তানি হ্রাস",
+      "নগর জনসংখ্যার উচ্চ ঘনত্ব",
+      "প্রবাসী আয়ের ওপর নির্ভরতা বৃদ্ধি",
+      "পুঁজি বৃদ্ধি সত্ত্বেও মোট উৎপাদনশীলতার (Total Factor Productivity) বৃদ্ধি ধীর গতির হওয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 79,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "Which functions both as a transitive and an intransitive verb?",
+    "options": [
+      "sleep",
+      "arrive",
+      "break",
+      "die"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 80,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "কোনটি মানুষকে লক্ষ্যবস্তুর দিকে পরিচালিত করে?",
+    "options": [
+      "প্রয়োজন",
+      "প্রেষণা",
+      "ইচ্ছা",
+      "শারীরিক শক্তি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 81,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "একটি সমবাহু ত্রিভুজের বাহুর দৈর্ঘ্য 8 মিটার হলে এর ক্ষেত্রফল হবে:",
+    "options": [
+      "8√3",
+      "8√5",
+      "16√3",
+      "16√5"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 82,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "‘To have a shot’ means:",
+    "options": [
+      "to open fire",
+      "to take a photograph",
+      "to make try",
+      "to test a gun"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 83,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "OCR ____ থেকে ____ এ রূপান্তরের জন্য ব্যবহার করা হয়।",
+    "options": [
+      "অডিও হতে টেক্সট",
+      "ইমেজ হতে টেক্সট",
+      "ভিডিও হতে টেক্সট",
+      "বাইনারি হতে ডেসিমেল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 84,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোন জলবায়ু চুক্তির অধীনে ‘সবুজ জলবায়ু তহবিল’ বা Green Climate Fund প্রতিষ্ঠা করা হয়েছিল?",
+    "options": [
+      "ক্যানকুন চুক্তি",
+      "প্যারিস চুক্তি",
+      "কিয়োটো প্রোটোকল",
+      "কোপেনহেগেন চুক্তি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 85,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "Candidates are required to get ____ the centre before 09:00 AM.",
+    "options": [
+      "at",
+      "to",
+      "in",
+      "into"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 86,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "ভাইরাস সম্পর্কে কোন বিবৃতিটি সঠিক?",
+    "options": [
+      "এদের যেকোনো সিনথেটিক নিউট্রিয়েন্ট মিডিয়ামে কালচার করা যায়",
+      "এদের জেনেটিক উপাদান হিসেবে ডিএনএ এবং আরএনএ থাকে",
+      "এরা এক ধরণের অন্তঃকোষীয় পরজীবী",
+      "ভাইরাস হল অণুবীক্ষণিক জীবন্ত প্রাণী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 87,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "কাগজের প্রধান রাসায়নিক উপাদান কোনটি?",
+    "options": [
+      "লিগনিন",
+      "রেজিন",
+      "হেমি সেলুলোজ",
+      "সেলুলোজ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 88,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "পারস্য উপসাগর থেকে জ্বালানী তেলের প্রবাহ রক্ষায় মার্কিন যুক্তরাষ্ট্র তাদের ‘______ ডকট্রিন’ অনুসরণ করে?",
+    "options": [
+      "মনরো",
+      "ট্রুম্যান",
+      "বুশ",
+      "কার্টার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 89,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোন দুটি দেশ সম্প্রতি ন্যাটোতে (NATO) যোগদান করেছে, যা ইউরোপের নিরাপত্তা পরিস্থিতিকে নতুন রূপ প্রদান করেছে?",
+    "options": [
+      "অস্ট্রেলিয়া এবং সুইজারল্যান্ড",
+      "ইউক্রেন এবং জর্জিয়া",
+      "সুইডেন এবং ফিনল্যান্ড",
+      "মলদোভা এবং বেলারুশ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 90,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সাংস্কৃতিক মূল্যবোধগুলো বেশি উদ্ভূত হয় ‘সামাজিক _____’ থেকে।",
+    "options": [
+      "আচরন",
+      "বৈষম্য",
+      "প্রথা",
+      "নীতি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 91,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "কোনটির দেহে নিউক্লিয়াস ও সাইটোপ্লাজম নেই?",
+    "options": [
+      "শৈবাল",
+      "ছত্রাক",
+      "ভাইরাস",
+      "ব্যাকটেরিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 92,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "x^2-(p+q)x+pq=0 এর সমাধান সেট হবে:",
+    "options": [
+      "p,q",
+      "p,q",
+      "-p,q",
+      "-p,-q"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 93,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "3+3/2+3/4+...3/64 ধারাটিতে মোট কতটি পদ আছে?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 94,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "আপনার পারসোনাল কম্পিউটার (পিসি) কোন একটি প্রোগ্রাম এর কর্মদক্ষতা (performance) বৃদ্ধির জন্য কোন কাজটি করা সর্বোত্তম হবে বলে আপনি মনে করেন?",
+    "options": [
+      "প্রোগ্রামটির জন্য এমন একটা এলগরিদম তৈরি করা যা asymptotically faster",
+      "পিসির Configuration উন্নত করা",
+      "খুব দ্রুত গতির I/O devices লাগানো",
+      "খ ও গ উভয়েই"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 95,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "যদি 0 < x < 1 হয়, তবে নিচের কোনটি সবচেয়ে বড় হবে?",
+    "options": [
+      "x",
+      "2x",
+      "x^2",
+      "x+1"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 96,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "একটি ত্রিভুজের তিনটি কোণের পরিমাণ x,x/2 ও 3x/2 । ক্ষুদ্রতম কোণের মান রেডিয়ানে কত হবে?",
+    "options": [
+      "π/6",
+      "π/3",
+      "π/2",
+      "2π/3"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 97,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "ABSCISSA শব্দটির বর্নগুলিকে নিয়ে কত প্রকারে বিন্যাস করা যায়?",
+    "options": [
+      "10080",
+      "6720",
+      "3360",
+      "3359"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 98,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "Which one is a coordinating conjunction?",
+    "options": [
+      "since",
+      "lest",
+      "as",
+      "so"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 99,
+    "bank": "50th BCS",
+    "subject": "Geography",
+    "question": "দুর্যোগ ব্যবস্থাপনার প্রথম ধাপ কোনটি?",
+    "options": [
+      "উদ্ধার",
+      "পুনর্বাসন",
+      "পুনর্গঠন",
+      "প্রস্তুতি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 100,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "কোনটি মাইক্রোওয়েভ ওভেনের কার্যনীতিকে সর্বোত্তমভাবে বর্ণনা করতে পারে?",
+    "options": [
+      "উচ্চ তাপ বিকিরণ এবং খাদ্য কণাগুলিতে পরিবহন",
+      "খাদ্য কণাগুলিতে ইনফ্রা-রেড বিকিরণ এবং শোষণ",
+      "পানির অণুগুলির ইন্ডাকশন হিটিং",
+      "ঘূর্ণনের কারণে ডাই-ইলেকট্রিক হিটিং"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 101,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের উন্নয়ন ধারার সবচেয়ে বড় কাঠামোগত বৈপরীত্য কোনটি?",
+    "options": [
+      "জনসংখ্যা বৃদ্ধির স্থবিরতা সত্ত্বেও জিডিপির দ্রুত প্রবৃদ্ধি",
+      "শক্তিশালী সামষ্টিক অর্থনৈতিক সূচকের পাশাপাশি দুর্বল প্রাতিষ্ঠানিক শাসনব্যবস্থা",
+      "রেমিট্যান্স বৃদ্ধি কিন্তু শ্রম অভিবাসন হ্রাস",
+      "রপ্তানি বৃদ্ধি কিন্তু শিল্পায়ন কমে যাওয়া"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 102,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "Identify the sentence where ‘up’ functions as a noun-",
+    "options": [
+      "He turned the volume up",
+      "Business confidence is on the up",
+      "We live just up the road",
+      "Our system should be up by afternoon"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 103,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "জেমস ওয়েব স্পেস টেলিস্কোপ (JWST) মূলতঃ তড়িৎ-চুম্বকীয় বর্ণালীর কোন অংশে মহাবিশ্ব পর্যবেক্ষণ করার জন্য ডিজাইন করা হয়েছে?",
+    "options": [
+      "অবলোহিত অঞ্চল",
+      "দৃশ্যমান এবং নিকট-অবলোহিত অঞ্চল",
+      "অতিবেগুনী এবং দৃশ্যমান অঞ্চল",
+      "এক্স-রে এবং গামা-রে অঞ্চল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 104,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "In William Shakeseapre’s play As you like it, the Seven Ages of Man speech was delivered by-",
+    "options": [
+      "Oliver",
+      "Orlando",
+      "Jaques",
+      "Rosalind"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 105,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "Transmission Control Protocol (TCP) OSI রেফারেন্স মডেলের কোন লেয়ারের প্রোটোকল?",
+    "options": [
+      "অ্যাপ্লিকেশন লেয়ার",
+      "নেটওয়ার্ক লেয়ার",
+      "ট্রান্সপোর্ট লেয়ার",
+      "ডেটালিঙ্ক লেয়ার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 106,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "চীনের উদ্যোগে চালু করা ‘বেল্ট অ্যান্ড রোড ইনিশিয়েটিভ’ (BRI) এর প্রাথমিক লক্ষ্য কী?",
+    "options": [
+      "একটি নতুন আন্তর্জাতিক মুদ্রা প্রতিষ্ঠা করা",
+      "নৌ ঘাঁটির মাধ্যমে বিশ্বব্যাপী অর্থনৈতিক সম্প্রসারণ",
+      "বিশ্বব্যাপী অর্থনৈতিক উন্নয়নে অর্থায়ন",
+      "বাণিজ্য এবং অবকাঠামোর একটি বিশ্বব্যাপী নেটওয়ার্ক তৈরি করা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 107,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘ই’ এর মাত্রার উপরের অংশের নাম কী?",
+    "options": [
+      "চৈতন",
+      "আঁকড়ি",
+      "পাগড়ি",
+      "জোড় আকঁড়ি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 108,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "মার্কিন যুক্তরাষ্ট্র কত সালে রাশিয়ার কাছ থেকে আলাস্কা ক্রয় করেছিল?",
+    "options": [
+      "১৮৪৬",
+      "১৮৬৭",
+      "১৮৯৮",
+      "১৯০৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 109,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "পরমাণু চুল্লীতে সচরাচর কোন জ্বালানী ব্যবহার করা হয়?",
+    "options": [
+      "ইউরেনিয়াম-২৩৫",
+      "ইউরেনিয়াম-২৩৮",
+      "থোরিয়াম-১৩২",
+      "প্লুটোনিয়াম-২৪০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 110,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "মুনাফার হার কত হলে কিছু পরিমাণ টাকা চক্রবৃদ্ধি হারে 10 বছরে দ্বিগুণ হবে?",
+    "options": [
+      "5.17%",
+      "6.17%",
+      "7.17%",
+      "8.17%"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 111,
+    "bank": "50th BCS",
+    "subject": "Geography",
+    "question": "ভঙ্গিল পর্বত, আগ্নেয় পর্বত ও স্তূপ পর্বতের উদাহরণ যথাক্রমে-",
+    "options": [
+      "রকি, ভিসুভিয়াস, ব্ল্যাক ফরেস্ট",
+      "হিমালয়, আল্পস, রকি",
+      "হিমালয়, রকি, বিন্দা",
+      "আল্পস, হেনরি, ফুজিয়ামা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 112,
+    "bank": "50th BCS",
+    "subject": "Geography",
+    "question": "বায়ুমণ্ডল ও মহাশূন্যের মধ্যবর্তী রেখাটির নাম কী?",
+    "options": [
+      "বিষুবরেখা",
+      "ট্রপোপজ",
+      "কারমান লাইন",
+      "কলোরাডো লাইন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 113,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘ময়দান, মুনাফা, বই’ শব্দ তিনটি কোন ভাষা থেকে আগত?",
+    "options": [
+      "উর্দু",
+      "ফারসি",
+      "আরবি",
+      "পর্তুগীজ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 114,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘মা তাঁর সন্তানদের ভালোবাসেন’- এটি কোন ধরণের বাক্য?",
+    "options": [
+      "ইচ্ছাসূচক",
+      "অনুজ্ঞাসূচক",
+      "প্রশ্নবোধক",
+      "অস্থিবাচক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 115,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "একটি কঠিন ঘনক অর্ধেক পানির উপরে ও অর্ধেক পানির নিচে ভাসছে। আপনি যদি ঘনকটি পানির মধ্যে ২ সে.মি. গভীরে ঠেলে দেন এবং তারপর সেটিকে ছেড়ে দেন, তাহলে কি ঘটবে?",
+    "options": [
+      "ঘনকটি পানির ২ সে.মি. গভীরে থাকবে",
+      "ঘনকটি সম্পূর্ণভাবে ডুবে যাবে",
+      "ঘনকটি আবার অর্ধেক ডুবে থাকা ও অর্ধেক ভেসে থাকা অবস্থায় ফিরে আসবে",
+      "ঘনকটি প্রথমে যতটুকু ভেসে ছিল তার চেয়ে উপরে উঠবে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 116,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের স্থানীয় সরকার ব্যবস্থা দুর্বল হওয়ার পেছনে সবচেয়ে বড় প্রাতিষ্ঠানিক দ্বন্দ্ব কোনটি?",
+    "options": [
+      "উপজেলা ও ইউনিয়ন পরিষদের মধ্যে দ্বৈত প্রশাসনিক কর্তৃত্ব",
+      "সংবিধানে আর্থিক ক্ষমতার বিকেন্দ্রিকরণের বিধান থাকা সত্ত্বেও বাস্তবে তা কেন্দ্রীয় সরকারের হাতে অতিকেন্দ্রীভূত",
+      "পৌরসভা পর্যায়ে সরকারি বেসরকারি অংশীদারিত্বের অভাব",
+      "দাতা সংস্থাগুলোর মধ্যে সমন্বয়হীনতা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 117,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের উচ্চফলনশীল (উফশী) জাতের ধান ও গমের নাম যথাক্রমে-",
+    "options": [
+      "হরিধান, রূপালী",
+      "ইরাটম, বর্ণালী",
+      "ব্রি-শাইল, বলাকা",
+      "হীরা, উত্তরণ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 118,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "যদি x+1/x=0 হয়, তবে √ x+1/√ x এর মান কত?",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "√ 2"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 119,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোনটি UNESCO ‘Intangible Cultural Heritage’- এর অন্তর্ভূক্ত?",
+    "options": [
+      "একুশে ফেব্রুয়ারি",
+      "পহেলা বৈশাখ",
+      "বাউল গান",
+      "জামদানি বয়ন শিল্প"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 120,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোন কবি মজলুম আদিব ছদ্মনামে কবিতা লিখতেন?",
+    "options": [
+      "আল মাহমুদ",
+      "হেলাল হাফিজ",
+      "নির্মলেন্দু গুণ",
+      "শামসুর রাহমান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 121,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "আন্তর্জাতিক নিরাপত্তা আলোচনায় নিচের কোন সাইবার হুমকিটি ক্রমবর্ধমানভাবে তাৎপর্যপূর্ণ হয়ে উঠেছে?",
+    "options": [
+      "ফিশিং (Phishing)",
+      "স্প্যাম ইমেইল (Spam e-mail)",
+      "র‌্যানসমওয়ার অ্যাটাক (Ransomware Attack)",
+      "পরিচয় চুরি (Identity Theft)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 122,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "মৈয়মনসিংহ গীতিকা কতটি ভাষায় অনূদিত হয়েছে?",
+    "options": [
+      "২৩টি",
+      "২০টি",
+      "২২টি",
+      "২৫টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 123,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোন আদালতের সিদ্ধান্তের বিরুদ্ধে আপীল করা যায় না?",
+    "options": [
+      "অর্থ ঋণ আদালত",
+      "আন্তর্জাতিক অপরাধ ট্রাইবুনাল",
+      "সামরিক আদালত",
+      "সুপ্রীম কোর্টের হাইকোর্ট ডিভিশন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 124,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "‘আকাশ ও পৃথিবীর অন্তরাল’ এক কথায় প্রকাশ করলে সঠিক উত্তর কী হবে?",
+    "options": [
+      "স্ফুলিঙ্গ",
+      "রোদসী",
+      "পীতাভ",
+      "আরক্ত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 125,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "GHz কিসের একক?",
+    "options": [
+      "মেমরির আকার",
+      "প্রসেসরের গতি",
+      "তথ্য স্থানান্তরের গতি",
+      "তথ্য উৎপাদনের পরিমাণ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 126,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "বাংলা পুঁথি সাহিত্যের উদাহরণ কোনটি?",
+    "options": [
+      "নূরনামা",
+      "আমীর হামজা",
+      "গুপি চন্দ্রের সন্ন্যাস",
+      "মহুয়া"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 127,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "You will need a variety of skills, including leadership, endurance etc. ‘In this sentence the word including’ is a -",
+    "options": [
+      "conjunction",
+      "gerund",
+      "participle",
+      "preposition"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 128,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "অপারেশন ‘____’ লোহিত সাগরে হুথি (Houthi) হামলার জবাবে মার্কিন নেতৃত্বাধীন সামুদ্রিক নিরাপত্তা উদ্যোগ।",
+    "options": [
+      "ডেজার্ট স্টর্ম",
+      "এন্ডিউরিং ফ্রিডম",
+      "ব্লু হেলমেট",
+      "প্রসপারিটি গার্ডিয়ান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 129,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন গুচ্ছের সবগুলো বানানই শুদ্ধ?",
+    "options": [
+      "সারথী, নিরীহ, নীরোগ",
+      "প্রমান, অঙ্গন, দর্পণ",
+      "অনাথা, সুকণ্ঠী, অনুস্টেয়",
+      "একত্রিত, স্থায়িত্ব, অর্ধাঙ্গিনী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 130,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "মার্কিন যুক্তরাষ্ট্রের নেতৃত্বাধীন ‘অ্যাকাস (AUKUS) চুক্তির প্রাথমিক লক্ষ্য কী?",
+    "options": [
+      "অর্থনৈতিক সহযোগিতা",
+      "সামরিক সহযোগিতা",
+      "পরিবেশ সুরক্ষা",
+      "মহাকাশ গবেষণা সহযোগিতা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 131,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "Which novel chronicles intense, destructive love fueling multigenerational cruelty & obsession?",
+    "options": [
+      "Jane Eyre",
+      "Emma",
+      "Wuthering Heights",
+      "Persuasion"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 132,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "The book (that she recommended) turned out to be very helpful. Here the underlined clause is a -",
+    "options": [
+      "relative clause",
+      "noun clause",
+      "adverbial clause",
+      "independent clause"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 133,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "বাংলাদেশের দীর্ঘতম নদী কোনটি?",
+    "options": [
+      "পদ্মা",
+      "মেঘনা",
+      "যমুনা",
+      "ব্রহ্মপুত্র"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 134,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "|3x-1|<2 এর সমাধান সেট:",
+    "options": [
+      "(-1/3,0)",
+      "(-1/3,∞))",
+      "(-1/3,1)",
+      "(∞,-1/3)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 135,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "‘It is no good falling in love at first sight’. Here the word “falling” is a/an-",
+    "options": [
+      "participle",
+      "infinitive",
+      "gerund",
+      "verbal noun"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 136,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সাধারনের দৃষ্টিতে কোনটি মুল্যবোধ সম্পন্ন শাসন ব্যবস্থার বৈশিষ্ট্য?",
+    "options": [
+      "আইনের নির্বাচনী প্রয়োগ",
+      "নাগরিকের অংশগ্রহণ",
+      "কর্তৃত্ববাদ",
+      "গোপনীয়তা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 137,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "x^4-2x+1 কে x – 3 দিয়ে ভাগ করলে ভাগশেষ কত হবে?",
+    "options": [
+      "2",
+      "81",
+      "0",
+      "76"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 138,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "Themes like racial prejudice, oppressive power dynamics, unbridgeable gulf between Eastern & Western cultures, etc. are best exemplified in-",
+    "options": [
+      "Shadow of the Moon by MM Kaye",
+      "Bhowani Junction by John Masters",
+      "Kim by Rudyard Kipling",
+      "A Passage to India by EM Forster"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 139,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "একজন টাইপ-১ ডায়াবেটিক রোগীর ক্ষেত্রে কোন বক্তব্যটি সঠিক?",
+    "options": [
+      "নির্দিষ্ট কোষের ইনসুলিন প্রতিরোধিতা",
+      "বিটা কোষগুলির অটো-ইমিউন ধ্বংসের কারণে অগ্ন্যাশয় অপর্যাপ্ত উনসুলিন তৈরি করে",
+      "অগ্ন্যাশয়ের আলফা কোষ দ্বারা গ্লুকাগনের অতিরিক্ত উৎপাদন",
+      "প্রো-ইনসুলিন থেকে ইনসুলিনে রূপান্তরে ত্রটি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 140,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "Which of these works contains a defence of the right of freedom of speech and expression?",
+    "options": [
+      "Holy Living and Holy Dying",
+      "Areopagitica",
+      "Religio Medici",
+      "A Free Man’s Worship"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 141,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "বিশ্ব অর্থনীতিতে ‘পেপার গোল্ড’ (Paper Gold) বলতে কী বোঝায়?",
+    "options": [
+      "বিশ্বব্যাংকের সুবিধালাভ",
+      "বিশেষ উত্তোলন অধিকার (SDR)",
+      "স্বর্ণের মানসম্পন্ন ভিত্তিতে মুদ্রা",
+      "ঘাটতি অর্থায়ন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 142,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘প্রাচ্য’ শব্দের বিপরীত শব্দ কোনটি?",
+    "options": [
+      "প্রতীচ্য",
+      "প্রাচ্যহীন",
+      "অপ্রাচ্য",
+      "নবীন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 143,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধ ও সুশাসনের উপস্থিতি জাতীয় উন্নয়নের কোন দিকটিকে বেশি টেকসই করে তোলে?",
+    "options": [
+      "স্বল্পমেয়াদি প্রবৃদ্ধি",
+      "অবকাঠামো নির্মান",
+      "মানব সম্পদ উন্নয়ন",
+      "আমলাতান্ত্রিক নিয়ন্ত্রণ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 144,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "কোনটি সঠিক বানান?",
+    "options": [
+      "Gazete",
+      "Gazzete",
+      "Gaggete",
+      "Gazette"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 145,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "শ্রমনির্ভর অর্থনীতি থেকে উৎপাদন ভিত্তিক অর্থনীতিতে রূপান্তরের পথে বাংলাদেশের সবচেয়ে বড় বাধা কোনটি?",
+    "options": [
+      "শিল্পাঞ্চলের অভাব",
+      "রাজনৈতিক অস্থিরতা",
+      "দক্ষ মানবসম্পদের ঘাটতি এবং শিক্ষার সঙ্গে কর্মক্ষেত্রের অসামঞ্জস্য",
+      "ক্ষুদ্রঋণের স্বল্পতা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 146,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "যদি a/b=b/c=2/3 হয়, তবে a:c এর মান কত হবে?",
+    "options": [
+      "2:3",
+      "3:4",
+      "4:9",
+      "9:4"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 147,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "‘Helena said I took the laptop home with me.’ Its indirect form is-",
+    "options": [
+      "Helena said that she took the laptop home with her",
+      "Helena said that she had taken the laptop home with her",
+      "Helena confirmed that she has taken the laptop home with her",
+      "Helena told that she had the laptop taken home with her"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 148,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "২০২৩ সালের এপ্রিল থেকে কোন বিদ্রোহী আধাসামরিক গোষ্ঠী সুদানের সশস্ত্র বাহিনীর বিরুদ্ধে গৃহযুদ্ধে লিপ্ত?",
+    "options": [
+      "আল শাবাব",
+      "জান জাউইদ",
+      "ফ্রি সুদান মুভমেন্ট",
+      "র‌্যাপিড সাপোর্ট ফোর্স (RSF)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 149,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "The lines ‘A Book of Verses underneath the Bough,/ A Jug of Wine, a Loaf of Bread – and Thou/ Beside me singing in the Wilderness….’ are taken from a famous translation work by.",
+    "options": [
+      "Scott Fitzgerald",
+      "Edward Fitzgerald",
+      "William Fitzgerald",
+      "Gerald Fitzgerald"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 150,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সংবাদপত্রের স্বাধীনতা কোন ধরনের অধিকার?",
+    "options": [
+      "ব্যক্তিগত",
+      "সামাজিক",
+      "রাষ্ট্রীয়",
+      "নীতিগত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 151,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "কোনটি জাতিসংঘের প্রতিষ্ঠান নয়?",
+    "options": [
+      "ইউনিসেফ",
+      "ইউনেস্কো",
+      "ডব্লিউটিও",
+      "আইএলও"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 152,
+    "bank": "50th BCS",
+    "subject": "Math",
+    "question": "যদি log_x324=4 হয় তবে x এর মান হবে:",
+    "options": [
+      "4",
+      "2√3",
+      "3√ 3",
+      "3√2"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 153,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "কোনটি সুশাসনের অনুপস্থিতিতে সমাজ যে 'hedden cost' বহন করে তার উৎকৃষ্ট উদাহরন?",
+    "options": [
+      "কর আদায়ের হার বৃদ্ধি",
+      "মেধা পাচার",
+      "অবকাঠামো সম্প্রসারন",
+      "রপ্তানি আয় বৃদ্ধি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 154,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বাক্যে সমধাতুজ কর্ম রয়েছে?",
+    "options": [
+      "সে বই পড়ছে",
+      "সে গভীর চিন্তায় মগ্ন",
+      "আজ এমন ঘুম ঘুমিয়েছি",
+      "সে খেলা করছে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 155,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "‘–––––’ ব্রিকস (BRICS) কর্তৃক অবকাঠামো এবং টেকসই উন্নয়ন প্রকল্পের অর্থায়নের লক্ষ্যে প্রতিষ্ঠিত হয়।",
+    "options": [
+      "NDB",
+      "ADB",
+      "AIIB",
+      "IMF"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 156,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "সমান দৈর্ঘ্যের দুইটি দড়ির একটি দিয়ে আয়তক্ষেত্রাকার বেষ্টনী তৈরী করা হয় এবং অপরটি দিয়ে বর্গক্ষেত্রাকার বেষ্টনী তৈরী করা হয়। কোন তথ্যটি সত্য?",
+    "options": [
+      "আয়তক্ষেত্রের ক্ষেত্রফল বর্গক্ষেত্রের চেয়ে বেশী",
+      "বর্গক্ষেত্রের ক্ষেত্রফল আয়তক্ষেত্রের চেয়ে বেশী",
+      "উভয়ের ক্ষেত্রফল সমান",
+      "কোনটির ক্ষেত্রফল বেশী বা উভয়ের ক্ষেত্রফল সমান কিনা তা বর্ণিত তথ্য থেকে নির্ণয় করা সম্ভব নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 157,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "লামিয়া একটি শ্রেণীর সামনে থেকে নবম এবং পিছন থেকে ৩৬তম হলে শ্রেণীতে শিক্ষার্থী কতজন?",
+    "options": [
+      "৪৪",
+      "৪৫",
+      "৪৬",
+      "৪৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 158,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধ ও শাসনের মধ্যে সম্পর্ক হলো-",
+    "options": [
+      "নৈতিক নীতি, নিয়ম ও রাজনৈতিক নির্দেশ মানা",
+      "নৈতিক নীতি, স্বচ্ছতা ও সামাজিক দায়বদ্ধতা",
+      "স্তরবিন্যাস, স্বচ্ছতা ও ঐতিহ্য",
+      "নৈতিকতা ছাড়া প্রশাসনিক দক্ষতা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 159,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "‘Pixel’ দ্বারা কী বুঝায়?",
+    "options": [
+      "Pixie land",
+      "Person length",
+      "Pixure length",
+      "Picture element"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 160,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ সরকার এবং পিসিজেএসএস (PCJSS)-এর মধ্যে পার্বত্য চট্টগ্রাম শান্তিচুক্তি কবে স্বাক্ষরিত হয়েছিল?",
+    "options": [
+      "০৪ ডিসেম্বর ১৯৯৫",
+      "০৬ নভেম্বর ১৯৯৮",
+      "০২ ডিসেম্বর ১৯৯৭",
+      "০৭ ডিসেম্বর ১৯৯৮"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 161,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "An element required in a paragraph for smooth flow of ideas is called a-",
+    "options": [
+      "transition sentence",
+      "topic sentence",
+      "supporting sentence",
+      "concluding sentence"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 162,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘বেতার, বিপত্নীক’- শব্দ দুটি কোন সমাসের উদাহরণ?",
+    "options": [
+      "নঞ তৎপুরুষ, বহুব্রীহি",
+      "কর্মধারয়, বহুব্রীহি",
+      "অব্যয়ীভাব, তৎপুরুষ",
+      "তৃতীয় তৎপরুষ, দ্বিগু সমাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 163,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "উত্তর কোরিয়া ও দক্ষিণ কোরিয়ার মধ্যকার বিভক্তকারী রেখা হলো –––––– উত্তর অক্ষাংশ।",
+    "options": [
+      "৩৮°",
+      "৩৪°",
+      "৪৯°",
+      "২৩.৫০°"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 164,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি ‘ভাত’ এর প্রতিশব্দ?",
+    "options": [
+      "অলিপিক",
+      "প্রভঞ্জন",
+      "মহি",
+      "তণডুল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 165,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "একটি বাক্সের মধ্যে একটি পেন্সিল আছে। বাক্সটি একটি তাকের উপরে অবস্থান করছে। তাকটি জানালার নিচে অবস্থান করছে। তাহলে নিচের কোন বাক্যটি উপরের বর্ণনার জন্য প্রযোজ্য হবে?",
+    "options": [
+      "পেন্সিলটি জানালার নিচে আছে",
+      "পেন্সিলটি জানালার উপরে আছে",
+      "পেন্সিলটি জানালার মধ্যে অবস্থান করছে",
+      "বাক্সটি পেন্সিলের নিচে অবস্থান করছে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 166,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন এলাকাটি বাংলাদেশের মুক্তিযুদ্ধকালীন জনযুদ্ধে ক্যাপ্টেন (অবঃ) আব্দুল হালিম চৌধুরীর দ্বারা গঠিত আঞ্চলিক বাহিনীর আওতাধীন এলাকা ছিল না?",
+    "options": [
+      "ধামরাই",
+      "কেরানীগঞ্জ",
+      "কালিয়াকৈর",
+      "সাভার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 167,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "০.৫ × ০.০৫ × ০.০০৫ =?",
+    "options": [
+      "০.১২৫",
+      "০.০১২৫",
+      "০.০০১২৫",
+      "০.০০০১২৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 168,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘রাজপথ’ শব্দের ব্যাসবাক্য কোনটি?",
+    "options": [
+      "রাজা ও পথ",
+      "রাজার পথ",
+      "বিশাল পথ",
+      "পথের রাজা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 169,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "2/5,3/5 ও 6/15 ভগ্নাংশুগলোর লঘিষ্ঠ সাধারণ গুণিতক (ল.সা.গু.) হবে:",
+    "options": [
+      "7/5",
+      "6/5",
+      "1/15",
+      "6/15"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 170,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "স্বচ্ছতা কেন সু-শাসন সম্পর্কে নাগরিকের ধারনাকে উন্নত ও স্বচ্ছ করে?",
+    "options": [
+      "এটি প্রশাসনিক চাপ বাড়ায়",
+      "এটি রাজনৈতিক প্রতিযোগিতা কমায়",
+      "এটি জনগণের নজরদারি ও সচেতন মূল্যায়নের জন্য সুযোগ দেয়",
+      "উপরের সবগুলো"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 171,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুক্তিযুদ্ধকে উপজীব্য করে ‘যাত্রা’ উপন্যাসটি ‍লিখেছেন-",
+    "options": [
+      "শওকত ওসমান",
+      "শহিদুল জহির",
+      "শওকত আলী",
+      "সেলিনা হোসেন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 172,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "Identify the compound sentence:",
+    "options": [
+      "Eigher you do it or you will be fined",
+      "Unless you do it, you will be fined",
+      "Do it or I shall fine you",
+      "You have to do it, otherwise I will fine you"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 173,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘কাআ তরুবর পঞ্চ বি ডাল’ -পদটির রচয়িতা কে?",
+    "options": [
+      "লুইপা",
+      "ভুসুরুপা",
+      "শবরপা",
+      "কাহুপা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 174,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "কোন টিস্যু পেশীকে হাড়ের সাথে সংযুক্ত রাখে?",
+    "options": [
+      "তরুণাস্থি",
+      "লিগামেন্ট",
+      "টেন্ডান",
+      "অ্যারিওলার টিস্যু"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 175,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "Habeas Corpus writ দায়ের করা হয় সংবিধানের –––– অনুচ্ছেদ লংঘনের কারণে।",
+    "options": [
+      "৩১",
+      "৩২",
+      "৩৪",
+      "৩৩"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 176,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "A = x:x স্বাভাবিক সংখ্যা এবং x<=5 হলে, P(A) এর উপাদান সংখ্যা হবে:",
+    "options": [
+      "64",
+      "32",
+      "16",
+      "8"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 177,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "What gender is the word ‘monarch’?",
+    "options": [
+      "masculine",
+      "feminine",
+      "neuter",
+      "common"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 178,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "কোনটি মূল্যবোধের সারসত্তাকে প্রতিফলিত করে?",
+    "options": [
+      "কর্তৃপক্ষ কর্তৃক আরোপিত নিয়ম",
+      "নৈতিক নির্দেশ ছাড়া প্রথা ও ঐতিহ্য",
+      "নৈতিক আচরন নির্দেশক বিশ্বাস ও নীতি",
+      "সামাজিক শৃঙ্খলার আইনি বাধ্যবাধকতা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 179,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন ফসলটি রপ্তানী বহুমুখীকরনে সম্ভাবনাময়?",
+    "options": [
+      "আউশ ধান",
+      "তেলবীজ",
+      "পাট",
+      "আলু"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 180,
+    "bank": "50th BCS",
+    "subject": "Science",
+    "question": "MRI কোন নীতিতে কাজ করে?",
+    "options": [
+      "শরীরের ত্রি-মাত্রিক চিত্র তৈরি করেতে এক্স-রে ব্যবহার করে",
+      "তেজস্ত্রিয় ট্রেসার দ্বারা নির্গত গামা-রে সনাক্তের মাধ্যমে",
+      "শক্তিশালী চুম্বক রেডিও তরঙ্গ ব্যবহার করে ইমেজ তৈরির মাধ্যমে",
+      "উচ্চ ফ্রিকোয়েন্সি শব্দ তরঙ্গ ব্যবহার করে ইমেজ তৈরির মাধ্যমে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 181,
+    "bank": "50th BCS",
+    "subject": "Others",
+    "question": "আফ্রিকান উন্নয়ন ব্যাংকের সদর দপ্তর ____অবস্থিত।",
+    "options": [
+      "নাইরোবি",
+      "আবিদজান",
+      "আদ্দিস আবাবা",
+      "লাগোস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 182,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "আন্তর্জাতিক অর্থায়নের ভিত্তি স্থাপনে ব্রেটন উডস্ (Bretton Woods) সম্মেলন কোথায় অনুষ্ঠিত হয়েছিল?",
+    "options": [
+      "নেদারল্যান্ডস",
+      "নিউ ইয়র্ক",
+      "নিউ হ্যাম্পশায়ার",
+      "নিউ জার্সি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 183,
+    "bank": "50th BCS",
+    "subject": "English Language",
+    "question": "‘The villagers believed that he was an honest leader.’ Passive form of this sentence is:",
+    "options": [
+      "He was believed to be an honest leader",
+      "He was believed to have been an honest leader",
+      "He has been believed to be an honest leader",
+      "He was believed he was an honest leader"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 184,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "‘____ কনভেনশন’ বিপজ্জনক বর্জ্যের আন্তঃসীমান্ত পরিবহন নিয়ন্ত্রণ করে।",
+    "options": [
+      "স্টকহোম",
+      "রোটারডাম",
+      "বাসেল",
+      "মিনামাটা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 185,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "স্মার্টফোনে GPS ব্যবহারের জন্য কোনটি প্রয়োজন?",
+    "options": [
+      "DHCP",
+      "Accelerometer",
+      "Gyroscope",
+      "Satellite Signal"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 186,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সর্বশেষ সিটি কর্পোরেশন কোনটি?",
+    "options": [
+      "ঢাকা উত্তর",
+      "কুমিল্লা",
+      "ময়মনসিংহ",
+      "রংপুর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 187,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "কোনটি কম্বিনেশনাল লজিক সার্কিট নয়?",
+    "options": [
+      "রেজিস্টার",
+      "ডিকোডার",
+      "মাল্টিপ্লেক্সার",
+      "NAND গেট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 188,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ ____ সাল থেকে গ্রীষ্মকালীন অলিম্পিকে অংশগ্রহন করে আসছে।",
+    "options": [
+      "১৯৮৫",
+      "১৯৮৪",
+      "১৯৮৬",
+      "১৯৮৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 189,
+    "bank": "50th BCS",
+    "subject": "Bangla Language",
+    "question": "‘স্বর্গ’ শব্দের সঠিক সমার্থক শব্দজোড়া কোনটি?",
+    "options": [
+      "হরিদশ্ব, বিবদান",
+      "ক্ষিতি, উর্বী",
+      "দিনমণি, দিন নাথ",
+      "ত্রিদিব, সুরপুর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 190,
+    "bank": "50th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "টেকসই উন্নয়নের জন্য সু-শাসন অপরিহার্য কারন এটি-",
+    "options": [
+      "দ্রুত শিল্পায়ন নিশ্চিত করে",
+      "অর্থনৈতিক প্রবৃদ্ধি ও সামাজিক ন্যায়ের ভারসাম্য রক্ষা করে",
+      "জনসংখ্যা হ্রাস করে",
+      "রাজনৈতিক দ্বন্দ দূর করে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 191,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "মাল্টিল্যাটারাল ইনভেস্টমেন্ট গ্যারান্টি এজেন্সি (MIGA) কোন সংস্থার অংশ?",
+    "options": [
+      "বিশ্বব্যাংক গ্রুপ",
+      "আন্তর্জাতিক মুদ্রা তহবিল",
+      "জাতিসংঘ উন্নয়ন কর্মসূচি",
+      "এশীয় অবকাঠামো বিনিয়োগ ব্যাংক (AIIB)"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 192,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘ঢাকা মুসলিম সাহিত্য সমাজ’ কত সালে প্রতিষ্ঠিত হয়?",
+    "options": [
+      "১৯২০ সালে",
+      "১৯২৬ সালে",
+      "১৯২৫ সালে",
+      "১৯৩০ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 193,
+    "bank": "50th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের অর্থনৈতিক নীতি ও উন্নয়ন পরিকল্পনা অনুমোদনের সর্বোচ্চ কর্তৃপক্ষ কোনটি?",
+    "options": [
+      "পরিকল্পনা কমিশন",
+      "অর্থ মন্ত্রনালয়",
+      "পরিকল্পনা মন্ত্রনালয়",
+      "জাতীয় অর্থনৈতিক পরিষদের নির্বাহি কমিটি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 194,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "একটি আয়না থেকে একটি বস্তু আয়নার পৃষ্ঠ থেকে পৃষ্ঠের লম্ব বরাবর সেকেন্ডে ১০ সে.মি. বেগে চলতে শুরু করল। ৪ সেকেন্ড পর বস্তুটি ও তার প্রতিবিম্বের মধ্যে দূরত্ব কত হবে?",
+    "options": [
+      "৪০ সে.মি.",
+      "১৬০ সে.মি.",
+      "৮০ সে.মি.",
+      "০ সে.মি."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 195,
+    "bank": "50th BCS",
+    "subject": "English Literature",
+    "question": "The killing of albatross in The Rime of the Ancient Mariner was indicative of-",
+    "options": [
+      "a trigger-happy Mariner",
+      "the essential irrationality of man",
+      "a superstitious Mariner",
+      "the Mariner as a skillful fowler"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 196,
+    "bank": "50th BCS",
+    "subject": "Bangla Literature",
+    "question": "১৩৫০ বঙ্গাব্দের দুর্ভিক্ষ নিয়ে রচিত উপন্যাস কোনটি?",
+    "options": [
+      "ইছামতি",
+      "অশনি সংকেত",
+      "আরণ্যক",
+      "বিষাদসিন্ধু"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 197,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "২০৩০ সালের মধ্যে টেকসই উন্নয়ন লক্ষ্যমাত্রা অর্জনে ইফাদ (IFAD), SDG এর কোন দুটি লক্ষ্যমাত্রা নিয়ে কাজ করে?",
+    "options": [
+      "৭ ও ৯",
+      "১১ ও ১৩",
+      "৩ ও ৬",
+      "১ ও ২"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 198,
+    "bank": "50th BCS",
+    "subject": "International Affairs",
+    "question": "জলবায়ু কূটনীতিতে ‘Common but Differentiated Responsibilities (CBDR)’ নীতি প্রথম কোথায় স্বীকৃত হয়েছিল?",
+    "options": [
+      "রিও-ঘোষণা",
+      "কিয়োটো প্রোটোকল",
+      "প্যারিস চুক্তি",
+      "স্টকহোম ঘোষণা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 199,
+    "bank": "50th BCS",
+    "subject": "ICT",
+    "question": "কম্পিউটার সায়েন্সে Trojan Horse একটি-",
+    "options": [
+      "ছবি এডিট করার সফটওয়্যার",
+      "অপারেটিং সিস্টেম",
+      "প্রোগ্রামিং ল্যাঙ্গুয়েজ",
+      "ম্যালওয়্যার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 200,
+    "bank": "50th BCS",
+    "subject": "Mental Ability",
+    "question": "ঘড়ির ঘণ্টার কাঁটা ও মিনিটের কাঁটা একদিনে কতবার মিলিত হয়?",
+    "options": [
+      "১২",
+      "১৮",
+      "২২",
+      "২৪"
+    ],
+    "answer": 2
+  }
+]

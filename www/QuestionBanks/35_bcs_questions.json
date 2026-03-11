@@ -1,0 +1,2602 @@
+[
+  {
+    "id": 1,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "পুরষ্কার-বিতরণী অনুষ্ঠানের পরিবেশ এত অপরিস্কার। বাক্যটির নিম্নরেখ পদে ষ/স ব্যবহারে-",
+    "options": [
+      "প্রথমটি অশুদ্ধ, দ্বিতীয়টি শুদ্ধ",
+      "প্রথমটি শুদ্ধ, দ্বিতীয়টি অশুদ্ধ",
+      "দুটোই অশুদ্ধ",
+      "দুটোই শুদ্ধ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 2,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "নিচের কোন বানানটি শুদ্ধ?",
+    "options": [
+      "মনীষী",
+      "মনিষি",
+      "মনীষি",
+      "মনিষী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 3,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বাক্যটি শুদ্ধ?",
+    "options": [
+      "দৈন্যতা সর্বদা মহত্বের পরিচায়ক নয়",
+      "দৈন্য সর্বদা মহত্বের পরিচায়ক নয়",
+      "দৈন্যতা সর্বদা মহত্ত্বের পরিচায়ক নয়",
+      "দৈন্য সর্বদা মহত্ত্বের পরিচায়ক নয়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 4,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "‘Consumer goods’ এর উপযুক্ত বাংলা পরিভাষা কী?",
+    "options": [
+      "ভোক্তার কল্যাণ",
+      "ভোগ্যপণ্য",
+      "ক্রয়কৃত পণ্য",
+      "ক্রেতার গুণাগুণ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 5,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "‘জল’ শব্দের সমার্থক নয় কোনটি?",
+    "options": [
+      "সলিল",
+      "উদক",
+      "জলধি",
+      "নীর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 6,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দজোড় বিপরীতার্থক নয়?",
+    "options": [
+      "অনুলোম-প্রতিলোম",
+      "নশ্বর-শাশ্বত",
+      "গরিষ্ঠ-লঘিষ্ঠ",
+      "হৃষ্ট-পুষ্ট"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "‘পরশ্ব’ শব্দটির অর্থ কী?",
+    "options": [
+      "পরশু",
+      "পরের ধন",
+      "কোকিল",
+      "পার্শ্ববর্তী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 8,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা ভাষায় মৌলিক স্বরধ্বনির সংখ্যা কত?",
+    "options": [
+      "৭টি",
+      "৯টি",
+      "১১টি",
+      "১৩টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 9,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা ভাষায় শব্দ সাধন হয় না নিম্নোক্ত কোন উপায়ে?",
+    "options": [
+      "সমাস দ্বারা",
+      "লিঙ্গ পরিবর্তন দ্বারা",
+      "উপসর্গ যোগে",
+      "ক, খ ও গ তিন উপায়েই হয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 10,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "‘লবণ’ শব্দের বিশেষ্য কোনটি?",
+    "options": [
+      "নোনতা",
+      "লবণাক্ত",
+      "লাবণ্য",
+      "ললিত"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 11,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি বাক্যের বৈশিষ্ট্য নয়?",
+    "options": [
+      "যোগ্যতা",
+      "আকাঙ্ক্ষা",
+      "আসক্তি",
+      "আসত্তি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 12,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "নিচের কোন শব্দটি প্রত্যয়সাধিত?",
+    "options": [
+      "প্রলয়",
+      "খণ্ডিত",
+      "নিঃশ্বাস",
+      "অনুপম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 13,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "‘দ্বৈপায়ন’ শব্দের শুদ্ধ সন্ধিবিচ্ছেদ কোনটি?",
+    "options": [
+      "দ্বীপ + আয়ন",
+      "দ্বীপ + অয়ন",
+      "দ্বিপ + অনট",
+      "দ্বীপ + অনট"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 14,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "‘জজ সাহেব’ কোন সমাসের উদাহরণ?",
+    "options": [
+      "দ্বিগু",
+      "কর্মধারয়",
+      "দ্বন্দ্ব",
+      "বহুব্রীহি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 15,
+    "bank": "35th BCS",
+    "subject": "Bangla Language",
+    "question": "নিচের কোনটি ধ্বনি-পরিবর্তনের উদাহরণ নয়?",
+    "options": [
+      "প্রাতিপদিক",
+      "অভিশ্রুতি",
+      "অপিনিহিতি",
+      "ধ্বনি-বিপর্যয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 16,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "সবচেয়ে বেশি চর্যাপদ পাওয়া গেছে কোন কবির?",
+    "options": [
+      "লুইপা",
+      "শবরপা",
+      "ভুসুকুপা",
+      "কাহ্নপা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 17,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যের প্রাচীন যুগের নিদর্শন কোনটি?",
+    "options": [
+      "নিরঞ্জনের রুষ্মা",
+      "দোহাকোষ",
+      "গুপিচন্দ্রের সন্ন্যাস",
+      "ময়নামতির গান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 18,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "“তাম্বুল রাতুল হইল অধর পরশে।” অর্থ কী?",
+    "options": [
+      "ঠোঁটের পরশে পান লাল হল",
+      "পানের পরশে ঠোঁট লাল হল",
+      "অস্তাচলগামী সূর্যের আভায় মুখ রক্তিম দেখা গেল",
+      "অস্তাচলগামী সূর্য ও মুখ একই রকম লাল হয়ে গেল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 19,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘হপ্তপয়কর’ কার রচনা?",
+    "options": [
+      "সৈয়দ আলাওল",
+      "জৈনুদ্দিন",
+      "দীনবন্ধু মিত্র",
+      "অমিয় দেব"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 20,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "মঙ্গলকাব্যের কবি নন কে?",
+    "options": [
+      "কানাহরি দত্ত",
+      "মানিক দত্ত",
+      "ভারতচন্দ্র",
+      "দাশু রায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 21,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘সমাচার দর্পণ’ পত্রিকার সম্পাদক ছিলেন-",
+    "options": [
+      "জন ক্লার্ক মার্শম্যান",
+      "জর্জ আব্রাহাম গ্রিয়ার্সন",
+      "উইলিয়াম কেরি",
+      "ডেভিড হেয়ার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 22,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি ঈশ্বরচন্দ্র বিদ্যাসাগরের আত্মজীবনী?",
+    "options": [
+      "স্মৃতি কথামালা",
+      "আত্মচরিত",
+      "আত্মকথা",
+      "আমার কথা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 23,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "রবীন্দ্রনাথ ঠাকুরের পূর্বপুরুষের আদিবসতি কোথায় ছিল?",
+    "options": [
+      "খুলনার দক্ষিণ ডিহি",
+      "যশোরের কেশবপুর",
+      "ছোটনাগপুর মালভূমি",
+      "কুষ্টিয়ার শিলাইদহ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 24,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘তেল নুন লকড়ি’ কার রচিত গ্রন্থ?",
+    "options": [
+      "প্রবোধচন্দ্র সেন",
+      "প্রমথনাথ বিশি",
+      "প্রমথ চৌধুরী",
+      "প্রদ্যুম্ন মিত্র"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 25,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যে প্রথম সার্থক ট্র্যাজেডি নাটক কোনটি?",
+    "options": [
+      "কৃষ্ণকুমারী",
+      "শর্মিষ্ঠা",
+      "সধবার একাদশী",
+      "নীলদর্পণ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 26,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘কপালকুণ্ডলা’ কোন প্রকৃতির রচনা?",
+    "options": [
+      "রোমান্সমূলক উপন্যাস",
+      "বিয়োগান্তক নাটক",
+      "ঐতিহাসিক উপন্যাস",
+      "সামাজিক উপন্যাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 27,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি রবীন্দ্ররচনার অন্তর্গত নয়?",
+    "options": [
+      "“কালের যাত্রার ধ্বনি শুনিতে কি পাও?”",
+      "“অগ্নিগ্রাসী বিশ্বত্রাসি জাগুক আবার আত্মদান”",
+      "“প্রাণের মানুষ আছে প্রাণে তাই হেরি তায় সকল খানে?”",
+      "“কি আঁচল বিছায়েছ বটের মূলে নদীর কূলে”"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 28,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "দ্রৌপদী কে?",
+    "options": [
+      "রামায়ণে সীতার সহচরী",
+      "মহাভারতে দুর্যোধনের স্ত্রী",
+      "রামায়ণে লক্ষ্মণের প্রণয়প্রার্থী নারী",
+      "মহাভারতে পাঁচ ভাইয়ের একক স্ত্রী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 29,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘মিলির হাতে স্টেনগান’ গল্পটি কার লেখা?",
+    "options": [
+      "আখতারুজ্জামান ইলিয়াস",
+      "শহীদুল জহির",
+      "শওকত ওসমান",
+      "শওকত আলী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 30,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘অসমাপ্ত আত্মজীবনী’ কার রচিত গ্রন্থ?",
+    "options": [
+      "বঙ্গবন্ধু শেখ মুজিবুর রহমান",
+      "শেখ হাসিনা",
+      "মওলানা আবদুল হামিদ খান ভাসানী",
+      "এ. কে. ফজলুল হক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 31,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "“প্রাণের বান্ধব রে বুড়ি হইলাম তোর কারণে।” গানটির গীতিকার কে?",
+    "options": [
+      "শাহ আবদুল করিম",
+      "রাধারমন",
+      "শেখ ওয়াহিদ",
+      "কুদ্দুস বয়াতি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 32,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘মাটির ময়না’ চলচ্চিত্রের নির্মাতা কে?",
+    "options": [
+      "আলমগীর কবির",
+      "হুমায়ূন আহমেদ",
+      "তারেক মাসুদ",
+      "শেখ নিয়ামত আলী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘হুলিয়া’ কবিতা কার রচনা?",
+    "options": [
+      "আবুল হাসান",
+      "আবুল হোসেন",
+      "মহাদেব সাহা",
+      "নির্মলেন্দু গুণ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 34,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "নিচের কোন সাহিত্যিক আততায়ীর হাতে ঢাকায় মৃত্যুবরণ করেন?",
+    "options": [
+      "আবুল হাসান",
+      "হুমায়ুন কবির",
+      "সোমেন চন্দ",
+      "কল্যাণ মিত্র"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 35,
+    "bank": "35th BCS",
+    "subject": "Bangla Literature",
+    "question": "নিম্নোক্ত কোন উপন্যাসে বাংলাদেশে মুক্তিযুদ্ধোত্তর সময়ের চিত্র অঙ্কিত হয়েছে?",
+    "options": [
+      "দেবেশ রায়ের ‘তিস্তাপাড়ের বৃত্তান্ত’",
+      "সুনীল গঙ্গোপাধ্যায়ের ‘পূর্ব-পশ্চিম’",
+      "শীর্ষেন্দু মুখোপাধ্যায়ের ‘যাও পাখি’",
+      "অভিজিৎ সেনের ‘রহুচণ্ডালের হাড়’"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 36,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Cricket enjoys a huge ____ in Bangladesh.",
+    "options": [
+      "follow on",
+      "fall out",
+      "follow",
+      "following"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 37,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Who wrote the following lines: \"all at once I saw/a crowd, a host of golden daffodils\"?",
+    "options": [
+      "Wordsworth",
+      "Herrick",
+      "Shelley",
+      "Keats"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "What would be the right synonym for \"initiative\"?",
+    "options": [
+      "apathy",
+      "indolence",
+      "enterprise",
+      "activity"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 39,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Which of the following words can be used as a verb?",
+    "options": [
+      "Mister",
+      "Master",
+      "Mistress",
+      "Mastery"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 40,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Who among the following writers is not a Nobel Laureate?",
+    "options": [
+      "T.S. Eliot",
+      "Toni Morrison",
+      "Grahame Greene",
+      "William Faulkner"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 41,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "The correct passive form of \"You must shut these doors\" is-",
+    "options": [
+      "These must be shut doors",
+      "Shut the doors you must",
+      "Shut must be the doors",
+      "These doors must be shut"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 42,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "The film was directed in the director's usual ___ style.",
+    "options": [
+      "confusion",
+      "idiosyncratic",
+      "personifying",
+      "purifying"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 43,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Which word is the determiner in the sentence \"Will it take much time?\"",
+    "options": [
+      "will",
+      "take",
+      "much",
+      "time"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 44,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "The play Arms and the Man is by-",
+    "options": [
+      "James Joyce",
+      "Samuel Beckett",
+      "Arthur Miller",
+      "George Bernard Shaw"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 45,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "‘He was a rather (disagreeable) man.’ Here the underlined word is a/an-",
+    "options": [
+      "Noun",
+      "Adjective",
+      "Adverb",
+      "Preposition"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 46,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "This could have worked if I ____ been more far-sighted.",
+    "options": [
+      "had",
+      "have",
+      "might",
+      "would"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 47,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "The 'climax' of a plot is what happens-",
+    "options": [
+      "in the beginning",
+      "at the end",
+      "at the height",
+      "in the confrontation"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 48,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Choose the pair of words that expresses a relationship similar to that of \"Harm : Damage\" -",
+    "options": [
+      "Sweet : Sour",
+      "Injure : Incapacitate",
+      "Stout : Weak",
+      "Hook : Crook"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Othello is a Shakespeare's play about -",
+    "options": [
+      "A Jew",
+      "A Roman",
+      "A Turk",
+      "A Moor"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 50,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "In the 18th Century the Mughal Empire begun to -",
+    "options": [
+      "discriminate",
+      "disintegrate",
+      "differentiate",
+      "dislocate"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 51,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Being fat does not necessarily kill you, but it ____ the risk that you will suffer from nasty diseases",
+    "options": [
+      "increases",
+      "emphasizes",
+      "encourages",
+      "involves"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 52,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "The poem \"Isle of Innisfree\" is written by -",
+    "options": [
+      "Dylan Thomas",
+      "Ezra Pound",
+      "W.H. Auden",
+      "W.B. Yeats"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Riders to the Sea is -",
+    "options": [
+      "an epic poem",
+      "a novella",
+      "a one-act play",
+      "a theatrical adaptation of a poem"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 54,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "“It is time to review the (protocol) on testing nuclear weapons”. Here the underlined word means-",
+    "options": [
+      "Record of rules",
+      "Summary of rules",
+      "Procedures",
+      "Problems"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 55,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "____ amazing song haunted me for a long time.",
+    "options": [
+      "These",
+      "Those",
+      "Thus",
+      "That"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 56,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Let us beging by looking at the (minutes) of the meeting. Here the underlined word means-",
+    "options": [
+      "time record",
+      "time frame",
+      "written record",
+      "written analysis"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 57,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "The noise level in Dhaka city has increased (exponentially). Here the underlined word means-",
+    "options": [
+      "amazingly",
+      "shockingly",
+      "steadily",
+      "rapidly"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 58,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Which of the following writers belong to the Elizabethan period?",
+    "options": [
+      "Christopher Marlowe",
+      "Alexander Pope",
+      "John Dryden",
+      "Samuel Beckett"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 59,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Women are too often ____ by family commitments.",
+    "options": [
+      "confused",
+      "controlled",
+      "contaminated",
+      "constrained"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 60,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "\"To be, or not to be, that is the question\" is a famous dialogue from-",
+    "options": [
+      "Othello",
+      "Romeo and Juliet",
+      "Hamlet",
+      "Macbeth"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 61,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Class relations and societal conflict is the key understanding of-",
+    "options": [
+      "Feminism",
+      "Formalism",
+      "Structuralism",
+      "Marxism"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 62,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Societies living in the (periphery) are always ignored. Here the underlined word means-",
+    "options": [
+      "offshore areas",
+      "marginal areas",
+      "remote places",
+      "backward regions"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 63,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "The idiom \"A stitch in time saves nine\" refers the importance of-",
+    "options": [
+      "saving lives",
+      "timely action",
+      "saving time",
+      "time tailoring"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 64,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Which is the correct sentence?",
+    "options": [
+      "He insisted on seeing her",
+      "He insisted for seeing her",
+      "He insisted in seeing her",
+      "He insisted to be seeing her"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "The phrase \"nouveau riche\" means-",
+    "options": [
+      "Riche rich",
+      "Well off",
+      "New high class",
+      "New rich"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 66,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "What would be the best antonym of \"hibernate\"?",
+    "options": [
+      "dormancy",
+      "liveliness",
+      "sluggishness",
+      "democracy"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 67,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "I am in the process of collecting (material) for my story. The underlined word is a /an-",
+    "options": [
+      "Verb",
+      "Adjective",
+      "Adverb",
+      "Noun"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 68,
+    "bank": "35th BCS",
+    "subject": "English Language",
+    "question": "Depression is often (hereditary). The underlined word is a/an-",
+    "options": [
+      "Adverb",
+      "Adjective",
+      "Noun",
+      "Verb"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 69,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Find the odd-man-out –",
+    "options": [
+      "George Eliot",
+      "Thomas Hardy",
+      "Joseph Conrad",
+      "James Joyce"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 70,
+    "bank": "35th BCS",
+    "subject": "English Literature",
+    "question": "Find the odd-man-out-",
+    "options": [
+      "The Bluest Eye",
+      "Sula",
+      "As I Lay Dying",
+      "A Mercy"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 71,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘সোয়াচ অব নো গ্রাউন্ড’ কোথায় অবস্থিত?",
+    "options": [
+      "যমুনা নদীতে",
+      "মেঘনার মোহনায়",
+      "বঙ্গোপসাগরে",
+      "সন্দ্বীপ চেনেল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 72,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাগদা চিংড়ি কোন দশক থেকে রপ্তানি পণ্য হিসেবে স্থান করে নেয়?",
+    "options": [
+      "পঞ্চাশ দশক",
+      "ষাট দশক",
+      "সত্তর দশক",
+      "আশির দশক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 73,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ সংবিধানে প্রশাসনিক ট্রাইব্যুনাল বিষয়টি কোন অনুচ্ছেদে সন্নিবেশিত হয়েছে?",
+    "options": [
+      "১১০",
+      "১১৫",
+      "১১৭",
+      "১২০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 74,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে বেসরকারি টিভি চ্যানেলের সংখ্যা-",
+    "options": [
+      "২৫",
+      "২৬",
+      "২৭",
+      "২৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 75,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘অলিভ টারটল’ বাংলাদেশের কোন দ্বীপে পাওয়া যায়?",
+    "options": [
+      "সেন্টমার্টিন",
+      "রাঙ্গাবালি",
+      "চর আলেকজান্ডার",
+      "ছেড়াদ্বীপ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "চীনা পরিব্রাজক হিউয়েন সাঙ এর দীক্ষাগুরু কে ছিলেন?",
+    "options": [
+      "অতীশ দিপঙ্কর",
+      "শিলভদ্র",
+      "মা হুয়ান",
+      "মেগাস্থিনিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 77,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রান্তিক হ্রদ কোন জেলায় অবস্থিত?",
+    "options": [
+      "রাঙামাটি",
+      "খাগড়াছড়ি",
+      "বান্দরবান",
+      "সিলেট"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 78,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে ইউনিয়ন পরিষদের সংখ্যা কত?",
+    "options": [
+      "৪৫০০",
+      "৪৫৫০",
+      "৫৬০০",
+      "৪৬০০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মহাস্থবীর শিলভদ্র কোন মহাবিহারের আচার্য ছিলেন?",
+    "options": [
+      "আনন্দ বিহার",
+      "নালন্দা বিহার",
+      "গোসিপো বিহার",
+      "সোমপুর বিহার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "খাসিয়া গ্রামগুলো কি নামে পরিচিত?",
+    "options": [
+      "বারাং",
+      "পাড়া",
+      "পুঞ্জি",
+      "মৌজা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 81,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "লর্ড ক্যানিং ভারত উপমহাদেশে প্রথম কোন ব্যবস্থা চালু করেন?",
+    "options": [
+      "চিরস্থায়ী বন্দোবস্ত ব্যবস্থা",
+      "দ্বৈত শাসন ব্যবস্থা",
+      "সতীদাহ নিবারণ ব্যবস্থা",
+      "পুলিশ ব্যবস্থা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 82,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯ মে, ২০১২ তারিখে কোন বাংলাদেশি এভারেস্ট জয় করেন?",
+    "options": [
+      "ওয়াসফিয়া নাজনীন",
+      "মুসা ইব্রাহিম",
+      "এম.এ.মুহিত",
+      "নিশাত মজুমদার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 83,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "পাকিস্তানের গণপরিষদের অধিবেশনে বাংলাকে রাষ্ট্রভাষা করার প্রথম দাবি কে উত্থাপন করেন?",
+    "options": [
+      "আব্দুল মতিন",
+      "ধীরেন্দ্রনাথ দত্ত",
+      "শেরে বাংলা এ. কে. ফজলুল হক",
+      "হোসেন শহীদ সোহরাওয়ার্দী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 84,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বিখ্যাত চিত্রকর্ম ‘তিন কন্যা’ এর চিত্রকর কে?",
+    "options": [
+      "জয়নুল আবেদিন",
+      "কামরুল হাসান",
+      "এস এম সুলতান",
+      "রফিকুন নবী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "যশোর জেলায় অবস্থিত বিল-",
+    "options": [
+      "হাইল",
+      "পাথরচাওলি",
+      "ভবদহ",
+      "আড়িয়াল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 86,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বিশ্ব জনসংখ্যা প্রতিবেদন ২০০৯ অনুযায়ী জনসংখ্যার দিক থেকে বিশ্বে বাংলাদেশের অবস্থান কততম?",
+    "options": [
+      "৭ম",
+      "৮ম",
+      "৯ম",
+      "কোনটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 87,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ অর্থনৈতিক সমীক্ষা ২০১৪ অনুযায়ী গড় সাক্ষরতার হার-",
+    "options": [
+      "৬১.১%",
+      "৫৭.৯%",
+      "৫৬.৮%",
+      "৬৫.৫%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 88,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের মুক্তিযুদ্ধের সর্বাধিনায়ক কে ছিলেন?",
+    "options": [
+      "বঙ্গবন্ধু শেখ মুজিবুর রহমান",
+      "জেনারেল এম. এ. জি ওসমানী",
+      "কর্নেল শফিউল্লাহ",
+      "মেজর জিয়াউর রহমান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 89,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘বর্ণালী’ এবং ‘শুভ্র’ কী?",
+    "options": [
+      "উন্নত জাতের ভুট্টা",
+      "উন্নত জাতের আম",
+      "উন্নত জাতের গম",
+      "উন্নত জাতের চাল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 90,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "গভীর সমুদ্রবন্দর নির্মাণের জন্য প্রস্তাবিত সোনাদিয়া দ্বীপের আয়তন কত?",
+    "options": [
+      "৯১ বর্গ কিলোমিটার",
+      "৯ বর্গ কিলোমিটার",
+      "৯ বর্গ কিলোমিটার",
+      "৮ বর্গ কিলোমিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 91,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "'Making of a Nation Bangladesh' গ্রন্থের রচয়িতা কে?",
+    "options": [
+      "কামাল হোসেন",
+      "এস. এ. করিম",
+      "নুরুল ইসলাম",
+      "আনিসুর রহমান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 92,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘জীবনঢুলী’ কি?",
+    "options": [
+      "একটি উপন্যাসের নাম",
+      "একটি কাব্যগ্রন্হের নাম",
+      "একটি আত্মজীবনীর নাম",
+      "একটি চলচ্চিত্রের নাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 93,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের পক্ষে ওয়ানডে অভিষেকে কোন ক্রিকেটার পাঁচ উইকেট পেয়েছেন?",
+    "options": [
+      "সোহাগ গাজী",
+      "রুবেল হোসেন",
+      "তাইজুল ইসলাম",
+      "তাসকিন আহমেদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 94,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "পরিকল্পনা কমিশনের গৃহীত পদক্ষেপ অনুযায়ী সপ্তম পঞ্চবার্ষিক পরিকল্পনা কোন মেয়াদে হবে?",
+    "options": [
+      "২০১৫-২০১৯",
+      "২০১৬-২০২০",
+      "২০১৭-২০২১",
+      "২০১৭-২০২১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 95,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "দ্য ব্লাড টেলিগ্রাম (The Blood Telegram) গ্রন্থটির লেখক-",
+    "options": [
+      "রিচার্ড সেশন",
+      "মার্কাস ফ্রান্ডা",
+      "গ্যারি জে ব্যাস",
+      "পল ওয়ালেচ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 96,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বিশ্ববাজারে বাংলাদেশের ব্ল্যাক বেঙ্গল ছাগলের চামড়া কি নামে পরিচিত?",
+    "options": [
+      "কুষ্টিয়া গ্রেড",
+      "চুয়াডাঙ্গা গ্রেড",
+      "ঝিনাইদহ গ্রেড",
+      "মেহেরপুর গ্রেড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 97,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন বিখ্যাত ম্যাগাজিন বঙ্গবন্ধু শেখ মুজিবুর রহমানকে রাজনীতির কবি (Poet of Politics) আখ্যা দিয়েছিল?",
+    "options": [
+      "টাইম",
+      "ইকোনোমিস্ট",
+      "নিউজ উইক্স",
+      "ইকোনোমিক এন্ড পলিটিক্যাল উইক্লি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 98,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোন অঞ্চলকে ৩৬০ আউলিয়ার দেশ বলা হয়?",
+    "options": [
+      "রাজশাহী",
+      "ঢাকা",
+      "চট্টগ্রাম",
+      "সিলেট"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 99,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ন্যাচারাল গ্যাস ফার্টিলাইজার ফ্যাক্টরি লিঃ-এর উৎপাদিত সার-এর নাম কোনটি?",
+    "options": [
+      "ইউরিয়া এবং এএসপি",
+      "ইউরিয়া",
+      "টিএসপি এবং এএসপি",
+      "ডিএপি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 100,
+    "bank": "35th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ম্যানগ্রোভ কি?",
+    "options": [
+      "কেওড়া বন",
+      "শালবন",
+      "উপকূলীয় বন",
+      "চিরহরিৎ বন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 101,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "নেপালের সর্বশেষ রাজা ছিলেন-",
+    "options": [
+      "রাজা ধীরেন্দ্র",
+      "রাজা জ্ঞানেন্দ্র",
+      "রাজা বীরেন্দ্র",
+      "রাজা মহেন্দ্র"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 102,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "প্রথম বিশ্বযুদ্ধ চলাকালীন বেলফোর ঘোষণা ১৯১৭ এর মূল প্রতিপাদ্য ছিল, -",
+    "options": [
+      "জাতিপুঞ্জ সৃষ্টি করা",
+      "অটোমানদের জায়গা দখল করা",
+      "ইহুদিদের জন্য একটি জাতিরাষ্ট্র গঠন",
+      "জার্মানির বিরুদ্ধে মিত্র শক্তির নতুন কৌশল অবলম্বন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 103,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "প্রশান্ত মহাসাগরে যুক্তরাষ্ট্রের সপ্তম নৌবহরের সদর দপ্তর হচ্ছে -",
+    "options": [
+      "ইউকোসুক",
+      "হাওয়াই",
+      "গোয়াম",
+      "সুবিক বে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 104,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "‘ডমিনো’ তত্ত্বটি কোন অঞ্চলের জন্য প্রযোজ্য ছিল?",
+    "options": [
+      "নিকট প্রাচ্য",
+      "পূর্ব আফ্রিকা",
+      "দক্ষিণ-পূর্ব এশিয়া",
+      "পূর্ব ইউরোপ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 105,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "‘গ্লাসনস্ত নীতি’ কোন দেশে চালু হয়েছিল?",
+    "options": [
+      "চীন",
+      "সাবেক সোভিয়েত ইউনিয়ন",
+      "হাঙ্গেরি",
+      "পোল্যান্ড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 106,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "ভারতের প্রধানমন্ত্রী নরেন্দ্র মোদির শপথগ্রহণ অনুষ্ঠানে সার্ক অঞ্চলের বাহিরে আমন্ত্রিত রাষ্ট্রের সংখ্যা -",
+    "options": [
+      "২",
+      "৩",
+      "৪",
+      "১"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 107,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "বর্তমান বিশ্বের কোন দেশটির সংবিধানকে ‘শান্তি সংবিধান’ বলা হয়?",
+    "options": [
+      "জাপান",
+      "পেরু",
+      "কোস্টারিকা",
+      "সুইজারল্যান্ড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 108,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "'Global Terrorism Index' ২০১৪ অনুযায়ী বিশ্বে সর্বাপেক্ষা ঝুঁকিপূর্ণ রাষ্ট্র -",
+    "options": [
+      "সিরিয়া",
+      "সুদান",
+      "ইরাক",
+      "সোমালিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 109,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "জলবায়ু পরিবর্তনের হুমকির ব্যাপকতা তুলে ধরার জন্য কোন দেশটি সমুদ্রের গভীরে মন্ত্রীসভার বৈঠক করেছে?",
+    "options": [
+      "ফিজি",
+      "পাপুয়া নিউগিনি",
+      "গোয়াম",
+      "মালদ্বীপ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 110,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "দ্বিতীয় বিশ্বযুদ্ধের পর পূর্ব-পশ্চিম দ্বন্দ্বের ফলে সৃষ্ট পূর্বের অর্থনৈতিক জোটটির নাম ছিল -",
+    "options": [
+      "কমিন্টার্ন",
+      "কমিনফর্ম",
+      "কমেকন",
+      "কোনোটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 111,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "ব্রিকসের সর্বশেষ শীর্ষ বৈঠক অনুষ্ঠিত হয় -",
+    "options": [
+      "রাশিয়া",
+      "ব্রাজিল",
+      "ভারত",
+      "দক্ষিণ আফ্রিকা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 112,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "‘উইঘুর’ হলো-",
+    "options": [
+      "চীনের একটি খাবারের নাম",
+      "চীনের একটি ধর্মীয় স্থানের নাম",
+      "চীনের একটি শহরের নাম",
+      "চীনের একটি সম্প্রদায়ের নাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 113,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "১৯৮২ সালের সমুদ্র আইন সংক্রান্ত কনভেনশন অনুযায়ী একটি উপকূলীয় রাষ্ট্রের মহীসোপানের (Continental Shelf) সীমা হবে ভিত্তি রেখা হতে -",
+    "options": [
+      "২০০ নটিকেল মাইল",
+      "৩০০ নটিকেল মাইল",
+      "৩৫০ নটিকেল মাইল",
+      "৪৫০ নটিকেল মাইল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 114,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "‘মংডু’ কোন দুটি দেশের সীমান্ত এলাকা?",
+    "options": [
+      "বাংলাদেশ-মায়ানমার",
+      "মায়ানমার-চীন",
+      "বাংলাদেশ-ভারত",
+      "ভারত-মায়ানমার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 115,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "কার্টাগেনা প্রটোকল হচ্ছে -",
+    "options": [
+      "জাতিসংঘের যুদ্ধ মোকাবেলা সংক্রান্ত চুক্তি",
+      "জাতিসংঘের শিশু অধিকার বিষয়ক চুক্তি",
+      "জাতিসংঘের নারী অধিকার বিষয়ক প্রটোকল",
+      "জাতিসংঘের জৈব নিরাপত্তা বিষয়ক চুক্তি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 116,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "১৯৮৯ থেকে ওজনস্তর বিষয়ক মন্ট্রিল প্রটোকল কতবার সংশোধন করা হয়?",
+    "options": [
+      "৫",
+      "৮",
+      "৪",
+      "৭"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 117,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "'The Art of War' গ্রন্থের রচয়িতা-",
+    "options": [
+      "ক্লজউইজ",
+      "আলফ্রেড মাহান",
+      "সুন জু",
+      "কৌটিল্য"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 118,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "বর্তমান বিশ্বে ‘নিউ সিল্ক রোড’ এর প্রবক্তা-",
+    "options": [
+      "জাপান",
+      "ভারত",
+      "আফগানিস্তান",
+      "চীন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 119,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "বিশ্ব প্রাণী দিবস হচ্ছে -",
+    "options": [
+      "৪ অক্টোবর",
+      "২৩ অক্টোবর",
+      "২৯ জুন",
+      "১১ ফেব্রুয়ারি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 120,
+    "bank": "35th BCS",
+    "subject": "International Affairs",
+    "question": "‘WIPO’ এর সদর দপ্তর?",
+    "options": [
+      "ব্রাসেলস",
+      "লন্ডন",
+      "জেনেভা",
+      "প্যারিস"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 121,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশে কালবৈশাখির ঝড় কখন হয়?",
+    "options": [
+      "মৌসুমী বায়ু ঋতুতে",
+      "শীতকালে",
+      "মৌসুমী বায়ু ঋতুর পরবর্তী সময়ে",
+      "প্রাক-মৌসুমী বায়ু ঋতুতে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 122,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "পূর্ব সতর্কতা ছাড়াই কোন দুর্যোগ সংঘটিত হয়?",
+    "options": [
+      "বন্যা",
+      "খরা",
+      "ভূমিকম্প",
+      "ঘূর্ণিঝড়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 123,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "ভারতীয় কোন রাজ্যের সাথে বাংলাদেশের কোনো সীমান্ত নেই?",
+    "options": [
+      "আসাম",
+      "মিজোরাম",
+      "ত্রিপুরা",
+      "নাগাল্যান্ড"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 124,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "‘ঝুম’ চাষ পদ্ধতি বাংলাদেশের কোন জেলাসমূহে দেখা যায়?",
+    "options": [
+      "সাতক্ষীরা, যশোর, কুষ্টিয়া",
+      "নাটোর, পাবনা, সিরাজগঞ্জ",
+      "বগুড়া, গাইবান্ধা, কুড়িগ্রাম",
+      "চট্টগ্রাম ও পার্বত্য চট্টগ্রামের জেলাসমূহ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 125,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "বায়ুমণ্ডলে নাইট্রোজেনের পরিমাণ কত শতাংশ?",
+    "options": [
+      "৭৫.৮%",
+      "৭৮.১%",
+      "৭৯.২%",
+      "প্রায় ৮০%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 126,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "নিম্নে উল্লেখিত ভূমিরূপসমূহের মধ্যে কোনটি হিমবাহের ক্ষয় কার্যের দ্বারা গঠিত?",
+    "options": [
+      "পার্শ্ব গ্রাবরেখা",
+      "শৈলশিরা",
+      "ভি-আকৃতির উপত্যকা",
+      "ইউ-আকৃতির উপত্যকা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 127,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের কৃষি কোন প্রকার?",
+    "options": [
+      "ধান-প্রধান নিবিড় স্বয়ংভোগী",
+      "ধান-প্রধান বাণিজ্যিক",
+      "স্বয়ংভোগী মিশ্র",
+      "স্বয়ংভোগী শষ্য চাষ ও পশুপালন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 128,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোনটি আপদ (Hazard) এর প্রত্যক্ষ প্রভাব?",
+    "options": [
+      "অর্থনৈতিক",
+      "সামাজিক",
+      "পরিবেশগত",
+      "অবকাঠামোগত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 129,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "দুর্যোগ ব্যবস্থাপনার বিভিন্ন কাজকে পর্যায়ক্রম অনুযায়ী সাজাতে হলে কোন কাজটি সর্বপ্রথমে হবে?",
+    "options": [
+      "পুনর্বাসন",
+      "ঝুঁকি (Risk) চিহ্নিতকরণ",
+      "দুর্যোগ প্রস্তুতি",
+      "দুর্যোগ প্রশমন কর্মকাণ্ড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 130,
+    "bank": "35th BCS",
+    "subject": "Geography",
+    "question": "প্রাকৃতিক দুর্যোগ ব্যবস্থাপনার ক্ষেত্রে নিম্নের কোন পর্যায়ে ব্যবস্থা গ্রহণ সবচেয়ে ফলপ্রসূ হবে?",
+    "options": [
+      "কমিউনিটি পর্যায়ে",
+      "জাতীয় পর্যায়ে",
+      "উপজেলা পর্যায়ে",
+      "আঞ্চলিক পর্যায়ে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 131,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "ডিএনএ অণুর দ্বি-হেলিক্স কাঠামোর জনক কে?",
+    "options": [
+      "স্যাংগার ও পলিং",
+      "ওয়াটসন ও ক্রিক",
+      "লুই পাস্তুর ও ওয়াটসন",
+      "পলিং ও ক্রিক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 132,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "হিমোগ্লোবিন কোন জাতীয় পদার্থ?",
+    "options": [
+      "আমিষ",
+      "স্নেহ",
+      "আয়োডিন",
+      "লৌহ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 133,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "কোন প্রাণীকে মরুভূমির জাহাজ বলা হয়?",
+    "options": [
+      "ঘোড়া",
+      "বলগা হরিণ",
+      "উট",
+      "খেচর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 134,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "pH হলো-",
+    "options": [
+      "এসিড নির্দেশক",
+      "এসিড ও ক্ষার নির্দেশক",
+      "এসিড ও ক্ষার নির্দেশক",
+      "এসিড, ক্ষার ও নিরপেক্ষতা নির্দেশক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 135,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "গোয়েন্দা বিভাগে নিম্নের কোন রশ্মি ব্যবহৃত হয়?",
+    "options": [
+      "বেকেরেল রশ্মি",
+      "গামা রশ্মি",
+      "X-রশ্মি",
+      "বিটা-রশ্মি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 136,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "বিচ্ছিন্ন অবস্থায় একটি পরমাণুর শক্তি -",
+    "options": [
+      "যুক্ত অবস্থার চাইতে কম",
+      "যুক্ত অবস্থার চাইতে অধিক",
+      "যুক্ত অবস্থার সমান",
+      "কোনোটিই সঠিক নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 137,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "ঘর্মাক্ত দেহে পাখার বাতাস আরাম দেয় কেন?",
+    "options": [
+      "গায়ের ঘাম বের হতে দেয় না",
+      "বাষ্পায়ন শীতলতার সৃষ্টি করে",
+      "পাখার বাতাস শীতল জলীয়বাষ্প ধারণ করে",
+      "পাখার বাতাস সরাসরি লোমকূপ দিয়ে শরীরে ঢুকে যায়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 138,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "নিম্নের কোন বাক্যটি সত্য নয়?",
+    "options": [
+      "পদার্থের নিউক্লিয়াসে প্রোটন ও নিউট্রন থাকে",
+      "প্রোটন ধনাত্মক আধানযুক্ত",
+      "ইলেকট্রন ঋণাত্মক আধানযুক্ত",
+      "ইলেকট্রন পরমাণুর নিউক্লিয়াসের ভিতরে অবস্থান করে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 139,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "কোনো বস্তুতে আধানের অস্তিত্ব নির্ণয়ের যন্ত্র হলো -",
+    "options": [
+      "অ্যামিটার",
+      "ভোল্টামিটার",
+      "অণুবীক্ষণ যন্ত্র",
+      "তড়িৎবীক্ষণ যন্ত্র"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 140,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "নিম্নের কোনটি বেকিং পাউডারের মূল উপাদানের সংকেত?",
+    "options": [
+      "CaCO_3",
+      "NaHCO_3",
+      "NH_4HCO_3",
+      "(NH_4)_2CO_3"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 141,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "আকৃতি, অবস্থান ও কাজের প্রকৃতিভেদে আবরণী টিস্যু কত ধরনের?",
+    "options": [
+      "২",
+      "৩",
+      "৪",
+      "৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 142,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "হৃৎপিণ্ড কোন ধরনের পেশি দ্বারা গঠিত?",
+    "options": [
+      "ঐচ্ছিক",
+      "অনৈচ্ছিক",
+      "বিশেষ ধরনের ঐচ্ছিক",
+      "বিশেষ ধরনের অনৈচ্ছিক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 143,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "কোন গ্রহের তাপমাত্রা তুলনামূলকভাবে অধিক?",
+    "options": [
+      "শুক্র",
+      "পৃথিবী",
+      "মঙ্গল",
+      "বুধ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 144,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "কীসের স্রোতে নদীখাত গভীর হয়?",
+    "options": [
+      "সমুদ্রস্রোত",
+      "নদীস্রোত",
+      "বানের স্রোত",
+      "জোয়ার-ভাটার স্রোত"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 145,
+    "bank": "35th BCS",
+    "subject": "Science",
+    "question": "বাংলাদেশের সুন্দরবনে কতো প্রজাতির হরিণ দেখা যায়?",
+    "options": [
+      "১",
+      "২",
+      "৩",
+      "৪"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 146,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "কম্পিউটার সিস্টেম এ Scanner একটি কোন ধরনের যন্ত্র?",
+    "options": [
+      "Input",
+      "Out put",
+      "উভয়েই",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 147,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "কম্পিউটার মূল মেমোরি তৈরি হয় কি দিয়ে?",
+    "options": [
+      "এ্যলুমিনিয়াম",
+      "প্লাসটিক",
+      "সিলিকন",
+      "কোনোটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 148,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "Back up প্রোগ্রাম বলতে কী বোঝানো হয়?",
+    "options": [
+      "নির্ধারিত ফাইল কপি করা",
+      "আগের প্রোগ্রামে ফিরে যাওয়া",
+      "সবশেষ পরিবর্তন Undo করা",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 149,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "একটি প্রতিষ্ঠানে ডিভাইস ভাগাভাগি করে নেয়ার সুবিধা হলো -",
+    "options": [
+      "অর্থ সাশ্রয়",
+      "সময় সাশ্রয়",
+      "স্থানের সাশ্রয়",
+      "উপরের সবকটি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 150,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন সাইটটি কেনা-বেচার জন্য নয়?",
+    "options": [
+      "ekhanei.com",
+      "Olx.com",
+      "google.com",
+      "amazon.com"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 151,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি ছাড়া Internet-এ প্রবেশ করা সহজ নয়?",
+    "options": [
+      "Task bar",
+      "Notification area",
+      "Menu bar",
+      "Web browser"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 152,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "কম্পিউটার মেমোরি থেকে সংরক্ষিত ডাটা উত্তোলনের পদ্ধতিকে কি বলে?",
+    "options": [
+      "Read-out",
+      "Read from",
+      "Read",
+      "উপরের সবগুলোই"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 153,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "MICR-এর পূর্ণরূপ কি?",
+    "options": [
+      "Magnetic Ink Character Reader",
+      "Magnetic Ink Code Reader",
+      "Magnetic Ink Case Reader",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 154,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি ডাটাবেজ ল্যাংগুয়েজ?",
+    "options": [
+      "Data Definition Language",
+      "Data Manipulation Language",
+      "Query Language",
+      "উপরের সবগুলোই"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 155,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "সোশ্যাল নেটওয়ার্কিং টুইটার কত সালে তৈরি হয়?",
+    "options": [
+      "২০০৪",
+      "২০০৬",
+      "২০০৩",
+      "২০০৮"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 156,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন স্মার্টফোন অপারেটিং সিস্টেমটি ওপেন সোর্স প্লাটফর্ম?",
+    "options": [
+      "IOS",
+      "Windows phone",
+      "Android",
+      "Symbian"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 157,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "মোবাইল কমিউনিকেশনে 4G এর ক্ষেত্রে 3G এর তুলনায় অতিরিক্ত বৈশিষ্ট্য কি?",
+    "options": [
+      "ভয়েস টেলিফোনি",
+      "ভিডিও কল",
+      "মোবাইল টিভি",
+      "ব্রডব্যান্ড ইন্টারনেট সেবা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 158,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "Oracle Corporation এর প্রতিষ্ঠাতা কে?",
+    "options": [
+      "Bill Gates",
+      "Tim Cook",
+      "Andrew S Grove",
+      "Lawrence J. Ellison"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 159,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "প্রোগ্রাম থেকে কপি করা ডাটা কোথায় থাকে?",
+    "options": [
+      "RAM",
+      "Clipboard",
+      "Terminal",
+      "Hard Disk"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 160,
+    "bank": "35th BCS",
+    "subject": "ICT",
+    "question": "পারসনাল কম্পিউটার যুক্ত করে নিচের কোনটি তৈরি করা যায়?",
+    "options": [
+      "Super Computer",
+      "Network",
+      "Server",
+      "Enterprise"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 161,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "কলার দাম 20% কমে যাওয়ায় 12 টাকায় পূর্ব অপেক্ষা 2টি কলা বেশি পাওয়া গেলে বর্তমানে একটি কলার দাম কত টাকা?",
+    "options": [
+      "1.50",
+      "2.50",
+      "3.00",
+      "4.00"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 162,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "60 লিটার ফলের রসে আম ও কমলার অনুপাত 2 : 1। কমলার রসের পরিমাণ কত লিটার বৃদ্ধি করলে অনুপাতটি 1 : 2 হবে?",
+    "options": [
+      "40",
+      "50",
+      "60",
+      "70"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 163,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "দুইটি সংখ্যার গ.সা.গু. 11 এবং ল.সা.গু. 7700। একটি সংখ্যা 275 হলে, অপর সংখ্যাটি -",
+    "options": [
+      "318",
+      "308",
+      "283",
+      "279"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 164,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "x-y=2 এবং xy=24 হলে, x এর ধনাত্মক মানটি-",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 165,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "3/ x+4/ x + 1 =2 হলে, x এর মান-",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 166,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "|x-3|<5 হলে-",
+    "options": [
+      "2 < x <8",
+      "-2 < x <8",
+      "- 8 < x <-2",
+      "- 4 < x <-2"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 167,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "x^-^3 -0.001=0 হলে, x^2 এর মান-",
+    "options": [
+      "100",
+      "1/10",
+      "10",
+      "1/100"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 168,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "log_ 3(1/ 9) এর মান-",
+    "options": [
+      "2",
+      "-2",
+      "3",
+      "-3"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 169,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "একটি গুণোত্তর অনুক্রমের দ্বিতীয় পদটি -48 এবং পঞ্চম পদটি 3/4 হলে সাধারণ অনুপাত কত?",
+    "options": [
+      "1/ 2",
+      "-1/ 2",
+      "1/ 4",
+      "-1/ 4"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 170,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "log_a x=1, log_a y=2 এবং log_az=3 হলে, log_a (x^3 y^2 / z) এর মান কত?",
+    "options": [
+      "1",
+      "2",
+      "4",
+      "5"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 171,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "2 সে. মি. ব্যাসার্ধবিশিষ্ট একটি বৃত্তের অন্তঃস্থ একটি বর্গক্ষেত্রের চারটি বাহু এবং বৃত্তটি দ্বারা আবদ্ধ অঞ্চলের ক্ষেত্রফল কত বর্গ সে.মি.?",
+    "options": [
+      "4π - 8",
+      "4π + 8",
+      "2π - 4",
+      "2π + 4"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 172,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "14 জন খেলোয়াড়ের মধ্য থেকে নির্দিষ্ট একজন অধিনায়কসহ 11 জনের একটি ক্রিকেট দল কতভাবে বাছাই করা যাবে?",
+    "options": [
+      "728",
+      "286",
+      "364",
+      "1001"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 173,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "100 জন শিক্ষার্থীর পরিসংখ্যানে গড় নম্বর 70। এদের মধ্যে 60 জন ছাত্রীর গড় নম্বর 75 হলে, ছাত্রদের গড় নম্বর কত?",
+    "options": [
+      "55.5",
+      "60.5",
+      "65.5",
+      "62.5"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 174,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "50 জন লোকের মধ্যে 35 জন ইংরেজি, 25 জন ইংরেজি ও বাংলা উভয়ই এবং প্রত্যেকেই দুইটি ভাষার অন্তঃত একটি ভাষায় কথা বলতে পারেন। বাংলায় কতজন কথা বলতে পারেন?",
+    "options": [
+      "10",
+      "15",
+      "40",
+      "30"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 175,
+    "bank": "35th BCS",
+    "subject": "Math",
+    "question": "CALCUTTA শব্দটির বর্ণগুলোকে একত্রে নিয়ে বিন্যাস সংখ্যা AMERICA শব্দটির বর্ণগুলে একত্রে নিয়ে বিন্যাস সংখ্যার কত গুণ?",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 176,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "সঠিক উত্তর কোনটি? ___ ছাড়া রোগ প্রতিরোধ করা অসম্ভব।",
+    "options": [
+      "টীকাদান কর্মসূচি",
+      "সচেতনতা",
+      "পুষ্টিকর খাদ্য",
+      "অর্থ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 177,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "শব্দ : কর্ণ; আলো : ?",
+    "options": [
+      "শোনা",
+      "বুদ্ধি",
+      "চক্ষু",
+      "অন্ধকার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 178,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৪",
+      "৭",
+      "২",
+      "৯"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 179,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৬",
+      "৮",
+      "৩",
+      "৫"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 180,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "কোনো বিয়ে অনুষ্ঠানে হঠাৎ করে আপনার পোশাকটি বিশ্রীভাবে ছিড়ে নষ্ট হয়ে গেল। এ অবস্থায় কি করবেন?",
+    "options": [
+      "ছেঁড়া অংশটুকু ধরে রাখার চেষ্টা করবেন",
+      "বিয়ে বাড়ী ছেঁড়ে চলে যাবেন",
+      "পোশাকের ছেঁড়া অংশটুকু যেভাবে আছে সেভাবে রাখবেন",
+      "আপনার কাছাকাছি যারা আছেন তাদের পরামর্শ নেবেন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 181,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "কোন বানানটি শুদ্ধ?",
+    "options": [
+      "প্রতিযোগিতা",
+      "সহযোগীতা",
+      "শ্রদ্ধাঞ্জলী",
+      "প্রতিযোগীতা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 182,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "কোনটি শুদ্ধ বানান?",
+    "options": [
+      "স্বশুর",
+      "শ্বসুর",
+      "শশুর",
+      "শ্বশুর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 183,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "TENSION",
+      "RELATION",
+      "NATIONAL",
+      "RELATIVE"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 184,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "নিচের চিত্রে মোট কয়টি ত্রিভুজ আছে?",
+    "options": [
+      "১৭",
+      "১৮",
+      "২০",
+      "২১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 185,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৬টি",
+      "৭টি",
+      "৮টি",
+      "১০টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 186,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": ".০৩ × .০০৬ × .০০৭=?",
+    "options": [
+      ".০০০১২৬",
+      ".০০০০০১২৬",
+      ".০০০১২৬০",
+      ".১২৬০০০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 187,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "নিচের দুইটি প্রশ্নবোধক চিহ্নের জায়গায় কোন সংখ্যাটি বসবে? ৭/?=?/৩৪৩",
+    "options": [
+      "৭",
+      "৩৪৩",
+      "৭৭",
+      "৪৯"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 188,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "নিচের দুইটি প্রশ্নবোধক চিহ্নের জায়গায় কোন সংখ্যাটি বসবে? ১,২,৮,৪৮,৩৮৪",
+    "options": [
+      "১৯৮০",
+      "২৮৪০",
+      "৩৮৪০",
+      "৪৬২০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 189,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "আপনার কাছে পাঁচটি আধুলি, ৮টা সিকি আছে। আর কয়টা ১০ পয়সার মুদ্রা দিলে মোট ৫ টাকা হবে?",
+    "options": [
+      "১০",
+      "১৫",
+      "০৫",
+      "০৩"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 190,
+    "bank": "35th BCS",
+    "subject": "Mental Ability",
+    "question": "১২ এর কত শতাংশ ১৮ হবে?",
+    "options": [
+      "১১০",
+      "১৫০",
+      "১২৫",
+      "১৬০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 191,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নীতিবিদ্যার আলোচ্য বিষয় কী?",
+    "options": [
+      "মানুষের আচরণের মনস্তাত্ত্বিক ব্যাখ্যা প্রদান",
+      "মানুষের জীবনের সফলতার দিকগুলো আলোচনা",
+      "সমাজে বসবাসকারী মানুষের আচরণ ব্যাখ্যা",
+      "সমাজে বসবাসকারী মানুষের আচরণের আলোচনা ও মূল্যায়ন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 192,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মানুষের কোন ক্রিয়া নীতিবিদ্যার আলোচ্য বিষয়?",
+    "options": [
+      "ঐচ্ছিক ক্রিয়া",
+      "অনৈচ্ছিক ক্রিয়া",
+      "ইচ্ছা নিরপেক্ষ ক্রিয়া",
+      "ক ও গ নামক ক্রিয়া"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 193,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধ (Values) কী?",
+    "options": [
+      "মানুষের আচরণ পরিচালনাকারী নীতি ও মানদণ্ড",
+      "শুধুমাত্র মানুষের প্রাতিষ্ঠানিক কার্যাদি নির্ধারণের দিক নির্দেশনা",
+      "সমাজ জীবনে মানুষের সুখী হওয়ার প্রয়োজনীয় মনোভাব",
+      "মানুষের সঙ্গে মানুষের পারস্পরিক সম্পর্ক নির্ধারণ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 194,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সামাজিক মূল্যবোধের ভিত্তি কী?",
+    "options": [
+      "আইনের শাসন",
+      "নৈতিকতা",
+      "সাম্য",
+      "উপরের সবগুলো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 195,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসনের পূর্বশর্ত হচ্ছে -",
+    "options": [
+      "মত প্রকাশের স্বাধীনতা",
+      "প্রশাসনের নিরপেক্ষতা",
+      "নিরপেক্ষ বিচার ব্যবস্থা",
+      "নিরপেক্ষ আইন ব্যবস্থা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 196,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সহস্রাব্দ উন্নয়ন লক্ষ্য (Millennium Development Goals) অর্জনে সুশাসনের কোন দিকটির উপর গুরুত্ব দেয়া হয়েছে?",
+    "options": [
+      "সুশাসনের সামাজিক দিক",
+      "সুশাসনের অর্থনৈতিক দিক",
+      "সুশাসনের মূল্যবোধের দিক",
+      "সুশাসনের গণতান্ত্রিক দিক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 197,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "“আইনের চোখে সব নাগরিক সমান।” বাংলাদেশের সংবিধানের কত নম্বর ধারায় এ নিশ্চয়তা প্রদান করা হয়েছে?",
+    "options": [
+      "ধারা ০৭",
+      "ধারা ২৭",
+      "ধারা ৩৭",
+      "ধারা ৪৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 198,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "Johannesburg Plan of Implementation সুশাসনের সঙ্গে নিচের কোন বিষয়টিকে অধিকতর গুরুত্ব দেয়?",
+    "options": [
+      "টেকসই উন্নয়ন",
+      "সাংস্কৃতিক উন্নয়ন",
+      "ধর্মীয় প্রতিষ্ঠানের উন্নয়ন",
+      "উপরের কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 199,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘সুশাসন’ শব্দটি সর্বপ্রথম কোন সংস্থা সুস্পষ্টভাবে ব্যাখ্যা করে?",
+    "options": [
+      "জাতিসংঘ",
+      "ইউএনডিপি",
+      "বিশ্বব্যাংক",
+      "আইএমএফ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 200,
+    "bank": "35th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নিরপেক্ষ ও শক্তিশালী গণমাধ্যমের অনুপস্থিতি কিসের অন্তরায়?",
+    "options": [
+      "সামাজিক অবক্ষয়ের",
+      "মূল্যবোধ অবক্ষয়ের",
+      "সুশাসনের",
+      "শিক্ষার গুণগতমানের"
+    ],
+    "answer": 2
+  }
+]

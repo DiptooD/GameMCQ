@@ -1,0 +1,1302 @@
+[
+  {
+    "id": 1,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "চর্যাপদ কোন ছন্দে লেখা?",
+    "options": [
+      "অক্ষরবৃত্ত",
+      "মাত্রাবৃত্ত",
+      "স্বরবৃত্ত",
+      "অমিত্রাক্ষর ছন্দ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "কবিওয়ালা ও শায়েরের উদ্ভব ঘটে কখন?",
+    "options": [
+      "আঠারো শতকের শেষার্ধে ও উনিশ শতকের প্রথমার্ধে",
+      "ষোড়শ শতকের শেষার্ধে ও সপ্তদশ শতকের প্রথমার্ধে",
+      "সপ্তদশ শতকের শেষার্ধে ও আঠারো শতকের প্রথমার্ধে",
+      "উনিশ শতকের শেষার্ধে ও বিংশ শতকের প্রথমার্ধে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 3,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "কবি গানের প্রথম কবি কে?",
+    "options": [
+      "গোঁজলা পুট [গুই]",
+      "হরু ঠাকুর",
+      "ভবানী ঘোষ",
+      "নিতাই বৈরাগী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 4,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "‘কেন পান্থ ক্ষান্ত হও হেরি দীর্ঘ পথ?’ – কার লেখা?",
+    "options": [
+      "কৃষ্ণচন্দ্র মজুমদার",
+      "ঈশ্বরচন্দ্র গুপ্ত",
+      "কামিনী রায়",
+      "যতীন্দ্রমোহন বাগচী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 5,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "কোন চরণটি সঠিক?",
+    "options": [
+      "ধন ধান্য পুষ্পে ভরা",
+      "ধন্য ধান্যে পুষ্পে ভরা",
+      "ধণ্যে ধান্যে পুষ্প ভরা",
+      "ধন্যে ধান্য পুষ্পে ভরা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 6,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বানানটি শুদ্ধ নয়?",
+    "options": [
+      "দরিদ্রতা",
+      "উপযোগিতা",
+      "শ্রদ্ধাঞ্জলি",
+      "উর্দ্ধ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "‘গৃহী’ শব্দের বিপরীতার্থক শব্দ-",
+    "options": [
+      "সংসারী",
+      "সঞ্চয়ী",
+      "সংস্থিতি",
+      "সন্ন্যাসী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 8,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "Excise duty – র পরিভাষা কোনটি?",
+    "options": [
+      "অতিরিক্ত কর",
+      "আবগারি শুল্ক",
+      "অর্পিত দায়িত্ব",
+      "অতিরিক্ত কর্তব্য"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 9,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বাক্যটি শুদ্ধ?",
+    "options": [
+      "তোমার গোপন কথা শোনা আমার পক্ষে সম্ভব নয়",
+      "দরিদ্রতা আমাদের প্রধান সমস্যা",
+      "সলজ্জিত হাসি হেসে মেয়েটি উত্তর দিল",
+      "সর্ব বিষয়ে বাহুল্যতা বর্জন করা উচিত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 10,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "‘তুমি আসবে বলে হে স্বাধীনতা সখিনা বিবির কপাল ভাঙল। ’ –এটি কোন বাক্য?",
+    "options": [
+      "সরল",
+      "মিশ্র বা জটিল",
+      "যৌগিক",
+      "সংযুক্ত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি ‘অগ্নি’-র সমার্থক শব্দ নয়?",
+    "options": [
+      "পাবক",
+      "বৈশ্বানর",
+      "সর্বশুচি",
+      "প্রজ্বলিত"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 12,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি সঠিক বানান?",
+    "options": [
+      "নিশিথিনী",
+      "নীশিথিনী",
+      "নিশীথিনী",
+      "নিশিথিনি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 13,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি ‘কোলন’?",
+    "options": [
+      ";",
+      ":",
+      "=",
+      "“ ”"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 14,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যের অন্যতম বিশিষ্ট পত্রিকা ‘কল্লোল’ কত সালে প্রথম প্রকাশিত হয়?",
+    "options": [
+      "১৯২৩ সালে",
+      "১৯২৪ সালে",
+      "১৯২৫ সালে",
+      "১৯২৭ সালে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 15,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "কোন গ্রন্থটি সুকান্ত ভট্টাচার্য কর্তৃক রচিত?",
+    "options": [
+      "হরতাল",
+      "পালাবদল",
+      "উত্তীর্ণ পঞ্চাশে",
+      "অন্বিষ্ট স্বদেশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 16,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "‘ঢাকের কাঠি’ বাগধারার অর্থ কি?",
+    "options": [
+      "কপট ব্যক্তি",
+      "ঘনিষ্ঠ সস্পর্ক",
+      "হতভাগ্য",
+      "মোসাহেব"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 17,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "বঙ্কিমচন্দ্র চট্টোপাধ্যায়ের ‘বিষবৃক্ষ’ উপন্যাসের চরিত্র কোনটি?",
+    "options": [
+      "কুন্দনন্দিনী",
+      "শ্যামাসুন্দরী",
+      "বিমলা",
+      "রোহিনি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 18,
+    "bank": "33rd BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বানানটি শুদ্ধ?",
+    "options": [
+      "পিপিলিকা",
+      "পিপীলিকা",
+      "পীপিলিকা",
+      "রোহিনী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 19,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "গীতাঞ্জলির ইংরেজি অনুবাদ সম্পাদনা করেছেন-",
+    "options": [
+      "এজরা পাউন্ড",
+      "টি.এস. এলিয়ট",
+      "ডবলিউ.বি. ইয়েটস",
+      "কীটস"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 20,
+    "bank": "33rd BCS",
+    "subject": "Bangla Literature",
+    "question": "‘The Origin and Development of Bengali Language’ গ্রন্থটি রচনা করেছেন-",
+    "options": [
+      "ড.মুহাম্মদ শহীদুল্লাহ",
+      "ড. সুনীতিকুমার চট্টোপাধ্যায়",
+      "হরপ্রসাদ শাস্ত্রী",
+      "স্যার জর্জ গ্রিয়ারসন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 21,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "Noureen will discuss the issue with Nasir __ phone.",
+    "options": [
+      "in",
+      "over",
+      "by",
+      "on"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 22,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "Put appropriate preposition for the sentence below: Some writers sink __ oblivion in course of time.",
+    "options": [
+      "on",
+      "from",
+      "under",
+      "into"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 23,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "‘Call to mind’ means–.",
+    "options": [
+      "fantasize",
+      "attend",
+      "remember",
+      "request"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 24,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "‘Pass away’ means–",
+    "options": [
+      "disappear",
+      "die",
+      "erase",
+      "fall"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 25,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "Pick the word that is synonymous with ‘authoritarian’.",
+    "options": [
+      "autocratic",
+      "senior",
+      "elderly",
+      "potential"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 26,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "The word ‘permissive’ implies –",
+    "options": [
+      "humble",
+      "law-abiding",
+      "liberal",
+      "submissive"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 27,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "their",
+      "her",
+      "whose",
+      "his"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 28,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "‘Subject-Verb Agreement’ refers to –",
+    "options": [
+      "person only",
+      "number, person and gender",
+      "number and person",
+      "number only"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 29,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "The only error in the sentence “One of the recommendation made by the committee was accepted by the authorities” is–",
+    "options": [
+      "recommendation",
+      "was",
+      "accepted by",
+      "committee"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 30,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "‘The French’ refers to–",
+    "options": [
+      "the French people",
+      "the French language",
+      "the French manners",
+      "the French society"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 31,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "If a person cannot stop taking drugs, he or she is–",
+    "options": [
+      "attached to them",
+      "committed to them",
+      "addicted to them",
+      "devoted to them"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 32,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "The word ‘officialese’ means–",
+    "options": [
+      "plural number of official",
+      "language used in offices",
+      "plural number of office",
+      "vague expressions"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 33,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "The verb ‘succumb’ means–",
+    "options": [
+      "achieve",
+      "submit",
+      "win",
+      "conquer"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 34,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "to receiving",
+      "to receive",
+      "in receiving",
+      "for receiving"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 35,
+    "bank": "33rd BCS",
+    "subject": "English Literature",
+    "question": "If a part of a speech or writing breaks the theme, it is called ___",
+    "options": [
+      "pomposity",
+      "digression",
+      "exaggeration",
+      "anti-climax"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 36,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "The expression ‘take into account’ means–",
+    "options": [
+      "count numbers",
+      "consider",
+      "think seriously",
+      "asses"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 37,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "Choose the best translation of ‘কর্তৃপক্ষ তাকে তিরস্কার করলো’ from the alternatives below–",
+    "options": [
+      "The authorities criticised him.",
+      "The authorities took him to book.",
+      "The authorities gave reins to him.",
+      "The authorities took him to task."
+    ],
+    "answer": 3
+  },
+  {
+    "id": 38,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "“Such claim needs to be tested empirically” suggest that–",
+    "options": [
+      "The test should be based on assumption.",
+      "The test should be based on idea.",
+      "The test should be based on experience.",
+      "The test should be based on calculation."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 39,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "The idiom “put up with” means –",
+    "options": [
+      "stay together",
+      "tolerate",
+      "keep trust",
+      "protect"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 40,
+    "bank": "33rd BCS",
+    "subject": "English Language",
+    "question": "In many ways, riding a bicycle is similar to-",
+    "options": [
+      "driving a car",
+      "when one drives a car",
+      "the driving of a car",
+      "when we drive a car"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 41,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সংবিধানে এখন পর্যন্ত কতটি সংশোধনী আনা হয়েছে?",
+    "options": [
+      "১৭",
+      "১৫",
+      "২০",
+      "১৯"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 42,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "পূর্বাশা দ্বীপের অপর নাম কি?",
+    "options": [
+      "নিঝুম দ্বীপ",
+      "সন্দ্বীপ",
+      "দক্ষিণ তালপট্টি",
+      "কুতুবদিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 43,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মুজিবনগর কোন জেলায় অবস্থিত?",
+    "options": [
+      "যশোর",
+      "কুষ্টিয়া",
+      "মেহেরপুর",
+      "চুয়াডাঙ্গা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 44,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সেন্টমার্টিন দ্বীপ কোন জেলায়?",
+    "options": [
+      "ভোলা",
+      "নোয়াখালী",
+      "চট্টগ্রাম",
+      "কক্সবাজার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 45,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সর্বাধিক বৈদেশিক মুদ্রা অর্জনকারী বিষয় কি?",
+    "options": [
+      "প্রবাসী শ্রমিক",
+      "পাট",
+      "রেডিমেড গার্মেন্টস",
+      "চামড়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 46,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘শালবন বিহার’ কোথায়?",
+    "options": [
+      "গাজীপুর",
+      "মধুপুর",
+      "রাজবাড়ী",
+      "কুমিল্লার ময়নামতি পাহাড়ের পাশে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 47,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘সাবাস বাংলাদেশ’ ভাস্কর্যটি কোথায় অবস্থিত?",
+    "options": [
+      "টিএসসি মোড়ে",
+      "ঢাকা বিশ্ববিদ্যালয়ে",
+      "রেসকোর্স ময়দানে",
+      "রাজশাহী বিশ্ববিদ্যালয়ে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 48,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "এশিয়া কাপ ক্রিকেট, ২০১২ কোন স্টেডিয়ামে অনুষ্ঠিত হয়?",
+    "options": [
+      "বঙ্গবন্ধু জাতীয় স্টেডিয়াম",
+      "শেরে বাংলা জাতীয় স্টেডিয়াম",
+      "বাংলাদেশ আর্মি স্টেডিয়াম",
+      "রাজশাহী স্টেডিয়াম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় দিবস কবে?",
+    "options": [
+      "১৬ ডিসেম্বর",
+      "৭ মার্চ",
+      "২৬ মার্চ",
+      "১৭ এপ্রিল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 50,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "শ্রীলঙ্কার মুদ্রার নাম কি?",
+    "options": [
+      "ডলার",
+      "পাউন্ড",
+      "টাকা",
+      "রূপী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 51,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সার্ক-এর সদস্য দেশ কয়টি?",
+    "options": [
+      "৬",
+      "৭",
+      "৮",
+      "৯"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 52,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলদেশের প্রথম প্রধান সেনাপতি কে ছিলেন?",
+    "options": [
+      "মে. জে. জিয়াউর রহমান",
+      "মে. জে. সফিউল্লাহ",
+      "লে. জে. এইচ. এম এরশাদ",
+      "জে. আতাউল গনি ওসমানী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের রাজধানী কোথায়?",
+    "options": [
+      "ঢাকা উত্তর",
+      "ঢাকা দক্ষিণ",
+      "ঢাকা",
+      "শেরে বাংলা নগর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 54,
+    "bank": "33rd BCS",
+    "subject": "International Affairs",
+    "question": "পৃথিবীর বৃহত্তম বিমান বন্দরটি কোথায় অবস্থিত?",
+    "options": [
+      "নিউইয়র্ক",
+      "লন্ডন",
+      "বার্লিন",
+      "জেদ্দা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 55,
+    "bank": "33rd BCS",
+    "subject": "International Affairs",
+    "question": "পৃথিবীর গভীরতম স্থান কোন মহাসাগরে?",
+    "options": [
+      "ভারত",
+      "আটলান্টিক",
+      "প্রশান্ত",
+      "উত্তর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 56,
+    "bank": "33rd BCS",
+    "subject": "International Affairs",
+    "question": "পৃথিবীর গভীরতম হ্রদ কোনটি?",
+    "options": [
+      "কাস্পিয়ান",
+      "বৈকাল",
+      "মানস সরোবর",
+      "ডেড সী (Dead Sea)"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 57,
+    "bank": "33rd BCS",
+    "subject": "International Affairs",
+    "question": "২০১৪ সালে বিশ্বকাপ ফুটবল কোথায় অনুষ্ঠিত হবে?",
+    "options": [
+      "লন্ডন",
+      "বার্লিন",
+      "ব্রাজিল",
+      "আর্জেন্টিনা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 58,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "শিল্পী জয়নুল আবেদিনের সংগ্রহশালাটি কোথায়?",
+    "options": [
+      "ঢাকায়",
+      "ময়মনসিংহে",
+      "চট্টগ্রামে",
+      "নড়াইলে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 59,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোন ছবি সম্প্রতি ‘কলকাতা ফিল্ম ফেস্টিভাল’ পুরস্কার লাভ করে?",
+    "options": [
+      "ওরা এগার জন",
+      "গেরিলা",
+      "আবার তোরা মানুষ হ",
+      "স্টপ জেনোসাইড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 60,
+    "bank": "33rd BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের আপিল বিভাগের মোট বিচারক কতজন?",
+    "options": [
+      "১১",
+      "২১",
+      "৯",
+      "১৫"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 61,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোনটি এন্টিবায়োটিক?",
+    "options": [
+      "ইনসুলিন",
+      "পেপসিন",
+      "পেনিসিলিন",
+      "ইথিলিন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 62,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "জন্ডিসে আক্রান্ত হয়–",
+    "options": [
+      "যকৃত",
+      "কিডনি",
+      "পাকস্থলী",
+      "হৃৎপিণ্ড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 63,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোনটি বিদ্যুৎ পরিবাহী নয়?",
+    "options": [
+      "তামা",
+      "লোহা",
+      "রূপা",
+      "রাবার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 64,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোনটি নবায়নযোগ্য শক্তির উৎস?",
+    "options": [
+      "সূর্যরশ্মি",
+      "পীট কয়লা",
+      "পেট্রোল",
+      "প্রাকৃতিক গ্যাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "33rd BCS",
+    "subject": "ICT",
+    "question": "ইন্টারনেট চালুর বছর-",
+    "options": [
+      "১৯৫৯",
+      "১৯৬৫",
+      "১৯৬৯",
+      "১৯৮১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 66,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "MKS পদ্ধতিতে ভরের একক-",
+    "options": [
+      "কিলোগ্রাম",
+      "পাউন্ড",
+      "গ্রাম",
+      "আউন্স"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 67,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোনটিকে চুম্বকে পরিণত করা যায়?",
+    "options": [
+      "তামা",
+      "ইস্পাত",
+      "পিতল",
+      "স্বর্ণ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 68,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "অ্যালটিমিটার (Altimeter) কি?",
+    "options": [
+      "তাপ পরিমাপক যন্ত্র",
+      "উষ্ণতা পরিমাপক যন্ত্র",
+      "গ্যাসের চাপ পরিমাপক যন্ত্র",
+      "উচ্চতা পরিমাপক যন্ত্র"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 69,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোনটি মৌলিক পদার্থ?",
+    "options": [
+      "লোহা",
+      "ব্রোঞ্জ",
+      "পানি",
+      "ইস্পাত"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 70,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোন ধাতু স্বাভাবিক তাপমাত্রায় তরল থাকে?",
+    "options": [
+      "পারদ",
+      "লিথিয়াম",
+      "জার্মেনিয়াম",
+      "ইউরেনিয়াম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 71,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "স্টেইনলেস স্টিলের অন্যতম উপাদান-",
+    "options": [
+      "তামা",
+      "দস্তা",
+      "ক্রোমিয়াম",
+      "এলুমিনিয়াম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 72,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "সর্বাপেক্ষা হালকা গ্যাস–",
+    "options": [
+      "অক্সিজেন",
+      "হাইড্রোজেন",
+      "র‌্যাডন",
+      "নাইট্রোজেন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "ভারী পানির রাসায়নিক সংকেত–",
+    "options": [
+      "2H_2 O_2",
+      "H_2 O",
+      "D_2 O",
+      "HD_2 O_2"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 74,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "লোহাকে গ্যালভানাইজিং করতে ব্যবহৃত হয়–",
+    "options": [
+      "তামা",
+      "দস্তা",
+      "রূপা",
+      "এলুমিনিয়াম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 75,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "সংকর ধাতু পিতলের উপাদান-",
+    "options": [
+      "তামা ও টিন",
+      "তামা ও দস্তা",
+      "তামা ও সীসা",
+      "তামা ও নিকেল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 76,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "কোনটি সিমেন্ট তৈরির অন্যতম কাঁচামাল?",
+    "options": [
+      "জিপসাম",
+      "সালফার",
+      "সোডিয়াম",
+      "খনিজ লবণ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 77,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "বিগব্যাঙ তত্ত্বের প্রবক্তা–",
+    "options": [
+      "আইনস্টাইন",
+      "জি. ল্যামেটার",
+      "স্টিফেন হকিং",
+      "গ্যালিলিও"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 78,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "মহাজাগতিক রশ্মির আবিষ্কারক–",
+    "options": [
+      "হেস",
+      "আইনস্টাইন",
+      "টলেমি",
+      "হাবল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "ইউরি গ্যাগারিন মহাশূন্যে যান–",
+    "options": [
+      "১৯৫৬ সালে",
+      "১৯৬১ সালে",
+      "১৯৬৪ সালে",
+      "১৯৬৯ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "33rd BCS",
+    "subject": "Science",
+    "question": "গ্রিনিচ মানমন্দির অবস্থিত-",
+    "options": [
+      "যুক্তরাজ্যে",
+      "যুক্তরাষ্ট্রে",
+      "ফ্রান্সে",
+      "জার্মানিতে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 81,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "তিন সদস্যের একটি বিতর্ক দলের সদস্যদের গড় বয়স ২৪ বছর। যদি কোনো সদস্যের বয়সই ২১ বছরের নিচে না হয় তবে তাদের কোনো একজনের সর্বোচ্চ বয়স কত হতে পারে?",
+    "options": [
+      "২৫ বছর",
+      "৩০ বছর",
+      "২৮ বছর",
+      "৩২ বছর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 82,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "(√[3]3×√[3]4)^6 = কত?",
+    "options": [
+      "12",
+      "48",
+      "36",
+      "144"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 83,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "একটি সমকোণী ত্রিভুজের লম্ব ভূমি অপেক্ষা ২ সে.মি. ছোট; কিন্তু অতিভুজ ভূমি অপেক্ষা ২ সে. মি. বড়। অতিভুজের দৈর্ঘ্য কত?",
+    "options": [
+      "১০ সে. মি.",
+      "৮ সে. মি.",
+      "৪ সে. মি.",
+      "৬ সে. মি."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 84,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "m সংখ্যক সংখ্যার গড় x এবং n সংখ্যক সংখ্যার গড় y হলে সব সংখ্যার গড় কত?",
+    "options": [
+      "x+y / mn",
+      "x+y / m+n",
+      "mx+ny / m+n",
+      "mx+ny / mn"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 85,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "যদি (a/ b)^x-3=(b/ a)^x-5 হয় তবে x এর মান কত?",
+    "options": [
+      "8",
+      "3",
+      "5",
+      "4"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 86,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "√[3]√[3]a^3 = কত?",
+    "options": [
+      "a",
+      "1",
+      "a^1/ 3",
+      "a^ 3"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 87,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "একটি সাবানের আকার ৫ সে.মি. × ৪ সে.মি. × ১.৫ সে.মি. হলে ৫৫ সে.মি. দৈর্ঘ্য, ৪৮ সে.মি. প্রস্থ এবং ৩০ সে.মি. উচ্চতাবিশিষ্ট একটি বাক্সের মধ্যে কতটি সাবান রাখা যাবে?",
+    "options": [
+      "২৬৪০টি",
+      "১৩২০টি",
+      "৩৬০০টি",
+      "৫২৪০টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 88,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "যদি সেট A=5, 15, 20,30 এবং B=3,5,15,18,20 হয় তবে নিচের কোনটি A∩B নির্দেশ করবে?",
+    "options": [
+      "3,18,30",
+      "3,5,15,18,20,30",
+      "5,15,20",
+      "কোনটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 89,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "১,১,২,৩,৫,৮,১৩,২১.............. ধারার ১০ম পদটি কত?",
+    "options": [
+      "৩৪",
+      "৫৫",
+      "৪৮",
+      "৬৪"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 90,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "4^x+4^x+4^x+4^x এর মান নিচের কোনটি?",
+    "options": [
+      "16^x",
+      "4^4x",
+      "2^2x+2",
+      "2^8x"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 91,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "রকীব সাহেব ৩,৭৩,৮৯৯ টাকা ব্যাংকে রাখলেন। ৭ ১/ ২ বছর পর তিনি আসল টাকার ১১/ ৪ অংশ সুদ পেলেন। ব্যাংকের সুদের হার কত?",
+    "options": [
+      "১২ ১ / ২%",
+      "১৬ ২ / ৩%",
+      "৮১ / ৩%",
+      "১১ ১ / ৯%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 92,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "নিচের কোনটি (√ 5 -√ 3) এর সমান?",
+    "options": [
+      "√ 2",
+      "1/ 2(√ 5-√ 3)",
+      "1/ √ 5+1/ √ 3",
+      "2/ √ 3+ √ 5"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 93,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "৫ জন তাঁত-শ্রমিক ৫ দিনে ৫টি কাপড় বুনতে পারে। একই ধরনের ৭টি কাপড় বুনতে ৭ জন শ্রমিকের কত দিন লাগবে?",
+    "options": [
+      "৫ দিন",
+      "২৫ / ৪৯ দিন",
+      "৪৯ / ২৫ দিন",
+      "৭ দিন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 94,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "36.2^3x-8=3^2 হলে x এ রর মান কত?",
+    "options": [
+      "7/ 3",
+      "3",
+      "8/ 3",
+      "2"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 95,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "একটি ত্রিভুজের দুটি কোণের পরিমাণ ৩৫°ও ৫৫°। ত্রিভুজটি কোন ধরনের?",
+    "options": [
+      "সমকোণী",
+      "সমবাহু",
+      "সমদ্বিবাহু",
+      "স্থূলকোণী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 96,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "(x-y,3)=(0,x+2y) হলে (x,y)= কত?",
+    "options": [
+      "(1,1)",
+      "(1,3)",
+      "(-1,-1)",
+      "(-3,1)"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 97,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "x/ y এর সাথে কত যোগ করলে যোগফল y/ x হবে?",
+    "options": [
+      "x^2-y^2/ xy",
+      "2x^2-y^2/ xy",
+      "y^2-x^2/ xy",
+      "x^2-2y^2/ xy"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 98,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "একটি আয়তাকার ঘরের প্রস্থ তার দৈর্ঘ্যের ২/ ৩ অংশ। ঘরটির পরিসীমা ৪০ মিটার হলে তার ক্ষেত্রফল কত?",
+    "options": [
+      "৬০ বর্গমিটার",
+      "৯৬ বর্গমিটার",
+      "৭২ বর্গমিটার",
+      "৬৪ বর্গমিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 99,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "৩ সে.মি., ৪ সে.মি. ও ৫ সে.মি. বাহুবিশিষ্ট তিনটি ঘনক গলিয়ে নতুন একটি ঘনক তৈরি করা হল। নতুন ঘনকের বাহুর দৈর্ঘ্য কত হবে?",
+    "options": [
+      "৭.৫ সে.মি.",
+      "৬.৫ সে.মি.",
+      "৬ সে.মি.",
+      "৭ সে.মি."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 100,
+    "bank": "33rd BCS",
+    "subject": "Math",
+    "question": "একটি রম্বসের কর্ণদ্বয়ের দৈর্ঘ্য ৮ সে.মি. ও ৯ সে.মি.। এই রম্বসের ক্ষেত্রফলের সমান ক্ষেত্রফলবিশিষ্ট বর্গক্ষেত্রের পরিসীমা কত?",
+    "options": [
+      "২৪ সে.মি",
+      "১৮ সে.মি",
+      "৩৬ সে.মি",
+      "১২ সে.মি"
+    ],
+    "answer": 0
+  }
+]

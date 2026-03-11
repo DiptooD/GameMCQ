@@ -1,0 +1,2582 @@
+[
+  {
+    "id": 1,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "বাক্যের ক্রিয়ার সাথে অন্যান্য পদের যে সম্পর্ক তাকে কী বলে?",
+    "options": [
+      "বিভক্তি",
+      "কারক",
+      "প্রত্যয়",
+      "অনুসর্গ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘গির্জা’ কোন ভাষার অন্তগর্ত শব্দ?",
+    "options": [
+      "ফারসি",
+      "পর্তুগিজ",
+      "ওলন্দাজ",
+      "পাঞ্জাবি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দযুগল বিপরীতার্থক নয়?",
+    "options": [
+      "ঐচ্ছিক-অনাবশ্যিক",
+      "কুটিল-সরল",
+      "কম-বেশি",
+      "কদাচার-সদাচার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 4,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "দ্বারা, দিয়া, কর্তৃক- বাংলা ব্যাকরণ অনুযায়ী কোন বিভক্তি?",
+    "options": [
+      "তৃতীয়া বিভক্তি",
+      "প্রথমা বিভক্তি",
+      "দ্বিতীয়া বিভক্তি",
+      "শূন্য বিভক্তি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 5,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘অভিরাম’ শব্দের অর্থ কী?",
+    "options": [
+      "বিরামহীন",
+      "বালিশ",
+      "চলন",
+      "সুন্দর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 6,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "শরতের শিশির- বাগধারা শব্দটির অর্থ কী?",
+    "options": [
+      "সুসময়ের বন্ধু",
+      "সুসময়ের সঞ্চয়",
+      "শরতের শোভা",
+      "শরতের শিউলি ফুল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 7,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "শিবরাত্রির সলতে- বাগধারাটির অর্থ কী?",
+    "options": [
+      "শিবরাত্রির আলো",
+      "একমাত্র সঞ্চয়",
+      "একমাত্র সন্তান",
+      "শিবরাত্রির গুরুত্ব"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 8,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘প্রোষিতভর্তৃকা’ - শব্দটির অর্থ কী?",
+    "options": [
+      "ভর্ৎসনাপ্রাপ্ত",
+      "যে নারীর স্বামী বিদেশে অবস্থান করে",
+      "ভূমিতে প্রোথিত তরুমূল",
+      "যে বিবাহিতা নারী পিত্রালয়ে অবস্থান করে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 9,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা কৃৎ-প্রত্যয় সাধিত শব্দ কোনটি?",
+    "options": [
+      "কারক",
+      "লিখিত",
+      "বেদনা",
+      "খেলনা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 10,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘Attested’- এর বাংলা পরিভাষা কোনটি?",
+    "options": [
+      "সত্যায়িত",
+      "প্রত্যয়িত",
+      "সত্যায়ন",
+      "সংলগ্ন/সংলাগ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 11,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি শুদ্ধ বানান?",
+    "options": [
+      "প্রজ্বল",
+      "প্রোজ্জল",
+      "প্রোজ্বল",
+      "প্রোজ্জ্বল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 12,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘জোছনা’ কোন শ্রেণির শব্দ?",
+    "options": [
+      "যৌগিক",
+      "তৎসম",
+      "দেশি",
+      "অর্ধ-তৎসম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 13,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘জিজীবিষা’ শব্দটি দিয়ে বোঝায়-",
+    "options": [
+      "জয়ের ইচ্ছা",
+      "হত্যার ইচ্ছা",
+      "বেঁচে থাকার ইচ্ছা",
+      "শোনার ইচ্ছা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 14,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘সর্বাঙ্গীণ’ শব্দের সঠিক প্রকৃতি-প্রত্যয় –",
+    "options": [
+      "সর্বঙ্গ + ঈন",
+      "সর্ব + অঙ্গীন",
+      "সর্ব + ঙ্গীন",
+      "সর্বাঙ্গ + ঈন্"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 15,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "অন্যের রচনা থেকে চুরি করাকে বলা হয়–",
+    "options": [
+      "বেতসবৃত্তি",
+      "পতঙ্গবৃত্তি",
+      "জলৌকাবৃত্তি",
+      "কুম্ভিলকবৃত্তি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 16,
+    "bank": "40th BCS",
+    "subject": "Bangla Language",
+    "question": "‘ঊর্ণনাভ’ শব্দটি দিয়ে বুঝায়-",
+    "options": [
+      "টিকটিকি",
+      "তেলাপোকা",
+      "উইপোকা",
+      "মাকড়সা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 17,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "চর্যাপদে কোন ধর্মমতের কথা আছে?",
+    "options": [
+      "খ্রিস্টধর্ম",
+      "প্যাগনিজম",
+      "জৈনধর্ম",
+      "বৌদ্ধধর্ম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 18,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "উল্লিখিতদের মধ্যে কে প্রাচীন যুগের কবি নন?",
+    "options": [
+      "কাহ্নপাদ",
+      "লুইপাদ",
+      "শান্তিপাদ",
+      "রমনীপাদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 19,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "উল্লিখিত কোন রচনাটি পুঁথি সাহিত্যের অন্তগর্ত নয়?",
+    "options": [
+      "ময়মনসিংহ গীতিকা",
+      "ইউসুফ জুলেখা",
+      "পদ্মাবতী",
+      "লাইলী মজনু"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 20,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "জীবনীকাব্য রচনার জন্য বিখ্যাত :",
+    "options": [
+      "ফকির গরীবুল্লাহ",
+      "নরহরি চক্রবর্তী",
+      "বিপ্রদাস পিপিলাই",
+      "বৃন্দাবন দাস"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 21,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "বৈষ্ণব পদাবলির সঙ্গে কোন ভাষা সম্পর্কিত?",
+    "options": [
+      "সন্ধ্যাভাষা",
+      "অধিভাষা",
+      "ব্রজবুলি",
+      "সংস্কৃত ভাষা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 22,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা আধুনিক উপন্যাস-এর প্রবর্তক ছিলেন–",
+    "options": [
+      "রবীন্দ্রনাথ ঠাকুর",
+      "প্যারীচাঁদ মিত্র",
+      "ঈশ্বরচন্দ্র বিদ্যাসাগর",
+      "বঙ্কিমচন্দ্র চট্টোপাধ্যায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 23,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘কিন্তু আরম্ভের পূর্বেও আরম্ভ আছে। সন্ধ্যাবেলায় দীপ জ্বালার আগে সকালবেলায় সলতে পাকানো’- বাক্যদ্বয় কোন রচনা থেকে উদ্ধৃত?",
+    "options": [
+      "নৌকাডুবি",
+      "চোখের বালি",
+      "যোগাযোগ",
+      "শেষের কবিতা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 24,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুক্তিযুদ্ধভিত্তিক উপন্যাস কোনটি?",
+    "options": [
+      "একটি কালো মেয়ের কথা",
+      "তেইশ নম্বর তৈলচিত্র",
+      "আয়নামতির পালা",
+      "ইছামতী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 25,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘কালো বরফ’ উপন্যাসটির বিষয় :",
+    "options": [
+      "তেভাগা আন্দোলন",
+      "ভাষা আন্দোলন",
+      "মুক্তিযুদ্ধ",
+      "দেশভাগ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 26,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘ঢাকা প্রকাশ’ সাপ্তাহিক পত্রিকাটির সম্পাদক কে?",
+    "options": [
+      "কৃষ্ণচন্দ্র মজুমদার",
+      "রামানন্দ চট্টোপাধ্যায়",
+      "শামসুর রাহমান",
+      "সিকান্দার আবু জাফর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 27,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘জীবনস্মৃতি’ কার রচনা?",
+    "options": [
+      "ঈশ্বরচন্দ্র বিদ্যাসাগর",
+      "রবীন্দ্রনাথ ঠাকুর",
+      "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
+      "রোকেয়া সাখাওয়াত হোসেন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 28,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "দীনবন্ধু মিত্রের ‘নীলদর্পণ’ নাটকটি ইংরেজিতে অনুবাদ করেন কে?",
+    "options": [
+      "প্যারীচাঁদ মিত্র",
+      "মাইকেল মধুসূদ্ন দত্ত",
+      "প্রমথ চৌধুরী",
+      "দ্বিজেন্দ্রলাল রায়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 29,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘সকালে উঠিয়া আমি মনে মনে বলি, সারাদিন আমি যেন ভালো হয়ে চলি’ চরণ দুটির রচয়িতা কে?",
+    "options": [
+      "চণ্ডীচরণ মুন্‌শী",
+      "কাজী নজরুল ইসলাম",
+      "রবীন্দ্রনাথ ঠাকুর",
+      "মদনমোহন তর্কালঙ্কার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 30,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "জসীমউদ্‌দীনের রচনা কোনটি?",
+    "options": [
+      "যাদের দেখেছি",
+      "পথে প্রবাসে",
+      "কাল নিরবধি",
+      "ভবিষ্যতের বাঙালী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 31,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘কিন্তু মানুষ্য কখনো পাষাণ হয় না’ – উক্তিটি কোন উপন্যাসের?",
+    "options": [
+      "রবীন্দ্রনাথের ‘চোখের বালি’",
+      "শরৎচন্দ্রের ‘পথের দাবী’",
+      "শওকত ওসমানের ‘ক্রীতদাসের হাসি’",
+      "বঙ্কিমচন্দ্রের ‘রাজসিংহ’"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "ইয়ংবেঙ্গল গোষ্ঠীভুক্ত ছিলেন কে?",
+    "options": [
+      "অক্ষয়কুমার দত্ত",
+      "এন্টনি ফিরঙ্গি",
+      "মাইকেল মধুসূদন দত্ত",
+      "কালীপ্রসন্ন সিংহ ঠাকুর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘বিদ্রোহী’ কবিতাটি কোন সনে প্রথম প্রকাশিত হয়?",
+    "options": [
+      "১৯২৩ সন",
+      "১৯২১ সন",
+      "১৯১৯ সন",
+      "১৯১৮ সন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 34,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘আগুন পাখি’– উপন্যাসটির রচয়িতা কে?",
+    "options": [
+      "রাহাত খান",
+      "হাসান আজিজুল হক",
+      "সেলিনা হোসেন",
+      "ইমদাদুল হক মিলন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 35,
+    "bank": "40th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘একুশে ফেব্রুয়ারি’র বিখ্যাত গানটির সুরকার কে?",
+    "options": [
+      "সুবীর সাহা",
+      "সুধীন দাস",
+      "আলতাফ মাহমুদ",
+      "আলতাফ মামুন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 36,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "‘Please write to me at the above address.’ The word ‘above’ in this sentence is a/an-",
+    "options": [
+      "noun",
+      "adjective",
+      "pronoun",
+      "adverb"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 37,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "In which sentence is the word ‘past’ used as a preposition?",
+    "options": [
+      "Writing letters is a thing of the past.",
+      "I look back on the past without regret.",
+      "I called out to him as he ran past.",
+      "Tania was a wonderful singer, but she’s past her prime."
+    ],
+    "answer": 3
+  },
+  {
+    "id": 38,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "The word ‘sibling’ means –",
+    "options": [
+      "a brother",
+      "a sister",
+      "a brother or sister",
+      "an infant"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 39,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Fill in the blank: As she was talking he suddenly broke ___, saying, ‘That’s a lie’",
+    "options": [
+      "off",
+      "in",
+      "down",
+      "into"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 40,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Fill in the blank : You may go for a walk if you feel __ it.",
+    "options": [
+      "about",
+      "on",
+      "like",
+      "for"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 41,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Identify the word which is spelt incorrectly :",
+    "options": [
+      "Consciencious",
+      "Perseverance",
+      "Convalescence",
+      "Maintenance"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 42,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "‘You look terrific in that dress!’ The word ‘terrific' in the above sentence means-",
+    "options": [
+      "excellent",
+      "funny",
+      "very ugly",
+      "horrible"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 43,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Someone who is capricious is–",
+    "options": [
+      "easily irritated",
+      "wise and willing to cooperate",
+      "exceedingly conceited and arrogant",
+      "known for sudden changes in attitude or behaviour"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 44,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Which one of the following words is masculine?",
+    "options": [
+      "Mare",
+      "Lad",
+      "Pillow",
+      "Pony"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 45,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "A man whose wife has died is called a/an –",
+    "options": [
+      "Widow",
+      "Widower",
+      "Spinster",
+      "Bachelor"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 46,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Which word is similar to ‘appal’?",
+    "options": [
+      "deceive",
+      "confuse",
+      "dismay",
+      "solicit"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 47,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Which word means the opposite of ‘dearth’?",
+    "options": [
+      "lack",
+      "abundance",
+      "poverty",
+      "shortage"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 48,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Identify the word which remains the same in its plural form :",
+    "options": [
+      "aircraft",
+      "intention",
+      "mouse",
+      "thesis"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 49,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Identify the determiner in the following sentence : ‘I have no news for you.’",
+    "options": [
+      "have",
+      "news",
+      "no",
+      "for"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 50,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "‘A lost opportunity never returns.’ Here ‘lost’ is a–",
+    "options": [
+      "gerund",
+      "verbal noun",
+      "gerundial infinitive",
+      "participle"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 51,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "The saying ‘enough is enough’ is used when you want–",
+    "options": [
+      "something to continue",
+      "something to stop",
+      "something to continue until it’s enough",
+      "to tell instructions are clear"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 52,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "‘He ran (with great speed)’ The underlined part of the sentence is a–",
+    "options": [
+      "noun phrase",
+      "adverb phrase",
+      "adjective phrase",
+      "participle phrase"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 53,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "‘We must not be late, else we will miss the train.’ This is a-",
+    "options": [
+      "compound sentence",
+      "complex sentence",
+      "simple sentence",
+      "interrogative sentence"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 54,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "Change the voice : ‘Who is calling me?’",
+    "options": [
+      "By whom am I called?",
+      "By whom I am called?",
+      "By whom am I being called?",
+      "Whom am I called by?"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 55,
+    "bank": "40th BCS",
+    "subject": "English Language",
+    "question": "An extra message added at the end of a letter after it is (signed) is called-",
+    "options": [
+      "Corrigendum",
+      "Postscript",
+      "NB",
+      "RSVP"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 56,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘The Rape of the Lock’ by Alexander Pope is a/an-",
+    "options": [
+      "epic",
+      "ballad",
+      "mock-heroic poem",
+      "elegy"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 57,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "Which of the following is not an American poet?",
+    "options": [
+      "Robert Frost",
+      "W.B. Yeats",
+      "Emily Dickinson",
+      "Langston Hughes"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "William Shakespeare was born in -",
+    "options": [
+      "1616",
+      "1664",
+      "1564",
+      "1493"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 59,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "Tennyson’s ‘In Memoriam’ is an elegy on the death of-",
+    "options": [
+      "John Milton",
+      "John Keats",
+      "Arthure Henry Hallam",
+      "Sydney Smith"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 60,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘Sweet Helen make me immortal with a kiss.’ The sentence has been taken from the play-",
+    "options": [
+      "Remeo and Juliet",
+      "Caesar and Cleopatra",
+      "Doctor Faustus",
+      "Antony and Cleopatra"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 61,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘What’s in a name? That which we call a rose By any other name would smell as sweet’- Who said this?",
+    "options": [
+      "Juliet",
+      "Romeo",
+      "Portia",
+      "Rosalind"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 62,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘Man’s love is of man’s life a thing apart, ‘Tis woman’s whole existence.’- This is taken from the poem of-",
+    "options": [
+      "P.B Shelley",
+      "Lord Byron",
+      "John Keats",
+      "Edmund Spenser"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 63,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "Who translated the ‘Rubaiyat of Omar Khayyam’ into English?",
+    "options": [
+      "Thomas Carlyle",
+      "Edward Fitzgerald",
+      "D.G. Rossetti",
+      "William Thackeray"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 64,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘Ulysses’ is a novel written by-",
+    "options": [
+      "Joseph Conrad",
+      "Thomas Hardy",
+      "Charles Dickens",
+      "James Joyce"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 65,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "The short story ‘The Diamond Necklace’ was written by-",
+    "options": [
+      "Guy de Maupassant",
+      "O Henry",
+      "Somerset Maugham",
+      "George Orwell"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 66,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘All the perfumes of Arabia will not sweeten this little hand.’- Who said this?",
+    "options": [
+      "Macbeth",
+      "Lady Macbeth",
+      "Lady Macduff",
+      "Macduff"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 67,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘Where are the songs of Spring? Aye, Where are they? Think not of them, thou hast the music too .’- Who wrote this?",
+    "options": [
+      "William Wordsworth",
+      "Robert Browning",
+      "John Keats",
+      "Samuel Coleridge"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 68,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "Who is the central character of ‘Wuthering Height’' by Emily Bronte?",
+    "options": [
+      "Mr. Earnshaw",
+      "Catherine",
+      "Heathcliff",
+      "Hindley Earnshaw"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 69,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "‘The old order changeth, yielding place to new.’ – This line is extracted from Tennyson’s poem-",
+    "options": [
+      "The Lotos Eaters",
+      "Tithonus",
+      "Locksley Hall",
+      "Morte d’ Arthur"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 70,
+    "bank": "40th BCS",
+    "subject": "English Literature",
+    "question": "Who worte the poem ‘The Good-Morrow’?",
+    "options": [
+      "George Herbert",
+      "Andrew Marvell",
+      "John Donne",
+      "Henry Vaughan"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 71,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "আলাউদ্দিন হোসেন শাহ্ কখন বৃহত্তর বাংলা শাসন করেন?",
+    "options": [
+      "১৪৯৮-১৫১৬ খ্রিস্টাব্দ",
+      "১৪৯৮-১৫১৭ খ্রিস্টাব্দ",
+      "১৪৯৮-১৫১৮ খ্রিস্টাব্দ",
+      "১৪৯৮-১৫১৯ খ্রিস্টাব্দ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 72,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রাচীন বাংলা মৌর্য শাসনের প্রতিষ্ঠাতা কে?",
+    "options": [
+      "অশোক মৌর্য",
+      "চন্দ্রগুপ্ত মৌর্য",
+      "সমুদ্র গুপ্ত",
+      "এর কোনোটিই না"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ইউরোপীয় বণিকদের মধ্যে বাংলায় প্রথম এসেছিলেন-",
+    "options": [
+      "পর্তুগিজরা",
+      "ইংরেজরা",
+      "ওলন্দাজরা",
+      "ফরাসিরা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 74,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯৭১ সালে মুক্তিযুদ্ধের সময় জাতিসংঘে কোন দেশ বাংলাদেশের পক্ষে ‘ভেটো’ প্রদান করেছিল?",
+    "options": [
+      "যুক্তরাজ্য",
+      "ফ্রান্স",
+      "যুক্তরাষ্ট্র",
+      "সোভিয়েত ইউনিয়ন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 75,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বঙ্গবন্ধুর ঐতিহাসিক ৭ই মার্চের ভাষণ সংবিধানের কোন তফসিলে অন্তর্ভুক্ত করা হয়েছে?",
+    "options": [
+      "চতুর্থ তফসিল",
+      "পঞ্চম তফসিল",
+      "ষষ্ঠ তফসিল",
+      "সপ্তম তফসিল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 76,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘বঙ্গভঙ্গ’ কালে ভারতের ভাইসরয় কে ছিলেন?",
+    "options": [
+      "লর্ড কার্জন",
+      "লর্ড ওয়াভেল",
+      "লর্ড মাউন্ট ব্যাটেন",
+      "লর্ড লিনলিথগো"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 77,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোন বনভূমি শালবৃক্ষের জন্য বিখ্যাত?",
+    "options": [
+      "সিলেটের বনভূমি",
+      "পার্বত্য চট্টগ্রামের বনভূমি",
+      "ভাওয়াল ও মধুপুরের বনভূমি",
+      "খুলনা, বরিশাল ও পটুয়াখালীর বনভূমি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 78,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে সবচেয়ে বেশি পাট উৎপন্ন হয় কোন জেলায়?",
+    "options": [
+      "ফরিদপুর",
+      "রংপুর",
+      "জামালপুর",
+      "শেরপুর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে মোট আবাদযোগ্য জমির পরিমাণ-",
+    "options": [
+      "২ কোটি ৪০ লক্ষ একর",
+      "২ কোটি ৫০ লক্ষ একর",
+      "২ কোটি ২৫ লক্ষ একর",
+      "২ কোটি ২১ লক্ষ একর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 80,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘গারো উপজাতি’ কোন জেলায় বাস করে?",
+    "options": [
+      "পার্বত্য চট্টগ্রাম",
+      "সিলেট",
+      "ময়মনসিংহ",
+      "টাঙ্গাইল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 81,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২০১৮ সালে বাংলাদেশের Per capita GDP (nominal) কত?",
+    "options": [
+      "$ ১,৭৫০ মার্কিন ডলার",
+      "$ ১,৭৫১ মার্কিন ডলার",
+      "$ ১,৭৫২ মার্কিন ডলার",
+      "$ ১,৭৫৩ মার্কিন ডলার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 82,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম আদমশুমারি অনুষ্ঠিত হয়-",
+    "options": [
+      "১৯৭২ সালে",
+      "১৯৭৩ সালে",
+      "১৯৭৪ সালে",
+      "১৯৭৫ সালে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 83,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "Inclusive Development Index (IDI)- এর ভিত্তিতে দক্ষিণ এশিয়ায় বাংলাদেশের স্থান কত?",
+    "options": [
+      "প্রথম স্থান",
+      "দ্বিতীয় স্থান",
+      "তৃতীয় স্থান",
+      "চতুর্থ স্থান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 84,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২০১৮ সালে বাংলাদেশের মোট রপ্তানি আয় কত?",
+    "options": [
+      "$ ৪০ বিলিয়ন মার্কিন ডলার",
+      "$ ৪১ বিলিয়ন মার্কিন ডলার",
+      "$ ৪২ বিলিয়ন মার্কিন ডলার",
+      "$ ৪৩ বিলিয়ন মার্কিন ডলার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "Alliance যে দেশভিত্তিক গার্মেন্টস ব্রান্ডগুলোর সংগঠন-",
+    "options": [
+      "যুক্তরাজ্যের",
+      "যুক্তরাষ্ট্রের",
+      "কানাডার",
+      "ইউরোপিয়ান ইউনিয়নের"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 86,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২০১৮ সালে বাংলাদেশের GDP- তে শিল্প খাতের অবদান কত শতাংশ ছিল?",
+    "options": [
+      "২৯.৬৬%",
+      "৩০.৬৬%",
+      "৩২.৬৬%",
+      "৩৩.৬৬%"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 87,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২০১৮-১৯ অর্থবছরে রপ্তানি প্রণোদনা রাখা হয়েছে-",
+    "options": [
+      "সাড়ে ৪ হাজার কোটি টাকা",
+      "সাড়ে ৫ হাজার কোটি টাকা",
+      "সাড়ে ৩ হাজার কোটি টাকা",
+      "সাড়ে ৬ হাজার কোটি টাকা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 88,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে প্রথম ভ্যাট (VAT) চালু হয়-",
+    "options": [
+      "১৯৯১ সালে",
+      "১৯৭৩ সালে",
+      "১৯৮৬ সালে",
+      "১৯৯৬ সালে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 89,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সংবিধানের কোন সংশোধনকে ‘First distortion of constitution’ বলে আখ্যায়িত করা হয়?",
+    "options": [
+      "৫ম সংশোধন",
+      "৪র্থ সংশোধন",
+      "৩য় সংশোধন",
+      "২য় সংশোধন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 90,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "স্বাধীনতার ঘোষণাপত্র সংবিধানের কততম তফসিলে সংযোজন করা হয়েছে?",
+    "options": [
+      "চতুর্থ",
+      "পঞ্চম",
+      "ষষ্ঠ",
+      "সপ্তম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 91,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধান প্রবর্তিত হয়-",
+    "options": [
+      "১৭ এপ্রিল, ১৯৭১",
+      "১৬ ডিসেম্বর, ১৯৭২",
+      "৭ মার্চ, ১৯৭২",
+      "২৬ মার্চ, ১৯৭৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 92,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সংবিধানের কোন অনুচ্ছেদে ‘সরকারি কর্ম কমিশন’ (PSC) গঠনের উল্লেখ আছে?",
+    "options": [
+      "১৩৭ নং অনুচ্ছেদে",
+      "১৩৫ নং অনুচ্ছেদে",
+      "১৩৮ নং অনুচ্ছেদে",
+      "১৩৪ নং অনুচ্ছেদে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 93,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "আওয়ামী লীগের ৬-দফা পেশ করা হয়েছিল-",
+    "options": [
+      "১৯৬৬ সালে",
+      "১৯৬৭ সালে",
+      "১৯৬৮ সালে",
+      "১৯৬৯ সালে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 94,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বঙ্গবন্ধুসহ আগরতলা ষড়যন্ত্র মামলায় মোট আসামি সংখ্যা ছিল কত জন?",
+    "options": [
+      "৩৪ জন",
+      "৩৫ জন",
+      "৩৬ জন",
+      "৩২ জন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 95,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "আইন ও সালিশ কেন্দ্র কি ধরনের সংস্থা?",
+    "options": [
+      "অর্থনৈতিক",
+      "মানবাধিকার",
+      "ধর্মীয়",
+      "খেলাধুলা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 96,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "Almond ও Powel চাপ সৃষ্টিকারী গোষ্ঠীকে বিভক্ত করেছেন-",
+    "options": [
+      "৩ ভাগে",
+      "৪ ভাগে",
+      "৫ ভাগে",
+      "৬ ভাগে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 97,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ জাতিসংঘের-",
+    "options": [
+      "১৪৬তম সদস্য",
+      "১৩৬তম সদস্য",
+      "১২৬তম সদস্য",
+      "১১৬তম সদস্য"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 98,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে প্রথম জাতীয় সংসদের নির্বাচন হয়-",
+    "options": [
+      "৭ ফেব্রুয়ারি, ১৯৭৩",
+      "৭ জানুয়ারি, ১৯৭৩",
+      "৭ মার্চ, ১৯৭৩",
+      "৭ এপ্রিল, ১৯৭৩"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 99,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "তৃণমূল পর্যায়ে স্বাস্থ্য সেবা নিশ্চিত করতে কমিউনিটি ক্লিনিক চালু করা হয়-",
+    "options": [
+      "১৩ হাজার ১২৫টি",
+      "১৩ হাজার ১৩০টি",
+      "১৩ হাজার ১৩৬টি",
+      "১৩ হাজার ১৪৬টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 100,
+    "bank": "40th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘Let there be Light’- বিখ্যাত ছবিটি পরিচালনা করেন-",
+    "options": [
+      "আমজাদ হোসেন",
+      "জহির রায়হান",
+      "খান আতাউর রহমান",
+      "শেখ নিয়ামত আলী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 101,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্রের Guantanamo Bay Detention Camp কোথায় অবস্থিত?",
+    "options": [
+      "ফ্লোরিডা",
+      "হাইতি",
+      "কিউবা",
+      "জ্যামাইকা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 102,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "টেকসই উন্নয়ন সংক্রান্ত ২০৩০ এজেন্ডা (The 2030 Agenda for Sustainable Development)– তে কয়টি লক্ষ্য (goal) রয়েছে।",
+    "options": [
+      "১৫",
+      "১৭",
+      "২১",
+      "২৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 103,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘ কোন সালে মানবাধিকার সংক্রান্ত বৈশ্বিক ঘোষণার ঐতিহাসিক নথিটি গ্রহণ করে?",
+    "options": [
+      "১৯৪৮",
+      "১৯৫৬",
+      "১৯৪৫",
+      "২০০০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 104,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "মিনস্ক নিচের কোন দেশের রাজধানী?",
+    "options": [
+      "তাজাকিস্তান",
+      "আজারবাইজান",
+      "পর্তুগাল",
+      "বেলারুশ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 105,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "সর্বশেষ মিউনিখ নিরাপত্তা সম্মেলন কোন সালের কোন মাসে অনুষ্ঠিত হয়েছে?",
+    "options": [
+      "সেপ্টেম্বর, ২০১৮",
+      "মার্চ, ২০১৯",
+      "ফেব্রুয়ারি, ২০১৯",
+      "ডিসেম্বর, ২০১৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 106,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "‘V20’ গ্রুপ কিসের সাথে সম্পর্কিত?",
+    "options": [
+      "কৃষি উন্নয়ন",
+      "দারিদ্র বিমোচন",
+      "জলবায়ু পরিবর্তন",
+      "বিনিয়োগ সম্পর্কিত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 107,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘ সমুদ্র আইন কত সালে স্বাক্ষরিত হয়েছিল?",
+    "options": [
+      "১৯৭৯ সালে",
+      "১৯৮২ সালে",
+      "১৯৮৩ সালে",
+      "১৯৯৮ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 108,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "বিশ্বের সর্বশেষ জলবায়ু সম্মেলন (ডিসেম্বর, ২০১৮) কোথায় অনুষ্ঠিত হয়?",
+    "options": [
+      "কাটোউইস, পোল্যান্ড",
+      "প্যারিস, ফ্রান্স",
+      "রোম, ইতালি",
+      "বেইজিং, চীন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 109,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "Sunshine Policy- এর সাথে কোন দুটি দেশ জড়িত?",
+    "options": [
+      "চীন, রাশিয়া",
+      "উত্তর কোরিয়া, দক্ষিণ কোরিয়া",
+      "জাপান, থাইল্যান্ড",
+      "তাইওয়ান, হংকং"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 110,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "BRICS কর্তৃক প্রতিষ্ঠিত ব্যাংকের নাম হচ্ছে-",
+    "options": [
+      "New Development Bank (NDB)",
+      "BRICS Development Bank (BDB)",
+      "Economic Development Bank (EDB)",
+      "International Commercial Bank (ICB)"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 111,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "চীন নিচের কোন আফ্রিকান দেশটিতে সামরিক ঘাঁটি স্থাপনের মাধ্যমে কৌশলগত সম্পর্ক স্থাপন করেছে?",
+    "options": [
+      "ইথিওপিয়া",
+      "জাম্বিয়া",
+      "লাইবেরিয়া",
+      "জিবুতি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 112,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "পাকিস্তান নিয়ন্ত্রিত কাশ্মীরের কোন অংশে ভারত সম্প্রতি (ফেব্রুয়ারি, ২০১৯) সামরিক বিমান হামলা পরিচালনা করে?",
+    "options": [
+      "এবোটাবাদ",
+      "বালাকোট",
+      "কোয়েটা",
+      "গিলগিট"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 113,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "নিচের কোন দেশে ২০২২ সালে G-20 বাৎসরিক সম্মেলন অনুষ্ঠিত হবে?",
+    "options": [
+      "ইতালি",
+      "যুক্তরাষ্ট্র",
+      "ভারত",
+      "ব্রাজিল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 114,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "‘দ্যা আইডিয়া অব জাস্টিস’ – গ্রন্থের রচয়িতা কে?",
+    "options": [
+      "মার্থা ন্যুসবাম",
+      "জোসেফ স্টিগলিটজ",
+      "অমর্ত্য সেন",
+      "জন রাউলস"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 115,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "শ্রীলংকার কোন সমুদ্রবন্দর চীনের নিকট ৯৯ বছরের জন্য লীজ দেয়া হয়েছে?",
+    "options": [
+      "ত্রিঙ্কোমালী",
+      "হাম্বানটোটা",
+      "গল বন্দর",
+      "পোর্ট অব কলম্বো"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 116,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "নিচের কোন সংস্থাটির সচিবালয় বাংলাদেশে অবস্থিত?",
+    "options": [
+      "BIMSTEC",
+      "CICA",
+      "IORA",
+      "SAARC"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 117,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "নিচের কোন সংস্থাটির স্থায়ী সদর দপ্তর নেই?",
+    "options": [
+      "NATO",
+      "NAM",
+      "EU",
+      "ASEAN"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 118,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘ বিষয়ক আলোচনায় পি৫ (P5) বলতে কি বুঝায়?",
+    "options": [
+      "নিরাপত্তা পরিষদের পাঁচটি স্থায়ী সদস্য রাষ্ট্র",
+      "পাঁচটি পরমাণু শক্তিধর রাষ্ট্র",
+      "পাঁচটি জাতিসংঘ সংস্থা",
+      "উপরের কোনটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 119,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "কোন দেশটি ইউরোপের বাল্টিক অঞ্চলে অবস্থিত নয়?",
+    "options": [
+      "ফিনল্যান্ড",
+      "পোল্যান্ড",
+      "অস্ট্রিয়া",
+      "সুইডেন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 120,
+    "bank": "40th BCS",
+    "subject": "International Affairs",
+    "question": "OIC– এর কততম শীর্ষ সম্মেলনে বঙ্গবন্ধু শেখ মুজিবুর রহমান অংশগ্রহণ করেন?",
+    "options": [
+      "২য় শীর্ষ সম্মেলন",
+      "৫ম শীর্ষ সম্মেলন",
+      "৪র্থ শীর্ষ সম্মেলন",
+      "৭ম শীর্ষ সম্মেলন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 121,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোনটি পাললিক শিলা?",
+    "options": [
+      "মার্বেল",
+      "কয়লা",
+      "গ্রানাইট",
+      "নিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 122,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোনটি বৃহৎ স্কেল মানচিত্র?",
+    "options": [
+      "১: ১০,০০০",
+      "১: ১০০,০০০",
+      "১:১০০০,০০০",
+      "১: ২৫০০,০০০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 123,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "সমবৃষ্টিপাত সম্পন্ন স্থানসমূহকে যোগকারী রেখাকে বলা হয়-",
+    "options": [
+      "আইসোথার্ম",
+      "আইসোবার",
+      "আইসোহাইট",
+      "আইসোহেলাইন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 124,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের লাউয়াছড়া জাতীয় উদ্যান কী ধরনের বনভূমি?",
+    "options": [
+      "ক্রান্তীয় চিরহরিৎ, আধা-চিরহরিৎ জাতীয়",
+      "ক্রান্তীয় আর্দ্র পত্র পতনশীল জাতীয়",
+      "পত্র পতনশীল জাতীয়",
+      "ম্যানগ্রোভ জাতীয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 125,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশে সংঘটিত বন্যার রেকর্ড অনুযায়ী (১৯৭১-২০০৭) কোন সালের বন্যায় সবচেয়ে বেশি এলাকা প্লাবিত হয়?",
+    "options": [
+      "১৯৭৪",
+      "১৯৮৮",
+      "১৯৯৮",
+      "২০০৭"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 126,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "সার্ক দুর্যোগ ব্যবস্থাপনা কেন্দ্র কোথায় অবস্থিত?",
+    "options": [
+      "নয়াদিল্লি",
+      "কলম্বো",
+      "ঢাকা",
+      "কাঠমুণ্ডু"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 127,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোনটি জলজ উদ্ভিদ নয়?",
+    "options": [
+      "হিজল",
+      "করচ",
+      "ডুমুর",
+      "গজারী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 128,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোনটি মানবসৃষ্ট আপদ (hazard) নয়?",
+    "options": [
+      "বায়ু দূষণ",
+      "দুর্ভিক্ষ",
+      "মহামারী",
+      "কালবৈশাখী (Norwester)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 129,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের অর্থনৈতিক সেক্টরগুলোর মধ্যে কোন খাতে বেশি কর্মসংস্থান হয়?",
+    "options": [
+      "নির্মাণ খাত",
+      "কৃষি খাত",
+      "সেবা খাত",
+      "শিল্প কারখানা খাত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 130,
+    "bank": "40th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের উপকূলীয় সমভূমিতে বসবাসকারী জনগোষ্ঠী যে ধরনের বন্যা কবলিত হয় তার নাম-",
+    "options": [
+      "নদীজ বন্যা",
+      "আকস্মিক বন্যা",
+      "বৃষ্টিজনিত বন্যা",
+      "জলোচ্ছ্বাসজনিত বন্যা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 131,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "^35_17Cl মৌলের নিউট্রন সংখ্যা কত?",
+    "options": [
+      "17",
+      "18",
+      "35",
+      "70"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 132,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "কোনো কঠিন পদার্থ বিশুদ্ধ নাকি অবিশুদ্ধ তা কিসের মাধ্যমে নির্ণয় করা যায়?",
+    "options": [
+      "ঘনীভবন",
+      "বাষ্পীভবন",
+      "গলনাঙ্ক",
+      "স্ফুটনাঙ্ক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 133,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "অ্যানোডে কোন বিক্রিয়া সম্পন্ন হয়?",
+    "options": [
+      "জারণ",
+      "বিজারণ",
+      "প্রশমন",
+      "পানিযোজন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 134,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "একটি বাল্বে ‘60 W-220 V’ লেখা আছে। বাল্বটির রোধ কত ওহম (Ohm)?",
+    "options": [
+      "16.36",
+      "160",
+      "280",
+      "806.67"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 135,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "নবায়নযোগ্য জ্বালানির উৎস-",
+    "options": [
+      "তেল",
+      "গ্যাস",
+      "কয়লা",
+      "বায়োগ্যাস"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 136,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "কার্বোহাইড্রোডে C,H এবং O – এর অনুপাত কত?",
+    "options": [
+      "১ : ১ : ২",
+      "১: ২: ১",
+      "১ : ৩ : ২",
+      "১ : ৩ : ১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 137,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "AC কে DC করার যন্ত্র-",
+    "options": [
+      "রেকটিফায়ার",
+      "অ্যামপ্লিফায়ার",
+      "ট্রান্সজিস্টর",
+      "ডায়োড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 138,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "বিদ্যুৎ শক্তিকে শব্দ শক্তিতে রূপান্তরিত করা হয় কোন যন্ত্রের মাধ্যমে-",
+    "options": [
+      "লাউড স্পিকার",
+      "অ্যামপ্লিফায়ার",
+      "জেনারেটর",
+      "মাল্টিমিটার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 139,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "বাতাসের আর্দ্রতা মাপার যন্ত্রের নাম কি?",
+    "options": [
+      "মাইক্রোমিটার",
+      "হাইগ্রোমিটার",
+      "ব্যারোমিটার",
+      "গ্রাভিমিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 140,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "কোথায় সাঁতার কাটা সহজ?",
+    "options": [
+      "পুকুরে",
+      "খালে",
+      "নদীতে",
+      "সাগরে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 141,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "ডিমে কোন ভিটামিন নেই?",
+    "options": [
+      "ভিটামিন-এ",
+      "ভিটামিন-বি",
+      "ভিটামিন-সি",
+      "ভিটামিন-ডি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 142,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "কোনটির জন্য পুষ্প রঙ্গিন ও সুন্দর হয়?",
+    "options": [
+      "ক্রোমোপ্লাস্ট",
+      "ক্লোরোপ্লাস্ট",
+      "ক্রোমোটোপ্লাস্ট",
+      "লিউকোপ্লাস্ট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 143,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "সোডিয়াম এসিটেটের সংকেত-",
+    "options": [
+      "CH_2 COONa",
+      "(CH_3 COO)_2 Ca",
+      "CH_3 COONa",
+      "CHCOONa"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 144,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "ক্যান্সার চিকিৎসায় ব্যবহৃত গামা বিকিরণের উৎস কি?",
+    "options": [
+      "আইসোটোন",
+      "আইসোটোপ",
+      "আইসোবার",
+      "আইসোমার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 145,
+    "bank": "40th BCS",
+    "subject": "Science",
+    "question": "খাদ্য তৈরির জন্য উদ্ভিদ বায়ু থেকে গ্রহণ করে-",
+    "options": [
+      "অক্সিজেন",
+      "কার্বন-ডাই-অক্সাইড",
+      "নাইট্রোজেন",
+      "জলীয় বাষ্প"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 146,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "মুদ্রিত লেখা সরাসরি ইনপুট নেয়ার জন্য নীচের কোনটি ব্যবহৃত হয়?",
+    "options": [
+      "OMR",
+      "OCR",
+      "MICR",
+      "Scanner"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 147,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন প্রোগ্রামটি একটি সম্পূর্ণ কম্পিউটার প্রোগ্রোমকে একবারে অনুবাদ ও সম্পাদন করে?",
+    "options": [
+      "Interpreter",
+      "Emulator",
+      "Compiler",
+      "Simulator"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 148,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি একই সাথে ইনপুট ও আউটপুট হিসেবে কাজ করে?",
+    "options": [
+      "Mouse",
+      "Microphone",
+      "Touch Screen",
+      "Printer"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 149,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি Octal number নয়?",
+    "options": [
+      "19",
+      "77",
+      "15",
+      "101"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 150,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "একটি রিলেশনাল ডাটাবেস মডেলে নিচের কোনটি দ্বারা Relation প্রকাশ করা হয়?",
+    "options": [
+      "Tuples",
+      "Attributes",
+      "Tables",
+      "Rows"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 151,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "Bluetooth কিসের উদাহরণ?",
+    "options": [
+      "Personal Area Network",
+      "Local Area Network",
+      "Virtual Private Network",
+      "কোনটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 152,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "মোবাইল ফোনে কোন Mode- এ যোগাযোগ হয়?",
+    "options": [
+      "Simplex",
+      "Half-duplex",
+      "Full-duplex",
+      "কোনটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 153,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "Time-shared OS –এর জন্য কোন scheduling policy সবচেয়ে ভাল?",
+    "options": [
+      "First come first serve",
+      "Round-robin",
+      "Shortest job first",
+      "Last come first serve"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 154,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি 52_(16) এর বাইনারী রূপ?",
+    "options": [
+      "01010010_(2)",
+      "01110011_(2)",
+      "00001100_(2)",
+      "11110000_(2)"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 155,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "প্রথম Web browser কোনটি?",
+    "options": [
+      "Netscape Navigator",
+      "World Wide Web",
+      "Internet Explorer",
+      "Safari"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 156,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "Social Networking Site- এ যোগাযোগে কোন media ব্যবহৃত হয়?",
+    "options": [
+      "Image/Video",
+      "Audio",
+      "Text",
+      "উপরের সবগুলো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 157,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "Firewall কি protection দেবার জন্য ব্যবহৃত হয়?",
+    "options": [
+      "Fire attacks",
+      "Unauthorized access",
+      "Virus attacks",
+      "Data-driven attacks"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 158,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "TV remote এর Carrier Frequency –র range কত?",
+    "options": [
+      "<100 MHZ",
+      "<1 GHZ",
+      "< 2 GHZ",
+      "Infrared-red range এর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 159,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "CPU কোন address generate করে?",
+    "options": [
+      "Physical address",
+      "Logical address",
+      "Both physical and logical address",
+      "উপরের কোনটি নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 160,
+    "bank": "40th BCS",
+    "subject": "ICT",
+    "question": "H.323 Protocol সাধারণত কি কাজে ব্যবহৃত হয়?",
+    "options": [
+      "File transfer",
+      "VoIP",
+      "Data Security",
+      "File download"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 161,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "নিচের কোনটি অমূলদ সংখ্যা?",
+    "options": [
+      "0.4^ ̇",
+      "√9",
+      "5.6^ ̇39^ ̇",
+      "√27 /48"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 162,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "নিচের কোন পূর্ণ সংখ্যাটিকে ৩, ৪, ৫ এবং ৬ দ্বারা ভাগ করলে যথাক্রমে ১, ২, ৩ ও ৪ অবশিষ্ট থাকে?",
+    "options": [
+      "৪৮",
+      "৫৪",
+      "৫৮",
+      "৬০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 163,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "পনির ও তপনের আয়ের অনুপাত 4:3 । তপন ও রবিনের আয়ের অনুপাত 5:4 । পনিরের আয় 120 টাকা হলে, রবিনের আয় কত?",
+    "options": [
+      "36 টাকা",
+      "12 টাকা",
+      "72 টাকা",
+      "48 টাকা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 164,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "৪৫০ টাকা বার্ষিক ৬% সুদে কত বছরে সুদে- আসলে ৫৫৮ টাকা হবে?",
+    "options": [
+      "৩ বছরে",
+      "৪ বছরে",
+      "৫ বছরে",
+      "৬ বছরে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 165,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "একটি মটর সাইকেল ১২% ক্ষতিতে বিক্রি করা হলো। যদি বিক্রয় মূল্য ১২০০ টাকা বেশি হতো, তাহলে ৮% লাভ হতো। মটর সাইকেলের ক্রয় মূল্য-",
+    "options": [
+      "৬০০০ টাকা",
+      "৫০০০ টাকা",
+      "৪০০০ টাকা",
+      "৮০০০ টাকা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 166,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "(০.৯)^৩+(০.৪)^৩/০.৯+০.৪ এর মান কত?",
+    "options": [
+      "০.৩৬",
+      "০.৫১",
+      "০.৮১",
+      "০.৬১"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 167,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "3x-2>2x-1 এর সমাধান সেট কোনটি?",
+    "options": [
+      "[ 1,∞ )",
+      "( 1,∞ )",
+      "[1/2,∞)",
+      "[-1,∞ )"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 168,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "6x^2-7x-4=0 সমীকরণে মূলদ্বয়ের প্রকৃতি কোনটি?",
+    "options": [
+      "বাস্তব ও সমান",
+      "বাস্তব ও অসমান",
+      "অবাস্তব",
+      "পূর্ণ বর্গ সংখ্যা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 169,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "যদি x^4-x^2+1=0 হয়, তবে x^3+1/x^3 = ?",
+    "options": [
+      "3",
+      "2",
+      "1",
+      "0"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 170,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "x^x^√ x=(x√ x)^x হলে, x এর মান কত?",
+    "options": [
+      "3/2",
+      "4/5",
+      "9/4",
+      "2/3"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 171,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "কোন শর্তে log_a^1=0?",
+    "options": [
+      "a> 0,a≠1",
+      "a≠0,a>1",
+      "a>0,a=1",
+      "a≠1,a<0"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 172,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "",
+    "options": [
+      "90°",
+      "55°",
+      "45°",
+      "35°"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 173,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "P=x:x,12 এর গুণনীয়কসমূহ এবং Q=x:x,3 এর গুণিতক এবং x≤12 হলে, P-Q কত?",
+    "options": [
+      "1,2,4",
+      "1,,3,4",
+      "1,3,6",
+      "1,2,6"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 174,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "cos(nπ/2) অনুক্রমটির চতুর্থ পদ কোনটি?",
+    "options": [
+      "-1",
+      "1",
+      "1/2",
+      "0"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 175,
+    "bank": "40th BCS",
+    "subject": "Math",
+    "question": "৬ জন খেলোয়াড়কে সমান সংখ্যক দুইটি দলে কত ভাবে বিভক্ত করা যায়?",
+    "options": [
+      "১০",
+      "২০",
+      "৬০",
+      "১২০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 176,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "শুদ্ধ বানান কোনটি?",
+    "options": [
+      "অধোগতি",
+      "অধঃগতি",
+      "অধগতি",
+      "অধোঃগতি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 177,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "সঠিক বানান কোনটি?",
+    "options": [
+      "Indwelling",
+      "Indwling",
+      "Indweling",
+      "Indeulling"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 178,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "বাংলা ‘ব্যঞ্জনবর্ণ’- মালায় ‘ম’ অক্ষরটির পূর্বের পঞ্চম অক্ষরটি কী?",
+    "options": [
+      "‘ধ’",
+      "‘ন’",
+      "‘প’",
+      "‘ল’"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 179,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "যদি ABC = ZYX হয়, তবে GIVV= ?",
+    "options": [
+      "TERE",
+      "TEER",
+      "TREE",
+      "FREE"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 180,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "‘UNICEF’ এর আয়নায় প্রতিবিম্ব কোনটি হবে?",
+    "options": [],
+    "answer": 1
+  },
+  {
+    "id": 181,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "রাস্তার সমান করার রোলার সরাবার জন্য সহজ হবে, যদি রোলারকে-",
+    "options": [
+      "ঠেলে নিয়ে যাওয়া হয়",
+      "টেনে নিয়ে যাওয়া হয়",
+      "তুলে নিয়ে যাওয়া হয়",
+      "সমান সহজ হয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 182,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": ".১×.০১×.০০১= ?",
+    "options": [
+      "১.০০০১",
+      ".১০০০১",
+      ".০০০০১",
+      ".০০০০০১"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 183,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "যদি চ × G = ৪২ হয় তবে J × ট =?",
+    "options": [
+      "১২০",
+      "৯২",
+      "১১৫",
+      "১১০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 184,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [],
+    "answer": 0
+  },
+  {
+    "id": 185,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [],
+    "answer": 1
+  },
+  {
+    "id": 186,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [],
+    "answer": 3
+  },
+  {
+    "id": 187,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "কোন শব্দগুচ্ছ শুদ্ধ?",
+    "options": [
+      "আয়ত্তাধীন, অহোরাত্রি, অদ্যপি",
+      "গড্ডালিকা, চিন্ময়, কল্যান",
+      "গৃহন্ত, গণনা, ইদানিং",
+      "আবশ্যক, মিথস্ক্রিয়া, গীতালি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 188,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "১২০",
+      "১৪০",
+      "১৬০",
+      "৮০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 189,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "একজন ব্যক্তি ভ্রমণে ৪ মাইল উত্তরে, ১২ মাইল পূর্বে, তারপর আবার ১২ মাইল উত্তরে যায়। সে শুরুর স্থান থেকে কত মাইল দূরে?",
+    "options": [
+      "১৭",
+      "২৮",
+      "২১",
+      "২০"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 190,
+    "bank": "40th BCS",
+    "subject": "Mental Ability",
+    "question": "ঢাকা থেকে হংকং হয়ে প্লেন নিউইয়র্ক যাওয়ার সময় দিনের সময় কালকে অপেক্ষাকৃত ছোট মনে হয়, কেন?",
+    "options": [
+      "পৃথিবী পশ্চিম দিকে ঘুরছে বলে",
+      "পৃথিবী সূর্যের চারদিকে ঘুরছে বলে",
+      "এক্ষেত্রে এসব ঘূর্ণনের কোন প্রভাব নেই",
+      "অন্য কোন কারণ আছে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 191,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "বাংলাদেশে ‘নব-নৈতিকতা’র প্রবর্তক হলেন-",
+    "options": [
+      "মোহাম্মদ বরকতুল্লা",
+      "জি.সি. দেব",
+      "আরজ আলী মাতুব্বর",
+      "আবদুল মতীন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 192,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘আমরা যে সমাজেই বসবাস করি না কেন, আমরা সকলেই ভালো নাগরিক হওয়ার প্রত্যাশা করি’। এটি-",
+    "options": [
+      "নৈতিক অনুশাসন",
+      "রাজনৈতিক ও সামাজিক অনুশাসন",
+      "আইনের শাসন",
+      "আইনের অধ্যাদেশ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 193,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সভ্য সমাজের মানদণ্ড হলো-",
+    "options": [
+      "গণতন্ত্র",
+      "বিচার ব্যবস্থা",
+      "সংবিধান",
+      "আইনের শাসন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 194,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘বিপরীত বৈষম্য’ –এর নীতিটি প্রয়োগ করা হয়-",
+    "options": [
+      "নারীদের ক্ষেত্রে",
+      "সংখ্যালঘুদের ক্ষেত্রে",
+      "প্রতিবন্ধীদের ক্ষেত্রে",
+      "পিছিয়ে পড়া জনগোষ্ঠীর ক্ষেত্রে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 195,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধ হলো-",
+    "options": [
+      "মানুষের সঙ্গে মানুষের পারস্পরিক সম্পর্ক নির্ধারণ",
+      "মানুষের আচরণ পরিচালনাকারী নীতি ও মানদণ্ড",
+      "সমাজজীবনে মানুষের সুখী হওয়ার প্রয়োজনীয় উপাদান",
+      "মানুষের প্রাতিষ্ঠানিক কার্যাবলীর দিক নির্দেশনা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 196,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "জাতিসংঘের অভিমত অনুসারে সুশাসনের লক্ষ্য ও উদ্দেশ্য হলো-",
+    "options": [
+      "দারিদ্র বিমোচন",
+      "মৌলিক অধিকার রক্ষা",
+      "মৌলিক স্বাধীনতার উন্নয়ন",
+      "নারীদের উন্নয়ন ও সুরক্ষা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 197,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসন প্রতিষ্ঠায় নাগরিকের কর্তব্য হলো-",
+    "options": [
+      "সরকার পরিচালনায় সাহায্য করা",
+      "নিজের অধিকার ভোগ করা",
+      "সৎভাবে ব্যবসা-বাণিজ্য করা",
+      "নিয়মিত কর প্রদান করা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 198,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধের চালিকা শক্তি হলো-",
+    "options": [
+      "উন্নয়ন",
+      "গণতন্ত্র",
+      "সংস্কৃতি",
+      "সুশাসন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 199,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "অর্থনৈতিক ক্ষেত্রে সুশাসন প্রতিষ্ঠিত হলে-",
+    "options": [
+      "দুর্নীতি দূর হয়",
+      "বিনিয়োগ বৃদ্ধি পায়",
+      "আইনের শাসন",
+      "প্রতিষ্ঠিত হয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 200,
+    "bank": "40th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "তথ্য পাওয়া মানুষের কী ধরনের অধিকার?",
+    "options": [
+      "রাজনৈতিক",
+      "অর্থনৈতিক",
+      "মৌলিক",
+      "সামাজিক"
+    ],
+    "answer": 2
+  }
+]

@@ -1,0 +1,2591 @@
+[
+  {
+    "id": 1,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "নিচের কোন ভগ্নাংশটি ২/ ৩ হতে বড়?",
+    "options": [
+      "৩৩/ ৫০",
+      "৮/ ১১",
+      "৩/ ৫",
+      "১৩/ ২৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "বার্ষিক ৫% হারে মুনাফায় ৪০০ টাকা ২ বছরের চক্রবৃদ্ধি মূলধন কত",
+    "options": [
+      "৪৪০ টাকা",
+      "৪৪১ টাকা",
+      "৪৪৫ টাকা",
+      "৪৫০ টাকা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "১০০ হতে বড় দুইটি পূর্ণসংখ্যার যোগফল ৩০০ হলে, সংখ্যা দুইটির অনুপাত কত?",
+    "options": [
+      "১ : ৯",
+      "২ : ৫",
+      "২ : ৩",
+      "৩ : ৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 4,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "x^2-7x+12≤0 এর সমাধান সেট -",
+    "options": [
+      "(-∞,3]",
+      "(3,4)",
+      "[3,4]",
+      "[4,∞)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 5,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "x^2+y^2+z^2=2, xy+yz+zx=1 হলে, (x+2y)^2+(y+2z)^2+(z+2x)^2 এর মান-",
+    "options": [
+      "12",
+      "19",
+      "16",
+      "14"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 6,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "3x-y=3, 5x+y=21 হলে, (x,y) এর মান -",
+    "options": [
+      "(2, 5)",
+      "(2, 6)",
+      "(3, 5)",
+      "(3, 6)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "1/2×2^x-3+1=5 হলে x এর মান কত?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 8,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "log_√8 x=3 1/3 হলে x এর মান কত?",
+    "options": [
+      "32",
+      "8",
+      "3",
+      "√ 8"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 9,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "১ হতে বড় ১০০০ এর মধ্যে কতগুলো সংখ্যা আছে যারা ১৬ দ্বারা বিভাজ্য নয় কিন্তু ৩০ দ্বারা বিভাজ্য?",
+    "options": [
+      "33",
+      "35",
+      "37",
+      "41"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 10,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "একটি সিলিন্ডারের বৃত্তীয় তলের ব্যাসার্ধ ২ সে.মি. এবং উচ্চতা ৬ সে.মি. হলে, উহার তলগুলির মোট ক্ষেত্রফল কত?",
+    "options": [
+      "১৬π বর্গ সে.মি.",
+      "৩২π বর্গ সে.মি.",
+      "৩৬π বর্গ সে.মি.",
+      "৪৮π বর্গ সে.মি."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "কোনো একটি ত্রিভুজের দুইটি কোণের পরিমাণ ২৮° ও ৬২°। ত্রিভুজটি কোন ধরনের?",
+    "options": [
+      "সমকোণী",
+      "সূক্ষ্মকোণী",
+      "স্থূলকোণী",
+      "সমদ্বিবাহু সমকোণী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 12,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "4 সে.মি. বাহুবিশিষ্ট বর্গক্ষেত্রে পরিলিখিত বৃত্তের ক্ষেত্রফল কত?",
+    "options": [
+      "8π বর্গ সে.মি.",
+      "6π বর্গ সে.মি.",
+      "4π বর্গ সে.মি.",
+      "2√ 2 π বর্গ সে.মি."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 13,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "CONIC শব্দটির অক্ষরগুলো নিয়ে গঠিত বিন্যাস সংখ্যা কত?",
+    "options": [
+      "24",
+      "40",
+      "60",
+      "120"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 14,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "যদি A= x:x হলো 5, 7 দ্বারা বিভাজ্য এবং x < 150 হয় তবে P(A) এর সদস্য সংখ্যা কত?",
+    "options": [
+      "8",
+      "12",
+      "14",
+      "16"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 15,
+    "bank": "46th BCS",
+    "subject": "Math",
+    "question": "একটি থলিতে 5টি নীল, 10টি সাদা, 20টি কালো বল আছে। দৈব চয়নের মাধ্যমে একটি বল তুললে সেটি সাদা না হওয়ার সম্ভাবনা কত?",
+    "options": [
+      "3/ 10",
+      "5/ 7",
+      "7/ 5",
+      "7/ 10"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 16,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "একজন লোক উত্তর-পশ্চিম দিকে মুখ করে আছে। সে ঘড়ির কাঁটার দিকে ৯০° ঘুরে, তারপরে ঘড়ির কাঁটার বিপরীত দিকে ১৮০° ঘুরে এবং তারপর একই দিকে আরো ৯০° ঘুরে। এখন সে কোন দিকে মুখ করে আছে?",
+    "options": [
+      "দক্ষিণ",
+      "দক্ষিণ-পশ্চিম",
+      "দক্ষিণ-পূর্ব",
+      "পূর্ব"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 17,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৪৩৫২১",
+      "৩৫৪২১",
+      "৩৪৫১২",
+      "৪৩৫১২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 18,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "একটি ছবিতে একজন পুরুষের দিকে ইঙ্গিত করে একজন মহিলা বলেন, “তার ভাইয়ের বাবা আমার দাদার একমাত্র ছেলে।” ছবির পুরুষের সঙ্গে উক্ত মহিলার সম্পর্ক কী?",
+    "options": [
+      "মা",
+      "খালা",
+      "বোন",
+      "কন্যা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 19,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "যদি E = 10, J = 20, O = 30 এবং T = 40 হয়, তাহলে B + E + S + T = ?",
+    "options": [
+      "৭১",
+      "৮২",
+      "৯০",
+      "৯২"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 20,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "নিচের কোন শব্দটি অন্যদের থেকে আলাদা?",
+    "options": [
+      "Kiwi",
+      "Eagle",
+      "Emu",
+      "Ostrich"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 21,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "একজন মহিলা বলছেন, “আপনি যদি আমার নিজের বয়সকে উল্টে দেন তাহলে তা আমার স্বামীর বয়সকে নির্দেশ করে। তিনি আমার থেকে বয়সে বড় এবং আমাদের বয়সের পার্থক্য আমাদের মোট বয়সের যোগফলের এগারো ভাগের একভাগ।” মহিলার বয়স কত?",
+    "options": [
+      "২৩ বছর",
+      "৩৪ বছর",
+      "৪৫ বছর",
+      "কোনোটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 22,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "যদি একটি কামান থেকে নিম্নলিখিত ৪টি বস্তুকে অনুভূমিক ভাবে নিক্ষেপ করা হয়, তবে কোনটি সবচেয়ে বেশি দূরে উড়ে যাবে?",
+    "options": [],
+    "answer": 2
+  },
+  {
+    "id": 23,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "একটি সভায় ১৫ জন লোক রয়েছে এবং তারা সকলেই সভা শেষে একে অপরের সাথে করমর্দন করে। মোট কতটি করমর্দন হবে?",
+    "options": [
+      "২১০",
+      "১০৫",
+      "২২৫",
+      "১৯৬"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 24,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "সেই জুটি নির্বাচন করুন যা- “Children : pediatrician” জুটির মধ্যে প্রকাশিত সম্পর্কটির মতো একটি সম্পর্ককে সর্বোত্তমভাবে প্রকাশ করে।",
+    "options": [
+      "Adult : Orthopedist",
+      "Kidney : Nephrologist",
+      "Females : Gynecologist",
+      "Skin : Darmatologist"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 25,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [],
+    "answer": 0
+  },
+  {
+    "id": 26,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৮০",
+      "১১৪",
+      "১০৮",
+      "কোনোটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 27,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "সঠিক বানান কোনটি, চিহ্নিত করুন।",
+    "options": [
+      "Consciencious",
+      "Conscienctious",
+      "Consciencitious",
+      "Conscientious"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 28,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "একটি কমিটিতে পুরুষ এবং মহিলার সংখ্যা একটি অনুপাতে ৩ : ২ হলে এবং মহিলা সংখ্যা ২৫ জন হলে- পুরুষের সংখ্যা কত?",
+    "options": [
+      "৩০",
+      "৩৫",
+      "৪০",
+      "৪৫"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 29,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "‘Ubiquitous’ সমার্থক শব্দ কোনটি চিহ্নিত করুন।",
+    "options": [
+      "Scarce",
+      "Abundant",
+      "Widespread",
+      "Limited"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 30,
+    "bank": "46th BCS",
+    "subject": "Mental Ability",
+    "question": "পাঁচটি ধারাবাহিক পূর্ণসংখ্যার গড় হলো ১৫ সবচেয়ে বড় পূর্ণ সংখ্যা কত?",
+    "options": [
+      "১৮",
+      "২০",
+      "২২",
+      "২৪"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 31,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘Animal Liberation’ গ্রন্থটির রচয়িতা কে?",
+    "options": [
+      "হেগেল",
+      "কান্ট",
+      "বেন্হাম",
+      "পিটার সিঙ্গার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "কোন শ্রেণির ক্রিয়া নীতিবিদ্যার আলোচ্য বিষয়ের অন্তর্ভুক্ত?",
+    "options": [
+      "নৈতিকতা-নিরপেক্ষ ক্রিয়া",
+      "সামাজিক ক্রিয়া",
+      "ঐচ্ছিক ক্রিয়া",
+      "ইচ্ছা-নিরপেক্ষ ক্রিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "বাংলাদেশের ‘নব্য-নৈতিকতার’ প্রবর্তক হলেন-",
+    "options": [
+      "মোহাম্মদ বরকতুল্লাহ",
+      "জি. সি. দেব",
+      "আরজ আলী মাতুব্বর",
+      "আব্দুল মতীন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 34,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নিচের কোনটি সুশাসনের মূলনীতি?",
+    "options": [
+      "স্বচ্ছতা ও জবাবদিহিতা",
+      "কর্তৃত্ববাদী শাসন",
+      "কেন্দ্রীভূত সিদ্ধান্ত গ্রহণ",
+      "স্বজন প্রীতি ও পক্ষপাতিত্ব"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 35,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "“মানুষ হও এবং মরে বাঁচ।” – এটি কার উক্তি?",
+    "options": [
+      "প্লেটো",
+      "হেগেল",
+      "জি. ই. ম্যূর",
+      "রাসেল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 36,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "জাতীয় শুদ্ধাচার কৌশল নীতিমালা কত সালে পাশ হয়?",
+    "options": [
+      "২০১০",
+      "২০১১",
+      "২০১২",
+      "২০১৮"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 37,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "“দর্শন হচ্ছে ধর্ম ও বিজ্ঞানের মধ্যবর্তী এক অনধিকৃত প্রদেশ।” – উক্তিটি কে করেছেন?",
+    "options": [
+      "আর. বি. পেরি",
+      "প্লেটো",
+      "সি. ডি. ব্রড",
+      "বার্ট্রান্ড রাসেল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 38,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘সুশাসন চারটি স্তম্ভের উপর নির্ভরশীল’ – এই অভিমত কোন সংস্থা প্রকাশ করে?",
+    "options": [
+      "জাতিসংঘ",
+      "জাতিসংঘের উন্নয়ন কর্মসূচি",
+      "বিশ্বব্যাংক",
+      "এশিয়া উন্নয়ন ব্যাংক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 39,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নিচের কোনটি ‘SMART Bangladesh’ এর উপাদান?",
+    "options": [
+      "Smart Democracy",
+      "Smart Politics",
+      "Smart Society",
+      "Smart Parliament"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 40,
+    "bank": "46th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘Republic’ গ্রন্থটির রচয়িতা কে?",
+    "options": [
+      "বার্কলে",
+      "জন লক",
+      "ডেকার্ট",
+      "প্লেটো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 41,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Which of the following words can be used as a verb?",
+    "options": [
+      "mobile",
+      "sugar",
+      "media",
+      "sand"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 42,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "In which sentence ‘Like’ is used as a preposition?",
+    "options": [
+      "He likes to eat fish",
+      "he laughs like his father does",
+      "He climed the tree like a cat",
+      "Like minded people are necessary to start a business"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 43,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "He died (following) the incident The underlined word is a/an–",
+    "options": [
+      "adjective",
+      "adverb",
+      "noun",
+      "preposition"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 44,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "(Writing a diary) is a very good practice to develop the writing skill. The underlined word is a/an--",
+    "options": [
+      "noun phrase",
+      "verbal phrase",
+      "adjective phrase",
+      "adverbial phrase"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 45,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Fill in the blank with the correct word. ______ he lay on the ground groaning",
+    "options": [
+      "Injured",
+      "Injuring",
+      "having injured",
+      "Be injured"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 46,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Find out the meaning of the following phrase: By and large",
+    "options": [
+      "very large",
+      "on the whole",
+      "far away",
+      "the largest one"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Choose the best alternative for the underlined. He (went back) on his promise of voting for me",
+    "options": [
+      "withdrew",
+      "forgot",
+      "reinforced",
+      "support"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 48,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "‘Let the cat out of the bag’ means ––",
+    "options": [
+      "bring out a cat from a bag",
+      "let a cat move at large",
+      "reveal a secret carelessly",
+      "take a pre-caucious steps"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 49,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "He is a man (to depend on). The underlined part is ______ .",
+    "options": [
+      "a noun phrase",
+      "an adjective phrase",
+      "an adverbial phrase",
+      "a prepositional phrase"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 50,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "His dream (that he will be a B.C.S cadre) finally came true. The underlined part is ---",
+    "options": [
+      "a noun clause",
+      "an adjective clause",
+      "an independent clause",
+      "a co-ordinate clause"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 51,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Which of the following is a correct simple sentence?",
+    "options": [
+      "All that glitters is not gold",
+      "All’s well that ends well",
+      "Do or die",
+      "I saw an old man walking past me"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 52,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Which is the correct complex form of the sentence? ‘A corrupt man cannot win the respect of others’",
+    "options": [
+      "A man who is corrupt cannot respect others",
+      "A man does not respect others who are corrupt.",
+      "A man who is corrupt cannot win the respect of others.",
+      "A man who can win the respect of others cannot be corrupt."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 53,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Find out the correct positive form of the sentence: ‘Who else is the better player than Zaman in the team?’",
+    "options": [
+      "Is there any other player in this team who is as good as Zaman?",
+      "Who is the best player than Zaman in this team?",
+      "Is there any other players in this team who is as good as Zaman?",
+      "Are there any other player in this team who are as good as Zaman?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 54,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "The submarine dipped to avoid ______ by the enemy plane.",
+    "options": [
+      "see",
+      "seeing",
+      "being seen",
+      "seen"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 55,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "In fear of _____ he escaped elsewhere.",
+    "options": [
+      "arresting",
+      "arrested",
+      "being arrested",
+      "having arrested"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 56,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "I didn’t follow who passed by me. It____ Shajib.",
+    "options": [
+      "were",
+      "must be",
+      "might be",
+      "was"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 57,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Samin is my colleague. I ___ him for ten years.",
+    "options": [
+      "know",
+      "knew",
+      "have known",
+      "have been known"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 58,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "The snow swirls _____ the valley.",
+    "options": [
+      "up",
+      "in",
+      "down",
+      "through"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 59,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "There is a coffee shop ____ the street.",
+    "options": [
+      "at",
+      "on",
+      "before",
+      "across"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 60,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Identify the correct sentences:",
+    "options": [
+      "He has said to me that I will go but you will stay there in Dhaka.",
+      "He has told me that he will go but I will stay here in Dhaka.",
+      "He has told me that I would go but you would stay here in Dhaka.",
+      "He has told me that he would go but I would stay here in Dhaka."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 61,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Identify the correct sentences:",
+    "options": [
+      "The room was darkened by switching off all the lights.",
+      "The room was darkened switching off all the lights.",
+      "The room was darkened to switch off all the lights.",
+      "Switching off all the lights the room was darkened."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 62,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Identify the correct sentences:",
+    "options": [
+      "Had you been there on time, you could have had the information.",
+      "If you had been there on time, you could have the information.",
+      "If you have been there on time, you might get the information.",
+      "Had been you there, you could have got the information."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 63,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "Identify the correct sentences:",
+    "options": [
+      "There are trees on the both sides of the road.",
+      "There are trees on both the sides of the road.",
+      "There are trees, on the side of the road.",
+      "There are trees on either sides of the road."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 64,
+    "bank": "46th BCS",
+    "subject": "English Language",
+    "question": "The antonym of ‘boisterous’ is --",
+    "options": [
+      "noisy",
+      "quit",
+      "unruly",
+      "cheerful"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "‘Plagiarism’ means-",
+    "options": [
+      "the act of using someones else’s idea as one’s own.",
+      "the act of planning everything beforehand.",
+      "the act of playing a musical instrument.",
+      "the art of dealing with forgery."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 66,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "The two cities in (A Tale of Two Cities) are -",
+    "options": [
+      "London and Manchester",
+      "London and Paris",
+      "Paris and New York",
+      "Paris and Geneva"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 67,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "The line ‘Frailty, thou name is woman’ occurs in Shakespeare’s play -",
+    "options": [
+      "Hamlet",
+      "Macbeth",
+      "Othello",
+      "King Lear"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 68,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "Who of the following compiled an English Dictionary?",
+    "options": [
+      "Samuel Johnson",
+      "T.S. Eliot",
+      "John Dryden",
+      "William Congreve"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 69,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "Which is not a poetry form?",
+    "options": [
+      "Sonnet",
+      "Ballad",
+      "Tale",
+      "Epic"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 70,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "‘I am a man more sinned against than sinning’ This is uttered by -",
+    "options": [
+      "Horatio",
+      "Hamlet",
+      "King Lear",
+      "Macbeth"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 71,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "Which event influenced the literature of the Romantic Period?",
+    "options": [
+      "French revolution",
+      "Industrial Revolution",
+      "Russian Revolution",
+      "Hundred Year’s War"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 72,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "The author of (A Farewell to Arms) is -",
+    "options": [
+      "Somerset Maugham",
+      "Ernest Hemingway",
+      "D.H. Lawrence",
+      "Jane Austen"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "Who is the most famous satirist in English literature?",
+    "options": [
+      "Alexander Pope",
+      "Jonathan Swift",
+      "John Dryden",
+      "William Wordsworth"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 74,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "Which period is known as “The Golden Age of English Literature”?",
+    "options": [
+      "The Victorian Age",
+      "The Elizabethan Age",
+      "The Eighteen century",
+      "The Restoration period"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 75,
+    "bank": "46th BCS",
+    "subject": "English Literature",
+    "question": "Which novel is written by an Indian novelist?",
+    "options": [
+      "The Ministry of Utmost Happiness",
+      "The Return of the Native",
+      "Things Fall Apart",
+      "Heart of Darkness"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা ভাষায় কোন স্বরধ্বনি উচ্চারণকালে জিহ্বা উচ্চ অবস্থানে থাকে?",
+    "options": [
+      "আ",
+      "এ",
+      "উ",
+      "ও"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 77,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা শব্দ ভাণ্ডারে অনার্য জাতির ব্যবহৃত শব্দ-",
+    "options": [
+      "তৎসম",
+      "তদ্ভব",
+      "দেশি",
+      "বিদেশি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 78,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "‘ধ্বনিবিজ্ঞান ও বাংলা ধ্বনিতত্ত্ব’ গ্রন্হের রচয়িতা-",
+    "options": [
+      "মুহম্মদ আবদুল হাই",
+      "মুহম্মদ শহীদুল্লাহ্",
+      "মুনীর চৌধুরী",
+      "মুহম্মদ এনামুল হক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা বর্ণমালায় যৌগিক স্বর কয়টি?",
+    "options": [
+      "১টি",
+      "২টি",
+      "৩টি",
+      "৪টি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "যোগরূঢ় শব্দ কোনটি?",
+    "options": [
+      "কলম",
+      "মলম",
+      "বাঁশি",
+      "শাখামৃগ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 81,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "উপসর্গযুক্ত শব্দ-",
+    "options": [
+      "বিদ্যা",
+      "বিদ্রোহী",
+      "বিষয়",
+      "বিপুল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 82,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "বিভক্তিযুক্ত শব্দ কোনটি?",
+    "options": [
+      "সরোবরে",
+      "চশমা",
+      "সরোজ",
+      "চম্পক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 83,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি প্রত্যয়-সাধিত শব্দ?",
+    "options": [
+      "ভাইবোন",
+      "রাজপথ",
+      "বকলম",
+      "ঐকিক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 84,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "‘শিরশ্ছেদ’ শব্দের সন্ধিবিচ্ছেদ-",
+    "options": [
+      "শির + ছেদ",
+      "শিরঃ + ছেদ",
+      "শিরশ্ + ছেদ",
+      "শির + উচ্ছেদ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "‘নীলকর’ কোন সমাসের দৃষ্টান্ত?",
+    "options": [
+      "দ্বন্দ্ব",
+      "বহুব্রীহি",
+      "নিত্য",
+      "উপপদ তৎপুরুষ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 86,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "‘Pedagogy’ শব্দের পরিভাষা-",
+    "options": [
+      "সহশিক্ষা",
+      "নারীশিক্ষা",
+      "শিক্ষাতত্ত্ব",
+      "শিক্ষানীতি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 87,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "‘বঙ্কিম’ এর বিপরীত শব্দ কোনটি?",
+    "options": [
+      "বন্ধুর",
+      "অসম",
+      "সুষম",
+      "ঋজু"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 88,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা একাডেমির ‘প্রমিত বাংলা বানানের নিয়ম’ কত সালে প্রণীত হয়?",
+    "options": [
+      "১৯৯০",
+      "১৯৯২",
+      "১৯৯৪",
+      "১৯৯৬"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 89,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন বানানটি শুদ্ধ?",
+    "options": [
+      "মুলো",
+      "মুলা",
+      "ধুলি",
+      "ধূলো"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 90,
+    "bank": "46th BCS",
+    "subject": "Bangla Language",
+    "question": "‘নদী’র সমার্থ শব্দ কোনটি?",
+    "options": [
+      "সিন্ধু",
+      "হিল্লোল",
+      "তটিনী",
+      "নির্ঝর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 91,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "চর্যাপদের কবিরা ছিলেন-",
+    "options": [
+      "মহাঘানী বৌদ্ধ",
+      "বজ্রঘানী বৌদ্ধ",
+      "বাউল",
+      "সহজঘানী বৌদ্ধ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 92,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘শূন্যপূরাণের’ রচয়িতা-",
+    "options": [
+      "রামাই পন্ডিত",
+      "হলায়ূধ মিশ্র",
+      "কাহ্নপা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 93,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যের ইতিহাসে কাঁকিল্যা গ্রাম কেন উল্লেখযোগ্য?",
+    "options": [
+      "শ্রীচৈতন্যদেবের জন্মস্থান",
+      "বড়ু চণ্ডীদাসের জন্মস্থান",
+      "চর্যাপদের প্রাপ্তিস্থান",
+      "শ্রীকৃষ্ণকীর্ত্তন কাব্যের প্রাপ্তিস্থান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 94,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘যে সবে বঙ্গেত জন্মি হিংসে বঙ্গবাণী। সে সব কাহার জন্ম নির্ণয় ন জানি।’ ।–––– কবিতাংশটি কোন কাব্যের অন্তর্গত?",
+    "options": [
+      "নূরনামা",
+      "নসিহতনামা",
+      "মধুমালতী",
+      "ইউসুফ-জুলেখা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 95,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "আলাওল কোন শতাব্দীর কবি?",
+    "options": [
+      "পঞ্চদশ",
+      "ষোড়শ",
+      "সপ্তদশ",
+      "অষ্টাদশ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 96,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোন বাংলা গানকে ইউনেস্কো Heritage of Humanity অভিধায় ভূষিত করেছে?",
+    "options": [
+      "রবীন্দ্র সংগীত",
+      "নজরুল সংগীত",
+      "ভাটিয়ালি গান",
+      "বাউল গান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 97,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "চন্ডীচরণ মুন্সী কে?",
+    "options": [
+      "শ্রীরামপুর মিশনের লিপিকর",
+      "ফোর্ট উইলিয়াম কলেজের পণ্ডিত",
+      "কেরী সাহেবের মুন্সী গ্রন্হের রচয়িতা",
+      "সমাচার চন্দ্রিকা পত্রিকার সম্পাদক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 98,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘রত্নপরীক্ষা’ গ্রন্হের রচয়িতা-",
+    "options": [
+      "রামমোহন রায়",
+      "অক্ষরকুমার দত্ত",
+      "ঈশ্বরচন্দ্র বিদ্যাসাগর",
+      "রাধানাথ শিকদার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 99,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "স্বর্ণকুমারী দেবীর পিতার নাম-",
+    "options": [
+      "দ্বারকানাথ ঠাকুর",
+      "দেবেন্দ্রনাথ ঠাকুর",
+      "রথীন্দ্রনাথ ঠাকুর",
+      "প্রমথ চৌধুরী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 100,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "ভীষ্মদেব খোশনবীশ বঙ্কিমচন্দ্র চট্টোপাধ্যায়ের কোন গ্রন্হের চরিত্র?",
+    "options": [
+      "কমলাকান্ত",
+      "লোকরহস্য",
+      "মুচিরাম গুড়ের জীবনচরিত",
+      "যুগলাঙ্গুরীয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 101,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "দীনবন্ধু মিত্রের ‘নীলদর্পণ’ নাটকের ইংরেজি অনুবাদক-",
+    "options": [
+      "জশুয়া মার্শম্যান",
+      "ডেভিড হেয়ার",
+      "ঈশ্বরচন্দ্র বিদ্যাসাগর",
+      "মাইকেল মধুসূদন দত্ত"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 102,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "রঞ্জন চরিত্রটি রবীন্দ্রনাথ ঠাকুরের কোন নাটকের?",
+    "options": [
+      "বিসর্জন",
+      "রক্তকরবী",
+      "মুক্তধারা",
+      "ডাকঘর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 103,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘তৈল’ প্রবন্ধটি লিখেছেন-",
+    "options": [
+      "সুকুমার রায়",
+      "রমেশচন্দ্র মজুমদার",
+      "শিবনারায়ণ রায়",
+      "হরপ্রসাদ শাস্ত্রী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 104,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "“নাম রেখিছি কোমল গান্ধার” কাব্যের রচিয়তা-",
+    "options": [
+      "রবীন্দ্রনাথ ঠাকুর",
+      "বিষ্ণু দে",
+      "অমিয় চক্রবর্তী",
+      "প্রেমেন্দ্র মিত্র"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 105,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘ও মন রমজানের ঐ রোজার শেষে এলো খুশির ঈদ’- গানটির রচয়িতা-",
+    "options": [
+      "কাজী নজরুল ইসলাম",
+      "গোলাম মোস্তফা",
+      "জসীমউদ্‌দীন",
+      "আব্বাস উদ্দীন আহমদ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 106,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "শামসুর রাহমানের রচিত উপন্যাস-",
+    "options": [
+      "পতঙ্গ পিঞ্জর",
+      "প্রেম একটি লাল গোলাপ",
+      "রৌদ্র করোটিতে",
+      "অদ্ভূত আঁধার এক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 107,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "সেলিম আল দীনের নাটকে অনুসৃত শিল্পতত্ত্ব-",
+    "options": [
+      "অস্তিত্ববাদ",
+      "অভিব্যক্তিবাদ",
+      "পরাবাস্তববাদ",
+      "দ্বৈতাদ্বৈতবাদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 108,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘পৃথক পালঙ্ক’ কাব্যগ্রন্হের কবি-",
+    "options": [
+      "আল মাহমুদ",
+      "রফিক আজাদ",
+      "আবুল হাসান",
+      "আবুল হোসেন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 109,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোন গল্পকারের গল্পে ম্যাজিক রিয়েলিজমের প্রতিফলন ঘটেছে?",
+    "options": [
+      "জ্যোতিপ্রকাশ দত্ত",
+      "রিজিয়া রহমান",
+      "শহীদুল জহির",
+      "দিলারা হাশেম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 110,
+    "bank": "46th BCS",
+    "subject": "Bangla Literature",
+    "question": "“একুশ মানে মাথা নত না করা”- এই অমর পঙ্‌ক্তির রচয়িতা-",
+    "options": [
+      "আবদুল গাফফার চৌধুরী",
+      "আবুল ফজল",
+      "মুনীর চৌধুরী",
+      "সিরাজুল ইসলাম চৌধুরী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 111,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "নিচের কোনটি গ্রীনহাউজ গ্যাস নয়?",
+    "options": [
+      "জলীয় বাষ্প (H_2 O)",
+      "কার্বন ডাইঅক্সাইড (CO_2)",
+      "মিথেন (CH_4)",
+      "নাইট্রিক অক্সাইড (NO)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 112,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "জলীয় দ্রবণে pH এর সর্বোচ্চ মান কোনটি?",
+    "options": [
+      "৭",
+      "১০",
+      "১৪",
+      "২০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 113,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "কোন অর্গানেলটি পর্দা দ্বারা আবেষ্টিত থাকে না?",
+    "options": [
+      "রাইবোসোম",
+      "ক্লোরোপ্লাস্ট",
+      "মাইটোকন্ড্রিয়া",
+      "পারোক্সিসোম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 114,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "প্রাকৃতিক ইউরেনিয়ামে শতকরা কতভাগ ^238U আইসোটোপ থাকে?",
+    "options": [
+      "50%",
+      "99.3%",
+      "0%",
+      "69.3%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 115,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "জীববিজ্ঞানে কী ধরনের তথ্য প্রযুক্তি ব্যবহার করা হয়?",
+    "options": [
+      "বায়োইনফরমেটিক্স",
+      "বায়োমেট্রিক্স",
+      "বায়োকেমিস্ট্রি",
+      "কোনটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 116,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "গমের মোজাইক ভাইরাস কীভাবে ছড়ায়?",
+    "options": [
+      "ইদুঁরের মাধ্যমে",
+      "মাইটের মাধ্যমে",
+      "বাতাসের মাধ্যমে",
+      "পাখির মাধ্যমে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 117,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "এন্টিবডি তৈরি করে নিচের কোনটি?",
+    "options": [
+      "Red blood corpuscle",
+      "Thrombocyte",
+      "B Lymphocyte",
+      "Monocyte"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 118,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "অত্যাবশ্যকীয় অ্যামাইনো এসিড কোনটি?",
+    "options": [
+      "গ্লাইসিন (Glycine)",
+      "সেরিন (Serine)",
+      "সিস্টিন (Cistine)",
+      "ভ্যালিন (Valine)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 119,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "প্রকৃতিতে মৌলিক বল কয়টি?",
+    "options": [
+      "2 টি",
+      "3 টি",
+      "4 টি",
+      "5 টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 120,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "জেমস্‌ ওয়েব টেলিস্কোপ কোন ধরনের রেডিয়েশন ব্যবহার করে?",
+    "options": [
+      "Ultra-violet",
+      "Infrared",
+      "Visible",
+      "X-ray"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 121,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "কোনটি আলোর প্রাথমিক রং হিসাবে বিবেচনা করা হয় না?",
+    "options": [
+      "সবুজ",
+      "নীল",
+      "লাল",
+      "হলুদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 122,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "রক্ত জমাট বাঁধার জন্য প্রয়োজনীয় ভিটামিনটি হল-",
+    "options": [
+      "Vitamin K",
+      "Vitamin A",
+      "Vitamin B",
+      "Vitamin C"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 123,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "ফোটন শক্তি ‘E’ এর সমীকরণটি হল-",
+    "options": [
+      "hλ/c",
+      "hc/λ",
+      "cλ/h",
+      "chλ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 124,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "দ্বিপদ নামকরণে দ্বিতীয় নামটি নির্দেশ করে-",
+    "options": [
+      "প্রজাতি",
+      "বর্গ",
+      "রাজ্য",
+      "শ্রেণি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 125,
+    "bank": "46th BCS",
+    "subject": "Science",
+    "question": "ধাতব কার্বোনেটের সাথে এসিডের বিক্রিয়ায় উৎপন্ন হয়-",
+    "options": [
+      "লবণ",
+      "পানি",
+      "কার্বন ডাইঅক্সাইড",
+      "সবগুলো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 126,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "Windows অপারেটিং সিস্টেম সম্পর্কিত নিম্নের কোন তথ্যটি সঠিক?",
+    "options": [
+      "এটি মাল্টি টাস্কিং অপারেটিং সিস্টেম",
+      "এটি Open source অপারেটিং সিস্টেম",
+      "ক এবং খ উভয়ই সত্য",
+      "কোনোটিই সত্য নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 127,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি কম্পিউটার মেমোরি হিসেবে দ্রুততম?",
+    "options": [
+      "RAM",
+      "Hard Disk",
+      "ROM",
+      "Register"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 128,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি কম্পিউটার সিস্টেমের কার্মক্ষমতায় কোনো ভূমিকা রাখে না?",
+    "options": [
+      "Size of RAM",
+      "Size of ROM",
+      "Size of Cache Memory",
+      "Size of Register"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 129,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি অক্টাল সংখ্যা (২৪)_৮ এর সঠিক বাইনারি রূপ?",
+    "options": [
+      "(111 101)_2",
+      "(010 100)_2",
+      "(111 100)_2",
+      "(101 010)_2"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 130,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "একটি অপারেটিং সিস্টেম একজন ব্যক্তিকে বিভিন্ন symbols, icon অথবা visual metaphor এর মাধ্যমে কম্পিউটারের সাথে সংযোগ স্থাপনে ভূমিকা পালন করে। নিচের কোনটি এ শ্রেণির কাজকে নির্দেশ করে?",
+    "options": [
+      "Command-Line Interface",
+      "Graphical User Interface",
+      "Block User Interface",
+      "Tap User Interface"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 131,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন বিবৃতিটি কম্পাইলার সম্পর্কিত সঠিক?",
+    "options": [
+      "এটি Interpreter-এর চেয়ে অনুবাদ করতে বেশি সময় লাগে",
+      "এটি প্রতি লাইন প্রোগ্রাম পড়ে এবং অনুবাদ করে",
+      "এটি একবারে পুরো প্রোগ্রাম অনুবাদ করে",
+      "এটি মেশিন প্রোগ্রামকে সোর্স প্রোগ্রামে রূপান্তর করে?"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 132,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি সোস্যাল মিডিয়া প্ল্যাটফর্ম নয়?",
+    "options": [
+      "Facebook",
+      "Twitter",
+      "Instagram",
+      "Google"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 133,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "Cellular Data Network এর ক্ষেত্রে GPRS বলতে কী বুঝায়?",
+    "options": [
+      "Global Positioning Radio Service",
+      "General Positioning Radio Service",
+      "Global Packet Radio Service",
+      "General Packet Radio Service"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 134,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "বাহিরের আক্রমণ থেকে প্রাইভেট নেটওয়ার্ক রক্ষার্থে নিচের কোনটি ব্যবহৃত হয়?",
+    "options": [
+      "Antivirus",
+      "Digital Signature",
+      "Encryption",
+      "Firewall"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 135,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি সার্চ ইঞ্চিন নয়?",
+    "options": [
+      "Bing",
+      "Google",
+      "Yahoo",
+      "Safari"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 136,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "ইন্টারনেট জগতে hyper-linked document গুলোর কালেকশানকে কী বলে?",
+    "options": [
+      "HTML",
+      "Email",
+      "WWW",
+      "DWS"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 137,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "গ্রাহকের চাহিদা অনুযায়ী, ইউটিলিটি-ভিত্তিক কম্পিউটিং পরিষেবা প্রদানের জন্য কোন প্রযুক্তিটি Distributed Computing এর একটি দৃষ্টান্ত?",
+    "options": [
+      "Remote Sensing",
+      "Cloud Computing",
+      "Remote Invocation",
+      "Private Computing"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 138,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন নেটওয়ার্কটি সবচেয়ে বেশি জায়গা ব্যাপ্তি হয়?",
+    "options": [
+      "LAN",
+      "WAN",
+      "MAN",
+      "PAN"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 139,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন প্রযুক্তি Face Recognition সিস্টেমে ব্যবহার করা হয়?",
+    "options": [
+      "Applied AI",
+      "Applied I_0 T",
+      "Virtual Reality",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 140,
+    "bank": "46th BCS",
+    "subject": "ICT",
+    "question": "নেটওয়ার্ক ট্রান্সমিশন রেট বোঝাতে ব্যবহৃত ‘MbPS’ এর পূর্ণরূপ কী?",
+    "options": [
+      "Megabytes per second",
+      "Megabits per second",
+      "Milibits per second",
+      "কোনোটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 141,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "কোন দিনটি বিশ্ব শরণার্থী দিবস হিসেবে পালিত হয়?",
+    "options": [
+      "৫ জুন",
+      "১০ জুন",
+      "২০ জুন",
+      "২৫ জুন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 142,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘ মাদক ও অপরাধ সংক্রান্ত সংস্থা UNODC-এর প্রধান কার্যালয় কোথায় অবস্থিত?",
+    "options": [
+      "রোম",
+      "ভিয়েনা",
+      "জেনেভা",
+      "পিটসবার্গ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 143,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশ ভারত স্থল সীমান্ত সম্পর্কিত প্রটোকলটি কত সালে স্বাক্ষরিত হয়?",
+    "options": [
+      "১৯৭৪",
+      "২০১১",
+      "২০১৩",
+      "২০১৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 144,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "আলেপ্পো শহরটি কোন দেশে অবস্থিত?",
+    "options": [
+      "ইরান",
+      "ইরাক",
+      "জর্ডান",
+      "সিরিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 145,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "উন্নয়নশীল দেশসমূহের বৈশ্বিক জোট ‘জি৭৭’ এর বর্তমান সদস্য সংখ্যা কত?",
+    "options": [
+      "১০৫",
+      "১১৫",
+      "১২৫",
+      "১৩৫"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 146,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "“২০৩০ সালের মধ্যে বিশ্বের দরিদ্র নারী, পুরুষ ও শিশুর সংখ্যা অর্ধেক নামিয়ে আনতে হবে” – এটি টেকসই উন্নয়ন লক্ষ্যমাত্রায় কোন অভীষ্ট লক্ষ্য?",
+    "options": [
+      "টার্গেট ১.১",
+      "টার্গেট ১.২",
+      "টার্গেট ১.৩",
+      "টার্গেট ১.৪"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 147,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "বৈশ্বিক উন্নয়ন উদ্যোক্তা এর প্রস্তাবক হচ্ছে-",
+    "options": [
+      "চীন",
+      "জাপান",
+      "ডেনমার্ক",
+      "সুইডেন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 148,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশ কত সালে আন্তর্জাতিক শ্রম সংস্থার সদস্যপদ লাভ করে?",
+    "options": [
+      "১৯৭২",
+      "১৯৭৩",
+      "১৯৭৪",
+      "১৯৭৫"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 149,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশের অভিবাসী নারী শ্রমিকদের সর্বাধিক গন্তব্যস্থল-",
+    "options": [
+      "সৌদি আরব",
+      "কুয়েত",
+      "ওমান",
+      "জর্দান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 150,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "কপ ২৮ সম্মেলনটি কী সম্পর্কিত?",
+    "options": [
+      "শরণার্থীর অধিকার",
+      "জ্বালানি নিরাপত্তা",
+      "সমুদ্র সীমানা",
+      "জলবায়ু পরিবর্তন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 151,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "বৈশ্বিক সন্ত্রাসবাদ সূচক ২০২৩ অনুযায়ী কোন দেশটি সবচেয়ে বেশি সন্ত্রাসবাদের ঝুঁকির মধ্যে?",
+    "options": [
+      "আফগানিস্তান",
+      "মায়ানমার",
+      "পেরু",
+      "মালি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 152,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "বৈশ্বিক শান্তিসূচক ২০২৩ অনুযায়ী বিশ্বের সবচেয়ে শান্তিপূর্ণ দেশ হলো-",
+    "options": [
+      "আইসল্যান্ড",
+      "জাপান",
+      "সিংগাপুর",
+      "সুইজারল্যান্ড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 153,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "‘বার বিধি’ (The Twelve Tables) কী?",
+    "options": [
+      "রোমান আইনের ভিত্তি",
+      "স্থাপত্যের ১২টি নির্দেশনা",
+      "ফুটবল খেলার নিয়মাবলি",
+      "স্থানীয়/ দেশি খেলা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 154,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "সিয়াচেন হিমবার (Siachen Glaciar) কোন দুইটি দেশের মধ্যে অবস্থিত?",
+    "options": [
+      "ভারত ও চীন",
+      "নেপাল ও চীন",
+      "পাকিস্তান ও চীন",
+      "ভারত ও পাকিস্তান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 155,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "টেকসই উন্নয়ন লক্ষ্যমাত্রার (SDG) চতুর্থ লক্ষ্যমাত্রা কোনটি?",
+    "options": [
+      "জলবায়ু কার্যক্রম",
+      "মানসম্মত শিক্ষা",
+      "দারিদ্র বিমোচন",
+      "শান্তি, ন্যায়বিচার ও কার্যকর প্রতিষ্ঠান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 156,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "জৈব নিরাপত্তা বিষয়ক (Biosafety to the Convention on Biological Diversity) হচ্ছে-",
+    "options": [
+      "কার্টাগোনা প্রটোকল",
+      "মন্ট্রিল প্রটোকল",
+      "কিয়াটো প্রটোকল",
+      "প্যারিস চুক্তি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 157,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "‘Friday For Futute’ কোন ধরনের আন্দোলন?",
+    "options": [
+      "ধর্মীয় আন্দোলন",
+      "পরিবেশবাদী আন্দোলন",
+      "শান্তিবাদী আন্দোলন",
+      "গণতান্ত্রিক আন্দোলন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 158,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "আন্তর্জাতিক আদালতের (International Court of Justice) সভাপতির মেয়াদ কত বৎসর?",
+    "options": [
+      "২ বৎসর",
+      "৩ বৎসর",
+      "৬ বৎসর",
+      "৯ বৎসর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 159,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "উত্তর আটলান্টিক চুক্তির কত নম্বর ধারায় যৌথ নিরাপত্তার ধারণাটি ব্যক্ত হয়েছে?",
+    "options": [
+      "আর্টিকেল ২",
+      "আর্টিকেল ৩",
+      "আর্টিকেল ৪",
+      "আর্টিকেল ৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 160,
+    "bank": "46th BCS",
+    "subject": "International Affairs",
+    "question": "আন্তর্জাতিক সম্পর্কের কোন তত্ত্বটি আন্তর্জাতিক প্রতিষ্ঠানের কার্যকরী ভূমিকার বিষয়ে ইতিবাচক ধারণা প্রদান করে?",
+    "options": [
+      "উদারবাদ",
+      "বাস্তববাদ",
+      "মার্ক্সবাদ",
+      "কোনোটিই নয়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 161,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "হিলি স্থল বন্দরটি বাংলাদেশের কোথায় অবস্থিত?",
+    "options": [
+      "বিরামপুর, দিনাজপুর",
+      "ঘোড়াঘাট, দিনাজপুর",
+      "হাকিমপুর, দিনাজপুর",
+      "পাঁচবিবি, জয়পুর হাট"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 162,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "ঢাকা থেকে পূর্বদিকে অবস্থিত একটি স্থানের সাথে দ্রাঘিমার পার্থক্য ৪৫°। ঢাকার সময় মধ্যাহ্ন ১২:০০ টা হলে ঐ স্থানটির স্থানীয় সময় হবে-",
+    "options": [
+      "সকাল ০৯:০০ টা",
+      "বিকাল ০৩:০০ টা",
+      "সন্ধ্যা ০৬:০০ টা",
+      "রাত ০৯:০০ টা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 163,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "কোন দুটি প্লেটের সংযোগস্থল বরাবর মাউন্ট এভারেস্ট অবস্থিত?",
+    "options": [
+      "ইন্ডিয়ান ও ইউরেশিয়ান",
+      "ইন্ডিয়ান ও বার্মিজ",
+      "ইন্ডিয়ান ও আফ্রিকান",
+      "বার্মিজ ও ইউরেশিয়ান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 164,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "উচ্চতা বৃদ্ধির সাথে ট্রপোমন্ডলে বায়ুর ক্রমহ্রাসমান তাপমাত্রা হল-",
+    "options": [
+      "৫.৫° সেলসিয়াস/কিলোমিটার",
+      "৬.৫° সেলসিয়াস/কিলোমিটার",
+      "৭.৫° সেলসিয়াস/কিলোমিটার",
+      "৮.৫° সেলসিয়াস/কিলোমিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 165,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "দুবাইয়ে অনুষ্ঠিত জাতিসংঘ জলবায়ু বিষয়ক সম্মেলন (কপ-২৮) মূল ফোকাস ছিল-",
+    "options": [
+      "জীবাশ্ম জ্বালানির ব্যবহার পর্যায়ক্রমে হ্রাসকরণ",
+      "জীববৈচিত্র সংরক্ষণ বিষয়ক",
+      "ওজোনস্তর ক্ষয় নিয়ন্ত্রণ বিষয়ক",
+      "মরুকরণ প্রক্রিয়া বিষয়ক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 166,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "নিরক্ষীয় তল থেকে উত্তর মেরুর কৌণিক দূরত্ব বা উৎপন্ন কোণ কত?",
+    "options": [
+      "১৮০°",
+      "৩৬০°",
+      "৯০°",
+      "০°"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 167,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "জাপানিজ শব্দ ‘সুনামি’ এর অর্থ কী?",
+    "options": [
+      "বিশালাকৃতির ঢেউ",
+      "সামুদ্রিক ঢেউ",
+      "জলোচ্ছ্বাস",
+      "পোতাশ্রয়ের ঢেউ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 168,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "বৈশ্বিক উষ্ণায়নের জন্য ঝুঁকিপূর্ণ নয় কোনটি?",
+    "options": [
+      "মরুকরণ",
+      "বন্যা",
+      "সমুদ্র পৃষ্ঠের উচ্চতা বৃদ্ধি",
+      "ভূমিকম্প"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 169,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "বন্যা নিয়ন্ত্রণে সাধারণ ব্যবস্থাপনার অন্তর্ভুক্ত নয় কোনটি?",
+    "options": [
+      "নদী খননের মাধ্যমে পানি পরিবহন সক্ষমতা বৃদ্ধি করা",
+      "নদী শাসন ব্যবস্থা সুনিশ্চিত করা",
+      "নদীর দুই তীরে বনাঞ্চল সৃষ্টি করা",
+      "বন্যার পূর্বাভাস ও সতর্কীকরণ ব্যবস্থার উন্নয়ন সাধন করা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 170,
+    "bank": "46th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোনটি কৃষি আবহাওয়াজনিত আপদ (Hazard)?",
+    "options": [
+      "ভূমিকম্প",
+      "ভূমিধস",
+      "সুনামি",
+      "খরা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 171,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "পাহাড়পুরের ‘সোমপুর মহাবিহার’ বাংলার কোন শাসন আমলের স্থাপত্য কীর্তির নিদর্শন?",
+    "options": [
+      "মৌর্য",
+      "পাল",
+      "গুপ্ত",
+      "চন্দ্র"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 172,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মুজিবনগর সরকারকে গার্ড অব অনার নেতৃত্ব দেন কে?",
+    "options": [
+      "মোহাম্মদ সোলায়মান",
+      "আব্দুল খালেক",
+      "মাহবুব উদ্দিন আহমেদ",
+      "শৈলেন্দ্র কিশোর চৌধুরী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 173,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঐতিহাসিক ৬-দফা দাবিতে কোন দু’টি বিষয় কেন্দ্রিয় সরকারের হাতে রাখার প্রস্তাব ছিল?",
+    "options": [
+      "বৈদেশিক বাণিজ্য ও প্রতিরক্ষা",
+      "অর্থ ও পররাষ্ট্র",
+      "স্বরাষ্ট্র ও পরিকল্পনা",
+      "প্রতিরক্ষা ও পররাষ্ট্র"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 174,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলার প্রাচীন জনপদ হরিকেল এর বর্তমান নাম কী?",
+    "options": [
+      "সিলেট ও চট্টগ্রাম",
+      "ঢাকা ও ময়মনসিংহ",
+      "কুমিল্লা ও নোয়াখালী",
+      "রাজশাহী ও রংপুর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 175,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোন বিভাগে জনসংখ্যার ঘনত্ব সবচেয়ে কম?",
+    "options": [
+      "সিলেট",
+      "খুলনা",
+      "বরিশাল",
+      "চট্রগ্রাম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 176,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ট্রেডিং কর্পোরেশন অব বাংলাদেশ কোন মন্ত্রণালয়ের আওতাভুক্ত?",
+    "options": [
+      "পরিকল্পনা",
+      "শিল্প",
+      "বাণিজ্য",
+      "অর্থ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 177,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ সরকার কোন উৎস থেকে সর্বোচ্চ রাজস্ব আয় করে?",
+    "options": [
+      "ভূমি রাজস্ব",
+      "মূল্য সংযোজন কর",
+      "আয়কর",
+      "আমদানি শুল্ক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 178,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মারমাদের সবচেয়ে বড় উৎসবের নাম কী?",
+    "options": [
+      "বিজু",
+      "রাশ",
+      "সাংগ্রাই",
+      "বাইশু"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 179,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বিশ্বকাপ ক্রিকেট ২০২৩-এ বাংলাদেশের কোন খেলোয়াড় সর্বোচ্চ রান করেন?",
+    "options": [
+      "লিটন দাস",
+      "মুশফিকুর রহিম",
+      "সাকিব আল হাসান",
+      "মাহমুদুল্লাহ রিয়াদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 180,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের পররাষ্ট্র নীতি সংক্রান্ত নির্দেশনা সংবিধানের কত অনুচ্ছেদে উল্লেখ করা হয়েছে?",
+    "options": [
+      "২৫",
+      "২৬",
+      "২৭",
+      "২৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 181,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মাতৃপ্রধান পরিবার ব্যবস্থার প্রচলন কোন জাতীসত্ত্বায় রয়েছে?",
+    "options": [
+      "গারো",
+      "সাওতাল",
+      "মনিপুরি",
+      "চাকমা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 182,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "অ্যাটর্নি জেনারেল রাষ্ট্রের কোন অংশের কর্মকর্তা?",
+    "options": [
+      "প্রধানমন্ত্রীর কার্যালয়",
+      "বিচার বিভাগ",
+      "নির্বাহী বিভাগ",
+      "মন্ত্রীপরিষদ বিভাগ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 183,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে কোন নদী কার্পজাতীয় মাছের রেণুর প্রধান উৎস?",
+    "options": [
+      "সালদা",
+      "হালদা",
+      "পদ্মা",
+      "কুমার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 184,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ব-দ্বীপ পরিকল্পনা ২১০০-এ কয়টি ভৌগোলিক হটস্পট নির্ধারণ করা হয়েছে?",
+    "options": [
+      "৬",
+      "৭",
+      "৮",
+      "৯"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 185,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সংবিধান প্রণয়ন কমিটির একমাত্র নারী সদস্য কে ছিলেন?",
+    "options": [
+      "সাজেদা চৌধুরী",
+      "নুরজাহান মোর্শেদ",
+      "রাফিয়া আক্তার ডলি",
+      "রাজিয়া বানু"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 186,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কৃষ্ণগহবর নিয়ে কোন বাঙালি বিজ্ঞানী গবেষণা করেছেন?",
+    "options": [
+      "কুদরত-ই-খুদা",
+      "কাজী মোতাহার হোসেন",
+      "জামাল নজরুল ইসলাম",
+      "আব্দুল মতিন চৌধুরী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 187,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন ক্ষেত্রে অবদানের জন্য প্রধানমন্ত্রী শেখ হাসিনা ২০১৬ সালে প্ল্যানেট ৫০-৫০ চ্যাম্পিয়ন পদক পান?",
+    "options": [
+      "মানবাধিকার",
+      "নারীর ক্ষমতায়ন",
+      "শিশু মৃত্যুহার হ্রাস",
+      "মাতৃ মৃত্যুহার হ্রাস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 188,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের ২য় প্রেক্ষিত পরিকল্পনার মেয়াদ কবে শেষ হবে?",
+    "options": [
+      "২০৩১",
+      "২০৩৫",
+      "২০৪১",
+      "২০৪৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 189,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২০২২-২৩ অর্থবছরে বাংলাদেশ কোন দেশ থেকে পণ্য রপ্তানি বাবদ সবচেয়ে বেশি আয় করেছে?",
+    "options": [
+      "যুক্তরাষ্ট্র",
+      "যুক্তরাজ্য",
+      "জার্মানী",
+      "স্পেন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 190,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের নবীনতম নদী কোনটি?",
+    "options": [
+      "পদ্মা",
+      "যমুনা",
+      "জিণ্জিরাম",
+      "মেঘনা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 191,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘মুজিব : একটি জাতির রূপকার’ চলচ্চিত্রের পরিচালক কে?",
+    "options": [
+      "গুরু দত্ত",
+      "শিবু সিরিল",
+      "শ্যাম বেনেগাল",
+      "বিশাল ভরদ্বাজ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 192,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বঙ্গবন্ধু শেখ মুজিবুর রহমান জাতিসংঘের সাধারণ পরিষদে ১৯৭৪ সালের কোন মাসে বাংলায় বক্তৃতা দেন?",
+    "options": [
+      "সেপ্টেম্বর",
+      "অক্টোবর",
+      "নভেম্বর",
+      "ডিসেম্বর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 193,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "The Foreshadowing of Bangladesh গবেষণা গ্রন্থটির লেখক কে?",
+    "options": [
+      "রেহমান সোবহান",
+      "আনিসুর রহমান",
+      "নুরুল ইসলাম",
+      "হারুন-অর-রশিদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 194,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম রাষ্ট্রপতি কে?",
+    "options": [
+      "বঙ্গবন্ধু শেখ মুজিবুর রহমান",
+      "সৈয়দ নজরুল ইসলাম",
+      "তাজউদ্দীন আহমেদ",
+      "বিচারপতি আবু সাঈদ চৌধুরী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 195,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "দ্বাদশ জাতীয় সংসদ নির্বাচনে ভোটার উপস্থিতির হার কত শতাংশ ছিল?",
+    "options": [
+      "৪০.৮",
+      "৪০.৯",
+      "৪১.৬",
+      "৪১.৮"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 196,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ সংবিধানের কত নম্বর অনুচ্ছেদ অনুযায়ী রাষ্ট্রপতি প্রধান বিচারপতি নিয়োগ দেন?",
+    "options": [
+      "৯৫",
+      "৯৬",
+      "৯৭",
+      "৯৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 197,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯৫৪ সালের নির্বাচনে যুক্তফ্রন্ট কতটি আসনে জয়লাভ করেছিল?",
+    "options": [
+      "২১৯",
+      "২২১",
+      "২২৩",
+      "২২৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 198,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ সর্বাধিক জনশক্তি রপ্তানি করে কোন দেশে?",
+    "options": [
+      "সংযুক্ত আরব আমিরাত",
+      "সৌদিআরব",
+      "কুয়েত",
+      "মালয়েশিয়া"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 199,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কতজন নারী ২০২৩ সালে বেগম রোকেয়া পদক পেয়েছেন?",
+    "options": [
+      "৩",
+      "৪",
+      "৫",
+      "৬"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 200,
+    "bank": "46th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ প্রথম ওয়ানডে এবং টেস্ট সিরিজ জয় করে কোন দেশের বিপক্ষে?",
+    "options": [
+      "পাকিস্তান",
+      "দক্ষিণ আফ্রিকা",
+      "ভারত",
+      "জিম্বাবুয়ে"
+    ],
+    "answer": 3
+  }
+]

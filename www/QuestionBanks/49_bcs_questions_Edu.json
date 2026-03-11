@@ -1,0 +1,1301 @@
+[
+  {
+    "id": 1,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নর্থ আটলান্টিক ট্রিটি অর্গানাইজেশন বা সামরিক জোট কত সালে সাক্ষরিত হয়?",
+    "options": [
+      "১৯৩৯",
+      "১৯৪৩",
+      "১৯৪৯",
+      "১৯৬০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 2,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯৫২ সালের ভাষা আন্দোলনে নেতৃস্থানীয় ভূমিকা পালন করে সাংস্কৃতিক সংগঠন ‘তমুদ্দুন মজলিস’। তমুদ্দুন মজলিস-এর প্রতিষ্ঠাতা অধ্যাপক আবুল কাশেম ঢাকা বিশ্ববিদ্যালয়ের কোন বিভাগের শিক্ষক ছিলেন?",
+    "options": [
+      "রসায়ন",
+      "পদার্থ বিজ্ঞান",
+      "অর্থনীতি",
+      "ইসলামী শিক্ষা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি ঘনকের সম্পূর্ণ পৃষ্ঠের ক্ষেত্রফল 48 বর্গমিটার। ঘনকটির কর্ণের দৈর্ঘ্য কত?",
+    "options": [
+      "2√2 মিটার",
+      "2√3 মিটার",
+      "2 মিটার",
+      "2√6 মিটার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 4,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশ-ICCPRএর স্বাক্ষরকারী একটি দেশ। ICCPR এর পূর্ণরূপ কী?",
+    "options": [
+      "International Conference on Civil and Political Rights.",
+      "International Conference of Civil and Political Rights.",
+      "International Covenant on Civil and Political Rights.",
+      "International Covenant of Civil and Political Rights."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 5,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি ট্রেন প্রতি সেকেন্ডে ১০০ ফুট বেগে চলছে। এক ব্যক্তির বন্দুকের গুলির বেগ সেকেন্ডে ২০০ ফুট। উক্ত ব্যক্তি চলন্ত ট্রেনের ৩০০ ফুট সামনে একটা স্তম্ভ লক্ষ্য করে গুলি ছুড়লে কত সেকেন্ড পর তা স্তম্ভকে আঘাত করবে?",
+    "options": [
+      "৩",
+      "১.৫",
+      "১",
+      "০.৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 6,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "গ্রিনল্যান্ড নিচের কোন রাষ্ট্রের অন্তর্ভুক্ত?",
+    "options": [
+      "সুইডেন",
+      "ডেনমার্ক",
+      "নরওয়ে",
+      "ফিনল্যান্ড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 7,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশের রাজনীতি সম্পর্কে একজন আমেরিকান ঐতিহাসিক মন্তব্য করেছেন; “বাংলাদেশের রাজনীতি ব্যক্তিত্বকে কেন্দ্র করে আবর্তিত হয়, ধারনা বা প্রতিষ্ঠানকে কেন্দ্র করে নয়” এই ঐতিহাসিকের নাম কি?",
+    "options": [
+      "এন্থনি মাসকারেনহাস",
+      "লরেঞ্চ জিরিং",
+      "লরেঞ্চ লিফশুলজ",
+      "হেনরি কিসিঞ্জার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 8,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "বিশ্বের প্রথম জাতিসংঘ শান্তিরক্ষী বাহিনী কোনটি?",
+    "options": [
+      "UNOSOM",
+      "UNMOGIP",
+      "UNTSO",
+      "UNEF 1"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 9,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় দিবস কোনটি?",
+    "options": [
+      "২৬ মার্চ",
+      "২১ ফেব্রুয়ারি",
+      "১৬ ডিসেম্বর",
+      "৫ আগস্ট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 10,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Pick the correctly spelt word-",
+    "options": [
+      "Conscintious",
+      "Consientious",
+      "concientious",
+      "conscientious"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 11,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "প্রথম বিশ্বযুদ্ধ কোন চুক্তির মাধ্যমে সমাপ্ত হয়?",
+    "options": [
+      "প্যারিস চুক্তি",
+      "ভারসাই চুক্তি",
+      "জেনেভা চুক্তি",
+      "রোম চুক্তি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 12,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘পরিবার থেকেই শিক্ষার শুরু’- এখানে ‘থেকে’ শব্দের সাথে যুক্ত ‘ই’-এর ব্যাকরণিক পরিচয় কী?",
+    "options": [
+      "উপসর্গ",
+      "প্রত্যয়",
+      "ধাতু",
+      "বলক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 13,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটা লোহার গোলক গলিয়ে কয়টি সমান আয়তনের গোলক তৈরী সম্ভব যাদের প্রত্যেকের ব্যাসার্ধ বড় গোলকটির অর্ধেক?",
+    "options": [
+      "৪",
+      "৮",
+      "১৬",
+      "২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 14,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "‘They talked about going on a vacation’. Here ‘going’ is a/an-",
+    "options": [
+      "participle",
+      "infinitive",
+      "verbal noun",
+      "gerund"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 15,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "log_x4 = - 2 হলে x= কত?",
+    "options": [
+      "1/2",
+      "-1/2",
+      "2",
+      "-2"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 16,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "মার্কিন যুক্তরাষ্ট্রের কোন প্রেসিডেন্ট জাপানে পারমাণবিক বোমা নিক্ষেপের অনুমোদন করেছিলেন?",
+    "options": [
+      "হ্যাঁরি এস ট্রুম্যান",
+      "ফ্রাঙ্কলিন ডি. রুজভেল্ট",
+      "রিচার্ড নিক্সন",
+      "জর্জ ডাব্লিও বুশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 17,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি ত্রিভুজের প্রথম কোণ দ্বিতীয় কোণের অর্ধেক। তৃতীয় কোণ অপর দুই কোণের বিয়োগফলের তিনগুণ। দ্বিতীয় কোণটি কত ডিগ্রী?",
+    "options": [
+      "৩০",
+      "৬০",
+      "৯০",
+      "৪৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 18,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "দুইটি সংখ্যার ল.সা.গু 4x^2 + 12x^2 - 16x - 48 গ.সা.গু 2x + 4। একটি সংখ্যা 4x^2 + 20x + 24 হলে অপরটি-",
+    "options": [
+      "x^2-4",
+      "2(x^2-4)",
+      "4(x^2-4)",
+      "x+2"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 19,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ODS (Ozone Depleting Substances) এর ব্যবহার কমানোর জন্য কোন চুক্তি সাক্ষরিত হয়?",
+    "options": [
+      "কিয়োটো প্রটোকল",
+      "মন্ট্রিল প্রটোকল",
+      "প্যারিস চুক্তি",
+      "রামসার কনভেনশন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 20,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "যদি গতকাল শুক্রবার হতো, তাহলে আজ থেকে ৮১ তম দিন কি বার হবে?",
+    "options": [
+      "শুক্রবার",
+      "বুধবার",
+      "সোমবার",
+      "রবিবার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 21,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "নিম্নোক্ত কোন ভারতীয় রাজ্যের বাংলাদেশের সাথে কোন ভূমি সীমানা নাই?",
+    "options": [
+      "নাগাল্যান্ড",
+      "মিজোরাম",
+      "মেঘালয়",
+      "আসাম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 22,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "আহমদ শরীফের মতে মধ্যযুগে চণ্ডীদাস নামে কতজন কবি ছিলেন?",
+    "options": [
+      "২",
+      "৩",
+      "৪",
+      "৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 23,
+    "bank": "49th BCS Edu.",
+    "subject": "English Literature",
+    "question": "The novel ‘Wuthering Heights’ was penned by the author under the penname-",
+    "options": [
+      "Ellise Bellet",
+      "Ellis Belle",
+      "Ellis Bell",
+      "Una Elis"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 24,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "মধুসূদন দত্তের পূর্ববর্তী গুরুত্বপূর্ণ কবি কে?",
+    "options": [
+      "রবীন্দ্রনাথ ঠাকুর",
+      "কায়কোবাদ",
+      "ঈশ্বরচন্দ্র গুপ্ত",
+      "ইসমাইল হোসেন সিরাজী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 25,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "আয়নাঘর কী?",
+    "options": [
+      "স্বচ্ছ কামরা",
+      "পরিবেশ বান্ধব কৃষিকাজ",
+      "গোপন কারাগার",
+      "একটি হলিউড মুভি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 26,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সংবিধানের আলোকে নিম্নের কোন অধিকারটি মৌলিক অধিকারের অন্তর্ভুক্ত নয়?",
+    "options": [
+      "বাক-স্বাধীনতার অধিকার",
+      "শিক্ষার অধিকার",
+      "সভা সমাবেশের অধিকার",
+      "ধর্মচর্চার অধিকার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 27,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Which gender is the noun ‘neighbour’?",
+    "options": [
+      "Masculin",
+      "Feminine",
+      "Neuter",
+      "Common"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 28,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘কম-দামে কেনা বেশী দামে বেচা আমাদের স্বাধীনতা’-বইটির লেখক কে?",
+    "options": [
+      "আবুল কালাম শামসুদ্দীন",
+      "আবুল মনসুর আহমদ",
+      "শামসুদ্দিন আবুল কালাম",
+      "এস ওয়াজেদ আলী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 29,
+    "bank": "49th BCS Edu.",
+    "subject": "Others",
+    "question": "একটি সমান্তর ধারার 4র্থ (চতুর্থ) এবং 12 তম পদের যোগফল 20। ঐ ধারার প্রথম 15 পদের যোগফল কত?",
+    "options": [
+      "100",
+      "150",
+      "200",
+      "300"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 30,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "‘Someone sneezed loudly at the back of the hall.’ In this sentence the verb ‘sneezed’ is -",
+    "options": [
+      "causative",
+      "intransitive",
+      "transitive",
+      "factitive"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 31,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯১১ সালে বঙ্গভঙ্গ রদের পর ঢাকায় একটি বিশ্ববিদ্যালয় প্রতিষ্ঠার জন্য ব্রিটিশ সরকারের কাছে দেনদরবার করার ক্ষেত্রে কোন নেতা অগ্রণী ভূমিকা পালন করেন?",
+    "options": [
+      "হাকিম আজমল খান",
+      "শেরে বাংলা এ. কে. ফজলুল হক",
+      "স্যার সলিমুল্লাহ",
+      "স্যার আব্দুর রহিম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 32,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "A person who leaves his/her own country to settle permanently in another is called a/an-",
+    "options": [
+      "immigrant",
+      "expatriate",
+      "emigrant",
+      "migrant"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "সংবিধান অনুযায়ী জাতীয় সংসদের ইংরেজী নাম কী?",
+    "options": [
+      "Parliament",
+      "National Parliament",
+      "Legislature",
+      "The House of the Nation"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 34,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘এ কাজ করতে আমি বদ্ধ পরিকর’- এখানে ‘পরিকর’ শব্দের অর্থ কী?",
+    "options": [
+      "শ্বাস",
+      "প্রতিজ্ঞা",
+      "কোমর",
+      "প্রতিশ্রুত"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 35,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "নীচের ধারার পরবর্তী সংখ্যা কোনটি? ১, √৯, ৫, √৪৯, ......",
+    "options": [
+      "৮",
+      "৯",
+      "১০",
+      "১২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 36,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "x^2+6x-27<0 অসমতাটির সমাধান সেট নিচের কোনটি?",
+    "options": [
+      "[-9,3]",
+      "[3,∞)",
+      "(-9,3)",
+      "(∞,-9)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 37,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "জিএসপি (GSP) এর পূর্ণরূপ কী?",
+    "options": [
+      "Generalized System of Preference",
+      "Global System of Positioning",
+      "Global Strategic Partnership",
+      "Government Support Program"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "আফিম যুদ্ধ কোন দুইটি দেশের মধ্যে সংঘটিত হয়?",
+    "options": [
+      "চীন ও আফগানিস্তান",
+      "চীন ও ইংল্যান্ড",
+      "চীন ও রাশিয়া",
+      "ইংল্যান্ড ও আফগানিস্তান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 39,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "চব্বিশের গণঅভ্যুত্থান পর বাংলাদেশের জাতীয় সংসদের সংস্কার বিষয়ে ঐক্যমতের অন্যতম প্রস্তাব কি?",
+    "options": [
+      "দ্বি-স্তর বিশিষ্ট সংসদ",
+      "সংসদের আসন বৃদ্ধি",
+      "সংরক্ষিত নারী আসন বাতিল",
+      "পি আর (PR) চালু করা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 40,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "কেপ ভারদ (Cape Verde) দ্বীপ রাষ্ট্রটি কোথায় অবস্থিত?",
+    "options": [
+      "গালফ অফ গিনি",
+      "ফ্রেজ পলিনেশিয়া",
+      "দক্ষিণ আফ্রিকা",
+      "পশ্চিম আফ্রিকা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 41,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নিম্নোক্ত কোন দেশ বা অঞ্চল জাতিসংঘের সদস্য দেশ নয়?",
+    "options": [
+      "তিমুর লিস্টি",
+      "দক্ষিণ সুদান",
+      "ওয়েস্টার্ন সাহারা",
+      "সেন্ট্রাল আফ্রিকান রিপাবলিক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 42,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "১ জন লোক ১ টা কলা ১ মিনিটে খেতে পারে। তাহলে ৫ জন লোকের ৫ টা কলা খেতে কত মিনিট সময় লাগবে?",
+    "options": [
+      "৫",
+      "২৫",
+      "১",
+      "১০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 43,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Identify the word that can be used as both singular and plural-",
+    "options": [
+      "light",
+      "shot",
+      "criterion",
+      "cannon"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 44,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘শিক্ষককে বুঝতে হবে শিক্ষার্থী কী চায়’- এই বাক্যে শিক্ষক ও শিক্ষার্থীর প্রয়োগ হয়েছে-",
+    "options": [
+      "একবচন বোঝাতে",
+      "বহুবচন বোঝাতে",
+      "একবচন ও বহুবচন উভয়ই বোঝাতে",
+      "প্রথমটি একবচন, পরেরটি বহুবচন বোঝাতে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 45,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের ওয়ারেন্ট অফ প্রেসিডেন্স অনুযায়ী সর্ব প্রথম কে অবস্থান করেন?",
+    "options": [
+      "প্রধানমন্ত্রী",
+      "রাষ্ট্রপতি",
+      "প্রধান উপদেষ্টা",
+      "প্রধান বিচারপতি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 46,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি বই 10% ক্ষতিতে বিক্রি করা হইল। বিক্রয়মূল্য 60 টাকা বেশী হলে 5% লাভ হত। বইটির ক্রয়মূল্য কত টাকা?",
+    "options": [
+      "200",
+      "300",
+      "400",
+      "500"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 47,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটা বাক্সে ৪টা লাল, ৩টা নীল, ২টা হলুদ ও ১টা সবুজ বল আছে। কমপক্ষে কয়টা বল উঠালে সেখানে অন্তত একটা লাল বল থাকবেই?",
+    "options": [
+      "৫",
+      "৬",
+      "৭",
+      "৮"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 48,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Identify the correct passive form, “People thought that the despot was corrupt”",
+    "options": [
+      "The despot had been thought to be corrupt",
+      "It was thought that the despot was corrupt",
+      "The despot was thought to be corrupt",
+      "The despot is thought to be corrupt"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 49,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "After lunch we went for a leisurely stroll Here ‘leisurely’ is a /an-",
+    "options": [
+      "adverb",
+      "adjective",
+      "noun",
+      "conjunction"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 50,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নিম্নোক্ত কোন দেশটি ইউরোপিয়ান ইউনিয়নের (EU) সদস্য নয়?",
+    "options": [
+      "বুলগেরিয়া",
+      "হাঙ্গেরি",
+      "পোল্যান্ড",
+      "সুইজারল্যান্ড"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 51,
+    "bank": "49th BCS Edu.",
+    "subject": "English Literature",
+    "question": "The play “Englishmen for My Money” was written by-",
+    "options": [
+      "Christopher Marlowe",
+      "Thomas Kyd",
+      "William Haughton",
+      "Ben Johnson"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 52,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘তিনি কথা শুনে ঘুমাতে পারলেন না’- বাক্যটির অস্তিবাচক রূপ কী হবে?",
+    "options": [
+      "তিনি কথা না শুনে ঘুমাতে পারলেন না",
+      "তিনি কথা না শুনে ঘুমাতে পারলেন",
+      "তিনি জেগে রইলেন কথা না শুনে",
+      "তিনি কথা শুনে জেগে রইলেন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "49th BCS Edu.",
+    "subject": "English Literature",
+    "question": "“____ I cannot but conclude the Bulk of your Natives, to be the most pernicious race of little odious vermin that Nature ever suffered to crawl upon the surface of the Earth” - the statement occurs in-",
+    "options": [
+      "Robinson Crusoe",
+      "A Doll’s House",
+      "Vanity Fair",
+      "Gulliver’s Travels"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 54,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি থলিতে 3টি সবুজ এবং 2টি লাল বল আছে। অপর একটি থলিতে 2টি সবুজ এবং 5টি লাল বল আছে। নিরপেক্ষভাবে প্রত্যেক থলি থেকে একটি করে বল তোলা হল। দুইটি বলের মধ্যে অন্তত একটি সবুজ হওয়ার সম্ভাব্যতা কত?",
+    "options": [
+      "5/7",
+      "2/7",
+      "5/12",
+      "1/4"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 55,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "পাকিস্তানের ১৯৭০ সালের সাধারণ নির্বাচনে প্রধান নির্বাচন কমিশনার কে ছিলেন?",
+    "options": [
+      "বিচারপতি সাত্তার",
+      "বিচারপতি সায়েম",
+      "বিচারপতি আবু সাঈদ চৌধুরী",
+      "বিচারপতি হামিদুর রহমান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 56,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নিম্নোক্ত কোন দেশটি ‘Five Eyes’ ভুক্ত নয়?",
+    "options": [
+      "অস্ট্রেলিয়া",
+      "ফ্রান্স",
+      "নিউজিল্যান্ড",
+      "কানাডা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 57,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "কোন যান্ত্রিক গিয়ারের চাকা ছোট হলে সংযুক্ত অবস্থায় বড়টির চেয়ে ছোট চাকাটি কিভাবে ঘুরবে?",
+    "options": [
+      "আস্তে",
+      "জোরে",
+      "একইভাবে",
+      "কোনটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "কোন ধ্বনি পরিবর্তনটি যথাযথ নয়?",
+    "options": [
+      "ক্রন্দন > কাঁদা",
+      "অঞ্চল > আঁচল",
+      "সংগীত > গীতিকা",
+      "দন্ত > দাঁত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 59,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "“কেবল আয়ের অভাব নয়, বরং সামর্থ্যের অভাবই দারিদ্র্যের মূল কারন”-অর্থনীতিবিদ অমর্ত্য সেন কোন গ্রন্থে এই যুক্তি তুলে ধরেন?",
+    "options": [
+      "Development as Freedom",
+      "Women and Human Development",
+      "Development through Disposition",
+      "Development, Environment and Power"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 60,
+    "bank": "49th BCS Edu.",
+    "subject": "Others",
+    "question": "‘We know (that the earth is a planet)’ The underlined part is a/an-",
+    "options": [
+      "noun clause",
+      "adverbial clause",
+      "adjective clause",
+      "principal clause"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 61,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "15 মিটার লম্বা একটি স্কেলের এক প্রান্তে 10 কেজি ওজন বাঁধা হয়েছে। একই প্রান্ত থেকে স্কেলের দৈর্ঘ্যের 3:2 অনুপাতে একটি পেরেক লাগানো আছে। অপর প্রান্তে কত কেজি ওজন দিলে স্কেলের ভারসাম্য থাকবে?",
+    "options": [
+      "45",
+      "30",
+      "15",
+      "5"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 62,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "কাজী নজরুল ইসলামের কোন উপন্যাসের কেন্দ্রীয় চরিত্র জাহাঙ্গীর?",
+    "options": [
+      "বাঁধন-হারা",
+      "মৃত্যুক্ষুধা",
+      "কুহেলিকা",
+      "শিউলিমালা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 63,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সর্বোচ্চ সংখ্যক চা বাগান রয়েছে কোন জেলায়?",
+    "options": [
+      "সিলেট",
+      "চট্টগ্রাম",
+      "মৌলভীবাজার",
+      "পঞ্চগড়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 64,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নিম্নোক্ত কোন রাষ্ট্রটি সাংহাই কোঅপারেশন অর্গানাইজেশন বা SCO এর সদস্য নয়?",
+    "options": [
+      "আজারবাইজান",
+      "ভারত",
+      "পাকিস্তান",
+      "ইরান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Select the sentence in which ‘better’ is an adverb-",
+    "options": [
+      "We’re helping for better weather tomorrow",
+      "Sound travels better in water than in air",
+      "It’s hard to decide which one is better",
+      "He joined the gym to better his health."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 66,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "চীন, ভারত ও বাংলাদেশের প্রবাহিত ব্রহ্মপুত্র নদী চীন বা তিব্বতে কী নামে পরিচিত?",
+    "options": [
+      "ইয়াংসি",
+      "লিজিয়াং",
+      "হয়াইলি",
+      "ইয়ারলাং সাংপো"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 67,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জুলাই বিপ্লবের শহীদ আবু সাঈদ কোন বিশ্ববিদ্যালয়ের ছাত্র ছিলেন?",
+    "options": [
+      "ঢাকা বিশ্ববিদ্যালয়",
+      "রংপুর বিশ্ববিদ্যালয়",
+      "রাজশাহী বিশ্ববিদ্যালয়",
+      "বেগম রোকেয়া বিশ্ববিদ্যালয়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 68,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Fill in the blanks with appropriate words. ‘Selina knocked it ____ the park with her performance in culinary art’",
+    "options": [
+      "outside",
+      "out of",
+      "inside",
+      "off"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 69,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ভারত পাকিস্তানের মধ্যে ইন্দাস ওয়াটার ট্রিটি (IWT) কোন সালে স্বাক্ষরিত হয়?",
+    "options": [
+      "১৯৪৮",
+      "১৯৭৪",
+      "১৯৬৫",
+      "১৯৮০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 70,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "The idiom ‘icing on the cake’ means-",
+    "options": [
+      "a slice of the cake",
+      "an attractive but unnecessary addition",
+      "an attractive service",
+      "an attractive and essential enhancement"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 71,
+    "bank": "49th BCS Edu.",
+    "subject": "Others",
+    "question": "Choose the synonym for ‘fright’:",
+    "options": [
+      "placidity",
+      "composure",
+      "apprehension",
+      "equanimity"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 72,
+    "bank": "49th BCS Edu.",
+    "subject": "English Literature",
+    "question": "“Rubiyat of Khayyam” is attributed to-",
+    "options": [
+      "Edward FitzGerald",
+      "Scott Fitzgerald",
+      "Thomas Fitzgerald",
+      "William Fitzgerald"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 73,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘উৎক্ষেপণ’ শব্দের ‘উৎ’ উপসর্গ কোন অর্থ ধারণ করছে?",
+    "options": [
+      "জোর",
+      "ঊর্ধ্ব",
+      "আড়াল",
+      "গতি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 74,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "রবীন্দ্রনাথ ঠাকুর শব্দের শুরুতে মাত্রাযুক্ত এ-কার ব্যবহার করতেন কেন?",
+    "options": [
+      "এ-কার মাত্রা যুক্ত বলে",
+      "‘এ’ মাত্রাহীন বর্ণ বলে",
+      "‘এ’ উচ্চারণ বোঝাতে",
+      "‘অ্যা’ উচ্চারণ বোঝাতে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 75,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "যদি M=a,b,1,2 এবং N=1,2 হয়, তবে N-M এর মান কত?",
+    "options": [
+      "a, b",
+      "0",
+      "-a,-b"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দটি প্রত্যয়যোগে গঠিত?",
+    "options": [
+      "ডাক্তারখানা",
+      "হাসপাতাল",
+      "আকাশছোঁয়া",
+      "গুণমান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 77,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘সত্যকে স্বীকার করতে অনেক ব্যক্তিরাই চায়না।’ এখানে ভুল ঘটেছে-",
+    "options": [
+      "বানান ও প্রত্যয়ের",
+      "অর্থ ও বচনের",
+      "অর্থ ও প্রত্যয়ের",
+      "বানান ও বচনের"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 78,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "পরিভাষিক শব্দ বলতে বুঝায়-",
+    "options": [
+      "ইংরেজি শব্দের বাংলা রূপান্তর",
+      "বিদেশি শব্দের অনুবাদ",
+      "বিষয়গত সুনির্দিষ্ট অর্থবোধক শব্দ",
+      "ব্যবহারিক প্রয়োজনে নবনির্মিত শব্দ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 79,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘মৃগয়া’ শব্দের মৃগ বলতে কি বোঝানো হয়?",
+    "options": [
+      "বানর",
+      "সিংহ",
+      "পশু",
+      "বন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 80,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সবচেয়ে বড় গণমাধ্যম নিয়ন্ত্রক সংস্থা কোন টি?",
+    "options": [
+      "তথ্য মন্ত্রণালয়",
+      "প্রেস কাউন্সিল",
+      "বিটিআরসি",
+      "বাংলাদেশ টেলিভিশন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 81,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "Demographic Dividend বলতে কী বুঝায়?",
+    "options": [
+      "শিশু মৃত্যুহার হ্রাস",
+      "জন্মহার শূনের কোটায় আনা",
+      "জনসংখ্যার অধিকাংশ বেকার",
+      "কর্মক্ষম বয়স গোষ্ঠীর অনুপাত বৃদ্ধি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 82,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "ভাষা-পরিবার অনুযায়ী সাঁওতাল জনগোষ্ঠী প্রধানত কোন পরিবারভুক্ত?",
+    "options": [
+      "ইন্দো-আর্য",
+      "দ্রাবিড়",
+      "অস্ট্রিক-অস্ট্রো এসিয়াটিক (মুণ্ডা)",
+      "তিব্বত-বর্মী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 83,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দটি বিসর্গসন্ধির মাধ্যমে গঠিত?",
+    "options": [
+      "নীরব",
+      "উজ্জ্বল",
+      "মানোত্তীর্ণ",
+      "সংগ্রাম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 84,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "লর্ড কর্নওয়ালিস ব্রিটিশ ভারতের গভর্নর জেনারেল হওয়ায় পূর্বে কোন ভূমিকায় ছিলেন?",
+    "options": [
+      "ব্রিটেনের পররাষ্ট্র মন্ত্রী",
+      "ফ্রান্সে নিযুক্ত ব্রিটেনের রাষ্ট্রদূত",
+      "যুক্তরাষ্ট্রের স্বাধীনতা যুদ্ধে ব্রিটিশ বাহিনীর প্রধান",
+      "কেমব্রিজ বিশ্ববিদ্যালয়ের উপাচার্য"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 85,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "PQR ত্রিভুজের ∠Q = 90° এবং ∠P = 2∠R হলে নিচের কোনটি সঠিক?",
+    "options": [
+      "PR = 2QR",
+      "PQ = 2PR",
+      "PR = 2PQ",
+      "QR = 2PQ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 86,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "ভাষার অর্থযুক্ত ক্ষুদ্রতম একক কোনটি?",
+    "options": [
+      "অক্ষর",
+      "রূপমূল",
+      "শব্দ",
+      "বর্গ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 87,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "ধ্বনি ও বর্ণের পার্থক্য কোথায়?",
+    "options": [
+      "লেখার ধরনে",
+      "উচ্চারণের বিশিষ্টতায়",
+      "সংখ্যাগত পরিমানে",
+      "ইন্দ্রিয় গ্রাহ্যে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 88,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "চর্যাপদের খণ্ডিত পদগুলো তিব্বতি থেকে প্রাচীন বাংলায় রূপান্তর করেন-",
+    "options": [
+      "সুনীতিকুমার চট্টোপাধ্যায়",
+      "হরপ্রসাদ শাস্ত্রী",
+      "রাজেন্দ্রলাল মিত্র",
+      "সুকুমার সেন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 89,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "হালিমা ইয়াকুব কোন দেশের রাষ্ট্রপতি ছিলেন?",
+    "options": [
+      "ব্রুনেই",
+      "মালয়েশিয়া",
+      "সিংগাপুর",
+      "তানজানিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 90,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "আশিস নন্দী, শশী থারুর প্রমুখ লেখকের মতে দ্বি-জাতি তত্ত্বের প্রথম প্রবক্তা কোন সংগঠনটি?",
+    "options": [
+      "মুসলিম লীগ",
+      "সর্ব ভারতীয় জাতীয় কংগ্রেস",
+      "আর.এস.এস.",
+      "জমিয়তে-ই-হিন্দ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 91,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "‘We work every day except Friday’. In this sentence ‘except’ is a/an-",
+    "options": [
+      "adjective",
+      "noun",
+      "preposition",
+      "pronoun"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 92,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "সম্প্রতি বাংলাদেশ সফর করে যাওয়া পাকিস্তানের উপ প্রধান মন্ত্রী ও পররাষ্ট্র মন্ত্রী, ইসহাক দার পাকিস্তানের কোন রাজনৈতিক দলের সাথে সম্পৃক্ত?",
+    "options": [
+      "পাকিস্তান পিপলস পার্টি (PPP)",
+      "পাকিস্তান তেহরিকে ইনসাফ (PTI)",
+      "পাকিস্তান মুসলিম লীগ (নওয়াজ)",
+      "জামায়াতে ইসলামী পাকিস্তান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 93,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "ax+by=a^2: bx-ay=ab; এই সহ-সমীকরণের (x, y) এর সমাধান কোনটি?",
+    "options": [
+      "(a^2,b^2)",
+      "(a,b)",
+      "(0,a)",
+      "(a,0)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 94,
+    "bank": "49th BCS Edu.",
+    "subject": "English Literature",
+    "question": "Who wrote “A Vindication of the Rights of Women”?",
+    "options": [
+      "Claire Clairmont",
+      "Marry Wollstonecraft",
+      "Mary Wollstonecraft Godwin",
+      "Mary Shelley"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 95,
+    "bank": "49th BCS Edu.",
+    "subject": "English Language",
+    "question": "Which sentence is correct?",
+    "options": [
+      "The picture was hanged on the wall",
+      "The picture was hung on the wall",
+      "The picture was hunged on the wall",
+      "The picture had hanged on the wall"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 96,
+    "bank": "49th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি গুণোত্তর ধারার পঞ্চম পদটি ৩২ ও অষ্টম পদটি ২৫৬ হলে উক্ত ধারার সাধারণ অনুপাত কত?",
+    "options": [
+      "৮",
+      "১৬",
+      "২",
+      "১/২"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 97,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "তুরস্কের বিচ্ছিন্নতাবাদী দল Kurdistan Workers’ Party বা PKK এর প্রতিষ্ঠাতা কে?",
+    "options": [
+      "জালাল তালাবানী",
+      "মাসুদ বারজানী",
+      "মাজলুম আবদি",
+      "আবদুল্লাহ ওচালান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 98,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘স্বাধীন’ শব্দের ব্যাসবাক্য কোনটি?",
+    "options": [
+      "স্বীয়-এর অধীন",
+      "সত্ত্বার অধীন",
+      "স্ব-এর অধীন",
+      "স্বত্তের-অধীন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 99,
+    "bank": "49th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "প্রাচীন কালে কোন দেশে সিভিল সার্ভিসের ধারনা প্রথম উদ্ভুত হয়?",
+    "options": [
+      "মিশর",
+      "গ্রীস",
+      "চীন",
+      "রোম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 100,
+    "bank": "49th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "ফররুখ আহমদের গ্রন্থ কোনটি?",
+    "options": [
+      "হরফের ছড়া",
+      "বর্ণশিক্ষা",
+      "বর্ণপরিচয়",
+      "সহজ ছড়া"
+    ],
+    "answer": 0
+  }
+]

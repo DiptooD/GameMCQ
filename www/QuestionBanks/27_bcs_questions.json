@@ -1,0 +1,1302 @@
+[
+  {
+    "id": 1,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি উপন্যাস?",
+    "options": [
+      "নতুন চাঁদ",
+      "কন্যাকুমারী",
+      "গড্ডলিকা",
+      "নেমেসিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "লৌকিক কাহিনির প্রথম রচয়িতা কে?",
+    "options": [
+      "আলাওল",
+      "কোরেশী মগন",
+      "দৌলত কাজী",
+      "সৈয়দ সুলতান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 3,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "সাপ্তাহিক ‘সুধাকর’-এর সম্পাদক কে?",
+    "options": [
+      "মুন্সি মোহাম্মদ রিয়াজউদ্দিন আহমদ",
+      "মুন্সি মোহাম্মদ মেহের উল্লাহ",
+      "শেখ আব্দুর রহিম",
+      "ইসমাইল হোসেন সিরাজী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 4,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "মাসিক ‘মোহাম্মদী’ কোন সালে প্রকাশিত হয়?",
+    "options": [
+      "১৯২৬",
+      "১৯২৭",
+      "১৯২৮",
+      "১৯২৯"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 5,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোন পত্রিকাটি ১৯২৩ সালে প্রকাশিত হয়?",
+    "options": [
+      "কালি কলম",
+      "প্রগতি",
+      "কল্লোল",
+      "সবুজপত্র"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 6,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "ঢাকা থেকে প্রকাশিত হয় কোন পত্রিকাটি?",
+    "options": [
+      "অরণি",
+      "পরিচয়",
+      "নবশক্তি",
+      "ক্রান্তি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "27th BCS",
+    "subject": "Bangla Language",
+    "question": "গ্রিক শব্দ কোনটি?",
+    "options": [
+      "তুফান",
+      "লুঙ্গী",
+      "কুশন",
+      "দাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 8,
+    "bank": "27th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা ভাষায় কয়টি খাঁটি বাংলা উপসর্গ আছে?",
+    "options": [
+      "উনিশ",
+      "কুড়ি",
+      "একুশ",
+      "বাইশি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 9,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘শিশুরাজ্যে এই মেয়েটি একটি ছোটখাট বর্গির উপদ্রব বলিলেই হয়।’ রবীন্দ্রনাথ ঠাকুরের কোন গল্পের সংলাপ?",
+    "options": [
+      "একরাত্রি",
+      "শুভা",
+      "সমাপ্তি",
+      "পোস্টমাস্টার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 10,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যের প্রথম ইতিহাস গ্রন্থ কোনটি?",
+    "options": [
+      "বাঙ্গালা সাহিত্যের ইতিহাস",
+      "বঙ্গভাষা ও সাহিত্য",
+      "বাংলা সাহিত্যের কথা",
+      "বাংলা সাহিত্যের রূপরেখা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "কত খ্রিস্টাব্দে শরৎচন্দ্র চট্টোপাধ্যায় কলকাতা বিশ্ববিদ্যালয়ের ‘জগত্তারিণী’ পদক লাভ করেন?",
+    "options": [
+      "১৯১৬",
+      "১৯২৩",
+      "১৯৩৩",
+      "১৯০৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 12,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "রাজা রামমোহন রচিত বাংলা ব্যাকরণের নাম কি?",
+    "options": [
+      "মাগধীয় ব্যাকরণ",
+      "গৌড়ীয় ব্যাকরণ",
+      "মাতৃভাষা ব্যাকরণ",
+      "ভাষা ও ব্যাকরণ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 13,
+    "bank": "27th BCS",
+    "subject": "Bangla Language",
+    "question": "‘মেছো’ শব্দের প্রকৃতি-প্রত্যয় কি?",
+    "options": [
+      "মাছ + ও",
+      "মেছ + ও",
+      "মাছি + উয়া > ও",
+      "মাছ + উয়া > ও"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 14,
+    "bank": "27th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন সন্ধিটি নিপাতনে সিদ্ধ?",
+    "options": [
+      "বাক্‌ + দান = বাগদান",
+      "উৎ + ছেদ = উচ্ছেদ",
+      "পর + পর = পরস্পর",
+      "সম + সার = সংসার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 15,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা মৌলিক নাটকের যাত্রা শুরু হয় কোন নাট্যকারের হাতে?",
+    "options": [
+      "মধুসূদন দত্ত",
+      "দীনবন্ধু মিত্র",
+      "জ্যোতিন্দ্রনাথ ঠাকুর",
+      "রামনারায়ণ তর্করত্ন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 16,
+    "bank": "27th BCS",
+    "subject": "Bangla Language",
+    "question": "প্রত্যক্ষ কোনো বস্তুর সাথে পরোক্ষ কোনো বস্তুর তুলনা করলে প্রত্যক্ষ বস্তুটিকে বলা হয়___।",
+    "options": [
+      "উপমিত",
+      "উপমান",
+      "উপমেয়",
+      "রূপক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 17,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘পাখি সব করে রব রাতি পোহাইল’ পঙ্‌ক্তির রচয়িতা কে?",
+    "options": [
+      "রামনারায়ণ তর্করত্ন",
+      "বিহারী লাল",
+      "কৃষ্ণচন্দ্র মজুমদার",
+      "মদনমোহন তর্কালঙ্কার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 18,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘আমি কিংবদন্তীর কথা বলছি’-এর রচয়িতা কে?",
+    "options": [
+      "সিকানদার আবু জাফর",
+      "আবু জাফর ওবায়দুল্লাহ",
+      "ফররুখ আহমদ",
+      "আহসান হাবীব"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 19,
+    "bank": "27th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘জীবনে জ্যাঠামি ও সাহিত্যে ন্যাকামি’ সহ্য করতে পারতেন না-",
+    "options": [
+      "বঙ্কিমচন্দ্র",
+      "সৈয়দ মুজতবা আলী",
+      "প্রমথ চৌধুরী",
+      "প্রমথনাথ বিশী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 20,
+    "bank": "27th BCS",
+    "subject": "Bangla Language",
+    "question": "‘এ মাটি সোনার বাড়া’-এ উদ্ধৃতিতে ‘সোনা’ কোন অর্থে ব্যবহার করা হয়েছে?",
+    "options": [
+      "বিশেষণের অতিশায়ন",
+      "রূপবাচক বিশেষণ",
+      "উপাদান বাচক বিশেষণ",
+      "বিধেয় বিশেষণ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 21,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "What would have happened if ___?",
+    "options": [
+      "The bridge is broken",
+      "The bridge would break",
+      "The bridge had broken",
+      "The bridge had been broken"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 22,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Explain the meaning of ‘Bring to pass’.",
+    "options": [
+      "Cause to destroy",
+      "Cause to happen",
+      "Cause to carry out",
+      "Cause to convince"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 23,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Which of the following sentences is the correct one?",
+    "options": [
+      "Paper is made of wood",
+      "Paper is made from wood",
+      "Paper is made by wood",
+      "Paper is made on wood"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 24,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "The word (bounty) is closest in meaning to-",
+    "options": [
+      "generosity",
+      "familiar",
+      "dividing line",
+      "sympathy"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 25,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Give the correct passive form of ‘My teacher embodies all the good qualities’.",
+    "options": [
+      "All the good qualities are embodied by my teacher.",
+      "All the good qualities are embodied in my teacher.",
+      "All the good qualities are embodied to my teacher.",
+      "All the good qualities are embodied on my teacher."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 26,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Choose the correct indirect speech- She asked me, ‘Are you happy in your new job?’",
+    "options": [
+      "She asked me if I was happy in my new job",
+      "She asked me if I have been happy in my new job",
+      "She asked me whether I am happy in my new job",
+      "She asked me if I had been happy in my new job"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 27,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "The meaning of the word ‘Obese’ is–",
+    "options": [
+      "very fat",
+      "ugly",
+      "tardy",
+      "obnoxious"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 28,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "A person who writes about his own life writes–",
+    "options": [
+      "a diary",
+      "a biography",
+      "an autobiography",
+      "a chronicle"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 29,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Which of the following sentences is correct?",
+    "options": [
+      "Why have you done this?",
+      "Why you had done this?",
+      "Why you have done this?",
+      "Why did you done this?"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 30,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "What will be the correct preposition to complete the sentence? ‘I am not good ___ translation’",
+    "options": [
+      "in",
+      "about",
+      "with",
+      "at"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 31,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Which is the noun of the word ‘beautiful’.",
+    "options": [
+      "Beauty",
+      "Beautify",
+      "Beauteous",
+      "Beautifully"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 32,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Fill in the blank with appropriate preposition. ‘Hurry up! we have to go ___ five minutes.’",
+    "options": [
+      "in",
+      "on",
+      "by",
+      "for"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Identify the imperative sentence.",
+    "options": [
+      "I shall go to college",
+      "Matin is singing a song",
+      "Stand up",
+      "It has been raining since morning"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 34,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Fill in the gap with the suitable word. To stay healthy, we must plan to have a balanced ___.",
+    "options": [
+      "diet",
+      "food",
+      "drink",
+      "environment"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 35,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Choose the correct alternative and mark its letter on your answer sheet. The rich should not look down ___ the poor.",
+    "options": [
+      "at",
+      "for",
+      "towards",
+      "upon"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 36,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "I took a map with me, as I didn’t want to ___ my way on the journey.",
+    "options": [
+      "loose",
+      "lose",
+      "lost",
+      "loss"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 37,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Every driver must be held ___ his own actions.",
+    "options": [
+      "responsible for",
+      "responsible to",
+      "liable to",
+      "blamed for"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "‘Through thick and thin’ means–",
+    "options": [
+      "under all conditions",
+      "to make thick and thin",
+      "not clear in understanding",
+      "of great density"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 39,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "‘Prior to’ means–",
+    "options": [
+      "after",
+      "before",
+      "immediately",
+      "during the period of"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 40,
+    "bank": "27th BCS",
+    "subject": "English Language",
+    "question": "Nobody knocked him down; it was an–",
+    "options": [
+      "incident",
+      "occurrence",
+      "accident",
+      "event"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 41,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "১^২ + ২^২ + ৩^২ + .........+ ৫০^২ = কত?",
+    "options": [
+      "৩৫৭২৫",
+      "৪২৯২৫",
+      "৪৫৫০০",
+      "৪৭২২৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 42,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "৪ টাকায় ৫টি করে কিনে ৫ টাকায় ৪টি করে বিক্রয় করলে শতকরা কত লাভ হবে?",
+    "options": [
+      "৪৫%",
+      "৪৮.৫০%",
+      "৫২.৭৫%",
+      "৫৬.২৫%"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 43,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "এক ব্যবসায়ী একটি পন্যের মুল ২৫% বাড়ালো, অতঃপর বর্ধিত মুল্য থেকে ২৫% কমালো।সর্বশেষ মুল্য সর্বপ্রথম মুল্যের তুলনায়-",
+    "options": [
+      "৪৫% কমানো হয়েছে",
+      "৬.২৫% কমানো হয়েছে",
+      "৬.২৫% বাড়ানো হয়েছে",
+      "৫% বাড়ানো হয়েছে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 44,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "যদি একটি কাজ ৯ জন লোক ১২ দিনে করতে পারে, অতিরিক্ত ৩ জন লোক নিয়োগ করলে কাজটি কতদিনে শেষ হবে?",
+    "options": [
+      "৭",
+      "৯",
+      "১০",
+      "১২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 45,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "শিক্ষা সফরে যাওয়ার জন্য ২৪০০ টাকায় বাস ভাড়া করা হলো এবং প্রত্যেক ছাত্র/ছাত্রী সমান ভাড়া বহন করবে ঠিক হলো। অতিরিক্ত ১০ জন ছাত্র/ছাত্রী যাওয়ায় প্রতি জনের ভাড়া ৮ টাকা কমে গেল। বাসে কতজন ছাত্র/ছাত্রী গিয়েছিল?",
+    "options": [
+      "৪০",
+      "৪৮",
+      "৫০",
+      "৬০"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 46,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "পিতা, মাতা ও পুত্রের বয়সের গড় ৩৭ বছর। আবার পিতা ও পুত্রের বয়সের গড় ৩৫ বছর। মাতার বয়স কত?",
+    "options": [
+      "৩৮ বছর",
+      "৪১ বছর",
+      "৪৫ বছর",
+      "৪৮ বছর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "যদি (x-y)^2=14 এবং xy=2 হয় তবে x^2+y^2= কত?",
+    "options": [
+      "12",
+      "14",
+      "16",
+      "18"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 48,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "বৃত্তের ব্যাস তিনগুণ বৃদ্ধি করলে ক্ষেত্রফল কতগুণ বৃদ্ধি পাবে?",
+    "options": [
+      "৪",
+      "৯",
+      "১২",
+      "১৬"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "একটি সমদ্বিবাহু সমকোণী ত্রিভুজের অতিভুজের দৈর্ঘ্য 12 সেমি হলে ত্রিভুজটির ক্ষেত্রফল কত বর্গ সেমি?",
+    "options": [
+      "৩৬",
+      "৪৮",
+      "৫৬",
+      "৭২"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 50,
+    "bank": "27th BCS",
+    "subject": "Math",
+    "question": "৬০ থেকে ৮০ এর মধ্যবর্তী বৃহত্তম ও ক্ষুদ্রতম মৌলিক সংখ্যার অন্তর হবে-",
+    "options": [
+      "৮",
+      "১২",
+      "১৮",
+      "১৪০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 51,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "NIPORT কি?",
+    "options": [
+      "জনসংখ্যা বিষয়ক গবেষণা প্রতিষ্ঠান",
+      "পোলট্রি ফার্ম বিষয়ক গবেষণা প্রতিষ্ঠান",
+      "নদীবন্দর বিষয়ক গবেষণা প্রতিষ্ঠান",
+      "বন্দর বিষয়ক গবেষণা প্রতিষ্ঠান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 52,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সংবিধানের কোন অনুচ্ছেদে ‘রাষ্ট্র ও গণজীবনের সর্বস্তরে নারী পুরুষের সমান অধিকার লাভ করিবেন’ বলা আছে?",
+    "options": [
+      "১০ নং অনুচ্ছেদে",
+      "২১ (২) নং অনুচ্ছেদে",
+      "২৭ নং অনুচ্ছেদে",
+      "২৮ (২) নং অনুচ্ছেদে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "UNDP রিপোর্ট সেপ্টেম্বর ২০০৫ সাল মোতাবেক বাংলাদেশের মাথাপিছু আয় কত?",
+    "options": [
+      "৪৪৪ ডলার",
+      "৭৭০ ডলার",
+      "১০৭০ ডলার",
+      "১৭৭০ ডলার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 54,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "স্বাধীনতা যুদ্ধে অবদানের জন্যে ‘বীরপ্রতীক’ উপাধি লাভ করে কতজন?",
+    "options": [
+      "৭ জন",
+      "৬৮ জন",
+      "১৭৫ জন",
+      "৪২৬ জন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 55,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের ইক্ষু গবেষণা ইনস্টিটিউট কোথায় অবস্থিত?",
+    "options": [
+      "দিনাজপুর",
+      "গোপালপুর",
+      "পাকশী",
+      "ঈশ্বরদী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 56,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মিলেনিয়াম ডেভেলপমেন্ট গোল অর্জন করার কথা কোন সময়ে?",
+    "options": [
+      "২০১০ সালে",
+      "২০১৫ সালে",
+      "২০২০ সালে",
+      "২০২৫ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 57,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "রাজারবাগ পুলিশ লাইনে ‘দুর্জয়’ ভাস্কর্যটির শিল্পী কে?",
+    "options": [
+      "হামিদুর রহমান",
+      "মৃণাল হক",
+      "শামিম শিকদার",
+      "নভেরা আহমেদ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "চট্টগ্রাম-কক্সবাজার সাবমেরিন কেবলস অপটিক্যাল ফাইবার স্থাপন করার জন্য বাংলাদেশ সরকারকে কত দূরত্বের ব্যয় বহন করতে হবে?",
+    "options": [
+      "৭০০ কিমি",
+      "৫৭০ কিমি",
+      "৩০০ কিমি",
+      "১৭০ কিমি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 59,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "রাজেন্দ্রপুর সেনানিবাসে অবস্থিত মুক্তিযুদ্ধের স্মৃতিস্তম্ভের নাম কি?",
+    "options": [
+      "বিজয়স্তম্ভ",
+      "বিজয়কেতন",
+      "স্বাধীনতা সোপান",
+      "রক্ত সোপান"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 60,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের পোস্টাল একাডেমি কোথায় অবস্থিত?",
+    "options": [
+      "রাজশাহী",
+      "ঢাকা",
+      "চট্টগ্রাম",
+      "খুলনা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 61,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রস্তাবিত পদ্মা সেতুর দৈর্ঘ্য কত কিমি?",
+    "options": [
+      "৫.০৩",
+      "৬.০৩",
+      "৪.৮",
+      "৬.৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 62,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে সর্বপ্রথম কোন মহিলা টেস্টটিউব শিশুর মা হন?",
+    "options": [
+      "পারভীন ফাতেমা",
+      "ফিরোজা বেগম",
+      "রওশন জাহান",
+      "কানিজ ফাতেমা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 63,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ জাতিসংঘের কততম সদস্য?",
+    "options": [
+      "১৩৬ তম",
+      "১৩৭ তম",
+      "১৩৮ তম",
+      "১৩৯ তম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 64,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কেন্দ্রীয় শহিদ মিনারের স্থপতি কে?",
+    "options": [
+      "তানভীর কবীর",
+      "হামিদুর রহমান",
+      "হামিদুজ্জামান",
+      "অস্কার বাদল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 65,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "জাতিসংঘ সাধারণ পরিষদের প্রথম বাংলাদেশী সভাপতি কে?",
+    "options": [
+      "বি এ সিদ্দিকী",
+      "খাজা ওয়াসিউদ্দিন",
+      "হুমায়ুন রশীদ চৌধুরী",
+      "শমসের মবিন চৌধুরী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 66,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "স্বাধীনতা যুদ্ধে অবদান রাখার জন্য কতজন মহিলাকে বীরপ্রতীক উপাধিতে ভূষিত করা হয়?",
+    "options": [
+      "৫ জন",
+      "৭ জন",
+      "২ জন",
+      "৬ জন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 67,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কর্মসংস্থান ব্যাংক প্রতিষ্ঠিত হয় কোন সনে?",
+    "options": [
+      "১৯৯৫",
+      "১৯৯৬",
+      "১৯৯৮",
+      "২০০১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 68,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "লোকসংখ্যার দিক থেকে বাংলাদেশ বিশ্বের কততম স্থানে?",
+    "options": [
+      "৫ম",
+      "৭ম",
+      "৮ম",
+      "১০ম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 69,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সেন্ট মার্টিন দ্বীপের আয়তন কত বর্গ কিলোমিটার?",
+    "options": [
+      "৮",
+      "১০",
+      "১২",
+      "১৪"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 70,
+    "bank": "27th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে পরমাণু শক্তি কমিশন গঠিত হয় কোন সনে?",
+    "options": [
+      "১৯৭২",
+      "১৯৭৩",
+      "১৯৭৫",
+      "১৯৯৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 71,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "কোন ইঞ্জিনে কার্বুরেটর থাকে?",
+    "options": [
+      "পেট্রোল ইঞ্জিনে",
+      "ডিজেল ইঞ্জিনে",
+      "রকেট ইঞ্জিনে",
+      "বিমান ইঞ্জিনে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 72,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "সর্বাপেক্ষা ছোট তরঙ্গ দৈর্ঘ্যের বিকিরণ হচ্ছে–",
+    "options": [
+      "আলফা রশ্মি",
+      "বিটা রশ্মি",
+      "গামা রশ্মি",
+      "রঞ্জন রশ্মি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 73,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "মানুষের হৃৎপিণ্ডে কতটি প্রকোষ্ঠ থাকে?",
+    "options": [
+      "দুটি",
+      "চারটি",
+      "ছয়টি",
+      "আটটি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 74,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "প্রেসার কুকারে রান্না তাড়াতাড়ি হয়, কারণ–",
+    "options": [
+      "রান্নার জন্য শুধু তাপ নয় চাপও কাজে লাগে",
+      "বদ্ধ পাত্রে তাপ সংরক্ষিত হয়",
+      "উচ্চচাপে তরলের স্ফুটনাংক বৃদ্ধি পায়",
+      "সঞ্চিত বাষ্পের তাপ রান্নার সহায়ক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 75,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "বিলিরুবিন তৈরি হয়-",
+    "options": [
+      "পিত্তথলিতে",
+      "কিডনীতে",
+      "প্লীহায়",
+      "যকৃতে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 76,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "মানুষের গায়ের রং কোন উপাদানের উপর নির্ভর করে?",
+    "options": [
+      "মেলানিন",
+      "থায়ামিন",
+      "ক্যারোটিন",
+      "হিমোগ্লোবিন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 77,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "বাদুড় অন্ধকারে চলাফেরা করে কিভাবে?",
+    "options": [
+      "তীক্ষ্ম দৃষ্টিসম্পন্ন চোখের সাহায্যে",
+      "ক্রমাগত শব্দ উৎপন্নের মাধ্যমে অবস্থান নির্ণয় করে",
+      "সৃষ্ট শব্দের প্রতিধ্বনি শুনে",
+      "অলৌকিকভাবে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 78,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "গাছের খাদ্য তালিকায় আছে?",
+    "options": [
+      "N, P, K, S ও Zn",
+      "Na, P, K, S ও Zn",
+      "N, B, K, S ও Al",
+      "N, P, K, S ও Al"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "নিচের কোনটি DNA এর নাইট্রোজেন বেস?",
+    "options": [
+      "ইউরাসিল",
+      "গোয়ানিন",
+      "পিরিডক্সিন",
+      "অ্যাসপারাজিন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "27th BCS",
+    "subject": "Science",
+    "question": "নিচের কোনটি পরমাণুর নিউক্লিয়াসে থাকে না?",
+    "options": [
+      "meson",
+      "neutron",
+      "proton",
+      "electron"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 81,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "২০০৫ সালে যুক্তরাষ্ট্রের দক্ষিণ বা দক্ষিণ-পশ্চিম অঞ্চলে সর্বপ্রথম কোন হারিকেনটি আঘাত হানে?",
+    "options": [
+      "ডেনিস",
+      "ক্যাটরিনা",
+      "আইভান",
+      "রিটা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 82,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "কোন দেশটি স্ক্যানডিনেভিয়ার অন্তর্ভুক্ত নয়?",
+    "options": [
+      "ডেনমার্ক",
+      "ফিনল্যান্ড",
+      "নেদারল্যান্ডস",
+      "যুক্তরাষ্ট্র"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 83,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "মুসলমান প্রধান না হয়েও কোন দেশটি ইসলামী সহযোগিতা সংস্থার সদস্য?",
+    "options": [
+      "নাইজেরিয়া",
+      "লেবানন",
+      "নাইজার",
+      "উগান্ডা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 84,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "কিউবায় ক্ষেপণাস্ত্র সঙ্কটের সময় যুক্তরাষ্ট্রের প্রেসিডেন্ট কে ছিলেন?",
+    "options": [
+      "রিচার্ড এম নিক্সন",
+      "জন এফ কেনেডি",
+      "লিন্ডন বেইনস জনসন",
+      "হ্যারি এস ট্রুম্যান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "মার্কিন যুক্তরাষ্ট্রের কোন প্রেসিডেন্ট ১২ বছর ক্ষমতায় অধিষ্ঠিত ছিলেন?",
+    "options": [
+      "হ্যারি এস ট্রুম্যান",
+      "ফ্রাঙ্কলিন রুজভেল্ট",
+      "জেমস মনরো",
+      "তথ্যটি সঠিক নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 86,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "ভারতীয় লোকসভার নির্বাচিত সদস্য সংখ্যা কত?",
+    "options": [
+      "৫৪৩",
+      "৫৪৫",
+      "৪১৪",
+      "৫৪০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 87,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "কোন দেশের মহিলারা সর্বপ্রথম ভোটাধিকার লাভ করে?",
+    "options": [
+      "মার্কিন যুক্তরাষ্ট্র",
+      "নিউজিল্যান্ড",
+      "বাহামা",
+      "সুইজারল্যান্ড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 88,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "রাসায়নিক অস্ত্র চুক্তি (Chemical Weapons Convention) কোন সালে স্বাক্ষরিত হয়?",
+    "options": [
+      "১৯৯০",
+      "১৯৯৩",
+      "১৯৯৬",
+      "১৯৯৯"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 89,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "কোন পরিষদের সুপারিশক্রমে জাতিসংঘে নতুন সদস্য গ্রহণ করা হয়?",
+    "options": [
+      "অছি পরিষদ",
+      "সাধারণ পরিষদ",
+      "নিরাপত্তা পরিষদ",
+      "অর্থনৈতিক ও সামাজিক পরিষদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 90,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "কোন মুসলিম মনীষী সর্বপ্রথম নোবেল পুরস্কার পান?",
+    "options": [
+      "ইয়াসির আরাফাত",
+      "নাগীব মাহফুজ",
+      "আনোয়ার সাদাত",
+      "প্রফেসর আব্দুস সালাম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 91,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "বাদশা ফাহাদের পর সৌদি বাদশা কে হন?",
+    "options": [
+      "খালেদ",
+      "ফয়সাল",
+      "আব্দুল আজিজ",
+      "আবদুল্লাহ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 92,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "অক্সফাম (Oxfam) এর সদর দপ্তর কোথায়?",
+    "options": [
+      "নিউইয়র্ক",
+      "ক্যামেনিক্স",
+      "লন্ডন",
+      "হেগ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 93,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "কোনটি বিংশ শতাব্দীর শেষভাগে উপনিবেশবাদের নিগড় থেকে মুক্ত হয়?",
+    "options": [
+      "হংকং",
+      "শ্রীলংকা",
+      "ম্যাকাউ",
+      "বাংলাদেশ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 94,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "নিচের কোন চুক্তিটি যুক্তরাষ্ট্রের সিনেটে অনুমোদিত হয়নি?",
+    "options": [
+      "এবিএম চুক্তি (ABM)",
+      "সল্ট-১ চুক্তি (SALT-1)",
+      "সল্ট-২ চুক্তি (SALT-2)",
+      "স্টার্ট-২ চুক্তি (START-2)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 95,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "Amnesty International কত সালে নোবেল শান্তি পুরস্কার পেয়েছিল?",
+    "options": [
+      "১৯৭৭",
+      "১৯৭৮",
+      "১৯৭৯",
+      "১৯৮১"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 96,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "START-2 কি?",
+    "options": [
+      "টিভিতে সম্প্রচারিত একটি সিরিয়াল",
+      "বাণিজ্য সংক্রান্ত একটি চুক্তি",
+      "কৌশলগত অস্ত্র হ্রাস সংক্রান্ত চুক্তি",
+      "এর কোনোটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 97,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "আসিয়ান রিজিওনাল ফোরাম (ARF) এর সদস্য সংখ্যা কত?",
+    "options": [
+      "২১",
+      "২২",
+      "২৩",
+      "২৬"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 98,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "মালয়েশিয়ার সাবেক প্রধানমন্ত্রী ড. মাহাথির মোহাম্মদ কত বছর ক্ষমতায় ছিলেন?",
+    "options": [
+      "২১ বছর",
+      "২২ বছর",
+      "২৪ বছর",
+      "২৫ বছর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 99,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশ কত সালে ইসলামী সম্মেলন সংস্থার সদস্যপদ লাভ করে?",
+    "options": [
+      "১৯৭২ সালে",
+      "১৯৭৩ সালে",
+      "১৯৭৪ সালে",
+      "১৯৭৫ সালে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 100,
+    "bank": "27th BCS",
+    "subject": "International Affairs",
+    "question": "ইরাকের বর্তমান প্রেসিডেন্ট জালাল তালাবানি কোন সম্প্রদায়ের?",
+    "options": [
+      "সুন্নি",
+      "শিয়া",
+      "কুর্দি",
+      "খ্রিস্টান"
+    ],
+    "answer": 0
+  }
+]

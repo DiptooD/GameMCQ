@@ -1,0 +1,1302 @@
+[
+  {
+    "id": 1,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "চর্যাপদ আবিষ্কৃত হয় কোথা থেকে?",
+    "options": [
+      "বাঁকুড়ার এক গৃহস্থের গোয়াল ঘর থেকে",
+      "আরাকান রাজগ্রন্থাগার থেকে",
+      "নেপালের রাজগ্রন্থশালা থেকে",
+      "সুদূর চীন দেশ থেকে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 2,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "মঙ্গলযুগের সর্বশেষ কবির নাম কি?",
+    "options": [
+      "বিজয়গুপ্ত",
+      "ভারতচন্দ্র রায়গুণাকর",
+      "মুকুন্দরাম চক্রবর্তী",
+      "কানাহরি দত্ত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "বিদ্যাপতি কোথাকার কবি ছিলেন?",
+    "options": [
+      "নবদ্বীপের",
+      "মিথিলার",
+      "বৃন্দাবনের",
+      "বর্ধমানের"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 4,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "শ্রীকৃষ্ণকীর্তন কাব্যের বড়াই কি ধরনের চরিত্র?",
+    "options": [
+      "শ্রী রাধার ননদিনী",
+      "শ্রী রাধার শাশুড়ি",
+      "রাধাকৃষ্ণের প্রেমের দূতী",
+      "জনৈক গোপবালা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 5,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "লোকসাহিত্য কাকে বলে?",
+    "options": [
+      "গ্রামীণ নরনারীর প্রণয় সংবলিত উপাখ্যানকে",
+      "লোক সাধারণের কল্যাণে দেবতার স্তুতিমুলক রচনাকে",
+      "লোকের মুখে মুখে প্রচলিত কাহিনি, গান, ছড়া ইত্যাদিতে",
+      "গ্রামীণ অশিক্ষিত ও অখ্যাত লোকের সৃষ্ট রচনাকে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 6,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যে কখন গদ্যের সূচনা হয়?",
+    "options": [
+      "নবম শতকে",
+      "ত্রয়োদশ শতকে",
+      "ষোড়শ শতকে",
+      "উনিশ শতকে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা ভাষায় প্রথম সাময়িকপত্র কোনটি?",
+    "options": [
+      "দিকদর্শন",
+      "সংবাদ প্রভাকর",
+      "তত্ত্ববোধিনী",
+      "বঙ্গদর্শন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 8,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "ইয়ং বেঙ্গল কি?",
+    "options": [
+      "বাংলাভাষা শিক্ষার্থী ইংরেজ",
+      "ইংরেজি ভাবধারাপুষ্ট বাঙালি যুবক",
+      "একটি সাহিত্যিক গোষ্ঠীর নাম",
+      "একটি সাময়িক পত্রের নাম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 9,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "দীনবন্ধু মিত্রের প্রহসন কোনটি?",
+    "options": [
+      "বুড়ো শালিকের ঘাড়ে রোঁ",
+      "বিয়ে পাগলা বুড়ো",
+      "কিঞ্চিত জলযোগ",
+      "কল্কি অবতার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 10,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "মীর মশাররফ হোসেনের নাটক কোনটি?",
+    "options": [
+      "নটির পূজা",
+      "বেহুলা গীতাভিনয়",
+      "নবীন তপস্বিনী",
+      "কৃষ্ণকুমারী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "কলকাতায় প্রথম রঙ্গমঞ্চ তৈরি হয় কত সালে?",
+    "options": [
+      "১৮১৭ সালে",
+      "১৮৩২ সালে",
+      "১৮৫২ সালে",
+      "১৭৫৩ সালে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 12,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "রবীন্দ্রনাথ ঠাকুরের অতিপ্রাকৃত গল্প কোনটি?",
+    "options": [
+      "একরাত্রি",
+      "নষ্টনীড়",
+      "ক্ষুধিত পাষাণ",
+      "মধ্যবর্তিনী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 13,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলা সাহিত্যের প্রথম মুসলিম ঔপন্যাসিকের নাম কি?",
+    "options": [
+      "মোতাহের হোসেন",
+      "ইসমাইল হোসেন সিরাজী",
+      "মীর মশাররফ হোসেন",
+      "ফররুখ আহমদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 14,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "নজরুল ইসলামের সম্পাদিত পত্রিকা কোনটি?",
+    "options": [
+      "মাহে নও",
+      "সওগাত",
+      "ধূমকেতু",
+      "কালিকলম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 15,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "জীবনানন্দ দাশের প্রবন্ধগ্রন্থ কোনটি?",
+    "options": [
+      "ধূসর পাণ্ডুলিপি",
+      "কবিতার কথা",
+      "ঝরা পালকের কবি",
+      "দুর্দিনের যাত্রী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 16,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘সাত সাগরের মাঝি’ কাব্যগ্রন্হের রচয়িতা কে?",
+    "options": [
+      "কাজী নজরুল ইসলাম",
+      "ফররুখ আহমদ",
+      "আব্দুল কাদির",
+      "বন্দে আলী মিয়া"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 17,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "বাংলাদেশের ভাষা আন্দোলনভিত্তিক উপন্যাস কোনটি?",
+    "options": [
+      "অগ্নিসাক্ষী",
+      "চিলেকোঠার সেপাই",
+      "আরেক ফাল্গুন",
+      "অনেক সূর্যের আশা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 18,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুক্তিযুদ্ধভিত্তিক উপন্যাস কোনটি?",
+    "options": [
+      "শঙ্খনীল কারাগার",
+      "কাঁটাতারে প্রজাপতি",
+      "জাহান্নম হইতে বিদায়",
+      "আর্তনাদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 19,
+    "bank": "28th BCS",
+    "subject": "Bangla Literature",
+    "question": "শওকত ওসমান কোন উপন্যাসের জন্য আদমজী পুরস্কার লাভ করেন?",
+    "options": [
+      "বনী আদম",
+      "জননী",
+      "চৌরসন্ধি",
+      "ক্রীতদাসের হাসি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 20,
+    "bank": "28th BCS",
+    "subject": "Bangla Language",
+    "question": "‘উপরোধ’ শব্দের অর্থ কি?",
+    "options": [
+      "প্রতিরোধ",
+      "উপস্থাপন",
+      "অনুরোধ",
+      "উপযোগী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 21,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "Dhaka is becoming one of the ____ cities in Asia.",
+    "options": [
+      "more busy",
+      "busy",
+      "busiest",
+      "most busiest"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 22,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "He had written the book before he-",
+    "options": [
+      "retired",
+      "had retired",
+      "has retired",
+      "will be retired"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 23,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "Rizvi requested Rini ____ telephone to attend the meeting.",
+    "options": [
+      "over",
+      "through",
+      "with",
+      "by"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 24,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "The word 'precedence' means-",
+    "options": [
+      "example",
+      "priority",
+      "elderly",
+      "case"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 25,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "The prices of rice are -",
+    "options": [
+      "raising",
+      "risen",
+      "rising",
+      "raised"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 26,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "'To get along with' means-",
+    "options": [
+      "to adjust",
+      "to accompany",
+      "to interest",
+      "to walk"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 27,
+    "bank": "28th BCS",
+    "subject": "English Literature",
+    "question": "'If winter comes, can spring be far behind?' These lines were written by-",
+    "options": [
+      "Keats",
+      "Frost",
+      "Eliot",
+      "Shelley"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 28,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "The verb of the word 'short' is -",
+    "options": [
+      "enshort",
+      "shorten",
+      "shorted",
+      "shorting"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 29,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "'Light' is to 'dark' as 'cold' is to-",
+    "options": [
+      "hot",
+      "heat",
+      "cool",
+      "winter"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 30,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "Many prefer donating money ___ distributing clothes.",
+    "options": [
+      "than",
+      "but",
+      "to",
+      "without"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 31,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "Julia has been ill ____ three months.",
+    "options": [
+      "since",
+      "about",
+      "in",
+      "for"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "We were waiting (for the bus). The underlined part is-",
+    "options": [
+      "a noun phrase",
+      "an infinitive phrase",
+      "a prepositional phrase",
+      "a verb phrase"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 33,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "The word 'disinterested' means-",
+    "options": [
+      "lack of interest",
+      "indifferent",
+      "callous",
+      "neutral"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 34,
+    "bank": "28th BCS",
+    "subject": "English Literature",
+    "question": "Who did write first engligh dictionary?",
+    "options": [
+      "Boswell",
+      "Ben Jonson",
+      "Samuel Johnson",
+      "Milton"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 35,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "New programs will be ____ next week in Bangladesh Television.",
+    "options": [
+      "telecast",
+      "published",
+      "telecasted",
+      "broadecasted"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 36,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "The word 'electorate' means-",
+    "options": [
+      "election office",
+      "a body of voters",
+      "many elections",
+      "candidates"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 37,
+    "bank": "28th BCS",
+    "subject": "English Literature",
+    "question": "'Animal Farm' was written by-",
+    "options": [
+      "Geogre Orwell",
+      "Stevenson",
+      "Swift",
+      "Mark Twain"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "There is no alternative ____ training.",
+    "options": [
+      "to",
+      "for",
+      "than",
+      "of"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 39,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "Which sentence is correct?",
+    "options": [
+      "This is an unique case",
+      "This is a unique case",
+      "This is a very unique case",
+      "This is the most unique case"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 40,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "I cannot _____ to pay such high prices.",
+    "options": [
+      "able",
+      "but",
+      "try",
+      "afford"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 41,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন গোষ্ঠী থেকে বাঙালি জাতির প্রধান অংশ গড়ে উঠেছে?",
+    "options": [
+      "নেগ্রিটো",
+      "ভোটচীন",
+      "দ্রাবিড়",
+      "অস্ট্রিক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 42,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঢাকায় সর্বপ্রথম কবে বাংলার রাজধানী স্থাপিত হয়?",
+    "options": [
+      "১২০৬ খ্রিস্টাব্দে",
+      "১৩১০ খ্রিস্টাব্দে",
+      "১৬১০ খ্রিস্টাব্দে",
+      "১৫২৬ খ্রিস্টাব্দে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 43,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঐতিহাসিক ২১-দফা দাবীর প্রথম দাবিটি কি ছিল?",
+    "options": [
+      "বাংলাকে অন্যতম রাষ্ট্রভাষা",
+      "প্রাদেশিক স্বায়ত্তশাসন",
+      "পূর্ববাংলার অর্থনৈতিক বৈষম্য দূরীকরণ",
+      "বিনা ক্ষতিপূরণে জমিদারী উচ্ছেদ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 44,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "অপরাজেয় বাংলা কবে উদ্বোধন করা হয়?",
+    "options": [
+      "১৬ ডিসেম্বর, ১৯৭৯",
+      "২৬ ডিসেম্বর, ১৯৭৯",
+      "১ জানুয়ারি, ১৯৮০",
+      "২১ ফেব্রুয়ারি, ১৯৮০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 45,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "জাতীয় স্মৃতিসৌধের উচ্চতা কত?",
+    "options": [
+      "৪৬.৫ মি",
+      "৪৬ মি",
+      "৪৫.৫ মি",
+      "৪৫ মি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 46,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "হাজংদের অধিবাস কোথায়?",
+    "options": [
+      "ময়মনসিংহ ও নেত্রকোণা",
+      "কক্সবাজার ও রামু",
+      "রংপুর ও দিনাজপুর",
+      "সিলেট ও মণিপুর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 47,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "নিঝুম দ্বীপের আয়তন কত?",
+    "options": [
+      "৮০ ব.মা.",
+      "৮২ ব.মা.",
+      "৮৫ ব.মা.",
+      "৯০ ব.মা."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 48,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে গ্রামের সংখ্যা কত?",
+    "options": [
+      "৮৫৪৫০টি",
+      "৮৪৫০০টি",
+      "৮৫৫০০টি",
+      "৮৩৯০০টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 49,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম জাতীয় সংসদ নির্বাচন কবে হয়?",
+    "options": [
+      "৭ মার্চ, ১৯৭৩",
+      "৫ মার্চ, ১৯৭৩",
+      "৬ এপ্রিল, ১৯৭৩",
+      "১১ এপ্রিল, ১৯৭৩"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 50,
+    "bank": "28th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সবচেয়ে ছোট ইউনিয়ন কোনটি?",
+    "options": [
+      "সেন্টমার্টিন",
+      "লালপুর",
+      "হিলি",
+      "লালমোহন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 51,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্রের সিনেটের মোট আসন সংখ্যা কতটি?",
+    "options": [
+      "৯৯",
+      "১০০",
+      "১০১",
+      "১০২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 52,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "ফেয়ার ফ্যাক্স কি?",
+    "options": [
+      "সংবাদ সংস্থা",
+      "পরিবেশ সংস্থা",
+      "গোয়েন্দা সংস্থা",
+      "মানবাধিকার সংস্থা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 53,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "NASA-এর সদর দফতর কোথায়?",
+    "options": [
+      "ফ্লোরিডা",
+      "হিউস্টন",
+      "কেপ কেনেডি",
+      "টেকসাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 54,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "দক্ষিণ আফ্রিকা কত বছর শ্বেতাঙ্গ শাসনে ছিল?",
+    "options": [
+      "৩০০ বছর",
+      "৩৩৫ বছর",
+      "৩৪২ বছর",
+      "৫০০ বছর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 55,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "বসনিয়ার যুদ্ধবিরতি স্বাক্ষরের মধ্যস্থতাকারী কে?",
+    "options": [
+      "বিল ক্লিনটন",
+      "জিমি কার্টার",
+      "নিক্সন",
+      "রিগান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 56,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "ফ্রান্সের বর্তমান প্রেসিডেন্টের নাম কি?",
+    "options": [
+      "নিকোলাস সার্কোজি",
+      "জ্যাক শিরাক",
+      "ফ্রঁসিয়ে মিতেরাঁ",
+      "জেনারেল দ্য গল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 57,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "হোয়াংহো নদীর উৎপত্তিস্থল কোথায়?",
+    "options": [
+      "হিমালয়",
+      "কুয়েনলুন পর্বত",
+      "ব্ল্যাক ফরেস্ট",
+      "আল্‌পস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "মেক্সিকো ও যুক্তরাষ্ট্র বিভক্তকারী সীমারেখা কোনটি?",
+    "options": [
+      "সনোরা লাইন",
+      "ম্যাকনামারা লাইন",
+      "ডুরান্ড লাইন",
+      "হিন্ডারবার্গ লাইন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 59,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "ইউরোপের ককপিট বলা হয় কোন দেশকে?",
+    "options": [
+      "বেলজিয়াম",
+      "ফ্রান্স",
+      "জার্মানী",
+      "ফিনল্যান্ড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 60,
+    "bank": "28th BCS",
+    "subject": "International Affairs",
+    "question": "বিশ্বের কোন দেশের সাক্ষরতার হার ১০০%?",
+    "options": [
+      "পোল্যান্ড",
+      "লিথুয়ানিয়া",
+      "কাজাকিস্তান",
+      "স্লোভাকিয়া"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 61,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "রেফ্রিজারেটরে কমপ্রেসরের কাজ কি?",
+    "options": [
+      "ফ্রেয়নকে ঘনীভূত করা",
+      "ফ্রেয়নকে বাষ্পে পরিণত করা",
+      "ফ্রেয়নকে সংকুচিত করে এর তাপ ও তাপমাত্রা বাড়ানো",
+      "ফ্রেয়নকে ঠাণ্ডা করা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 62,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "এক গ্রাম পানির তাপমাত্রা ২০° হতে ৩০° সেলসিয়াসে বৃদ্ধির জন্যে কত তাপের প্রয়োজন?",
+    "options": [
+      "১ ক্যালরি",
+      "২ ক্যালরি",
+      "৩ ক্যালরি",
+      "৪ ক্যালরি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 63,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "কোন শব্দ শোনার পরে কত সেকেন্ড পর্যন্ত এর রেশ আমাদের মস্তিষ্কে থাকে?",
+    "options": [
+      "১ সেকেন্ড",
+      "০.১ সেকেন্ড",
+      "০.০১ সেকেন্ড",
+      "০.০০১ সেকেন্ড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 64,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "টেপ রেকর্ডার এবং কম্পিউটারের স্মৃতির ফিতায় কি ধরনের চুম্বক ব্যবহৃত হয়?",
+    "options": [
+      "স্থায়ী চুম্বক",
+      "অস্থায়ী চুম্বক",
+      "সংকর চুম্বক",
+      "প্রাকৃতিক চুম্বক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "টেলিভিশনে রঙিন ছবি উৎপাদনের জন্য কয়টি মৌলিক রং-এর ছবি ব্যবহার করা হয়?",
+    "options": [
+      "১টি",
+      "২টি",
+      "৩টি",
+      "৪টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 66,
+    "bank": "28th BCS",
+    "subject": "ICT",
+    "question": "পৃথিবীতে কখন ল্যাপটপ কম্পিউটার প্রবর্তিত হয় এবং কোন কোম্পানি এটা তৈরি করে?",
+    "options": [
+      "কমপ্যাক, ১৯৮৫",
+      "এপসন, ১৯৮১",
+      "আইবিএম, ১৯৮৩",
+      "অ্যাপল, ১৯৭৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 67,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "যে যন্ত্রের সাহায্যে পরবর্তী উচ্চ বিভবকে নিম্ন বিভবে এবং নিম্ন বিভবকে উচ্চ বিভবে রূপান্তরিত করা হয় তার নাম কি?",
+    "options": [
+      "ট্রান্সফর্মার",
+      "মোটর",
+      "জেনারেটর",
+      "ডায়নামো"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 68,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "বিদ্যুৎ বিলের হিসাব কিভাবে করা হয়?",
+    "options": [
+      "ওয়াট আওয়ারে",
+      "ওয়াটে",
+      "ভোল্টে",
+      "কিলোওয়াট ঘণ্টায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 69,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "কোনটি পানিতে দ্রবীভূত হয় না?",
+    "options": [
+      "গ্লিসারিন",
+      "ফিটকিরি",
+      "সোডিয়াম ক্লোরাইড",
+      "ক্যালসিয়াম কার্বনেট"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 70,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "পারমাণবিক চুল্লিতে তাপ পরিবাহক হিসেবে কোন ধাতু ব্যবহৃত হয়?",
+    "options": [
+      "সোডিয়াম",
+      "পটাসিয়াম",
+      "ম্যাগনেসিয়াম",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 71,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "চা পাতায় কোন ভিটামিন থাকে?",
+    "options": [
+      "ভিটামিন-ই",
+      "ভিটামিন-কে",
+      "ভিটামিন-বি কমপ্লেক্স",
+      "ভিটামিন-এ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 72,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "উদ্ভিদের পাতা হলদে হয়ে যায় কিসের অভাবে?",
+    "options": [
+      "নাইট্রোজেনের",
+      "ফসফরাসের",
+      "ইউরিয়ার",
+      "পটাসিয়ামের"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 73,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "মানুষের স্পাইনাল কর্ডের দৈর্ঘ্য কত?",
+    "options": [
+      "১৫ ইঞ্চি (প্রায়)",
+      "১৭ ইঞ্চি (প্রায়)",
+      "১৮ ইঞ্চি (প্রায়)",
+      "২০ ইঞ্চি (প্রায়)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 74,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "ক্যান্সার রোগের কারণ কি?",
+    "options": [
+      "কোষের অস্বাভাবিক মৃত্যু",
+      "কোষের অস্বাভাবিক বৃদ্ধি",
+      "কোষের অস্বাভাবিক জমাট বাঁধা",
+      "উপরের সবগুলো"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 75,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "ইনসুলিন নিঃসৃত হয় কোথা থেকে? [টপিক: মানব শারীরতত্ত্ব]",
+    "options": [
+      "অগ্ন্যাশয় হতে",
+      "প্যানক্রিয়াস হতে",
+      "লিভার হতে",
+      "পিটুইটারী গ্ল্যান্ড হতে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "সুষম খাদ্যের উপাদান কয়টি?",
+    "options": [
+      "৪টি",
+      "৫টি",
+      "৬টি",
+      "৮টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 77,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "জীবজগতের জন্যে সবচেয়ে ক্ষতিকারক রশ্মি কোনটি?",
+    "options": [
+      "আলট্রা-ভায়োলেট রশ্মি",
+      "বিটা রশ্মি",
+      "আলফা রশ্মি",
+      "গামা রশ্মি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 78,
+    "bank": "28th BCS",
+    "subject": "Geography",
+    "question": "জনসংখ্যা বৃদ্ধির ফলে ব্যাপকভাবে ক্ষতিগ্রস্ত হচ্ছে কি?",
+    "options": [
+      "প্রাকৃতিক পরিবেশ",
+      "সামাজিক পরিবেশ",
+      "বায়বীয় পরিবেশ",
+      "সাংস্কৃতিক পরিবেশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "28th BCS",
+    "subject": "Geography",
+    "question": "কোথায় দিন রাত্রি সর্বত্র সমান?",
+    "options": [
+      "মেরু অঞ্চলে",
+      "নিরক্ষরেখায়",
+      "উত্তর গোলার্ধে",
+      "দক্ষিণ গোলার্ধে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "28th BCS",
+    "subject": "Geography",
+    "question": "ছায়াপথ তার নিজ অক্ষকে কেন্দ্র করে ঘুরে আসতে যে সময় লাগে তাকে কি বলে?",
+    "options": [
+      "সৌর বছর",
+      "কসমিক ইয়ার",
+      "আলোক বর্ষ",
+      "পলিসার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 81,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "A rocket flying to the moon does not need wings because -",
+    "options": [
+      "it has no engine",
+      "space has too much dust",
+      "it has no engine",
+      "space has too much dust"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 82,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "Rubber is notable for its-",
+    "options": [
+      "lightness",
+      "heaviness",
+      "elasticity",
+      "viscosity"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 83,
+    "bank": "28th BCS",
+    "subject": "English Literature",
+    "question": "Julius Caesar was the ruler of Rome about-",
+    "options": [
+      "1000 years ago",
+      "1500 years ago",
+      "2000 years ago",
+      "3000 years ago"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 84,
+    "bank": "28th BCS",
+    "subject": "Science",
+    "question": "The South Pole is located in the-",
+    "options": [
+      "Arctic",
+      "Antarctic",
+      "Antipodes",
+      "Occident"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "Tiger : Zoology : Mars :",
+    "options": [
+      "Astrology",
+      "Cryptology",
+      "Astronomy",
+      "Telescopy"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 86,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "Break : Repair : : Wound:",
+    "options": [
+      "Heal",
+      "Hurt",
+      "Fix",
+      "Plaster"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 87,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "Frightened : Scream : : Angry : ?",
+    "options": [
+      "Cry",
+      "Shiver",
+      "Shout",
+      "Sneer"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 88,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "He ____ consciousness as a result of his head hitting the car's deshboard.",
+    "options": [
+      "failed",
+      "broke",
+      "lost",
+      "passed"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 89,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "Only after I ____ home, did I remember my doctor's appointment.",
+    "options": [
+      "going",
+      "go",
+      "went",
+      "gone"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 90,
+    "bank": "28th BCS",
+    "subject": "English Language",
+    "question": "When they had their first child, they put ____ a large sum for his education.",
+    "options": [
+      "aside",
+      "beside",
+      "outside",
+      "under"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 91,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "If you count 1 to 100, how many 5s will you pass on the way?",
+    "options": [
+      "10",
+      "11",
+      "18",
+      "19"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 92,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "A farmer had 17 hens. All but 9 died. How many live hens were left?",
+    "options": [
+      "0",
+      "9",
+      "8",
+      "16"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 93,
+    "bank": "28th BCS",
+    "subject": "Math",
+    "question": "If two typist can type two pages in two minutes, how many typists will it take to type 18 pages in six minutes?",
+    "options": [
+      "3",
+      "6",
+      "9",
+      "18"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 94,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "The fifth consonant from the beginning of this sentence is the letter -",
+    "options": [
+      "i",
+      "e",
+      "a",
+      "t"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 95,
+    "bank": "28th BCS",
+    "subject": "Mental Ability",
+    "question": "If the second day of the month is a Monday, the eighteenth day of the month is a-",
+    "options": [
+      "Sunday",
+      "Tuesday",
+      "Wednesday",
+      "Monday"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 96,
+    "bank": "28th BCS",
+    "subject": "Math",
+    "question": "Two men, starting at the same point, walk in opposite directions for 4 meters, turn left and walk another 3 meters. What is the distance between them?",
+    "options": [
+      "7 meters",
+      "14 meters",
+      "10 meters",
+      "6 meters"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 97,
+    "bank": "28th BCS",
+    "subject": "Math",
+    "question": "30% of 10 is 10% of which?",
+    "options": [
+      "30",
+      "60",
+      "30",
+      "600"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 98,
+    "bank": "28th BCS",
+    "subject": "Math",
+    "question": "Rahim is 12 years old. He is three times older than Karim. What will be the age of Rahim when he is two times older than Karim?",
+    "options": [
+      "15 years",
+      "16 years",
+      "17 years",
+      "18 years"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 99,
+    "bank": "28th BCS",
+    "subject": "Math",
+    "question": "Divide 30 by half and add 10. What do you get?",
+    "options": [
+      "25",
+      "45",
+      "55",
+      "70"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 100,
+    "bank": "28th BCS",
+    "subject": "Math",
+    "question": "If a man swims 4 miters upstream at 1 mph and back downstream to the same point at 4 mph, what is his average speed?",
+    "options": [
+      "0.8 mph",
+      "1.6 mph",
+      "2.4 mph",
+      "3.2 mph"
+    ],
+    "answer": 1
+  }
+]

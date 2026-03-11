@@ -1,0 +1,1315 @@
+class MenuScene extends Phaser.Scene {
+    constructor() {
+        super("MenuScene");
+        
+        // --- Load saved settings or use defaults ---
+        this.selectedBankKey = localStorage.getItem('saved_bankKey') || "all";
+        this.selectedSubject = localStorage.getItem('saved_subject') || "all_no_math";
+        this.selectedMode = localStorage.getItem('saved_mode') || "normal"; 
+        
+        this.quickPanelState = localStorage.getItem('settings_quickPanel') || 'right';
+
+        this.dropdowns = []; 
+        this.backgroundLayers = [];
+    }
+
+    preload() {
+        this.load.json('bank_directory', 'bank_directory.json');
+        this.load.audio('bg_music', 'bgm.mp3'); 
+        this.load.audio('menubgm', 'menubgm.mp3'); 
+    }
+
+    create() {
+        // Clear history viewing state if returning from a detailed view
+        if (window.GameState && window.GameState.viewingHistoryMatch) {
+            window.GameState.viewingHistoryMatch = null;
+        }
+
+        // --- 0. Initialize State & Textures ---
+        if (typeof window.GameState === 'undefined') {
+            window.GameState = { 
+                equippedShip: "default", 
+                weaponLevel: 1, 
+                keys: 0, 
+                debris: 0,
+                boosters: { fireShield: 0, speedBoost: 0, batteryEff: 0 },
+                musicVolume: 0.5,
+                sfxVolume: 1.0,
+                matchHistory: []
+            };
+        }
+
+        if (typeof GameTextures !== 'undefined') GameTextures.init(this);
+        if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
+        if (typeof GameSFX !== 'undefined') GameSFX.init(this);
+
+        // --- MUSIC MANAGER ---
+        if (this.sound.get('bg_music')) {
+            this.sound.get('bg_music').stop();
+        }
+
+        let menuMusic = this.sound.get('menubgm');
+        if (!menuMusic) {
+            menuMusic = this.sound.add('menubgm', { loop: true, volume: window.GameState.musicVolume });
+            menuMusic.play();
+        } else {
+            menuMusic.setVolume(window.GameState.musicVolume);
+            if (!menuMusic.isPlaying) {
+                menuMusic.play();
+            }
+        }
+
+        // --- 1. Manifest Handling ---
+        const manifest = this.cache.json.get('bank_directory');
+        if (!manifest) {
+            this.load.once('complete', () => this.scene.restart());
+            this.load.start();
+            return; 
+        }
+
+        let missingFiles = false;
+        manifest.banks.forEach(bank => {
+            if (!this.cache.json.exists(bank.key)) {
+                this.load.json(bank.key, bank.url);
+                missingFiles = true;
+            }
+        });
+
+        if (missingFiles) {
+            this.load.once('complete', () => this.scene.restart());
+            this.load.start();
+            return;
+        }
+
+        // --- Verify Current Mode ---
+        if (this.selectedMode === "revision" && this.getAvailableQuestionCount("revision") === 0) {
+            this.selectedMode = "normal";
+            localStorage.setItem('saved_mode', "normal");
+        }
+
+        // --- VISUALS ---
+        this.createBackground();
+
+        const cx = this.cameras.main.centerX;
+        const cy = this.cameras.main.centerY;
+        const UI_WIDTH = 520;      
+        
+        // --- COMPONENTS ---
+        this.createCurrencyUI();
+        this.createTopLeftIcons();
+
+        // 1. Title
+        const titleContainer = this.add.container(cx, cy - 420);
+        const titleText = this.add.text(0, 0, "গেইম MCQ", { 
+            fontSize: "100px",
+            fontFamily: "'Anek Bangla'", 
+            fontWeight: 800, 
+            color: "#00e1ff", 
+            fontStyle: "bold",
+            stroke: "#000000",
+            strokeThickness: 10,
+            shadow: { offsetX: 4, offsetY: 4, color: "#0044aa", blur: 15, stroke: true, fill: true }
+        }).setOrigin(0.5);
+        titleContainer.add(titleText);
+
+        this.tweens.add({
+            targets: titleContainer, y: titleContainer.y - 15, duration: 2500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+        });
+
+        this.time.addEvent({
+            delay: 80, loop: true,
+            callback: () => {
+                if (Math.random() > 0.6) {
+                    titleText.x = Phaser.Math.FloatBetween(-1.5, 1.5);
+                    titleText.y = Phaser.Math.FloatBetween(-1.5, 1.5);
+                    titleText.angle = Phaser.Math.FloatBetween(-0.5, 0.5);
+                } else {
+                    titleText.x = 0; titleText.y = 0; titleText.angle = 0;
+                }
+            }
+        });
+
+        // 2. Hangar/Customize Display
+        this.createHangarButton(cx, cy - 220);
+
+        // 3. Settings Panel
+        const panelY = cy + 40;
+        this.createSettingsPanel(cx, panelY, UI_WIDTH, manifest);
+
+        // 4. Start Button
+        const startY = panelY + 270;
+        this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
+
+        // 5. Floating Bottom Menu 
+        this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90); 
+        
+        // Global Input to close dropdowns
+        this.input.on('pointerdown', (pointer, gameObjects) => {
+            if (gameObjects.length === 0) {
+                this.closeAllDropdowns();
+            }
+        });
+
+
+    if (GameState.showHistoryPopupOnLoad) {
+        GameState.showHistoryPopupOnLoad = false;
+        this.showMatchHistoryPopup(); // (Replace with your actual method name that opens the popup)
+    }
+
+    }
+
+    update() {
+        if (this.scrollingBg) {
+            this.scrollingBg.tilePositionY -= 0.6;
+        }
+
+        if (this.backgroundLayers) {
+            this.backgroundLayers.forEach(layer => {
+                layer.group.children.iterate(star => {
+                    if (star) {
+                        star.y += layer.speed;
+                        if (star.y > this.cameras.main.height) {
+                            star.y = -10;
+                            star.x = Phaser.Math.Between(0, 720);
+                        }
+                    }
+                });
+            });
+        }
+
+        if (this.reactorRing) {
+            this.reactorRing.rotation += 0.015;
+        }
+
+        // --- Physics-Based Smooth Scrolling logic for History Popup ---
+        if (this.historyScrollData && this.historyScrollState) {
+            if (!this.historyScrollState.isDragging) {
+                let { contentContainer, listStartY, minScroll } = this.historyScrollData;
+                let vY = this.historyScrollState.velocityY;
+                let currentY = contentContainer.y;
+
+                // Apply velocity momentum
+                if (Math.abs(vY) > 0.01) {
+                    currentY += vY * 16;
+                    this.historyScrollState.velocityY *= 0.9; // Friction
+                }
+
+                // Elastic Bounds
+                if (currentY > listStartY) {
+                    currentY += (listStartY - currentY) * 0.2;
+                } else if (currentY < listStartY + minScroll) {
+                    currentY += ((listStartY + minScroll) - currentY) * 0.2;
+                }
+
+                contentContainer.y = currentY;
+            } else {
+                this.historyScrollState.velocityY *= 0.8; 
+            }
+        }
+    }
+
+    // --- UTILITIES ---
+    playSound(key, baseVolume = 1.0) {
+        if (this.cache.audio.exists(key)) {
+            const finalVolume = baseVolume * (window.GameState.sfxVolume !== undefined ? window.GameState.sfxVolume : 1.0);
+            this.sound.play(key, { volume: finalVolume });
+        }
+    }
+
+    showToast(msg) {
+        const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
+            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+            backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 20, y: 12}
+        }).setOrigin(0.5).setDepth(5000).setAlpha(0);
+        
+        this.tweens.add({ 
+            targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() 
+        });
+    }
+
+    getAvailableQuestionCount(mode) {
+        const manifest = this.cache.json.get('bank_directory');
+        if (!manifest) return 0;
+        let finalQuestions = [];
+
+        if (this.selectedBankKey === "all") {
+            manifest.banks.forEach(bank => {
+                const data = this.cache.json.get(bank.key);
+                if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
+            });
+        } else {
+            const data = this.cache.json.get(this.selectedBankKey);
+            if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
+        }
+
+        if (this.selectedSubject === "all_no_math") {
+            finalQuestions = finalQuestions.filter(q => q.subject !== "Math");
+        } else if (this.selectedSubject !== "all") {
+            finalQuestions = finalQuestions.filter(q => q.subject === this.selectedSubject);
+        }
+
+        let seenQuestions = JSON.parse(localStorage.getItem('seenQuestions') || '[]');
+
+        if (mode === "revision") {
+            return finalQuestions.filter(q => seenQuestions.includes(q.question)).length;
+        } else if (mode === "new") {
+            return finalQuestions.filter(q => !seenQuestions.includes(q.question)).length;
+        }
+        return finalQuestions.length;
+    }
+
+    // --- TOP LEFT ICONS (EXIT & SETTINGS) ---
+    createTopLeftIcons() {
+        const iconY = 65;
+
+        const exitBg = this.add.circle(60, iconY, 28, 0x001122, 0.8).setStrokeStyle(3, 0xaa0000);
+        const exitIcon = this.add.text(60, iconY, "❌", { fontSize: '24px' }).setOrigin(0.5);
+        const exitHitArea = this.add.circle(60, iconY, 35).setInteractive({ useHandCursor: true });
+
+        exitHitArea.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            this.tweens.add({ targets: [exitBg, exitIcon], scale: 0.9, duration: 50, yoyo: true });
+            if (navigator.app && navigator.app.exitApp) {
+                navigator.app.exitApp();
+            }
+        });
+
+        const settingsBg = this.add.circle(135, iconY, 28, 0x001122, 0.8).setStrokeStyle(3, 0x0066aa);
+        const settingsIcon = this.add.text(135, iconY, "⚙️", { fontSize: '30px' }).setOrigin(0.5);
+        const settingsHitArea = this.add.circle(135, iconY, 35).setInteractive({ useHandCursor: true });
+
+        settingsHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: [settingsBg, settingsIcon], scale: 0.9, duration: 50, yoyo: true });
+            this.showAppConfigPopup();
+        });
+    }
+
+    // --- SETTINGS POPUP ---
+    showAppConfigPopup() {
+        const cx = this.cameras.main.centerX;
+        const cy = this.cameras.main.centerY;
+
+        const popup = this.add.container(cx, cy).setDepth(2000);
+        const overlay = this.add.rectangle(0, 0, 720, 1280, 0x000000, 0.85).setInteractive();
+        
+        const bg = this.add.graphics();
+        bg.fillStyle(0x000c22, 0.95);
+        bg.fillRoundedRect(-280, -260, 560, 540, 20);
+        bg.lineStyle(4, 0x0066aa, 1);
+        bg.strokeRoundedRect(-280, -260, 560, 540, 20);
+
+        const title = this.add.text(0, -200, "সেটিংস (Settings)", { 
+            fontSize: '40px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const closeHit = this.add.circle(230, -200, 30).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(230, -200, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
+        
+        closeHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            popup.destroy();
+        });
+
+        const createVolumeBar = (yOffset, labelText, initialVolume, callback) => {
+            const label = this.add.text(-230, yOffset, labelText, { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0, 0.5);
+            
+            const trackX = -30;
+            const trackWidth = 240;
+            
+            const trackBg = this.add.graphics();
+            trackBg.fillStyle(0x002244, 1);
+            trackBg.fillRoundedRect(trackX, yOffset - 8, trackWidth, 16, 8);
+            trackBg.lineStyle(2, 0x0066aa);
+            trackBg.strokeRoundedRect(trackX, yOffset - 8, trackWidth, 16, 8);
+
+            const fillBg = this.add.graphics();
+            
+            const knob = this.add.circle(trackX + (trackWidth * initialVolume), yOffset, 14, 0xffffff)
+                .setStrokeStyle(2, 0x00aaff)
+                .setInteractive({ useHandCursor: true, draggable: true });
+                
+            const updateVisuals = (vol) => {
+                fillBg.clear();
+                fillBg.fillStyle(0x00ffff, 1);
+                if (vol > 0) fillBg.fillRoundedRect(trackX, yOffset - 8, trackWidth * vol, 16, 8);
+                knob.x = trackX + (trackWidth * vol);
+            };
+            updateVisuals(initialVolume);
+
+            const trackHit = this.add.rectangle(trackX + trackWidth/2, yOffset, trackWidth + 40, 50, 0x000000, 0)
+                .setInteractive({ useHandCursor: true, draggable: true });
+            
+            const calculateVolumeFromPointer = (pointer) => {
+                const startX = cx + trackX;
+                let vol = (pointer.x - startX) / trackWidth;
+                return Phaser.Math.Clamp(vol, 0, 1);
+            };
+
+            const applyVolumeChange = (vol) => {
+                updateVisuals(vol);
+                callback(vol);
+            };
+
+            trackHit.on('pointerdown', (pointer) => {
+                this.playSound('sfx_click');
+                applyVolumeChange(calculateVolumeFromPointer(pointer));
+            });
+            trackHit.on('drag', (pointer) => applyVolumeChange(calculateVolumeFromPointer(pointer)));
+            knob.on('pointerdown', (pointer) => applyVolumeChange(calculateVolumeFromPointer(pointer)));
+            knob.on('drag', (pointer) => applyVolumeChange(calculateVolumeFromPointer(pointer)));
+
+            return { elems: [label, trackBg, fillBg, trackHit, knob], updateFn: applyVolumeChange };
+        };
+
+        const musicBar = createVolumeBar(-110, "মিউজিক (Music):", window.GameState.musicVolume, (vol) => {
+            window.GameState.musicVolume = vol;
+            localStorage.setItem('settings_musicVol', vol);
+            let menuMusic = this.sound.get('menubgm');
+            if (menuMusic) menuMusic.setVolume(vol);
+        });
+
+        const sfxBar = createVolumeBar(-40, "সাউন্ড (SFX):", window.GameState.sfxVolume, (vol) => {
+            window.GameState.sfxVolume = vol;
+            localStorage.setItem('settings_sfxVol', vol);
+        });
+
+        const qpLabel = this.add.text(-230, 35, "কুইক প্যানেল\n(Quick Panel):", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0, 0.5);
+        const qpOptions = ['right', 'left', 'hidden'];
+        const qpLabels = { 'right': 'Right (ডান)', 'left': 'Left (বাম)', 'hidden': 'Disable (বন্ধ)' };
+        
+        const qpBtnBg = this.add.graphics();
+        qpBtnBg.fillStyle(0x002255, 1);
+        qpBtnBg.fillRoundedRect(10, 10, 220, 50, 10);
+        qpBtnBg.lineStyle(2, 0x00aaff);
+        qpBtnBg.strokeRoundedRect(10, 10, 220, 50, 10);
+
+        const qpBtnTxt = this.add.text(120, 35, qpLabels[this.quickPanelState], { 
+            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const qpHit = this.add.rectangle(120, 35, 220, 50).setInteractive({ useHandCursor: true });
+        qpHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            let idx = qpOptions.indexOf(this.quickPanelState);
+            idx = (idx + 1) % qpOptions.length;
+            this.quickPanelState = qpOptions[idx];
+            localStorage.setItem('settings_quickPanel', this.quickPanelState);
+            qpBtnTxt.setText(qpLabels[this.quickPanelState]);
+        });
+
+        const resetBtnBg = this.add.graphics();
+        resetBtnBg.fillStyle(0x004422, 1);
+        resetBtnBg.fillRoundedRect(-180, 100, 360, 50, 15);
+        resetBtnBg.lineStyle(3, 0x00ff88);
+        resetBtnBg.strokeRoundedRect(-180, 100, 360, 50, 15);
+
+        const resetBtnTxt = this.add.text(0, 125, "ডিফল্ট সেট করুন (Reset Defaults)", { 
+            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#aaffaa', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const resetHit = this.add.rectangle(0, 125, 360, 50).setInteractive({ useHandCursor: true });
+        resetHit.on('pointerdown', () => {
+            this.playSound('sfx_powerup');
+            musicBar.updateFn(0.5);
+            sfxBar.updateFn(1.0);
+            
+            this.quickPanelState = 'right';
+            localStorage.setItem('settings_quickPanel', 'right');
+            qpBtnTxt.setText(qpLabels[this.quickPanelState]);
+        });
+
+        const clearBtnBg = this.add.graphics();
+        clearBtnBg.fillStyle(0x550000, 1);
+        clearBtnBg.fillRoundedRect(-180, 170, 360, 50, 15);
+        clearBtnBg.lineStyle(3, 0xff4444);
+        clearBtnBg.strokeRoundedRect(-180, 170, 360, 50, 15);
+
+        const clearBtnTxt = this.add.text(0, 195, "হিস্ট্রি মুছুন (Clear History)", { 
+            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffaaaa', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const clearHit = this.add.rectangle(0, 195, 360, 50).setInteractive({ useHandCursor: true });
+        clearHit.on('pointerdown', () => {
+            this.playSound('sfx_warning');
+            this.showClearHistoryWarning(popup);
+        });
+
+        popup.add([
+            overlay, bg, title, closeIcon, closeHit, 
+            ...musicBar.elems, ...sfxBar.elems, 
+            qpLabel, qpBtnBg, qpBtnTxt, qpHit, 
+            resetBtnBg, resetBtnTxt, resetHit,
+            clearBtnBg, clearBtnTxt, clearHit
+        ]);
+        
+        popup.setScale(0.8);
+        popup.setAlpha(0);
+        this.tweens.add({ targets: popup, scale: 1, alpha: 1, duration: 200, ease: 'Back.out' });
+    }
+
+    showClearHistoryWarning(parentPopup) {
+        const warningBox = this.add.container(0, 0).setDepth(2001);
+        const overlay = this.add.rectangle(0, 0, 720, 1280, 0x000000, 0.9).setInteractive();
+        
+        const bg = this.add.graphics();
+        bg.fillStyle(0x220000, 1);
+        bg.fillRoundedRect(-240, -150, 480, 300, 15);
+        bg.lineStyle(4, 0xff0000, 1);
+        bg.strokeRoundedRect(-240, -150, 480, 300, 15);
+
+        const alertTxt = this.add.text(0, -60, "সতর্কতা!\nআপনি কি নিশ্চিত যে সমস্ত\nপ্রশ্নের হিস্ট্রি মুছে ফেলতে চান?", { 
+            fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ffffff', align: 'center', lineSpacing: 10 
+        }).setOrigin(0.5);
+
+        const yesBg = this.add.rectangle(-100, 80, 160, 55, 0x880000).setStrokeStyle(2, 0xff4444);
+        const yesTxt = this.add.text(-100, 80, "হ্যাঁ (Yes)", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+        const yesHit = this.add.rectangle(-100, 80, 160, 55).setInteractive({ useHandCursor: true });
+
+        yesHit.on('pointerdown', () => {
+            this.playSound('sfx_explode');
+            localStorage.removeItem('seenQuestions');
+            GameState.matchHistory = []; // Wipe match history
+            if (window.saveGame) window.saveGame();
+
+            warningBox.destroy();
+            const toast = this.add.text(0, 200, "হিস্ট্রি সফলভাবে মুছে ফেলা হয়েছে!", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#00ff00', backgroundColor: '#003300', padding: {x: 15, y: 10} }).setOrigin(0.5);
+            parentPopup.add(toast);
+            this.tweens.add({ targets: toast, alpha: 0, delay: 1500, duration: 500, onComplete: () => toast.destroy() });
+        });
+
+        const noBg = this.add.rectangle(100, 80, 160, 55, 0x004400).setStrokeStyle(2, 0x00ff00);
+        const noTxt = this.add.text(100, 80, "না (No)", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+        const noHit = this.add.rectangle(100, 80, 160, 55).setInteractive({ useHandCursor: true });
+
+        noHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            warningBox.destroy();
+        });
+
+        warningBox.add([overlay, bg, alertTxt, yesBg, yesTxt, yesHit, noBg, noTxt, noHit]);
+        parentPopup.add(warningBox);
+    }
+
+    createCurrencyUI() {
+        const keys = (window.GameState && window.GameState.keys) || 0;
+        const debris = (window.GameState && window.GameState.debris) || 0;
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 0.8);
+        bg.fillRoundedRect(420, 35, 270, 60, 30); 
+        bg.lineStyle(3, 0x0066aa, 0.9);
+        bg.strokeRoundedRect(420, 35, 270, 60, 30);
+        
+        this.add.image(465, 65, "ui_key").setScale(0.65);
+        this.kText = this.add.text(495, 63, keys.toString(), { 
+            fontSize: "26px", color: "#ffd700", fontFamily: "Arial", fontStyle: "bold" 
+        }).setOrigin(0, 0.5);
+
+        this.add.rectangle(555, 65, 3, 35, 0x0066aa, 0.8);
+
+        this.add.image(600, 67, "ui_debris_icon").setScale(0.70);
+        this.dText = this.add.text(630, 63, debris.toString(), { 
+            fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
+        }).setOrigin(0, 0.5);
+    }
+
+    createHangarButton(x, y) {
+        const container = this.add.container(x, y);
+
+        const pedestal = this.add.ellipse(0, 90, 240, 50, 0x00ffff, 0.1);
+        pedestal.setStrokeStyle(2, 0x00ffff, 0.5);
+        
+        const ringGraphics = this.make.graphics();
+        ringGraphics.lineStyle(3, 0x00ffff, 0.4);
+        ringGraphics.strokeCircle(0, 0, 100); 
+        ringGraphics.lineStyle(2, 0x0088ff, 0.8);
+        for(let i=0; i<6; i++) {
+            const angle = Phaser.Math.DegToRad(i * 60);
+            ringGraphics.beginPath();
+            ringGraphics.arc(0, 0, 90, angle, angle + 0.5);
+            ringGraphics.strokePath();
+        }
+        ringGraphics.generateTexture("tech_ring_large", 220, 220);
+        ringGraphics.destroy();
+
+        this.reactorRing = this.add.image(0, 10, "tech_ring_large").setAlpha(0.2);
+        const bgGlow = this.add.circle(0, 10, 80, 0x002255, 0.7);
+
+        const equipped = window.GameState.equippedShip || "default";
+        const level = window.GameState.weaponLevel || 1;
+        
+        let shipTexture = (equipped === "default") ? `player_lv${level}` : `${equipped}_lv${level}`;
+        if (!this.textures.exists(shipTexture)) shipTexture = "player_lv1";
+        
+        const shipIcon = this.add.image(0, -15, shipTexture).setScale(0.85); 
+        
+        this.tweens.add({
+            targets: shipIcon, y: -5, duration: 2000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+        });
+
+        const labelBg = this.add.graphics();
+        labelBg.fillStyle(0x000000, 0.85);
+        labelBg.fillRoundedRect(-90, 120, 180, 40, 20);
+        labelBg.lineStyle(2, 0x00aaff, 1);
+        labelBg.strokeRoundedRect(-90, 120, 180, 40, 20);
+        
+        const label = this.add.text(0, 140, "CUSTOMIZE", { 
+            fontSize: "18px", fontFamily: "Arial", color: "#00ffff", fontStyle: "bold", letterSpacing: 3
+        }).setOrigin(0.5);
+
+        const hitArea = this.add.circle(0, 30, 140, 0xffffff, 0).setInteractive({ useHandCursor: true });
+        
+        hitArea.on('pointerover', () => {
+            this.reactorRing.setTint(0xffffff);
+            bgGlow.setFillStyle(0x004488, 0.8);
+            pedestal.setStrokeStyle(2, 0xffffff, 0.8);
+        });
+        
+        hitArea.on('pointerout', () => {
+            this.reactorRing.clearTint();
+            bgGlow.setFillStyle(0x002255, 0.7);
+            pedestal.setStrokeStyle(2, 0x00ffff, 0.5);
+        });
+
+        hitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.tweens.add({
+                targets: container, scale: 0.95, duration: 80, yoyo: true, onComplete: () => this.scene.start("ShopScene") 
+            });
+        });
+
+        container.add([pedestal, bgGlow, this.reactorRing, shipIcon, labelBg, label, hitArea]);
+    }
+
+    createSettingsPanel(x, y, width, manifest) {
+        const height = 330; 
+        
+        const panelGraphics = this.add.graphics();
+        panelGraphics.fillStyle(0x000c22, 0.75); 
+        panelGraphics.fillRoundedRect(x - width/2, y - height/2, width, height, 20);
+        panelGraphics.lineStyle(2, 0x0066aa, 0.6);
+        panelGraphics.strokeRoundedRect(x - width/2, y - height/2, width, height, 20);
+
+        let currentY = y - height/2 + 55;
+        const UI_HEIGHT = 75; 
+        const GAP = 25;
+
+        const bankOptions = ["All", ...manifest.banks.map(b => b.name).reverse()];
+        const subjectOptions = ["All", "All Without Math", ...manifest.subjects];
+
+        let initBankName = "All";
+        if (this.selectedBankKey !== "all") {
+            const b = manifest.banks.find(x => x.key === this.selectedBankKey);
+            if (b) initBankName = b.name;
+        }
+
+        let initSubName = "All Without Math"; 
+        if (this.selectedSubject === "all") initSubName = "All";
+        else if (this.selectedSubject !== "all_no_math") initSubName = this.selectedSubject;
+
+        this.createDropdown(x, currentY, width - 40, UI_HEIGHT, "Bank", bankOptions, initBankName, (selectedName) => {
+            if (selectedName === "All") {
+                this.selectedBankKey = "all";
+            } else {
+                const bankObj = manifest.banks.find(b => b.name === selectedName);
+                this.selectedBankKey = bankObj ? bankObj.key : "all";
+            }
+            localStorage.setItem('saved_bankKey', this.selectedBankKey);
+        });
+
+        currentY += UI_HEIGHT + GAP;
+
+        this.createDropdown(x, currentY, width - 40, UI_HEIGHT, "Subject", subjectOptions, initSubName, (selectedSub) => {
+            if (selectedSub === "All") this.selectedSubject = "all";
+            else if (selectedSub === "All Without Math") this.selectedSubject = "all_no_math";
+            else this.selectedSubject = selectedSub;
+            localStorage.setItem('saved_subject', this.selectedSubject);
+        });
+
+        currentY += UI_HEIGHT + GAP; 
+
+        this.createModeSelector(x, currentY, width - 40, UI_HEIGHT);
+    }
+
+    createDropdown(x, y, width, height, label, options, initialVal, onSelect) {
+        const container = this.add.container(x, y);
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0x081830, 0.9);
+        bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
+        bg.lineStyle(2, 0x0088cc, 0.7);
+        bg.strokeRoundedRect(-width/2, -height/2, width, height, 15);
+
+        const hitArea = this.add.rectangle(0, 0, width, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        const formatText = (lbl, val) => {
+            let str = `${lbl}: ${val}`;
+            return str.length > 25 ? str.substring(0, 23) + "..." : str;
+        };
+
+        const mainText = this.add.text(-width/2 + 25, 0, formatText(label, initialVal), { 
+            fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 600, color: "#ffffff" 
+        }).setOrigin(0, 0.5);
+
+        const arrow = this.add.text(width/2 - 30, 0, "▼", { 
+            fontSize: "20px", color: "#00ffff" 
+        }).setOrigin(0.5);
+
+        container.add([bg, mainText, arrow, hitArea]);
+        container.depth = 20; 
+
+        const listContainerWorldY = y + height/2 + 5;
+        const listContainer = this.add.container(0, height/2 + 5);
+        listContainer.setVisible(false);
+        listContainer.setAlpha(0); 
+        container.add(listContainer);
+
+        const itemHeight = 70; 
+        const maxVisibleItems = 5; 
+        const visibleHeight = Math.min(options.length * itemHeight, maxVisibleItems * itemHeight);
+        const totalListHeight = options.length * itemHeight;
+        const isScrollable = totalListHeight > visibleHeight;
+
+        const listBg = this.add.graphics();
+        listBg.fillStyle(0x020815, 0.98);
+        listBg.fillRoundedRect(-width/2, 0, width, visibleHeight, 15);
+        listBg.lineStyle(2, 0x0066aa, 1);
+        listBg.strokeRoundedRect(-width/2, 0, width, visibleHeight, 15);
+        listContainer.add(listBg);
+
+        const maskGraphics = this.make.graphics();
+        maskGraphics.fillStyle(0xffffff);
+        maskGraphics.fillRect(x - width/2, listContainerWorldY, width, visibleHeight);
+        const listMask = maskGraphics.createGeometryMask();
+
+        const contentContainer = this.add.container(0, 0);
+        contentContainer.setMask(listMask);
+        listContainer.add(contentContainer);
+
+        const highlightBg = this.add.rectangle(0, 0, width - 4, itemHeight - 2, 0x0088ff, 0.25).setAlpha(0);
+        contentContainer.add(highlightBg);
+
+        let currentY = 0;
+        options.forEach((opt, index) => {
+            const optText = this.add.text(-width/2 + 25, currentY + itemHeight/2, opt, {
+                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 500, color: "#b3d4ff" 
+            }).setOrigin(0, 0.5);
+
+            if (index < options.length - 1) {
+                const divider = this.add.rectangle(0, currentY + itemHeight, width - 20, 1, 0x003355, 0.6);
+                contentContainer.add(divider);
+            }
+
+            contentContainer.add(optText);
+            currentY += itemHeight;
+        });
+
+        let scrollBarThumb;
+        if (isScrollable) {
+            const scrollBarBg = this.add.rectangle(width/2 - 8, visibleHeight/2, 6, visibleHeight - 10, 0x000000, 0.5);
+            const thumbHeight = Math.max(30, (visibleHeight / totalListHeight) * visibleHeight);
+            scrollBarThumb = this.add.rectangle(width/2 - 8, thumbHeight/2 + 5, 6, thumbHeight, 0x00aaff, 0.8).setOrigin(0.5);
+            listContainer.add([scrollBarBg, scrollBarThumb]);
+        }
+
+        const dragZone = this.add.rectangle(0, visibleHeight/2, width, visibleHeight, 0x000000, 0)
+            .setInteractive({ useHandCursor: true, draggable: isScrollable });
+        listContainer.add(dragZone);
+
+        let startDragY = 0;
+        let isDragging = false;
+        let startContentY = 0;
+
+        dragZone.on('pointerdown', (pointer) => {
+            pointer.event.stopPropagation();
+            startDragY = pointer.y;
+            isDragging = false;
+            startContentY = contentContainer.y;
+        });
+
+        dragZone.on('pointermove', (pointer) => {
+            const localY = pointer.y - listContainerWorldY - contentContainer.y;
+            const index = Math.floor(localY / itemHeight);
+            if (index >= 0 && index < options.length) {
+                highlightBg.y = index * itemHeight + itemHeight / 2;
+                highlightBg.setAlpha(1);
+            } else {
+                highlightBg.setAlpha(0);
+            }
+        });
+
+        dragZone.on('pointerout', () => { highlightBg.setAlpha(0); });
+
+        if (isScrollable) {
+            dragZone.on('drag', (pointer) => {
+                isDragging = true;
+                let deltaY = pointer.y - startDragY;
+                let newY = startContentY + deltaY;
+
+                const minY = -(totalListHeight - visibleHeight);
+                const maxY = 0;
+
+                if (newY > maxY) newY = maxY + (newY - maxY) * 0.2;
+                if (newY < minY) newY = minY + (newY - minY) * 0.2;
+
+                contentContainer.y = newY;
+
+                const scrollPercent = Phaser.Math.Clamp(newY / minY, 0, 1);
+                const thumbHeight = scrollBarThumb.height;
+                const thumbMaxY = visibleHeight - 5 - thumbHeight/2;
+                const thumbMinY = 5 + thumbHeight/2;
+                scrollBarThumb.y = thumbMinY + scrollPercent * (thumbMaxY - thumbMinY);
+            });
+
+            dragZone.on('dragend', () => {
+                const minY = -(totalListHeight - visibleHeight);
+                const maxY = 0;
+                let targetY = contentContainer.y;
+
+                if (targetY > maxY) targetY = maxY;
+                if (targetY < minY) targetY = minY;
+
+                if (targetY !== contentContainer.y) {
+                    this.tweens.add({
+                        targets: contentContainer, y: targetY, duration: 200, ease: 'Back.easeOut'
+                    });
+                }
+            });
+            
+            dragZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
+                let newY = contentContainer.y - deltaY;
+                const minY = -(totalListHeight - visibleHeight);
+                const maxY = 0;
+                if (newY > maxY) newY = maxY;
+                if (newY < minY) newY = minY;
+                
+                contentContainer.y = newY;
+
+                const scrollPercent = Phaser.Math.Clamp(newY / minY, 0, 1);
+                const thumbHeight = scrollBarThumb.height;
+                const thumbMaxY = visibleHeight - 5 - thumbHeight/2;
+                const thumbMinY = 5 + thumbHeight/2;
+                scrollBarThumb.y = thumbMinY + scrollPercent * (thumbMaxY - thumbMinY);
+            });
+        }
+
+        dragZone.on('pointerup', (pointer) => {
+            pointer.event.stopPropagation();
+            if (!isDragging || Math.abs(pointer.y - startDragY) < 10) {
+                const localY = pointer.y - listContainerWorldY - contentContainer.y;
+                const index = Math.floor(localY / itemHeight);
+                
+                if (index >= 0 && index < options.length) {
+                    const opt = options[index];
+                    this.playSound('sfx_coin');
+                    mainText.setText(formatText(label, opt));
+                    onSelect(opt);
+                    toggleMenu();
+                }
+            }
+            isDragging = false;
+        });
+
+        let isOpen = false;
+        const toggleMenu = () => {
+            this.playSound('sfx_click');
+            isOpen = !isOpen;
+            
+            if (isOpen) {
+                listContainer.setVisible(true);
+                container.depth = 100;
+                
+                this.tweens.add({ targets: listContainer, alpha: 1, duration: 150, ease: 'Power1' });
+                
+                this.dropdowns.forEach(d => {
+                    if (d !== container && d.isOpen()) d.close();
+                });
+            } else {
+                this.tweens.add({ 
+                    targets: listContainer, alpha: 0, duration: 150, ease: 'Power1',
+                    onComplete: () => {
+                        listContainer.setVisible(false);
+                        container.depth = 20;
+                        contentContainer.y = 0;
+                        if (scrollBarThumb) scrollBarThumb.y = 5 + scrollBarThumb.height / 2;
+                    }
+                });
+            }
+            
+            this.tweens.add({ targets: arrow, rotation: isOpen ? Math.PI : 0, duration: 200, ease: 'Cubic.out' });
+        };
+
+        container.close = () => {
+            if(!isOpen) return;
+            isOpen = false;
+            this.tweens.add({ 
+                targets: listContainer, alpha: 0, duration: 150, ease: 'Power1',
+                onComplete: () => {
+                    listContainer.setVisible(false);
+                    container.depth = 20;
+                }
+            });
+            this.tweens.add({ targets: arrow, rotation: 0, duration: 200 });
+        };
+        
+        container.isOpen = () => isOpen;
+        this.dropdowns.push(container);
+
+        hitArea.on('pointerdown', (pointer) => {
+            pointer.event.stopPropagation();
+            toggleMenu();
+        });
+    }
+
+    createModeSelector(x, y, totalWidth, height) {
+        const container = this.add.container(x, y);
+        
+        const baseBg = this.add.graphics();
+        baseBg.fillStyle(0x041022, 0.9);
+        baseBg.fillRoundedRect(-totalWidth/2, -height/2, totalWidth, height, height/2);
+        baseBg.lineStyle(2, 0x005588, 0.9);
+        baseBg.strokeRoundedRect(-totalWidth/2, -height/2, totalWidth, height, height/2);
+        container.add(baseBg);
+
+        const options = [
+            { label: "Revision", value: "revision" },
+            { label: "Normal", value: "normal" },
+            { label: "New", value: "new" }
+        ];
+        
+        const btnWidth = totalWidth / options.length;
+        const startX = -totalWidth / 2 + btnWidth / 2;
+        
+        this.modeButtons = [];
+
+        this.modeHighlight = this.add.graphics();
+        this.modeHighlight.fillStyle(0xffffff, .1);
+        this.modeHighlight.fillRoundedRect(-btnWidth/2 + 4, -height/2 + 4, btnWidth - 8, height - 8, (height-8)/2);
+        container.add(this.modeHighlight);
+
+        options.forEach((opt, index) => {
+            const btnX = startX + (index * btnWidth);
+            const hitArea = this.add.rectangle(btnX, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+            
+            const txt = this.add.text(btnX, 0, opt.label, {
+                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#88bbdd" 
+            }).setOrigin(0.5);
+
+            hitArea.on('pointerdown', () => {
+                if (opt.value === "revision" && this.getAvailableQuestionCount("revision") === 0) {
+                    this.playSound('sfx_q_wrong', 0.2);
+                    this.showToast("Play a game to earn revision questions.");
+                    return; 
+                }
+
+                this.playSound('sfx_click');
+                this.selectedMode = opt.value;
+                localStorage.setItem('saved_mode', this.selectedMode);
+                this.updateModeSelector(btnX);
+            });
+
+            this.modeButtons.push({ txt: txt, value: opt.value, x: btnX });
+            container.add([txt, hitArea]);
+        });
+
+        const defaultBtn = this.modeButtons.find(b => b.value === this.selectedMode);
+        if (defaultBtn) {
+            this.modeHighlight.x = defaultBtn.x;
+            defaultBtn.txt.setColor("#ffffff");
+        }
+    }
+
+    updateModeSelector(targetX) {
+        this.tweens.add({ targets: this.modeHighlight, x: targetX, duration: 250, ease: 'Cubic.out' });
+        this.modeButtons.forEach(btn => btn.txt.setColor(btn.value === this.selectedMode ? "#ffffff" : "#88bbdd"));
+    }
+
+    createStartButton(x, y, width, height) {
+        const container = this.add.container(x, y);
+
+        const outerGlow = this.add.graphics();
+        outerGlow.fillStyle(0x00ffff, 0.2);
+        outerGlow.fillRoundedRect(-width/2 - 15, -height/2 - 15, width + 30, height + 30, height/2 + 8);
+        
+        this.tweens.add({ targets: outerGlow, alpha: 0.05, scale: 1.1, duration: 1500, yoyo: true, repeat: -1 });
+
+        const btnBg = this.add.graphics();
+        btnBg.fillGradientStyle(0x001133, 0x001133, 0x004488, 0x004488, 1);
+        btnBg.fillRoundedRect(-width/2, -height/2, width, height, height/2);
+        btnBg.lineStyle(3, 0x00ffff, 0.8);
+        btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
+
+        const maskShape = this.make.graphics();
+        maskShape.fillStyle(0xffffff, .51);
+        maskShape.fillRoundedRect(x - width/2, y - height/2, width, height, height/2);
+        const mask = maskShape.createGeometryMask();
+
+        const scanline = this.add.rectangle(-width/2 - 50, 0, 35, height, 0x00ffff, 0.1)
+            .setOrigin(0.5).setMask(mask); 
+
+        this.tweens.add({
+            targets: scanline, x: width/2 + 50, duration: 8000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' 
+        });
+
+        const accents = this.add.graphics();
+        accents.lineStyle(8, 0xffffff, .4);
+        accents.beginPath(); accents.arc(-width/2 + 25, -height/2 + 25, 25, Math.PI, Math.PI * 1.5); accents.strokePath();
+        accents.beginPath(); accents.arc(width/2 - 25, height/2 - 25, 25, 0, Math.PI * 0.5); accents.strokePath();
+
+        const btnTxt = this.add.text(0, 0, "খেলা শুরু করুন", { 
+            fontSize: "52px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, color: "#ffffff",
+            stroke: "#0033cc", strokeThickness: 5
+        }).setOrigin(0.5);
+
+        const grad = btnTxt.context.createLinearGradient(0, 0, 0, btnTxt.height);
+        grad.addColorStop(0, '#ffffff'); grad.addColorStop(0.5, '#00ffff'); grad.addColorStop(1, '#0088ff');
+        btnTxt.setFill(grad);
+
+        const hitArea = this.add.rectangle(0, 0, width, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        container.add([outerGlow, btnBg, accents, scanline, btnTxt, hitArea]);
+
+        hitArea.on('pointerover', () => {
+            this.tweens.add({ targets: container, scale: 1.05, duration: 200, ease: 'Back.out' });
+            btnBg.clear();
+            btnBg.fillGradientStyle(0x002266, 0x002266, 0x0088ff, 0x0088ff, 1);
+            btnBg.fillRoundedRect(-width/2, -height/2, width, height, height/2);
+            btnBg.lineStyle(4, 0xffffff, 1);
+            btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
+        });
+        
+        hitArea.on('pointerout', () => {
+            this.tweens.add({ targets: container, scale: 1, duration: 200 });
+            btnBg.clear();
+            btnBg.fillGradientStyle(0x001133, 0x001133, 0x004488, 0x004488, 1);
+            btnBg.fillRoundedRect(-width/2, -height/2, width, height, height/2);
+            btnBg.lineStyle(3, 0x00ffff, 0.8);
+            btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
+        });
+
+        hitArea.on("pointerdown", () => {
+            this.playSound('sfx_powerup');
+            this.tweens.add({ targets: container, scale: 0.92, duration: 100, yoyo: true, onComplete: () => this.startGame() });
+        });
+    }
+
+    createBottomMenu(cx, y, totalWidth, height) {
+        const container = this.add.container(cx, y);
+        
+        const bg = this.add.graphics();
+        bg.fillStyle(0x051025, 0.9);
+        bg.fillRoundedRect(-totalWidth/2, -height/2, totalWidth, height, height/2);
+        bg.lineStyle(2, 0x0066aa, 0.8);
+        bg.strokeRoundedRect(-totalWidth/2, -height/2, totalWidth, height, height/2);
+        container.add(bg);
+
+        // Break into 3 Buttons (Shop | History | Spin)
+        const btnWidth = totalWidth / 3;
+
+        // 1. SHOP Button
+        const shopHitArea = this.add.rectangle(-totalWidth/2 + btnWidth/2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const bagIcon = this.add.text(-totalWidth/2 + btnWidth/2 - 35, -5, "🛒", { fontSize: "28px" }).setOrigin(0.4);
+        const shopText = this.add.text(-totalWidth/2 + btnWidth/2 + 15, 0, "শপ", { 
+            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        }).setOrigin(0.5);
+
+        shopHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.scene.start("ShopScene");
+        });
+        shopHitArea.on('pointerover', () => shopText.setColor("#ffffff"));
+        shopHitArea.on('pointerout', () => shopText.setColor("#b3d4ff"));
+
+        const div1 = this.add.rectangle(-totalWidth/2 + btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
+
+        // 2. HISTORY Button
+        const histHitArea = this.add.rectangle(0, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const histIcon = this.add.text(-35, -5, "📜", { fontSize: "28px" }).setOrigin(0.4);
+        const histText = this.add.text(15, 0, "হিস্ট্রি", { 
+            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        }).setOrigin(0.5);
+
+        histHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.showMatchHistoryPopup();
+        });
+        histHitArea.on('pointerover', () => histText.setColor("#ffffff"));
+        histHitArea.on('pointerout', () => histText.setColor("#b3d4ff"));
+
+        const div2 = this.add.rectangle(totalWidth/2 - btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
+
+        // 3. SPIN Button
+        const wheelHitArea = this.add.rectangle(totalWidth/2 - btnWidth/2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const wheelIcon = this.add.text(totalWidth/2 - btnWidth/2 - 35, -4, "🌀", { fontSize: "30px" }).setOrigin(0.4);
+        const wheelText = this.add.text(totalWidth/2 - btnWidth/2 + 15, 0, "স্পিন", { 
+            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        }).setOrigin(0.5);
+
+        this.tweens.add({ targets: wheelIcon, angle: 360, duration: 50000, repeat: -1, ease: "Linear" });
+
+        wheelHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.scene.start("SpinWheelScene");
+        });
+        wheelHitArea.on('pointerover', () => wheelText.setColor("#ffffff"));
+        wheelHitArea.on('pointerout', () => wheelText.setColor("#b3d4ff"));
+
+        container.add([shopHitArea, bagIcon, shopText, div1, histHitArea, histIcon, histText, div2, wheelHitArea, wheelIcon, wheelText]);
+    }
+
+    // --- MATCH HISTORY POPUP LIST ---
+    showMatchHistoryPopup() {
+        const cx = this.cameras.main.centerX;
+        const cy = this.cameras.main.centerY;
+        const w = this.cameras.main.width;
+        const h = this.cameras.main.height;
+
+        const popup = this.add.container(cx, cy).setDepth(2000);
+        const overlay = this.add.rectangle(0, 0, w, h, 0x000000, 0.85).setInteractive();
+        
+        const panelW = 620;
+        const panelH = 900;
+        
+        const bg = this.add.graphics();
+        bg.fillStyle(0x000c22, 0.95);
+        bg.fillRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
+        bg.lineStyle(4, 0x0066aa, 1);
+        bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
+
+        const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি (Recent History)", { 
+            fontSize: '40px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const closeHit = this.add.circle(panelW/2 - 40, -panelH/2 + 50, 30).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(panelW/2 - 40, -panelH/2 + 50, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
+        
+        closeHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            popup.destroy();
+            this.historyScrollData = null; 
+        });
+
+        popup.add([overlay, bg, title, closeIcon, closeHit]);
+
+        const listStartY = -panelH/2 + 100;
+        const listHeight = panelH - 120;
+        const listWidth = panelW - 40;
+
+        const contentContainer = this.add.container(0, listStartY);
+        
+        const maskShape = this.make.graphics();
+        maskShape.fillStyle(0xffffff);
+        maskShape.fillRect(cx - listWidth/2, cy + listStartY, listWidth, listHeight);
+        const mask = maskShape.createGeometryMask();
+        contentContainer.setMask(mask);
+
+        let currentY = 20;
+        const history = GameState.matchHistory || [];
+
+        if (history.length === 0) {
+            const noData = this.add.text(0, listHeight/2, "কোন ম্যাচ খেলা হয়নি", { 
+                fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#666" 
+            }).setOrigin(0.5);
+            contentContainer.add(noData);
+        } else {
+            history.forEach((match) => {
+                const cardH = 120;
+                const cardBg = this.add.graphics();
+                
+                const drawCard = (hover) => {
+                    cardBg.clear();
+                    cardBg.fillStyle(hover ? 0x0a1a3a : 0x051025, 0.9);
+                    cardBg.fillRoundedRect(-listWidth/2 + 10, currentY, listWidth - 20, cardH, 15);
+                    cardBg.lineStyle(2, hover ? 0x0088ff : 0x004488, 1);
+                    cardBg.strokeRoundedRect(-listWidth/2 + 10, currentY, listWidth - 20, cardH, 15);
+                };
+                drawCard(false);
+
+                const dateTxt = this.add.text(-listWidth/2 + 30, currentY + 20, match.date, { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" });
+                
+                let pColor = "#ff4444";
+                if(match.percent === 100) pColor = "#ffffff";
+                else if(match.percent >= 80) pColor = "#00ff00";
+                else if(match.percent >= 26) pColor = "#ffff00";
+
+                const pctTxt = this.add.text(listWidth/2 - 30, currentY + 30, `${match.percent}%`, { fontSize: "42px", fontFamily: "'Anek Bangla'", fontStyle: 'bold', color: pColor }).setOrigin(1, 0);
+
+                const stats = `মোট: ${match.total} | সঠিক: ${match.correct} | ভুল: ${match.wrong} | স্কিপ: ${match.skipped}`;
+                const statTxt = this.add.text(-listWidth/2 + 30, currentY + 65, stats, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff" });
+
+                // Interactive HitArea for jumping into DeathScene to see Match Details
+                const hitArea = this.add.rectangle(0, currentY + cardH/2, listWidth - 20, cardH, 0x000000, 0).setInteractive({ useHandCursor: true });
+                
+                let downY = 0;
+                hitArea.on('pointerdown', (pointer) => {
+                    downY = pointer.y;
+                    drawCard(true);
+                });
+                hitArea.on('pointerup', (pointer) => {
+                    // Check if it was a distinct click and not a swipe scroll
+                    if (Math.abs(pointer.y - downY) < 15) {
+                        this.playSound('sfx_click');
+                        GameState.viewingHistoryMatch = match;
+                        popup.destroy();
+                        this.historyScrollData = null;
+                        this.scene.start("DeathScene");
+                    }
+                    drawCard(false);
+                });
+                hitArea.on('pointerout', () => drawCard(false));
+
+                contentContainer.add([cardBg, dateTxt, pctTxt, statTxt, hitArea]);
+                currentY += cardH + 15;
+            });
+        }
+
+        popup.add(contentContainer);
+
+        // --- Smooth Scrolling for History Popup List ---
+        if (currentY > listHeight) {
+            const minScroll = listHeight - currentY - 20;
+            let startY = 0;
+            let containerStartY = 0;
+            let lastTime = 0;
+            let lastY = 0;
+
+            const scrollZone = this.add.rectangle(0, listStartY + listHeight/2, listWidth, listHeight, 0x000000, 0).setInteractive();
+            popup.add(scrollZone);
+
+            this.historyScrollState = { isDragging: false, velocityY: 0 };
+            this.historyScrollData = { contentContainer, listStartY, minScroll };
+
+            scrollZone.on('pointerdown', (pointer) => {
+                this.historyScrollState.isDragging = true;
+                this.historyScrollState.velocityY = 0;
+                startY = pointer.y;
+                lastY = pointer.y;
+                containerStartY = contentContainer.y;
+                lastTime = this.time.now;
+            });
+
+            this.input.on('pointermove', (pointer) => {
+                if (this.historyScrollState.isDragging) {
+                    const diff = pointer.y - startY;
+                    let newY = containerStartY + diff;
+
+                    if (newY > listStartY) {
+                        newY = listStartY + (newY - listStartY) * 0.3;
+                    } else if (newY < listStartY + minScroll) {
+                        newY = listStartY + minScroll + (newY - (listStartY + minScroll)) * 0.3;
+                    }
+                    contentContainer.y = newY;
+
+                    const now = this.time.now;
+                    const dt = now - lastTime;
+                    if (dt > 0) this.historyScrollState.velocityY = (pointer.y - lastY) / dt;
+                    lastTime = now;
+                    lastY = pointer.y;
+                }
+            });
+
+            const stopDrag = () => { this.historyScrollState.isDragging = false; };
+            this.input.on('pointerup', stopDrag);
+            this.input.on('pointerout', stopDrag);
+        }
+        
+        popup.setScale(0.8);
+        popup.setAlpha(0);
+        this.tweens.add({ targets: popup, scale: 1, alpha: 1, duration: 200, ease: 'Back.out' });
+    }
+
+    createBackground() {
+        this.backgroundLayers = []; 
+        
+        if (!this.textures.exists('animated_bg_grad')) {
+            const gradBg = this.make.graphics({x: 0, y: 0});
+            gradBg.fillGradientStyle(0x020510, 0x020510, 0x0a1535, 0x0a1535, 1);
+            gradBg.fillRect(0, 0, 720, 1280);
+            gradBg.fillGradientStyle(0x0a1535, 0x0a1535, 0x020510, 0x020510, 1);
+            gradBg.fillRect(0, 1280, 720, 1280);
+            
+            gradBg.generateTexture('animated_bg_grad', 720, 2560);
+            gradBg.destroy();
+        }
+
+        this.scrollingBg = this.add.tileSprite(360, 640, 720, 1280, 'animated_bg_grad').setDepth(-100);
+
+        const neb1 = this.add.circle(250, 100, 250, 0x0044aa, 0.1).setDepth(-99);
+        const neb2 = this.add.circle(550, 1100, 300, 0x4400aa, 0.1).setDepth(-99);
+
+        this.tweens.add({
+            targets: [neb1, neb2], x: 650, y: 750, scale: 1.15, alpha: 0.15, duration: 8000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+        });
+        
+        const createLayer = (count, speed, color, size, alpha = 1) => {
+            const group = this.add.group();
+            for (let i = 0; i < count; i++) {
+                const x = Phaser.Math.Between(0, 720);
+                const y = Phaser.Math.Between(0, 1280);
+                const star = this.add.circle(x, y, size, color, alpha).setDepth(-98);
+                group.add(star);
+            }
+            this.backgroundLayers.push({ group: group, speed: speed });
+        };
+
+        createLayer(50, 0.4, 0x555588, 1.5, 0.5); 
+        createLayer(30, 1.0, 0x88aaff, 2, 0.8); 
+        createLayer(15, 2.2, 0xffffff, 2.5, 1); 
+    }
+
+    startGame() {
+        const manifest = this.cache.json.get('bank_directory');
+        let finalQuestions = [];
+
+        if (this.selectedBankKey === "all") {
+            manifest.banks.forEach(bank => {
+                const data = this.cache.json.get(bank.key);
+                if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
+            });
+        } else {
+            const data = this.cache.json.get(this.selectedBankKey);
+            if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
+        }
+
+        if (this.selectedSubject === "all_no_math") {
+            finalQuestions = finalQuestions.filter(q => q.subject !== "Math");
+        } else if (this.selectedSubject !== "all") {
+            finalQuestions = finalQuestions.filter(q => q.subject === this.selectedSubject);
+        }
+
+        let seenQuestions = JSON.parse(localStorage.getItem('seenQuestions') || '[]');
+
+        if (this.selectedMode === "revision") {
+            finalQuestions = finalQuestions.filter(q => seenQuestions.includes(q.question));
+            if (finalQuestions.length === 0) {
+                alert("No previous questions found! Play a normal game first.");
+                return;
+            }
+        } else if (this.selectedMode === "new") {
+            finalQuestions = finalQuestions.filter(q => !seenQuestions.includes(q.question));
+            if (finalQuestions.length === 0) {
+                alert("You have already answered all questions in this category!");
+                return;
+            }
+        }
+
+        if (finalQuestions.length === 0) {
+            alert("No questions found for this selection!");
+            return;
+        }
+
+        Phaser.Utils.Array.Shuffle(finalQuestions);
+
+        window.resetGameState();
+        GameState.currentQuestions = finalQuestions;
+        GameState.gameMode = this.selectedMode;
+
+        this.scene.start("GameScene");
+        this.scene.launch("QuestionScene");
+    }
+
+    closeAllDropdowns() {
+        this.dropdowns.forEach(d => d.close());
+    }
+}

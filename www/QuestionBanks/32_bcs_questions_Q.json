@@ -1,0 +1,1302 @@
+[
+  {
+    "id": 1,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "‘বৃক্ষ’ শব্দের সমার্থক শব্দ কোনটি?",
+    "options": [
+      "কলাপী",
+      "নীরধি",
+      "বিটপী",
+      "অবনি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 2,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "‘Subconscious’ শব্দটির বাংলা পারিভাষিক শব্দ হলো-",
+    "options": [
+      "অর্ধচেতন",
+      "অবচেতন",
+      "চেতনাহীন",
+      "চেতনাপ্রবাহ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "কোনটি ইংরেজি শব্দ?",
+    "options": [
+      "ম্যাজেন্টা",
+      "পিস্তল",
+      "আলমারি",
+      "কমা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 4,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "‘শূন্যপুরাণ’ রচনা করেছেন-",
+    "options": [
+      "রামাই পণ্ডিত",
+      "শ্রীকর নন্দী",
+      "বিজয় গুপ্ত",
+      "লোচন দাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 5,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দ গঠনে বাংলা উপসর্গ ব্যবহৃত হয়েছে?",
+    "options": [
+      "পরাকাষ্ঠা",
+      "অভিব্যক্তি",
+      "পরিশ্রান্ত",
+      "অনাবৃষ্টি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 6,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "‘পালামৌ’ ভ্রমণকাহিনীটি কার রচনা?",
+    "options": [
+      "শরৎচন্দ্র চট্টোপাধ্যায়",
+      "সুনীল গঙ্গোপাধ্যায়",
+      "সঞ্জীবচন্দ্র চট্টোপাধ্যায়",
+      "তারাশঙ্কর বন্দ্যোপাধ্যায়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 7,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "‘আলোছায়া’ পদটি কোন সমাসের অন্তর্গত?",
+    "options": [
+      "দ্বন্দ্ব সমাস",
+      "অব্যয়ীভাব সমাস",
+      "তৎপুরুষ সমাস",
+      "কর্মধারয় সমাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 8,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "কোনটি সাধিত শব্দ নয়?",
+    "options": [
+      "পানসা",
+      "ফুলেল",
+      "গোলাপ",
+      "হাতল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 9,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "‘দিবারাত্রির কাব্য’ কার লেখা উপন্যাস?",
+    "options": [
+      "তারাশঙ্কর বন্দ্যোপাধ্যায়",
+      "শ্রীকুমার বন্দ্যোপাধ্যায়",
+      "ঈশানচন্দ্র বন্দ্যোপাধ্যায়",
+      "মানিক বন্দ্যোপাধ্যায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 10,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "কাজী নজরুল ইসলাম রচিত গল্প কোনটি?",
+    "options": [
+      "পদ্মরাগ",
+      "পদ্মগোখরা",
+      "পদ্মাপুরাণ",
+      "পদ্মাবতী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "‘আনোয়ারা’ গ্রন্হটি কার রচনা?",
+    "options": [
+      "কাজী এমদাদুল হক",
+      "মীর মশাররফ হোসেন",
+      "মোহাম্মদ নজিবর রহমান",
+      "ইসমাইল হোসেন সিরাজী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 12,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "‘বীরবল’ ছদ্মনামে কে লিখতেন?",
+    "options": [
+      "রবীন্দ্রনাথ ঠাকুর",
+      "মুনীর চৌধুরী",
+      "সমরেশ বসু",
+      "প্রমথ চৌধুরী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 13,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "কোনটি শুদ্ধ বানান?",
+    "options": [
+      "আকাংখা",
+      "আকাঙ্ক্ষা",
+      "আকাঙ্খা",
+      "আকাংক্ষা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 14,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "কোনটি ‘বাতাস’ শব্দের সমার্থক নয়?",
+    "options": [
+      "পাবক",
+      "মারুত",
+      "পবন",
+      "অনিল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 15,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "ভাষার ক্ষুদ্রতম একক কোনটি?",
+    "options": [
+      "বর্ণ",
+      "শব্দ",
+      "অক্ষর",
+      "ধ্বনি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 16,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "‘মা ছিল না বলে কেউ তার চুল বেঁধে দেয়নি।’ এটি একটি-",
+    "options": [
+      "জটিল বাক্য",
+      "যৌগিক বাক্য",
+      "সরল বাক্য",
+      "মিশ্র বাক্য"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 17,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Language",
+    "question": "‘গাছপাথর’ বাগধারাটির অর্থ-",
+    "options": [
+      "ভূমিকা করা",
+      "হিসাব-নিকাশ",
+      "অসম্ভব বস্তু",
+      "বাড়াবাড়ি করা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 18,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "‘তুমি অধম, তাই বলিয়া আমি উত্তম হইব না কেন?’ এই প্রবাদটির রচয়িতা কে?",
+    "options": [
+      "মীর মশাররফ হোসেন",
+      "রোকেয়া সাখাওয়াত হোসেন",
+      "বঙ্কিমচন্দ্র চট্টোপাধ্যায়",
+      "রবীন্দ্রনাথ ঠাকুর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 19,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "ভাষা আন্দোলন বিষয়ক উপন্যাস কোনটি?",
+    "options": [
+      "আরেক ফাল্গুন",
+      "জীবন ঘষে আগুন",
+      "নন্দিত নরকে",
+      "পিঙ্গল আকাশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 20,
+    "bank": "32nd BCS Special",
+    "subject": "Bangla Literature",
+    "question": "মুক্তিযুদ্ধনির্ভর রচনা কোনটি?",
+    "options": [
+      "এইসব দিন রাত্রি",
+      "নূরলদীনের সারা জীবন",
+      "একাত্তরের দিনগুলি",
+      "সৎ মানুষের খোঁজে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 21,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "Planned",
+      "Improvise",
+      "Impromptu",
+      "Immediate"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 22,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "Choose the correct synonym for ‘Menacing’.",
+    "options": [
+      "Encouraging",
+      "Alarming",
+      "Promising",
+      "Auspicious"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 23,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "Choose the correct antonym for ‘Oblige’.",
+    "options": [
+      "Bind",
+      "Require",
+      "Bother",
+      "Censure"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 24,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "Choose the correct antonym for ‘Cynical’.",
+    "options": [
+      "Pessimistic",
+      "Gullible",
+      "Equivocal",
+      "Liberal"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 25,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "We were less surprised than Rahman.",
+      "We were all surprised.",
+      "Rahman was less surprised than us.",
+      "We were as surprised as Rahman."
+    ],
+    "answer": 3
+  },
+  {
+    "id": 26,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "“Not once has our neighbour invited us into his house.”",
+    "options": [
+      "Our neighbour has invited us into his house not once but many times.",
+      "Our neighbour has never invited us into his house.",
+      "Occasionally our neighbour has invited us into his house",
+      "Our neighbour has not always invited us into his house."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 27,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "had better to get",
+      "had to better get",
+      "had better get",
+      "had better got"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 28,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "After food has been dried or canned __ for later consumption.",
+    "options": [
+      "it should be stored",
+      "that it should be stored",
+      "should be stored",
+      "which should be stored"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 29,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "make his ideas understood",
+      "get his ideas down pat",
+      "summarise his ideas",
+      "put together his ideas"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 30,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "What may be considered (courteous) in one culture may be arrogant in another.",
+    "options": [
+      "flimsy",
+      "coarse",
+      "gracious",
+      "friendly"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 31,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "Every",
+      "should vote",
+      "for",
+      "their"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "to diagnose",
+      "perfect",
+      "to which",
+      "will respond."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 33,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "to",
+      "improve",
+      "by",
+      "watch"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 34,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "Laws : policeman",
+      "Butter : baker",
+      "Chalk : black board",
+      "Joy : emotion"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 35,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "Patron : support",
+    "options": [
+      "Spouse : divorce",
+      "Artist : imitation",
+      "Counselor : advice",
+      "Restaurant : customer"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 36,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "Heart : human",
+    "options": [
+      "Wall : brick",
+      "Hand : child",
+      "Kitchen : house",
+      "Engine : car"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 37,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "",
+    "options": [
+      "Choose the meaning of the given expressions :",
+      "It is likely to have bad news.",
+      "It is likely that nothing bad has happened.",
+      "It is unlikely that nothing bad has happened."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 38,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "A bird in hand is worth two in the bush.",
+    "options": [
+      "Take what you have got readily available rather than expecting better in the future.",
+      "The seen is better than the unseen.",
+      "Promises are better than actuals.",
+      "It is no good beating about the bush."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 39,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "The sentence 'Who would have thought Shylock was so unkind' expresses–.",
+    "options": [
+      "hyperbole",
+      "interrogation",
+      "command",
+      "wonder"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 40,
+    "bank": "32nd BCS Special",
+    "subject": "English Language",
+    "question": "To 'raise ones brows' indicate –.",
+    "options": [
+      "annoyance",
+      "disapproval",
+      "indifference",
+      "surprise"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 41,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রথম বাংলাদেশী এভারেস্ট বিজয়ী মুসা ইব্রাহীম কোন সালে মাউন্ট এভারেস্ট শৃঙ্গে আরোহণ করেন?",
+    "options": [
+      "২০০৮",
+      "২০১১",
+      "২০০৯",
+      "২০১০"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 42,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "তামাবিল সীমান্তের সাথে ভারতের কোন শহরটি অবস্থিত?",
+    "options": [
+      "করিমগঞ্জ",
+      "খোয়াই",
+      "পেট্রাপোল",
+      "ডাউকি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 43,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "BTRC এর ইংরেজি পূর্ণরূপ কোনটি?",
+    "options": [
+      "Bangladesh Telephone Regulatory Commission",
+      "Bangladesh Telecommunication Regulatory Commission",
+      "Bangladesh Telecom Regulatory Commission",
+      "Bangladesh Telephone and Telegraph Regulatory Commission"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 44,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ রেলওয়ের সর্ববৃহৎ কারখানা কোথায়?",
+    "options": [
+      "চট্টগ্রাম",
+      "পাকশি",
+      "সৈয়দপুর",
+      "আখাউড়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 45,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের White gold কোনটি?",
+    "options": [
+      "ইলিশ",
+      "পাট",
+      "রূপা",
+      "চিংড়ি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 46,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোন জেলাটি বাংলাদেশ-ভারত সীমান্তের মধ্যে নয়?",
+    "options": [
+      "পঞ্চগড়",
+      "সাতক্ষীরা",
+      "হবিগঞ্জ",
+      "কক্সবাজার"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 47,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "‘সোনালিকা’ ও ‘আকবর’ বাংলাদেশের কৃষি ক্ষেত্রে কিসের নাম?",
+    "options": [
+      "উন্নত কৃষি যন্ত্রপাতির নাম",
+      "উন্নত জাতের ধানের নাম",
+      "দুটি কৃষি বিষয়ক বেসরকারি সংস্থার নাম",
+      "উন্নত জাতের গমের নাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 48,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "‘আলোকিত মানুষ চাই’ এটি কোন প্রতিষ্ঠানের শ্লোগান?",
+    "options": [
+      "জাতীয় গ্রন্হ কেন্দ্র",
+      "বিশ্বসাহিত্য কেন্দ্র",
+      "সুশাসনের জন্য নাগরিক",
+      "পাবলিক লাইব্রেরী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় পতাকার দৈর্ঘ্য-প্রস্থের অনুপাত কোনটি?",
+    "options": [
+      "৮ : ৫",
+      "১০ : ৬",
+      "১১ : ৮",
+      "১১ : ৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 50,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন জেলায় চা-বাগান বেশি?",
+    "options": [
+      "সিলেট",
+      "হবিগঞ্জ",
+      "মৌলভীবাজার",
+      "বান্দরবান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 51,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "জনসংখ্যার ভিত্তিতে বৃহত্তর মুসলিম রাষ্ট্র কোনটি?",
+    "options": [
+      "পাকিস্তান",
+      "সৌদি আরব",
+      "মিশর",
+      "ইন্দোনেশিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 52,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "রেডক্রসের সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "প্যারিস",
+      "লন্ডন",
+      "নিউইয়র্ক",
+      "জেনেভা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "‘জুলিয়াস সীজার’ কেন বিখ্যাত?",
+    "options": [
+      "রোমান সম্রাট হিসেবে",
+      "বর্ণবাদ বিরোধী হিসেবে",
+      "ব্রিটেনের রাজা হিসেবে",
+      "আমেরিকার প্রেসিডেন্ট হিসেবে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 54,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "পূর্ব তিমুরের রাজধানী কোথায়?",
+    "options": [
+      "লাসা",
+      "পোর্টো নোভো",
+      "দিলি",
+      "তিয়েন আন মেন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 55,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "নোবেল পুরস্কার বিজয়ী ‘তাওয়াকুল কারমান’ কোন দেশের নাগরিক?",
+    "options": [
+      "ইরান",
+      "ইন্দোনেশিয়া",
+      "তুরস্ক",
+      "ইয়েমেন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 56,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "আমেরিকার চালকবিহীন গোয়েন্দা বিমান ‘স্টিলথ ড্রোন’টি কি?",
+    "options": [
+      "বোমারু বিমান চালিত",
+      "মিগ চালিত",
+      "হেলিকপ্টার চালিত",
+      "শক্তিশালী রকেট চালিত"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 57,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "আটলান্টিক ও প্রশান্ত মহাসাগরকে যুক্ত করেছে কোনটি?",
+    "options": [
+      "সুয়েজ খাল",
+      "মিসিসিপি",
+      "ভলগা",
+      "পানামা খাল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 58,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "‘গ্রিনল্যান্ড’ এর মালিকানা কোন দেশের?",
+    "options": [
+      "সুইডেন",
+      "নেদারল্যান্ডস্",
+      "ডেনমার্ক",
+      "ইংল্যান্ড"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 59,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "‘গ্রেট হল’ কোথায় অবস্থিত?",
+    "options": [
+      "ব্রিটেন",
+      "যুক্তরাষ্ট্র",
+      "চীন",
+      "রাশিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 60,
+    "bank": "32nd BCS Special",
+    "subject": "International Affairs",
+    "question": "‘তাস’ কোন দেশের সংবাদ সংস্থা?",
+    "options": [
+      "রাশিয়া",
+      "চীন",
+      "ভারত",
+      "পাকিস্তান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 61,
+    "bank": "32nd BCS Special",
+    "subject": "ICT",
+    "question": "মডেম এর মধ্যে যা থাকে তা হলো-",
+    "options": [
+      "একটি মডুলেটর",
+      "একটি মডুলেটর ও একটি ডিমডুলেটর",
+      "একটি কোডেক",
+      "একটি এনকোডার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 62,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "ডায়োড সবচেয়ে বেশি ব্যবহৃত হয়-",
+    "options": [
+      "ক্যাপাসিটর হিসেবে",
+      "ট্রান্সফরমার হিসেবে",
+      "রেজিস্টর হিসেবে",
+      "রেক্টিফায়ার হিসেবে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 63,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "বাসা বাড়িতে সরবরাহকৃত বিদ্যুতের ফ্রিকোয়েন্সি হলো–",
+    "options": [
+      "৫০ হার্জ",
+      "২২০ হার্জ",
+      "২০০ হার্জ",
+      "১০০ হার্জ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 64,
+    "bank": "32nd BCS Special",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কৃষিতে ‘দোয়েল’–",
+    "options": [
+      "জাতীয় পাখির নাম",
+      "কৃষি সংস্থার নাম",
+      "উন্নত জাতের গমের নাম",
+      "কৃষি যন্ত্রের নাম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 65,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "মৌমাছির চাষ হলো-",
+    "options": [
+      "এপিকালচার",
+      "সেরিকালচার",
+      "পিসিকালচার",
+      "হর্টিকালচার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 66,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "দুধে থাকে–",
+    "options": [
+      "সাইট্রিক এসিড",
+      "ল্যাকটিক এসিড",
+      "নাইট্রিক এসিড",
+      "এসিটিক এসিড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 67,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "কোনটি জৈব অম্ল?",
+    "options": [
+      "নাইট্রিক এসিড",
+      "হাইড্রোক্লোরিক এসিড",
+      "এসিটিক এসিড",
+      "সালফিউরিক এসিড"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 68,
+    "bank": "32nd BCS Special",
+    "subject": "ICT",
+    "question": "কম্পিউটার ভাইরাস কি?",
+    "options": [
+      "একটি ক্ষতিকারক জীবাণু",
+      "একটি ক্ষতিকারক সার্কিট",
+      "একটি ক্ষতিকারক চৌম্বক ফ্লাক্স",
+      "একটি ক্ষতিকারক প্রোগ্রাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 69,
+    "bank": "32nd BCS Special",
+    "subject": "ICT",
+    "question": "কোনটি তারবিহীন দ্রুতগতির ইন্টারনেট সংযোগের জন্য উপযোগী?",
+    "options": [
+      "ওয়াইম্যাক্স",
+      "সি-মস",
+      "ব্লু-টুথ",
+      "ব্রডব্যান্ড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 70,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "এন্টিবায়োটিকের কাজ-",
+    "options": [
+      "রোগ প্রতিরোধের ক্ষমতা বৃদ্ধি করা",
+      "জীবাণু ধ্বংস করা",
+      "ভাইরাস ধ্বংস করা",
+      "দ্রুত রোগ নিরাময় করা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 71,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "মাশরুম এক ধরনের-",
+    "options": [
+      "অপুষ্পক উদ্ভিদ",
+      "পরজীবী উদ্ভিদ",
+      "ফাঙ্গাস",
+      "অর্কিড"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 72,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "অপটিক্যাল ফাইবারে আলোর কোন ঘটনাটি ঘটে?",
+    "options": [
+      "প্রতিসরণ",
+      "বিচ্ছুরণ",
+      "অপবর্তন",
+      "অভ্যন্তরীণ প্রতিফলন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 73,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "যকৃতের রোগ কোনটি?",
+    "options": [
+      "জন্ডিস",
+      "টাইফয়েড",
+      "হাম",
+      "কলেরা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 74,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "যে বায়ু সর্বদাই উচ্চচাপ অঞ্চল থেকে নিম্নচাপ অঞ্চলের দিকে প্রবাহিত হয় তা হলো-",
+    "options": [
+      "অয়ন বায়ু",
+      "নিয়ত বায়ু",
+      "প্রত্যয়ন বায়ু",
+      "মৌসুমী বায়ু"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 75,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "পিতলের উপাদান হলো-",
+    "options": [
+      "তামা ও টিন",
+      "তামা ও নিকেল",
+      "তামা ও সিসা",
+      "তামা ও দস্তা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 76,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "বৈদ্যুতিক মিটারে এক ইউনিট বিদ্যুৎ খরচ বলতে বুঝায়-",
+    "options": [
+      "এক কিলোওয়াট-ঘণ্টা",
+      "এক ওয়াট-ঘণ্টা",
+      "এক কিলোওয়াট",
+      "এক ওয়াট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 77,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "পারস্পরিক আবেশকে ব্যবহার করা হয় কোনটিতে?",
+    "options": [
+      "ডায়োড",
+      "ট্রান্সফরমার",
+      "ট্রানজিস্টার",
+      "অ্যামপ্লিফায়ার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 78,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "উদ্ভিদের বৃদ্ধি নির্ণায়ক যন্ত্র–",
+    "options": [
+      "ওডোমিটার",
+      "ক্রনোমিটার",
+      "ট্যাকোমিটার",
+      "ক্রেসকোগ্রাফ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 79,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "স্বর্ণের খাদ বের করতে ব্যবহার করা হয়–",
+    "options": [
+      "সালফিউরিক এসিড",
+      "নাইট্রিক এসিড",
+      "সাইট্রিক এসিড",
+      "কার্বোলিক এসিড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "32nd BCS Special",
+    "subject": "Science",
+    "question": "ভূপৃষ্ঠের সৌরদীপ্ত ও অন্ধকারাচ্ছন্ন অংশের সংযোগস্থলকে বলে–",
+    "options": [
+      "ঊষা",
+      "গোধূলি",
+      "গুরুবৃত্ত",
+      "ছায়াবৃত্ত"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 81,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "x এবং y উভয়ই বিজোড় সংখ্যা হলে কোনটি জোড় সংখ্যা হবে?",
+    "options": [
+      "x+y+1",
+      "xy",
+      "xy+2",
+      "x+y"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 82,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "৭ সে.মি. ব্যাসার্ধ বিশিষ্ট বৃত্তের অন্তর্লিখিত বর্গক্ষেত্রের ক্ষেত্রফল কত?",
+    "options": [
+      "৯৮ ব.সে.মি.",
+      "৪৯ ব.সে.মি.",
+      "১৯৬ ব.সে.মি.",
+      "১৪৬ ব.সে.মি."
+    ],
+    "answer": 0
+  },
+  {
+    "id": 83,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "কোনো ত্রিভুজের তিনটি বাহুকে বর্ধিত করলে উৎপন্ন বহিঃস্থকোণ তিনটির সমষ্টি কত?",
+    "options": [
+      "১৮০^circ",
+      "১৫০^circ",
+      "২৭০^circ",
+      "৩৬০^circ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 84,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "১, ৩, ৬, ১০, ১৫, ২১........ ধারাটির দশম পদ কত?",
+    "options": [
+      "৪৫",
+      "৫৫",
+      "৬২",
+      "৬৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 85,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "√ 2 / √ 6+2 কত?",
+    "options": [
+      "√ 3+√ 2",
+      "3+√ 2",
+      "√ 3-√ 2",
+      "√ 3+ 2"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 86,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "x^2-8x-8y+16+y^2 এর সাথে কত যোগ করলে যোগফল একটি পূর্ণ বর্গ হবে?",
+    "options": [
+      "4xy",
+      "2xy",
+      "6xy",
+      "8xy"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 87,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "টাকায় ৩টি করে লেবু কিনে টাকায় ২টি করে বিক্রি করলে শতকরা কত লাভ হবে?",
+    "options": [
+      "৫০%",
+      "২০%",
+      "৩০%",
+      "৩৩%"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 88,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "বৃত্তের ব্যাস তিনগুণ বৃদ্ধি পেলে ক্ষেত্রফল কতগুণ বৃদ্ধি পাবে?",
+    "options": [
+      "৩ গুণ",
+      "৯ গুণ",
+      "১২গুণ",
+      "১৬ গুণ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 89,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "একটি গাড়ির চাকা প্রতি মিনিটে ৯০ বার ঘোরে। ১ সেকেন্ডে চাকাটি কত ডিগ্রি ঘুরবে?",
+    "options": [
+      "১৮০^circ",
+      "২৭০০^circ",
+      "৩৬০^circ",
+      "৫৪০^circ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 90,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "ABCD চতুর্ভুজে AB || CD,AC=BD এবং ∠A=90^circ হলে, সঠিক চতুর্ভুজ কোনটি?",
+    "options": [
+      "সামান্তরিক",
+      "রম্বস",
+      "ট্রাপিজিয়াম",
+      "আয়তক্ষেত্র"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 91,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "কোন ভগ্নাংশটি ক্ষুদ্রতম?",
+    "options": [
+      "৫ / ৬",
+      "১২ / ১৫",
+      "১১ / ১৪",
+      "১৭ / ২১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 92,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "পরপর তিনটি সংখ্যার গুণফল ১২০ হলে তাদের যোগফল কত?",
+    "options": [
+      "৯",
+      "১২",
+      "১৪",
+      "১৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 93,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "০.৪৭ ̇ কে সাধারণ ভগ্নাংশে পরিণত করলে কত হবে?",
+    "options": [
+      "৪৭ / ৯০",
+      "৪৩ / ৯০",
+      "৪৩ / ৯৯",
+      "৪৭ / ৯০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 94,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "x^2-y^2+2y-1 এর একটি উৎপাদক–",
+    "options": [
+      "x+y+1",
+      "x-y",
+      "x+y-1",
+      "x-y-1"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 95,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "log_28= কত?",
+    "options": [
+      "4",
+      "3",
+      "2",
+      "1"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 96,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "x^3+x^2 y,x^2 y+xy^2 এর ল.সা.গু কোনটি?",
+    "options": [
+      "xy",
+      "x+y",
+      "xy(x+y)",
+      "x^2y(x+y)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 97,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "একটি আয়তাকার ঘরের দৈর্ঘ্য প্রস্থ অপেক্ষা ৪ মিটার বেশি। ঘরটির পরিসীমা ৩২ মিটার হলে ঘরটির দৈর্ঘ্য কত?",
+    "options": [
+      "৬ মিটার",
+      "১০ মিটার",
+      "১৮ মিটার",
+      "১২ মিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 98,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "একটি সমবাহু ত্রিভুজের বাহুর প্রত্যেকটির দৈর্ঘ্য ২ মিটার বাড়ালে এর ক্ষেত্রফল 3√ 3 বর্গমিটার বেড়ে যায়। সমবাহু ত্রিভুজের বাহুর দৈর্ঘ্য কত?",
+    "options": [
+      "1 মিটার",
+      "2 মিটার",
+      "3 মিটার",
+      "4 মিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 99,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "x-1/ x=7 হলে x^3- (1/ x)^3 এর মান কত?",
+    "options": [
+      "334",
+      "154",
+      "364",
+      "512"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 100,
+    "bank": "32nd BCS Special",
+    "subject": "Math",
+    "question": "সেট A=x∈N:x^2>8,x^3<30 হলে x এর মান কোনটি?",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answer": 1
+  }
+]

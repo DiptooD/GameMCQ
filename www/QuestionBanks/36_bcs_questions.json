@@ -1,0 +1,2597 @@
+[
+  {
+    "id": 1,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘বন্ধন’ শব্দের সঠিক অক্ষর বিন্যাস কোনটি?",
+    "options": [
+      "ব + ন্ + ধ + ন্",
+      "বন্ + ধন্",
+      "ব + ন্ধ + ন",
+      "বান্ + ধন্"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা বর্ণমালায় অর্ধমাত্রার বর্ণ কয়টি?",
+    "options": [
+      "৭টি",
+      "৯টি",
+      "১০টি",
+      "৮টি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 3,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘বিজ্ঞান’ শব্দের যুক্তবর্ণের সঠিক রূপ কোনটি?",
+    "options": [
+      "জ্ + ঞ",
+      "ঞ্ + গ",
+      "ঞ্ + জ",
+      "গ্ + ঞ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 4,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "নিচের কোন শব্দটি প্রত্যয়যোগে গঠিত হয়নি?",
+    "options": [
+      "সভাসদ",
+      "শুভেচ্ছা",
+      "ফলবান",
+      "তন্বী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 5,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "বহুব্রীহি সমাসবদ্ধ পদ কোনটি?",
+    "options": [
+      "জনশ্রুতি",
+      "অনমনীয়",
+      "খাসমহল",
+      "তপোবন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 6,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "নিচের কোনটি বিশেষ্য পদ?",
+    "options": [
+      "জাত",
+      "গৈরিক",
+      "উদ্ধত",
+      "গাম্ভীর্য"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 7,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "নিচের কোন শব্দে ণ-ত্ব বিধি অনুসারে ‘ণ’-এর ব্যবহার হয়েছে?",
+    "options": [
+      "কল্যাণ",
+      "প্রবণ",
+      "নিক্কণ",
+      "বিপণি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 8,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘মিথ্যাবাদীকে সবাই অপছন্দ করে’– বাক্যটিকে নেতিবাচক বাক্যে রূপান্তর করলে হয়–",
+    "options": [
+      "মিথ্যাবাদীকে সবাই পছন্দ করে",
+      "মিথ্যাবাদীকে সবাই পছন্দ না করে পারে না",
+      "মিথ্যাবাদীকে কেউ পছন্দ করে না",
+      "মিথ্যাবাদীকে কেউ অপছন্দ করে না"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 9,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘Null and Void’-এর বাংলা পরিভাষা কী?",
+    "options": [
+      "বাতিল",
+      "পালাবদল",
+      "মামুলি",
+      "নিরপেক্ষ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 10,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘হেড মৌলভী’ কোন কোন ভাষায় শব্দ যোগে গঠিত হয়েছে?",
+    "options": [
+      "ইংরেজি + ফার্সি",
+      "ইংরেজি + আরবি",
+      "তুর্কি + আরবি",
+      "ইংরেজি + পর্তুগিজ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 11,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘রবীন্দ্র’-এর সঠিক সন্ধি বিচ্ছেদ কোনটি?",
+    "options": [
+      "রবী + ইন্দ্র",
+      "রবী + ঈন্দ্র",
+      "রবি + ইন্দ্র",
+      "রবি + ঈন্দ্র"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 12,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘এ যে আমাদের চেনা লোক’– বাক্যে ‘চেনা’ কোন পদ?",
+    "options": [
+      "বিশেষ্য",
+      "অব্যয়",
+      "ক্রিয়া",
+      "বিশেষণ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 13,
+    "bank": "36th BCS",
+    "subject": "Bangla Language",
+    "question": "‘প্রকর্ষ’ শব্দের সমার্থক শব্দ–",
+    "options": [
+      "উৎকর্ষতা",
+      "অপকর্ষ",
+      "উৎকর্ষ",
+      "অপকর্ষতা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 14,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি কাজী নজরুল ইসলামের রচনা নয়?",
+    "options": [
+      "ছায়ানট",
+      "চক্রবাক",
+      "রুদ্রমঙ্গল",
+      "বালুচর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 15,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘সবুজপত্র’ প্রকাশিত হয় কোন সালে?",
+    "options": [
+      "১৯০৯",
+      "১৯১০",
+      "১৯১৪",
+      "১৯২১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 16,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুক্তিযুদ্ধবিষয়ক নাটক–",
+    "options": [
+      "সুবচন নির্বাসনে",
+      "রক্তাক্ত প্রান্তর",
+      "নূরলদীনের সারা জীবন",
+      "পায়ের আওয়াজ পাওয়া যায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 17,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি জসীমউদ্দীনের নাটক?",
+    "options": [
+      "রাখালী",
+      "মাটির কান্না",
+      "বেদের মেয়ে",
+      "বোবা কাহিনী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 18,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "মধ্যযুগের বাংলা সাহিত্যে কোন ধর্মপ্রচারক-এর প্রভাব অপরিসীম?",
+    "options": [
+      "শ্রীচৈতন্যদেব",
+      "শ্রীকৃষ্ণ",
+      "আদিনাথ",
+      "মনোহর দাশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 19,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুনীর চৌধুরীর অনূদিত নাটক কোনটি?",
+    "options": [
+      "কবর",
+      "চিঠি",
+      "রক্তাক্ত প্রান্তর",
+      "মুখরা রমণী বশীকরণ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 20,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি উপন্যাস নয়?",
+    "options": [
+      "দিবারাত্রির কাব্য",
+      "হাঁসুলী বাঁকের উপকথা",
+      "কবিতার কথা",
+      "পথের পাঁচালী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 21,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘বিষাদ সিন্ধু’ একটি–",
+    "options": [
+      "গবেষণা গ্রন্থ",
+      "ধর্মবিষয়ক প্রবন্ধ",
+      "ইতিহাস আশ্রয়ী উপন্যাস",
+      "আত্মজীবনী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 22,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "মধ্যযুগের শেষ কবি ভারতচন্দ্র রায়গুণাকর কত সালে মৃত্যুবরণ করেন?",
+    "options": [
+      "১৭৫৬",
+      "১৭৫২",
+      "১৭৬০",
+      "১৭৬২"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 23,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘তোহফা’ কাব্যটি কে রচনা করেন?",
+    "options": [
+      "দৌলত কাজী",
+      "মাগন ঠাকুর",
+      "সাবিরিদ খান",
+      "আলাওল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 24,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "এন্টনি ফিরিঙ্গি কী জাতীয় সাহিত্যের রচয়িতা?",
+    "options": [
+      "কবিগান",
+      "পুঁথি সাহিত্য",
+      "নাথ সাহিত্য",
+      "বৈষ্ণব পদ সাহিত্য"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 25,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘রাজা প্রতাপাদিত্য চরিত্র’ গ্রন্থটির প্রণেতা–",
+    "options": [
+      "উইলিয়াম কেরি",
+      "গোলকনাথ শর্মা",
+      "রামরাম বসু",
+      "হরপ্রসাদ রায়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 26,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘ইয়ং বেঙ্গল’ গোষ্ঠীর মুখপত্ররূপে কোন পত্রিকা প্রকাশিত হয়?",
+    "options": [
+      "বঙ্গদূত",
+      "জ্ঞানান্বেষণ",
+      "জ্ঞানাঙ্কুর",
+      "সংবাদ প্রভাকর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 27,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "হরিনাথ মজুমদার সম্পাদিত পত্রিকার নাম–",
+    "options": [
+      "অবকাশ রঞ্জিকা",
+      "বিবিধার্য সংগ্রহ",
+      "কাব্য প্রকাশ",
+      "গ্রামবার্তা প্রকাশিকা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 28,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "নিচের কোনটি ভ্রমণসাহিত্য বিষয়ক গ্রন্হ নয়?",
+    "options": [
+      "চার ইয়ারী কথা",
+      "পালামৌ",
+      "দৃষ্টিপাত",
+      "দেশে বিদেশে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 29,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "নিচের যে উপন্যাসে গ্রামীণ সমাজ জীবনের চিত্র প্রাধান্য লাভ করেনি-",
+    "options": [
+      "গণদেবতা",
+      "পদ্মানদীর মাঝি",
+      "সীতারাম",
+      "পথের পাঁচালী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 30,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "নিচের কোন চরিত্র দুটি রবীন্দ্রনাথের ‘ঘরে বাইরে’ উপন্যাসের?",
+    "options": [
+      "বিহারী-বিনোদিনী",
+      "নিখিলেস-বিমলা",
+      "মধুসূদন-কুমুদিনী",
+      "অমিত-লাবণ্য"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 31,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি কাজী নজরুল ইসলামের উপন্যাস?",
+    "options": [
+      "রিক্তের বেদন",
+      "সর্বহারা",
+      "আলেয়া",
+      "কুহেলিকা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি মাইকেল মধুসূদন দত্তের পত্রকাব্য?",
+    "options": [
+      "ব্রজাঙ্গনা",
+      "বিলাতের পত্র",
+      "বীরাঙ্গনা",
+      "হিমালয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘একখানি ছোট ক্ষেত আমি একেলা’– রবীন্দ্রনাথ ঠাকুরের কোন কবিতার চরণ?",
+    "options": [
+      "সোনার তরী",
+      "চিত্রা",
+      "মানসী",
+      "বলাকা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 34,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘আমি কিংবদন্তীর কথা বলছি’–কবিতাটি কার লেখা?",
+    "options": [
+      "শামসুর রাহমান",
+      "আল মাহমুদ",
+      "আবুল ফজল",
+      "আবু জাফর ওবায়দুল্লাহ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 35,
+    "bank": "36th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি শওকত ওসমানের রচনা নয়?",
+    "options": [
+      "চৌরসন্ধি",
+      "ক্রীতদাসের হাসি",
+      "ভেজাল",
+      "বনি আদম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 36,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Professor Razzak was a scholar ____ refute. (Fill in the gap)",
+    "options": [
+      "in",
+      "of",
+      "after",
+      "by"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 37,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘David Copperfield’ is a/an _____ novel.",
+    "options": [
+      "Victorian",
+      "Eligabethan",
+      "Romantic",
+      "Modern"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘Elegy Written in a Country Churchyard’ is written by–",
+    "options": [
+      "William Wordsworth",
+      "Thomas Gray",
+      "John Keats",
+      "W.B. Yeats"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 39,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "John Smith is good ____ Mathematics. (Fill in the gap)",
+    "options": [
+      "at",
+      "in",
+      "of",
+      "after"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 40,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "Shakespeare's ‘Measure for Measure’ is a successful–",
+    "options": [
+      "tragedy",
+      "comedy",
+      "tragi-comedy",
+      "melodrama"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 41,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Teacher said, ‘The earth ____ round the sun.’",
+    "options": [
+      "moves",
+      "moved",
+      "has moved",
+      "will be moving"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 42,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "The romantic age in English literature began with the publication of–",
+    "options": [
+      "Preface to Shakespeare",
+      "Perface to Lyrical Ballads",
+      "Preface to Ancient Mariners",
+      "Preface to Dr. Johnson"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 43,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "In English grammar, ____ deals with formation of sentences.",
+    "options": [
+      "Morphology",
+      "Etymology",
+      "Syntax",
+      "Semantics"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 44,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "Which of the following books is written by Thomas Hardy?",
+    "options": [
+      "Vanity Fair",
+      "The Return of the Native",
+      "Pride and Prejudice",
+      "Oliver Twist"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 45,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "He insisted ____ there. (Fill in the gap)",
+    "options": [
+      "on my going",
+      "is to go",
+      "over going",
+      "to go"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 46,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "The idiom ‘A stitch in time saves nine’–refers to the importance of–",
+    "options": [
+      "Saving lives",
+      "timely action",
+      "saving time",
+      "time tailoring"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘Frailty thy name is woman’–is a famous dialogue from.",
+    "options": [
+      "Christopher Marlowe",
+      "John Webstar",
+      "W. Shakespeare",
+      "T.S. Eliot"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 48,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "The poem ‘The Solitary Reaper’ is written by–",
+    "options": [
+      "W.H. Auden",
+      "W. Wordsworth",
+      "W.B. Yeats",
+      "Ezra Pound"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘The Merchant of Venice’ is a Shakespearean play about–",
+    "options": [
+      "a Jew",
+      "a Moor",
+      "a Roman",
+      "a Turk"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 50,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "What would be the right antonym for ‘initiative’?",
+    "options": [
+      "apathy",
+      "indolence",
+      "enterprise",
+      "activity"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 51,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "The play ‘Candida’ is by–",
+    "options": [
+      "James Joyce",
+      "Shakespeare",
+      "G. B. Shaw",
+      "Arthur Miller"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 52,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "Which of the following writers belongs to the romantic period in English literature?",
+    "options": [
+      "A. Tennyson",
+      "Alexander Pope",
+      "John Dryden",
+      "S.T. Coleridge"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "This could have worked if I ____ been more cautious.",
+    "options": [
+      "had",
+      "have",
+      "might",
+      "would"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 54,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "The Climax of a plot is what happens–",
+    "options": [
+      "in the beginning",
+      "at the height",
+      "at the end",
+      "in the confrontation"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 55,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "London town is found a living being in the works of–",
+    "options": [
+      "Thomas Hardy",
+      "Charles Dickens",
+      "W. Congreve",
+      "D.H. Lawrence"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 56,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "I have been living in Dhaka ____ 2000.",
+    "options": [
+      "since",
+      "from",
+      "after",
+      "till"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 57,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Give the antonym of the word ‘transitory’.",
+    "options": [
+      "temporary",
+      "permanent",
+      "transparent",
+      "short-lived"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Verb of ‘Number’ is–",
+    "options": [
+      "number",
+      "enumerate",
+      "numbering",
+      "numerical"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 59,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘Child is the father of man’ is taken from the poem of–",
+    "options": [
+      "W. Wordsworth",
+      "S.T. Coleridge",
+      "P.B. Shelley",
+      "A.C. Swinburne"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 60,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Slow and steady ____ the race. (Fill in the gap)",
+    "options": [
+      "win",
+      "wins",
+      "has won",
+      "won"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 61,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘Man is a political animal’– who said this?",
+    "options": [
+      "Dante",
+      "Plato",
+      "Aristotle",
+      "Socrates"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 62,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "Who is known as ‘the poet of nature’ in English literature?",
+    "options": [
+      "Lord Tennyson",
+      "John Milton",
+      "William Wordsworth",
+      "John Keats"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 63,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Identify the correct sentence?",
+    "options": [
+      "Yesterday, he has gone home",
+      "Yesterday, he did gone home",
+      "Yesterday, he had gone home",
+      "Yesterday, he went home"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 64,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "“A Passage to India” is written by–",
+    "options": [
+      "E.M. Forster",
+      "Rudyard Kipling",
+      "Galls Worthy",
+      "A.H. Auden"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "‘Gitanjali’ of Rabindranath Tagore was translated by–",
+    "options": [
+      "W. B. Yeats",
+      "Robert Frost",
+      "John Keats",
+      "Rudyard Kipling"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 66,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "‘Venerate’ Means–",
+    "options": [
+      "defame",
+      "abuse",
+      "respect",
+      "accuse"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 67,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Credit tk 5000 ____ my account.",
+    "options": [
+      "in",
+      "with",
+      "against",
+      "to"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 68,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "‘To do away with’ means–",
+    "options": [
+      "to repeat",
+      "to start",
+      "to get rid of",
+      "to drive off"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 69,
+    "bank": "36th BCS",
+    "subject": "English Literature",
+    "question": "Who of the following writers was not a novelist?",
+    "options": [
+      "Charles Dickens",
+      "W.B. Yeats",
+      "James Joyce",
+      "Jane Austen"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 70,
+    "bank": "36th BCS",
+    "subject": "English Language",
+    "question": "Which one is a correct sentence?",
+    "options": [
+      "paper is made of wood",
+      "paper is made from wood",
+      "paper is made by wood",
+      "paper is made on wood"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 71,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাঙালী জাতির প্রধান অংশ কোন মূল জাতিগোষ্ঠীর অন্তর্ভুক্ত?",
+    "options": [
+      "দ্রাবিড়",
+      "নেগ্রিটো",
+      "ভোটচীন",
+      "অস্ট্রিক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 72,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলার সর্বপ্রাচীন জনপদের নাম কি?",
+    "options": [
+      "পুণ্ড্র",
+      "তাম্রলিপ্ত",
+      "গৌড়",
+      "হরিকেল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 73,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলা (দেশ ও ভাষা) নামের উৎপত্তির বিষয়টি কোন গ্রন্থে সর্বাধিক উল্লেখিত হয়েছে?",
+    "options": [
+      "আলমগীরনামা",
+      "আইন-ই-আকবরী",
+      "আকবরনামা",
+      "তুজুক-ই-আকবরী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 74,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঢাকার লালবাগের দুর্গ নির্মাণ করেন:",
+    "options": [
+      "শাহ সুজা",
+      "শায়েস্তা খান",
+      "মীর জুমলা",
+      "সুবেদার ইসলাম খান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 75,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলার ‘ছিয়াত্তরের মন্বন্তর’-এর সময় কাল:",
+    "options": [
+      "১৭৭০ খ্রিস্টাব্দ",
+      "১৭৬০ খ্রিস্টাব্দ",
+      "১৭৬৫ খ্রিস্টাব্দ",
+      "১৭৫৬ খ্রিস্টাব্দ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 76,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সর্বদলীয় কেন্দ্রীয় রাষ্ট্রভাষা সংগ্রাম পরিষদ গঠিত হয়?",
+    "options": [
+      "৩১ জানুয়ারি, ১৯৫২",
+      "২ ফেব্রুয়ারি, ১৯৫২",
+      "১৮ ফেব্রুয়ারি, ১৯৫২",
+      "২০ জানুয়ারি, ১৯৫২"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 77,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "৬ দফা দাবি পেশ করা হয়:",
+    "options": [
+      "১৯৭০ সালে",
+      "১৯৬৬ সালে",
+      "১৯৬৫ সালে",
+      "১৯৬৯ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 78,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বঙ্গবন্ধুর ১৯৭১ সালের ৭ মার্চ ভাষণের সময়কালে পূর্ব পাকিস্তানে যে আন্দোলন চলছিল সেটি হলো:",
+    "options": [
+      "ইসলামাবাদের সামরিক সরকার পদত্যাগের আন্দোলন",
+      "পূর্ব পাকিস্তানের অসহযোগ আন্দোলন",
+      "প্রেসিডেন্ট ইয়াহহিয়ার পদত্যাগ আন্দোলন",
+      "মার্শাল ‘ল’ পদত্যাগের আন্দোলন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 79,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২৬ মার্চ, ১৯৭১-এর স্বাধীনতা ঘোষণা বঙ্গবন্ধু জারী করেন-",
+    "options": [
+      "বেতার/রেডিওর মাধ্যমে",
+      "ওয়্যারলেসের মাধ্যমে",
+      "টেলিগ্রামের মাধ্যম",
+      "টেলিভিশনের মাধ্যমে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 80,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে রোপা আমন ধান কাটা হয়–",
+    "options": [
+      "আষাঢ়-শ্রাবণ মাসে",
+      "ভাদ্র-আশ্বিন মাসে",
+      "অগ্রহায়ণ-পৌষ মাসে",
+      "মাঘ-ফাল্গুন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 81,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সুন্দরবন-এর কত শতাংশ বাংলাদেশের ভৌগোলিক সীমার মধ্যে পড়েছে?",
+    "options": [
+      "৫০%",
+      "৫৮%",
+      "৬২%",
+      "৬৬%"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 82,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "MDG-এর অন্যতম লক্ষ্য কি?",
+    "options": [
+      "দেশ থেকে পোলিও নির্মূল",
+      "HIV/AIDS নির্মূল করা",
+      "যক্ষ্মা নির্মূল করা",
+      "ক্ষুধা ও দারিদ্র্য দূর করা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 83,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "তত্ত্বাবধায়ক সরকার ব্যবস্থা সংবিধানের কততম সংশোধনীর মাধ্যমে রদ করা হয়েছে?",
+    "options": [
+      "১২তম",
+      "১৩তম",
+      "১৪তম",
+      "১৫তম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 84,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় সংসদ কয় কক্ষবিশিষ্ট?",
+    "options": [
+      "এক কক্ষ",
+      "দুই বা দ্বিকক্ষ",
+      "তিন কক্ষ",
+      "বহুকক্ষ বিশিষ্ট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 85,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ভারতের কতটি ‘ছিটমহল’ বাংলাদেশের ভৌগোলিক সীমায় অন্তর্ভুক্ত হয়েছে?",
+    "options": [
+      "১৬২টি",
+      "১১১টি",
+      "৫১টি",
+      "১০১টি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 86,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের ভৌগোলিক অবস্থান কোনটি?",
+    "options": [
+      "২২°-৩০' ২০°-৩৪' দক্ষিণ অক্ষাংশে",
+      "৮০°-৩১' ৪০°-৯০' দ্রাঘিমাংশে",
+      "৩৪°-২৫' ৩৮' উত্তর অক্ষাংশে",
+      "৮৮°-০১' থেকে ৯২°-৪১' পূর্ব দ্রাঘিমাংশে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 87,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে প্রথম আদমশুমারি অনুষ্ঠিত হয় কবে?",
+    "options": [
+      "১৯৭২ সালে",
+      "১৯৭৩ সালে",
+      "১৯৭৪ সালে",
+      "১৯৭৭ সালে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 88,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন উপজাতি বা ক্ষুদ্র নৃ-গোষ্ঠীর ধর্ম ইসলাম?",
+    "options": [
+      "রাখাইন",
+      "মারমা",
+      "পাঙন",
+      "খিয়াং"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 89,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঢাকার ‘ধোলাই খাল’ কে খনন করেন?",
+    "options": [
+      "পরিবিবি",
+      "ইসলাম খান",
+      "শায়েস্তা খান",
+      "ঈশা খান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 90,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাভাষাকে পাকিস্তান গণপরিষদ কোন তারিখে অন্যতম রাষ্ট্রভাষা হিসেবে স্বীকৃতি দেয়?",
+    "options": [
+      "৯ মে, ১৯৫৪",
+      "২২ ফেব্রুয়ারি, ১৯৫৩",
+      "১৬ ফেব্রুয়ারি, ১৯৫৬",
+      "২১ ফেব্রুয়ারি, ১৯৫২"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 91,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মুক্তিযুদ্ধকালীন কোন তারিখে বুদ্ধিজীবীদের ওপর ব্যাপক হত্যাকাণ্ড সংঘটিত হয়?",
+    "options": [
+      "২৫ মার্চ, ১৯৭১",
+      "২৬ মার্চ, ১৯৭১",
+      "১৪ ডিসেম্বর, ১৯৭১",
+      "১৬ ডিসেম্বর, ১৯৭১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 92,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশেকে স্বীকৃতি প্রদানকারী প্রথম ইউরোপীয় দেশ কোনটি?",
+    "options": [
+      "যুক্তরাজ্য",
+      "পূর্ব জার্মানি",
+      "স্পেন",
+      "গ্রিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 93,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের বৃহত্তম জেলা কতটি?",
+    "options": [
+      "১৭টি",
+      "২০টি",
+      "৬৪টি",
+      "১৯টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 94,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘শুভলং’ ঝরনা কোন জেলায় অবস্থিত?",
+    "options": [
+      "রাঙামাটি",
+      "বান্দরবান",
+      "মৌলভীবাজার",
+      "সিলেট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 95,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের উষ্ণতম স্থানের নাম কি?",
+    "options": [
+      "পুটিয়া, রাজশাহী",
+      "নাচালো, চাঁপাইনবাবগঞ্জ",
+      "লালপুর, নাটোর",
+      "ঈশ্বরদি, পাবনা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 96,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় পতাকা কবে গৃহীত হয়?",
+    "options": [
+      "১৭ জানুয়ারি, ১৯৭২",
+      "২৬ মার্চ, ১৯৭১",
+      "১৬ ডিসেম্বর, ১৯৭১",
+      "২১ ফেব্রুয়ারি, ১৯৭২"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 97,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোনো রাষ্ট্রীয় অনুষ্ঠানে জাতীয় সংগীতের কত চরণ বাজানো হয়?",
+    "options": [
+      "প্রথম ১০টি",
+      "প্রথম ৪টি",
+      "প্রথম ৬টি",
+      "প্রথম ৫টি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 98,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ECNEC-এর চেয়ারম্যান বা সভাপতি কে?",
+    "options": [
+      "অর্থমন্ত্রী",
+      "প্রধানমন্ত্রী",
+      "পরিকল্পনামন্ত্রী",
+      "স্পীকার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 99,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "‘অগ্নিশ্বর’ কি ফসলের উন্নত জাত?",
+    "options": [
+      "ধান",
+      "কলা",
+      "পাট",
+      "গম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 100,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বর্তমান সময়ে বাংলাদেশ সরকারের বড় অর্জন কোনটি?",
+    "options": [
+      "যুদ্ধাপরাধীদের বিচার",
+      "সমুদ্রসীমা বিজয়",
+      "বৈদেশিক মুদ্রার রিজার্ভ",
+      "বিদ্যুৎ উৎপাদন বৃদ্ধি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 101,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "কোন সংকটকে কেন্দ্র করে ১৯৫০ সালে ‘শান্তির জন্য ঐক্য প্রস্তাব’ জাতিসংঘের মাধ্যমে পেশ করা হয়?",
+    "options": [
+      "ভিয়েতনাম সংকট",
+      "সাইপ্রাস সংকট",
+      "কোরিয়া সংকট",
+      "প্যালেস্টাইন সংকট"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 102,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "সুয়েজ খাল কোন বছর চালু হয়?",
+    "options": [
+      "১৯০৩",
+      "১৮৬৯",
+      "১৮৮৯",
+      "১৮৫৪"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 103,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "নিম্নলিখিত কোনটি International Mother Earth day?",
+    "options": [
+      "১৮ এপ্রিল",
+      "২০ এপ্রিল",
+      "২২ এপ্রিল",
+      "২৪ এপ্রিল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 104,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "প্রেসিডেন্ট উইড্র উইলসনের 14 points এ কত নম্বর point এ জাতিপুঞ্জের সৃষ্টির কথা উল্লেখ করা হয়েছে?",
+    "options": [
+      "৯",
+      "১২",
+      "১৩",
+      "১৪"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 105,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "১৭৮৩ সালে ভার্সাইতে কয়টি চুক্তি স্বাক্ষরিত হয়?",
+    "options": [
+      "২",
+      "৩",
+      "৪",
+      "৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 106,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "লাওসের (Laos) সরকারি নাম কি?",
+    "options": [
+      "Loas People's Democratic Republic",
+      "Republic of Laos",
+      "Kingdom of Laos",
+      "Democratic Republic of Laos"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 107,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "নিচের কোন রাষ্ট্র সর্বাধিক রাষ্ট্রের সাথে সীমান্তযুক্ত?",
+    "options": [
+      "ভারত",
+      "চীন",
+      "মিয়ানমার",
+      "আফগানিস্তান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 108,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘ উন্নয়ন কর্মসূচি (UNDP)-এর শীর্ষ পদটি কি?",
+    "options": [
+      "প্রশাসক",
+      "মহাপরিচালক",
+      "মহাসচিব",
+      "প্রেসিডেন্ট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 109,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "জলবায়ু পরিবর্তন মোকাবেলায় Green Climate Fund বিশ্বের দরিদ্র দেশগুলোর জন্য কি পরিমাণ অর্থ মঞ্জুর করেছে?",
+    "options": [
+      "৮০ বিলিয়ন ডলার",
+      "১০০ বিলিয়ন ডলার",
+      "১৫০ বিলিয়ন ডলার",
+      "২০০ বিলিয়ন ডলার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 110,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্র কবে এককভাবে ABM (Anti-Ballistic Missile) চুক্তি থেকে নিজেকে প্রত্যাহার করে?",
+    "options": [
+      "জুন ২০০১",
+      "জুন ২০০০",
+      "জুন ২০০২",
+      "জুন ২০০৩"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 111,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "আরব লীগ প্রতিষ্ঠা পায়–",
+    "options": [
+      "১৯৪৯",
+      "১৯৫০",
+      "১৯৪৫",
+      "১৯৪০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 112,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "Yalta Conference-এর একটি লক্ষ্য ছিল:",
+    "options": [
+      "বিশ্বযুদ্ধের কারণ নির্ণয়",
+      "জিব্রালটার প্রণালীর সুরক্ষা",
+      "জাতিসংঘ প্রতিষ্ঠা",
+      "যুদ্ধে ক্ষতিগ্রস্তদের ক্ষতিপূরণ প্রদান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 113,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "বর্তমানে NAM-এর সদস্য সংখ্যা–",
+    "options": [
+      "৩৩",
+      "১৫",
+      "৭৭",
+      "২১"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 114,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "‘War and Peace’ উপন্যাসের রচয়িতা–",
+    "options": [
+      "লিও টলস্টয়",
+      "ডেভিড রিকার্ডো",
+      "কার্ল মার্কস",
+      "জেন অস্টিন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 115,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "আন্তর্জাতিক রেড ক্রস-এর সদর দপ্তর:",
+    "options": [
+      "ভিয়েনা",
+      "জেনেভা",
+      "প্যারিস",
+      "লন্ডন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 116,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "IAEA-এর সদর দপ্তর হচ্ছে :",
+    "options": [
+      "জেনেভা",
+      "ভিয়েনা",
+      "ওয়াশিংটন",
+      "প্যারিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 117,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "সার্ক প্রতিষ্ঠিত হয়:",
+    "options": [
+      "১৯৮২",
+      "১৯৮৫",
+      "১৯৮৪",
+      "১৯৮৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 118,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘ কোন বছর প্রতিষ্ঠিত হয়?",
+    "options": [
+      "১৯৪১",
+      "১৯৪৫",
+      "১৯৪৮",
+      "১৯৪৯"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 119,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "আলেপ্পো শহরটি কোথায় অবস্থিত?",
+    "options": [
+      "মিশর",
+      "ইরান",
+      "ইরাক",
+      "সিরিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 120,
+    "bank": "36th BCS",
+    "subject": "International Affairs",
+    "question": "মাদার তেরেসা কোন দেশে জন্মগ্রহণ করেন?",
+    "options": [
+      "ভারত",
+      "আলজেরিয়া",
+      "আলবেনিয়া",
+      "ফ্রান্স"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 121,
+    "bank": "36th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে কখন থেকে বয়স্কভাতা চালু হয়?",
+    "options": [
+      "১৯৯৮ সালে",
+      "১৯৯৯ সালে",
+      "২০০০ সালে",
+      "১৯৯৭ সালে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 122,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের সাথে ভারতের সীমানা কত?",
+    "options": [
+      "৫১৩৮ কি.মি",
+      "৪৩৭১ কি.মি",
+      "৪১৫৬ কি.মি",
+      "৩৯৭৮ কি.মি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 123,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "মেয়র মোহাম্মদ হানিফ ফ্লাইওভারের দৈর্ঘ্য কত?",
+    "options": [
+      "১১.২ কি.মি",
+      "১২.২ কি.মি",
+      "১১.৮ কি.মি",
+      "১২.৮ কি.মি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 124,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "সুন্দরবনে বাঘ গণনায় ব্যবহৃত হয়–",
+    "options": [
+      "পাগ-মার্ক",
+      "ফুটমার্ক",
+      "GIS",
+      "কোয়ার্ডবেট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 125,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "২০০৪ সালের ভয়ংকর সুনামি ঢেউয়ের গতি ছিল ঘণ্টায়–",
+    "options": [
+      "১০০–২০০ কি.মি",
+      "৩০০–৪০০ কি.মি",
+      "৭০০–৮০০ কি.মি",
+      "৯০০–১০০০ কি.মি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 126,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "ফিশারিজ ট্রেনিং ইনস্টিটিউট কোথায় অবস্থিত?",
+    "options": [
+      "ঢাকায়",
+      "খুলনায়",
+      "নারায়ণগঞ্জে",
+      "চাঁদপুরে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 127,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "সমুদ্রপৃষ্ঠ ৪৫cm বৃদ্ধি পেলে ২০৫০ সাল নাগাদ বাংলাদেশে climate refugee হবে?",
+    "options": [
+      "৩ কোটি",
+      "৩.৫ কোটি",
+      "৪ কোটি",
+      "৪.৫ কোটি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 128,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "বায়ুমণ্ডলের মোট শক্তির কত শতাংশ সূর্য হতে আসে?",
+    "options": [
+      "৯০ শতাংশ",
+      "৯৪ শতাংশ",
+      "৯৮ শতাংশ",
+      "৯৯.৯৭ শতাংশ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 129,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "বিশ্বব্যাংক অনুযায়ী ভবিষ্যতের জলবায়ু পরিবর্তনের ক্ষতিকর প্রভাব মোকাবেলায় বিশ্ব সাহায্যের কত শতাংশ বাংলাদেশকে প্রদান করবে?",
+    "options": [
+      "৩০%",
+      "৪০%",
+      "৫০%",
+      "৬০%"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 130,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "দুর্যোগ ব্যবস্থাপনা নীতিমালা ২০১৫ কবে জারি হয়েছে?",
+    "options": [
+      "১ জানুয়ারি",
+      "১১ জানুয়ারি",
+      "১৯ জানুয়ারি",
+      "২১ মার্চ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 131,
+    "bank": "36th BCS",
+    "subject": "Geography",
+    "question": "সুনামির কারণ হলো–",
+    "options": [
+      "ঘূর্ণিঝড়",
+      "চন্দ্র ও সূর্যের আকর্ষণ",
+      "সমুদ্রের তলদেশে ভূমিকম্পন",
+      "আগ্নেয়গিরির আগ্ন্যুৎপাত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 132,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "যেসব অণুজীব রোগ সৃষ্টি করে তাদের বলা হয়–",
+    "options": [
+      "প্যাথজেনিক",
+      "ইনফেকশন",
+      "টক্সিন",
+      "জীবাণু"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 133,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "শিশুর মনস্তাত্ত্বিক চাহিদা পূরণে নিচের কোনটি জরুরি?",
+    "options": [
+      "স্বীকৃতি",
+      "স্নেহ",
+      "সাফল্য",
+      "উল্লেখিত সবকটি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 134,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "নিচের কোনটি আমিষ জাতীয় খাদ্য হজমে সাহায্য করে?",
+    "options": [
+      "ট্রিপসিন",
+      "লাইপেজ",
+      "টায়ালিন",
+      "অ্যামাইলেজ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 135,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "বায়ুমণ্ডলে শতকরা কতভাগ আর্গন বিদ্যমান?",
+    "options": [
+      "৭৮.০",
+      "০.৮",
+      "০.৪১",
+      "০.৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 136,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "মানুষের রক্তে লোহিত কণিকা কোথায় সঞ্চিত থাকে?",
+    "options": [
+      "হৃদযন্ত্রে",
+      "বৃক্কে",
+      "ফুসফুসে",
+      "প্লীহাতে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 137,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "কোন যন্ত্রের সাহায্যে যান্ত্রিক শক্তিকে বিদ্যুৎ শক্তিতে রূপান্তরিত করা হয়?",
+    "options": [
+      "ট্রান্সফরমার",
+      "ডায়নামো",
+      "বৈদ্যুতিক মটর",
+      "হুইল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 138,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "মস্তিষ্ক কোন তন্ত্রের অঙ্গ?",
+    "options": [
+      "স্নায়ুতন্ত্রের",
+      "রেচনতন্ত্রের",
+      "পরিপাকতন্ত্রের",
+      "শ্বাসতন্ত্রের"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 139,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "ভাইরাসজনিত রোগ নয় কোনটি?",
+    "options": [
+      "জন্ডিস",
+      "এইডস",
+      "নিউমোনিয়া",
+      "চোখ ওঠা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 140,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "প্রাণিজগতের উৎপত্তি ও বংশসম্বন্ধীয় বিদ্যাকে বলে–",
+    "options": [
+      "বায়োলজী",
+      "জুওলজী",
+      "জেনেটিক",
+      "ইভোলিউশন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 141,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "কোন জ্বালানি পোড়ালে সালফার ডাই-অক্সাইড বাতাসে আসে?",
+    "options": [
+      "ডিজেল",
+      "পেট্রোল",
+      "অকটেন",
+      "সিএনজি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 142,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "মোবাইল টেলিফোনের লাইনের মধ্য দিয়ে প্রবাহিত হয়–",
+    "options": [
+      "শব্দশক্তি",
+      "তড়িৎশক্তি",
+      "আলোকশক্তি",
+      "চৌম্বকশক্তি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 143,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "জীবজগতের জন্য সবচেয়ে ক্ষতিকর রশ্মি কোনটি?",
+    "options": [
+      "আলফা রশ্মি",
+      "বিটা রশ্মি",
+      "গামা রশ্মি",
+      "আলট্রাভায়োলেট রশ্মি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 144,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "কোন রং বেশি দূর থেকে দেখা যায়?",
+    "options": [
+      "সাদা",
+      "কালো",
+      "হলুদ",
+      "লাল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 145,
+    "bank": "36th BCS",
+    "subject": "Science",
+    "question": "ক্যান্সার চিকিৎসায় ব্যবহৃত গামা বিকিরণের উৎস হলো–",
+    "options": [
+      "আইসোটোন",
+      "আইসোটোপ",
+      "আইসোবার",
+      "রাসায়নিক পদার্থ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 146,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন মেমোরীটি Non-volatile?",
+    "options": [
+      "SRAM",
+      "DRAM",
+      "ROM",
+      "উপরের সবগুলো"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 147,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি 3G Language নয়?",
+    "options": [
+      "C",
+      "Java",
+      "Assembly Language",
+      "Machine Language"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 148,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোন উক্তিটি সঠিক?",
+    "options": [
+      "১ কিলোবাইট = ১০২৪ বাইট",
+      "১ মেগাবাইট = ১০২৪ বাইট",
+      "১ কিলোবাইট = ১০০০ বাইট",
+      "১ মেগাবাইট = ১০০০ বাইট"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 149,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "Wi-fi কোন স্ট্যান্ডার্ড-এর উপর ভিত্তি করে কাজ করে?",
+    "options": [
+      "IEEE 802.11",
+      "IEEE 804.11",
+      "IEEE 803.11",
+      "IEEE 806.11"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 150,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটিতে সাধারণত ইনফ্রারেড ডিভাইস ব্যবহার করা হয়?",
+    "options": [
+      "WAN",
+      "Satellite Communication",
+      "MAN",
+      "TV রিমোর্ট কন্ট্রোলে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 151,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "(1011)_2+(0101)_2=?",
+    "options": [
+      "(1100)_2",
+      "(11000)_2",
+      "(01100)_2",
+      "কোনোটিই নয়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 152,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "Wi MAX-এর পূর্ণরূপ কি?",
+    "options": [
+      "Worldwide Interoperability for Microwave Access",
+      "Worldwide Internet for Microwave Access",
+      "Worldwide Interconection for Microwave Access",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 153,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "Boolean Algebra-এর নিচের কোনটি সঠিক?",
+    "options": [
+      "A+ bar A =1",
+      "A. A = 1",
+      "A + A = 2A",
+      "উপরের কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 154,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "8086 কত বিটের মাইক্রো প্রসেসর?",
+    "options": [
+      "8",
+      "16",
+      "32",
+      "উপরের কোনোটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 155,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "Mobile Phone-এর কোনটি input device নয়?",
+    "options": [
+      "Keypad",
+      "Touch Screen",
+      "Camera",
+      "Power Supply"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 156,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি ডাটাবেজ language?",
+    "options": [
+      "Oracle",
+      "C",
+      "MS-Word",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 157,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "LinkedIn-এর ক্ষেত্রে কোনটি সঠিক?",
+    "options": [
+      "এটি একটি বিজনেস অরিয়েন্টেড সোশ্যাল নেটওয়ার্কিং সার্ভিস",
+      "এটি ২০০২ সালে প্রতিষ্ঠিত",
+      "২০০৬ সালে এটির সদস্যসংখ্যা ২০ মিলিয়নের অধিক হয়",
+      "উপরের সবগুলোই"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 158,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "কমিউনিকেশন সিস্টেমে গেটওয়ে কি কাজে ব্যবহার হয়?",
+    "options": [
+      "বিভিন্ন নেটওয়ার্ক ডিভাইস সংযুক্ত করার কাজে",
+      "দুই বা তার অধিক ভিন্ন ধরনের নেটওয়ার্ককে সংযুক্ত করার কাজে",
+      "এটি নেটওয়ার্ক হাব কিংবা সুইচের মতই কাজ করে",
+      "কোনোটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 159,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি কম্পিউটারের প্রাইমারি মেমোরি?",
+    "options": [
+      "RAM",
+      "Hard Disk",
+      "Pen drive",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 160,
+    "bank": "36th BCS",
+    "subject": "ICT",
+    "question": "Plotter কোন ধরনের ডিভাইস?",
+    "options": [
+      "ইনপুট",
+      "আউটপুট",
+      "মেমোরি",
+      "উপরের কোনোটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 161,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "A=x:x মৌলিক সংখ্যা এবং x≤5 হলে P(A) এর সদস্য সংখ্যা কত?",
+    "options": [
+      "8",
+      "7",
+      "6",
+      "3"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 162,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "12টি পুস্তক থেকে 5টি কত প্রকারে বাছাই করা যায় যেখানে 2টি পুস্তক সর্বদাই অন্তর্ভুক্ত থাকবে?",
+    "options": [
+      "252",
+      "792",
+      "224",
+      "120"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 163,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "আবহাওয়া অফিসের রিপোর্ট অনুযায়ী-২০১৫ সালের জুলাই মাসের ২য় সপ্তাহে বৃষ্টি হয়েছে মোট 5 দিন। ঐ সপ্তাহে বুধবার বৃষ্টি না হওয়ার সম্ভাবনা কত?",
+    "options": [
+      "1",
+      "5 / 7",
+      "2 / 7",
+      "1 / 7"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 164,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "৩৫০ টাকা দরে ৩ কেজি মিষ্টি কিনে ৪ টাকা হারে ভ্যাট দিলে মোট কত ভ্যাট দিতে হবে?",
+    "options": [
+      "১৪ টাকা",
+      "৪২ টাকা",
+      "১২ টাকা",
+      "১০৫ টাকা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 165,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "যদি তেলের মূল্য ২৫% বৃদ্ধি পায় তবে তেলের ব্যবহার শতকরা কত কমালে তেল বাবদ ব্যয় বৃদ্ধি পাবে না?",
+    "options": [
+      "১৬%",
+      "২০%",
+      "২৫%",
+      "২৪%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 166,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "দুটি সংখ্যার গুণফল ৩৩৮০ এবং গ. সা. গু ১৩ । সংখ্যা দুটিই ল. সা. গু. কত?",
+    "options": [
+      "২৬০",
+      "৭৮০",
+      "১৩০",
+      "৪৯০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 167,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "যদি 1 + 3 + 5 +........ + (2 x-1) কত?",
+    "options": [
+      "x (x -1)",
+      "x (x +1) /2",
+      "x (x +1)",
+      "x^2"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 168,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "log_√3 81 কত?",
+    "options": [
+      "4",
+      "27√3",
+      "8",
+      "1/ 8"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 169,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "যদি (25)^2x+3= 5^3x+6 হয় তবে x= কত?",
+    "options": [
+      "0",
+      "1",
+      "-1",
+      "4"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 170,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "চিত্র অনুসারে O কেন্দ্র বিশিষ্ট বৃত্তে ∆ABC অন্তলিখিত। ∠ y =112° হলে ∠x= কত?",
+    "options": [
+      "68^ o",
+      "34^ o",
+      "45^ o",
+      "39^ o"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 171,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "একটি বর্গক্ষেত্রের কর্ণের দৈর্ঘ্য 4√2 একক হলে ঐ বর্গক্ষেত্রের ক্ষেত্রফল কত বর্গ একক?",
+    "options": [
+      "24",
+      "8",
+      "16",
+      "32"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 172,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "∆ABC এ ∠A = 40°, ∠B=70°, হলে ∆ABC কি ধরনের ত্রিভুজ?",
+    "options": [
+      "সমকোণী",
+      "স্থুলকোণী",
+      "সমদ্বিবাহু",
+      "সমবাহু"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 173,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "x^2+ y^2=185, x-y=3 এর একটি সমাধান হল:",
+    "options": [
+      "(7, 4)",
+      "(9, 6)",
+      "(10, 7)",
+      "(11, 8)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 174,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "",
+    "options": [
+      "1",
+      "-1",
+      "a - 1",
+      "a + 1"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 175,
+    "bank": "36th BCS",
+    "subject": "Math",
+    "question": "x-1 / x= 1 হলে, x^3-1/ x^ 3 এর মান কত?",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 176,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "১ + ৫ + ৯ +................ + ৮১ =?",
+    "options": [
+      "৯৬১",
+      "৮৬১",
+      "৭৬১",
+      "৬৬১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 177,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "L_10",
+      "L_15",
+      "K_15",
+      "K_8"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 178,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "১৮",
+      "১৯",
+      "২০",
+      "২১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 179,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "ইংরেজি বর্ণমালার ধারাবাহিকভাবে ১৮তম অক্ষরের বামদিকে ১০ম অক্ষর কোনটি?",
+    "options": [
+      "H",
+      "S",
+      "F",
+      "J"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 180,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "√১৫.৬০২৫=?",
+    "options": [
+      "৩.৮৫",
+      "৩.৭৫",
+      "৩.৯৫",
+      "৩.৬৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 181,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "৩, ৭, ৪, ১৪, ৫, ২১, ৬ ধারার অষ্টম সংখ্যাটি কত হবে?",
+    "options": [
+      "৬",
+      "৭",
+      "২৮",
+      "২৯"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 182,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "দুটি সমান্তরাল রেখা কটি বিন্দুতে ছেদ করে?",
+    "options": [
+      "৪",
+      "২",
+      "৮",
+      "১৬"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 183,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [],
+    "answer": 1
+  },
+  {
+    "id": 184,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৪ কেজি",
+      "৬ কেজি",
+      "৮ কেজি",
+      "১০ কেজি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 185,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "আয়নায় প্রতিফলিত হলে নিচের কোন শব্দটির কোন পরিবর্তন হবে না?",
+    "options": [
+      "OPT",
+      "NOON",
+      "SOS",
+      "OTTO"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 186,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "সঠিক বানান কোনটি?",
+    "options": [
+      "কূসংস্কার",
+      "কুসংকার",
+      "কুসংষ্কার",
+      "কূশংষ্কার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 187,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "আয়না থেকে ২ ফুট দূরত্বে দাঁড়িয়ে, আয়নাতে আপনার প্রতিবিম্ব কতদূর দেখা যাবে?",
+    "options": [
+      "৫ ফুট",
+      "৪ ফুট",
+      "৩ ফুট",
+      "২ ফুট"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 188,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "২-এর কত শতাংশ ৮ হবে?",
+    "options": [
+      "২০০",
+      "৪০০",
+      "৩৪৫",
+      "৩০০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 189,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "প্রশ্নবোধক স্থানে (?) কোনটি বসবে? ৩, ১০, ৯, ৮, ২৭, ৬, ৮১, ৪, ২৪৩ (?)",
+    "options": [
+      "২",
+      "৪",
+      "১৫",
+      "১২"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 190,
+    "bank": "36th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "36",
+      "32",
+      "31",
+      "40"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 191,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নৈতিকভাবে বলা হয় মানবজীবনের–",
+    "options": [
+      "নৈতিক শক্তি",
+      "নৈতিক বিধি",
+      "নৈতিক আদর্শ",
+      "সবগুলোই"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 192,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘Power : A New Social Analysis’ গ্রন্থটি কার লেখা?",
+    "options": [
+      "ম্যাকিয়াভেলি",
+      "হবস",
+      "লক",
+      "রাসেল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 193,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "‘সুবর্ণ মধ্যক’ হলো–",
+    "options": [
+      "গাণিতিক মধ্যমান",
+      "দুটি চরমপন্থার মধ্যবর্তী পন্থা",
+      "সম্ভাব্য সব ধরনের কাজের মধ্যমান",
+      "একটি দার্শনিক সম্প্রদায়ের নাম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 194,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নৈতিক আচরণবিধি (Code of ethics) বলতে বুঝায়–",
+    "options": [
+      "মৌলিক মূল্যবোধ সংক্রান্ত সাধারন বচন যা সংগঠনের পেশাগত ভূমিকাকে সংজ্ঞায়িত করে",
+      "বাস্তবতার নিরিখে নির্দিষ্ট আচরণের মানদণ্ড নির্ধারণ সংক্রান্ত আচরণবিধি",
+      "দৈনন্দিন কার্যকলাপ ত্বরান্বিত করণে প্রণীত নৈতিক নিয়ম, মানদণ্ড বা আচরণবিধি",
+      "উপরের তিনটিই সঠিক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 195,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "ব্যক্তিগত মূল্যবোধ লালন করে–",
+    "options": [
+      "সামাজিক মূল্যবোধকে",
+      "গণতান্ত্রিক মূল্যবোধকে",
+      "ব্যক্তিগত মূল্যবোধকে",
+      "স্বাধীনতার মূল্যবোধকে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 196,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধ শিক্ষার অন্যতম লক্ষ্য হচ্ছে–",
+    "options": [
+      "দুর্নীতি রোধ করা",
+      "সামাজিক অবক্ষয় রোধ করা",
+      "রাজনৈতিক অবক্ষয় রোধ করা",
+      "সাংস্কৃতিক অবরোধ রক্ষণ করা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 197,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসন হচ্ছে এমন এক শাসন ব্যবস্থা যা শাসক ও শাসিতের মধ্যে–",
+    "options": [
+      "সুসম্পর্ক গড়ে তোলে",
+      "আস্থার সর্ম্পক গড়ে তোলে",
+      "শান্তির সম্পর্ক গড়ে তোলে",
+      "কোনোটিই নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 198,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসনের পূর্বশর্ত হচ্ছে–",
+    "options": [
+      "অর্থনৈতিক উন্নয়ন",
+      "অর্থনৈতিক ও সামাজিক উন্নয়ন",
+      "সামাজিক উন্নয়ন",
+      "সবগুলোই"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 199,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "একজন জনপ্রশাসকের মৌলিক মূল্যবোধ হলো-",
+    "options": [
+      "স্বাধীনতা",
+      "ক্ষমতা",
+      "কর্মদক্ষতা",
+      "জনকল্যাণ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 200,
+    "bank": "36th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসনের পথে অন্তরায়–",
+    "options": [
+      "আইনের শাসন",
+      "জবাবদিহিতা",
+      "স্বজনপ্রীতি",
+      "ন্যায়পরায়ণতা"
+    ],
+    "answer": 2
+  }
+]

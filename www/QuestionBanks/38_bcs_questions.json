@@ -1,0 +1,2597 @@
+[
+  {
+    "id": 1,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দটি শুদ্ধ বানানে লেখা হয়েছে?",
+    "options": [
+      "শূণ্য",
+      "ত্রিভুজ",
+      "পূন্য",
+      "ভূবন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটিতে অপপ্রয়োগ ঘটেছে?",
+    "options": [
+      "জবাবদিহি",
+      "মিথস্ক্রিয়া",
+      "একত্রিত",
+      "গৌরবিত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 3,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা ভাষায় ব্যবহৃত মৌলিক স্বরধ্বনি কয়টি?",
+    "options": [
+      "৭টি",
+      "৮টি",
+      "৬টি",
+      "১১টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 4,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘বাবা’ কোন ভাষা থেকে আগত শব্দ?",
+    "options": [
+      "সংস্কৃত",
+      "হিন্দি",
+      "অহমিয়া",
+      "তুর্কি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 5,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘Null and Void’ – এর বাংলা পরিভাষা কোনটি?",
+    "options": [
+      "বাতিল",
+      "পালাবদল",
+      "মামুলি",
+      "নিরপেক্ষ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 6,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি শুদ্ধ বানান?",
+    "options": [
+      "স্বায়ত্ত্বশাসন",
+      "সায়ত্তশাসন",
+      "সায়ত্ত্বশাসন",
+      "স্বায়ত্বশাসন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 7,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘গিন্নি’ কোন শ্রেণির শব্দ?",
+    "options": [
+      "দেশি",
+      "বিদেশি",
+      "তদ্ভব",
+      "অর্ধ-তৎসম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 8,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘শ্রদ্ধা’ শব্দের সঠিক প্রকৃতি–প্রত্যয় কোনটি?",
+    "options": [
+      "শ্রৎ + √ধা + অ + আ",
+      "শ্রৎ + √ধা + আ",
+      "শ্র + √ধা + আ",
+      "শ্রু + √ধা + আ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 9,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘পুষ্পসৌরভ’ কোন সমাসের উদাহরণ?",
+    "options": [
+      "তৎপুরুষ",
+      "কর্মধারয়",
+      "অব্যয়ীভাব",
+      "বহুব্রীহি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 10,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘সূর্য’ শব্দের সমার্থক শব্দ কোনটি?",
+    "options": [
+      "অর্ণব",
+      "অর্ক",
+      "প্রসূন",
+      "পল্লব"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 11,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘হ্ম’ যুক্তবর্ণটি কিভাবে গঠিত হয়েছে?",
+    "options": [
+      "হ্ + ম",
+      "ক্ + ষ",
+      "ষ্ + ম",
+      "ম্ + হ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 12,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘সদ্যোজাত’ শব্দের শুদ্ধ সন্ধিবিচ্ছেদ কোনটি?",
+    "options": [
+      "সৎ + জাত",
+      "সদ্যো + জাত",
+      "সদ্যঃ + জাত",
+      "সদ্য + জাত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 13,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘ব্যক্ত’ শব্দের বিপরীতার্থক শব্দ কোনটি?",
+    "options": [
+      "ত্যক্ত",
+      "গ্রাহ্য",
+      "দৃঢ়",
+      "গূঢ়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 14,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "বাংলা কৃৎ-প্রত্যয় সাধিত শব্দ কোনটি?",
+    "options": [
+      "চামার",
+      "ধারালো",
+      "মোড়ক",
+      "পোষ্টাই"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 15,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "কোনটি সার্থক বাক্যের গুণ নয়?",
+    "options": [
+      "আকাঙ্ক্ষা",
+      "যোগ্যতা",
+      "আসক্তি",
+      "আসত্তি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 16,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "গঠনরীতিতে ‘শ্রীকৃষ্ণকীর্তন’ কাব্য মূলত-",
+    "options": [
+      "পদাবলি",
+      "ধামালি",
+      "গ্রেমগীতি",
+      "নাটগীতি (নাট্যগীতি)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 17,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘সন্ধ্যাভাষা’ কোন সাহিত্যকর্মের সঙ্গে যুক্ত?",
+    "options": [
+      "চর্যাপদ",
+      "পদাবলি",
+      "মঙ্গলকাব্য",
+      "রোমান্সকাব্য"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 18,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "দৌলত উজির বাহরাম খান কোন অঞ্চলের অধিবাসী ছিলেন?",
+    "options": [
+      "ফরিদপুর",
+      "সিলেট",
+      "কৃষ্ণনগর",
+      "চট্টগ্রাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 19,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘চন্দ্রাবতী’ কী?",
+    "options": [
+      "নাটক",
+      "কাব্য",
+      "পদাবলী",
+      "পালাগান"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 20,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘বিদ্যাপতি’ কোন রাজসভার কবি ছিলেন?",
+    "options": [
+      "রোসাঙ্গ",
+      "কৃষ্ণনগর",
+      "বিক্রমপুর",
+      "মিথিলা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 21,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি বিদ্যাসাগরের আত্মজীবনীমূলক লেখা?",
+    "options": [
+      "আত্মচরিত",
+      "আত্মকথা",
+      "আত্মজিজ্ঞাসা",
+      "আমার কথা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 22,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "রোকেয়া সাখাওয়াত হোসেনের ‘মতিচূর’ কোন ধরনের রচনা?",
+    "options": [
+      "প্রবন্ধ",
+      "উপন্যাস",
+      "নাটক",
+      "আত্মজীবনী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 23,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি জসীমউদ্দীনের রচনা?",
+    "options": [
+      "গাজী মিয়াঁর বস্তানী",
+      "হাঁসুলী বাঁকের উপকথা",
+      "ভাওয়াল গড়ের উপাখ্যান",
+      "ঠাকুরবাড়ির আঙিনা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 24,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘আমার ঘরের চাবি পরের হাতে’ – গানটির রচয়িতা কে?",
+    "options": [
+      "লালন শাহ্",
+      "হাসন রাজা",
+      "পাগলা কানাই",
+      "রাধারমণ দত্ত"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 25,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুক্তিযুদ্ধের পটভূমিতে রচিত কাব্যগ্রন্থ কোনটি?",
+    "options": [
+      "নেকড়ে অরণ্য",
+      "বন্দী শিবির থেকে",
+      "নিষিদ্ধ লোবান",
+      "প্রিয়যোদ্ধা প্রিয়তম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 26,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "কাজী নজরুল ইসলামের ‘অগ্নিবীণা’ কাব্যের প্রথম কবিতা কোনটি?",
+    "options": [
+      "আগমনী",
+      "কোরবানী",
+      "প্রলয়োল্লাস",
+      "বিদ্রোহী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 27,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "দীনবন্ধু মিত্রের ‘নীল –দর্পণ’ নাটক প্রথম কোথা থেকে প্রকাশিত হয়?",
+    "options": [
+      "কলকাতা",
+      "ঢাকা",
+      "লন্ডন",
+      "মুর্শিদাবাদ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 28,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "কোনটি রবীন্দ্রনাথ ঠাকুরের কাব্যগ্রন্থ?",
+    "options": [
+      "শেষলেখা",
+      "শেষপ্রশ্ন",
+      "শেষকথা",
+      "শেষদিন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 29,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘নদী ও নারী’ উপন্যাসের রচিয়তা কে?",
+    "options": [
+      "কাজী আবদুল ওদুদ",
+      "আবুল ফজল",
+      "রশীদ করিম",
+      "হুমায়ুন কবির"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 30,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘বীরবল’ কোন লেখকের ছদ্মনাম?",
+    "options": [
+      "আবু ইসহাক",
+      "সুনীল গঙ্গোপাধ্যায়",
+      "প্রমথনাথ বিশী",
+      "প্রমথ চৌধুরী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 31,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "মুনীর চৌধুরীর ‘মুখরা রমণী বশীকরণ’ একটি-",
+    "options": [
+      "উপন্যাস",
+      "ছোটগল্প",
+      "প্রবন্ধ",
+      "অনুবাদ নাটক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘চন্দরা’ চরিত্রের স্রষ্টা কে?",
+    "options": [
+      "বুদ্ধদেব বসু",
+      "রবীন্দ্রনাথ ঠাকুর",
+      "মীর মশাররফ হোসেন",
+      "সৈয়দ শামসুল হক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 33,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "‘পূর্বাশা’ পত্রিকার সম্পাদক কে ছিলেন?",
+    "options": [
+      "কাজী নজরুল ইসলাম",
+      "শাহাদাৎ হোসেন",
+      "সঞ্জয় ভট্টাচার্য",
+      "সুধীন্দ্রনাথ দ্ত্ত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 34,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "কে ফোর্ট উইলিয়াম কলেজের শিক্ষক ছিলেন?",
+    "options": [
+      "হরপ্রসাদ শাস্ত্রী",
+      "রামরাম বসু",
+      "দেবেন্দ্রনাথ ঠাকুর",
+      "অক্ষয়কুমার দত্ত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 35,
+    "bank": "38th BCS",
+    "subject": "Bangla Literature",
+    "question": "কত সালে ‘মেঘনাদবধ কাব্য’ প্রথম প্রকাশিত হয়?",
+    "options": [
+      "১৮৬০",
+      "১৮৬৫",
+      "১৮৫৯",
+      "১৮৬১"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 36,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "Who is the author of ‘Man and Superman’?",
+    "options": [
+      "G.B. Shaw",
+      "Thomas Hardy",
+      "Ernest Hemingway",
+      "Charles Dickens"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 37,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "The most famous satirist in English literature is–",
+    "options": [
+      "Jonathan Swift",
+      "Alexander Pope",
+      "Joseph Addison",
+      "Richard Steel"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "What is the plural form of the word ‘louse’?",
+    "options": [
+      "louses",
+      "lice",
+      "lices",
+      "licess"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 39,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Choose the correct sentence:",
+    "options": [
+      "He refrained to take any drastic action",
+      "He refrained on taking any drastic action",
+      "He refrained in taking any drastic action",
+      "He refrained from taking any drastic action"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 40,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Which word is closest in meaning to ‘Franchise’?",
+    "options": [
+      "utility",
+      "frankness",
+      "privilege",
+      "superficial"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 41,
+    "bank": "38th BCS",
+    "subject": "Bangla Language",
+    "question": "‘Once in a blue moon’ means-",
+    "options": [
+      "always",
+      "very rarely",
+      "nearly",
+      "hourly"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 42,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "‘Jacobean Period’ of English Literature refers to–",
+    "options": [
+      "1558-1603",
+      "1625-1649",
+      "1603-1625",
+      "1649-1660"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 43,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "A (retired) officer lives nest door. Here, The underlined word is used as a/an:",
+    "options": [
+      "Gerund",
+      "adverb",
+      "Preposition",
+      "participle"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 44,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Choose the appropriate preposition in the blank of the following sentence: Eight men were concerned ____ the plot.",
+    "options": [
+      "at",
+      "with",
+      "in",
+      "for"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 45,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Fill in the gap with the right tense: When water ___ it turns into ice.",
+    "options": [
+      "will freeze",
+      "freezes",
+      "would freeze",
+      "froze"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 46,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Which one is the correct antonym of ‘frugal’?",
+    "options": [
+      "Extraordinary",
+      "spendthrift",
+      "economical",
+      "authentic"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Choose the meaning of the idiom- ‘Take the bull by the horns’.",
+    "options": [
+      "To challenge the enemy with courage",
+      "Force the enemy to submit",
+      "Out of one’s wit",
+      "Surrender before the enemy"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 48,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Fill in the blank with the correct quantifier. I still have ____ money.",
+    "options": [
+      "a few",
+      "quite a few",
+      "many",
+      "a little"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 49,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Select the right compound structure of the sentence: “Though he is poor, he is honest”.",
+    "options": [
+      "He is poor and honest",
+      "As he is poor, he is honest",
+      "He is poor but honest",
+      "Since he is poor, he is honest"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 50,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "Where do the following lines occur in? ‘Alone, alone, all, all alone, Alone on a wide, wide sea.......’",
+    "options": [
+      "The Rime of the Ancient Mariner",
+      "Kubla khan",
+      "The Nightingle",
+      "The Dungeon"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 51,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "‘For God’s sake hold your tongue, and let me love.’ This line is written by-",
+    "options": [
+      "Emily Dickinson",
+      "T.S. Eliot",
+      "Mathew Arnold",
+      "John Donne"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 52,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Fill in the blank: Tourists ___ their reservations well in advance if they want to fly to Cox’s Bazar.",
+    "options": [
+      "better to had get",
+      "had better to get",
+      "had better got",
+      "had better get"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 53,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "[html][img id=\"2706\"][/html]",
+    "options": [
+      "Preposition",
+      "Adverb",
+      "Noun",
+      "Conjunction"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 54,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Which one of the following words is in singular form?",
+    "options": [
+      "agenda",
+      "oases",
+      "radius",
+      "formulae"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 55,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Identify the right passive voice of ‘It is impossible to do this’.",
+    "options": [
+      "Doing this is impossible",
+      "This is impossible to be done",
+      "This is must be done",
+      "This can’t be done"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 56,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "Of the following authors, who wrote an epic?",
+    "options": [
+      "John Milton",
+      "Jane Mansfield",
+      "William Cowper",
+      "William Shakespeare"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 57,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "The literary term ‘euphemism’ means–",
+    "options": [
+      "vague idea",
+      "in offensive expression",
+      "a sonnet",
+      "wise saying"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "‘Mutton’ is a/an -",
+    "options": [
+      "Common noun",
+      "Abstract noun",
+      "Material noun",
+      "Proper noun"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 59,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "(Reading) is an excellent habit. Here, The underlined word is a-",
+    "options": [
+      "Verbal noun",
+      "Participle",
+      "Verb",
+      "Gerund"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 60,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Which one of the following words is an example of a distributive pronoun?",
+    "options": [
+      "such",
+      "either",
+      "that",
+      "any"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 61,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "Who is not a Victorian poet?",
+    "options": [
+      "Mathew Arnold",
+      "Alexander Pope",
+      "Robert Browning",
+      "Alfred Tennyson"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 62,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "A speech of too many word is called–",
+    "options": [
+      "A big speech",
+      "Maiden speech",
+      "An unimportant speech",
+      "A verbose speech"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 63,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "‘Strike while the iron is hot’ is an example of –",
+    "options": [
+      "Noun clause",
+      "Adjective clause",
+      "Adverbial clause",
+      "Subordinate clause"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 64,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "The play ‘The Spanish Tragedy’ is written by–",
+    "options": [
+      "Thomas Kyd",
+      "Christopher Marlowe",
+      "Shakespeare",
+      "Ben Jonson"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 65,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "Who among the following Indian English writers is famous novelist?",
+    "options": [
+      "Gayatri Chakravorty Spivak",
+      "R.K. Narayan",
+      "Nissim Ezekiel",
+      "Kamala Das"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 66,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "The word ‘Panegyric’ means -",
+    "options": [
+      "Criticism",
+      "Elaborate praise",
+      "Curse",
+      "High sound"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 67,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Select the correctly spelt word:",
+    "options": [
+      "heterogeneous",
+      "hetarogeneous",
+      "hetrogeneous",
+      "hetroganeous"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 68,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "‘Among’ is a preposition that is used when __ people are involved.",
+    "options": [
+      "two",
+      "more than two",
+      "two or more than two",
+      "four only"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 69,
+    "bank": "38th BCS",
+    "subject": "English Literature",
+    "question": "Which period is known as ‘The golden age of English literature’?",
+    "options": [
+      "The Victorian age",
+      "The Elizabethan age",
+      "The Restoration age",
+      "The Eighteenth Century"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 70,
+    "bank": "38th BCS",
+    "subject": "English Language",
+    "question": "Which one in the correct indirect narration? “Why have you beaten my dog”? he said to me.",
+    "options": [
+      "He demanded me why had I beaten his dog",
+      "He asked me why I have had beaten his dog",
+      "He enquired me why had I had beaten his dog",
+      "He demanded of me why I had beaten his dog"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 71,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রাচীন বাংলার হরিকেল জনপদ অঞ্চলভুক্ত এলাকা-",
+    "options": [
+      "রাজশাহী",
+      "দিনাজপুর",
+      "খুলনা",
+      "চট্টগ্রাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 72,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "নিচের মোগল সম্রাটদের মধ্যে কে প্রথম আত্মজীবনী লিখেছিলেন?",
+    "options": [
+      "আকবর",
+      "বাবর",
+      "শাহজাহান",
+      "হুমায়ুন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "ঐতিহাসিক ছয় দফা ঘোষণা করা হয় ১৯৬৬ সালের-",
+    "options": [
+      "ফেব্রুয়ারিতে",
+      "মে মাসে",
+      "জুলাই মাসে",
+      "আগস্টে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 74,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মুজিবনগর সরকারের ত্রাণ ও পুনর্বাসন মন্ত্রী কে ছিলেন?",
+    "options": [
+      "ক্যাপ্টেন এম মনসুর আলী",
+      "তাজউদ্দীন আহমদ",
+      "এ.এইচ. এম কামারুজ্জামান",
+      "খন্দকার মোশতাক আহমদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 75,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কিসের ভিত্তিতে পূর্ব বাংলায় ভাষা আন্দোলন হয়েছিল?",
+    "options": [
+      "দ্বি-জাতি তত্ত্ব",
+      "সামাজিক চেতনা",
+      "অসাম্প্রদায়িকতা",
+      "বাঙালি জাতীয়তাবাদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 76,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯৫৪ সালের পূর্ববাংলা প্রাদেশিক পরিষদ নির্বাচনে যুক্ত ছিলেন না–",
+    "options": [
+      "শেরে বাংলা এ কে ফজলুল হক",
+      "হোসেন শহীদ সোহরাওয়ার্দী",
+      "মাওলানা আবদুল হামিদ খান ভাসানী",
+      "নবাব স্যার সলিমুল্লাহ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 77,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "জুম চাষ হয়-",
+    "options": [
+      "বরিশালে",
+      "ময়মনসিংহে",
+      "খাগড়াছড়িতে",
+      "দিনাজপুরে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 78,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "চাকমা জনগোষ্ঠীর লোকসংখ্যা সর্বাধিক–",
+    "options": [
+      "রাঙ্গামাটি জেলায়",
+      "খাগড়াছড়ি জেলায়",
+      "বান্দরবান জেলায়",
+      "সিলেট জেলায়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম আদমশুমারি হয়–",
+    "options": [
+      "১৯৭৯ সালে",
+      "১৯৭২ সালে",
+      "১৯৭৩ সালে",
+      "১৯৭৪ সালে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 80,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের মোট দেশজ উৎপাদনে কৃষি খাতের অবদান-",
+    "options": [
+      "নিয়মিতভাবে বৃদ্ধি পাচ্ছে",
+      "অনিয়মিতভাবে বৃদ্ধি পাচ্ছে",
+      "ক্রমহ্রাসমান",
+      "অপরিবর্তিত থাকছে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 81,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের অন্যতম বিশেষায়িত ব্যাংক-",
+    "options": [
+      "বাংলাদেশ কৃষি ব্যাংক",
+      "সোনালী ব্যাংক",
+      "অগ্রণী ব্যাংক",
+      "রূপালী ব্যাংক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 82,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধানের কোন ধারায় সকল নাগরিককে আইনের দৃষ্টিতে সমতার কথা বলা হয়েছে?",
+    "options": [
+      "ধারা ২৬",
+      "ধারা ২৭",
+      "ধারা ২৮",
+      "ধারা ২৯"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 83,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ ইকোনমিক রিভিউ, ২০১৬ অনুসারে বাংলাদেশের শিশু মৃত্যুর হার (প্রতি হাজার জীবিত জন্মে)–",
+    "options": [
+      "২৫",
+      "২৭",
+      "২৯",
+      "৩১"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 84,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "৭ম পঞ্চবার্ষিকী পরিকল্পনা মেয়াদে প্রতিবছর বাংলাদেশের গড় প্রকৃত জিডিপি প্রবৃদ্ধি অর্জনের লক্ষ্যমাত্রা–",
+    "options": [
+      "৭.০০%",
+      "৭.১২%",
+      "৭.৩০%",
+      "৭.৪০%"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 85,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "২০১৫-১৬ অর্থবছরে বাংলাদেশের গড় মূল্যস্ফীতি ছিল-",
+    "options": [
+      "৫.৯২%",
+      "৬.০%",
+      "৬.৪১%",
+      "৬.৪৩%"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 86,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে বিদ্যুৎ উৎপাদনে জ্বালানি হিসেবে সর্বাধিক ব্যবহৃত হয়–",
+    "options": [
+      "ফার্নেস অয়েল",
+      "কয়লা",
+      "প্রাকৃতিক গ্যাস",
+      "ডিজেল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 87,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধান মতে প্রধান নির্বাচন কমিশনারের নিয়োগের মেয়াদকাল–",
+    "options": [
+      "৩ বছর",
+      "৪ বছর",
+      "৫ বছর",
+      "৬ বছর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 88,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "দেশের কোনো এলাকাতেই ভোটার হননি এমন ব্যক্তি সংসদ নির্বাচনে–",
+    "options": [
+      "নির্বাচন কমিশনের অনুমতিক্রমে প্রার্থী হতে পারবেন",
+      "আইন মন্ত্রণালয়ের অনুমতিক্রমে প্রার্থী হতে পারবেন",
+      "সংশ্লিষ্ট দলীয় কর্তৃপক্ষের অনুমতিক্রমে প্রার্থী হতে পারবেন",
+      "কোনোক্রমেই প্রার্থী হতে পারবেন না"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 89,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "কোনটি স্থানীয় সরকার নয়?",
+    "options": [
+      "পৌরসভা",
+      "পল্লী বিদ্যুৎ",
+      "সিটি কর্পোরেশন",
+      "উপজেলা পরিষদ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 90,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "আইন প্রণয়নের ক্ষমতা-",
+    "options": [
+      "আইন মন্ত্রণালয়ের",
+      "রাষ্ট্রপতির",
+      "স্পিকারের",
+      "জাতীয় সংসদের"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 91,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "সমাজের শিক্ষিত শ্রেণীর যে অংশ সরকার বা কর্পোরেট গ্রুপে থাকে না, কিন্তু সকলের উপর প্রভাব বিস্তার করার ক্ষমতা রাখে–",
+    "options": [
+      "রাজনৈতিক দল",
+      "সুশীল সমাজ",
+      "বিচার বিভাগ",
+      "প্রশাসন বিভাগ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 92,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "গণপ্রজাতন্ত্রী বাংলাদেশের রাষ্ট্রপতি পদে নির্বাচিত হবার ন্যূনতম বয়স–",
+    "options": [
+      "৩০ বছর",
+      "৩৫ বছর",
+      "৪০ বছর",
+      "৪৫ বছর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 93,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় আয় গণনায় দেশের অর্থনীতিকে ক’টি খাতে ভাগ করা হয়?",
+    "options": [
+      "১২",
+      "১৩",
+      "১৪",
+      "১৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 94,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "টেস্ট ক্রিকেটে বাংলোদেশের পক্ষে কে প্রথম ডাবল সেঞ্চুরি করেন?",
+    "options": [
+      "মুশফিক",
+      "তামিম",
+      "সাব্বির",
+      "লিটন দাস"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 95,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "নিচের কোনটি নাগরিকের দায়িত্ব?",
+    "options": [
+      "রাস্তায় ট্রাফিক আইন মেনে চলা",
+      "শিল্প কারখানায় অধিক শ্রমিক নিয়োগ দেয়া",
+      "দক্ষ জনশক্তি তৈরি করা",
+      "রাজনৈতিক সংগঠনে অন্তর্ভুক্ত হওয়া"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 96,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "মায়ানমারের সাথে বাংলাদেশের ক’টি জেলার সীমান্ত রয়েছে?",
+    "options": [
+      "২টি",
+      "৩টি",
+      "৪টি",
+      "৫টি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 97,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "পার্বত্য চট্টগ্রাম শান্তিচুক্তি কত সালে স্বাক্ষরিত হয়?",
+    "options": [
+      "১৯৯৩",
+      "১৯৯৭",
+      "১৯৯৯",
+      "২০০১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 98,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের তৈরি প্রথম ন্যানো স্যাটেলাইটের নাম কী?",
+    "options": [
+      "বিকন অন্বেষা",
+      "ব্র্যাক অন্বেষা",
+      "নোয়া ১৮",
+      "নোয়া ১৯"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 99,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ এবং মায়ানমারের মধ্যে সমুদ্র সীমা বিরোধ কোন সংস্থার মাধ্যমে নিষ্পত্তি হয়?",
+    "options": [
+      "Permanent Court of Justice",
+      "International Tribunal for the Law of the Sea",
+      "International Court of Justice",
+      "Permanent Court of Arbitration"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 100,
+    "bank": "38th BCS",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ বর্তমানে সর্বাধিক পরিমাণ অর্থের বিভিন্ন পণ্য আমদানি করে-",
+    "options": [
+      "ভারত থেকে",
+      "চীন থেকে",
+      "জাপান থেকে",
+      "সিঙ্গাপুর থেকে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 101,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "২০২২ সালের ফিফা বিশ্বকাপ অনুষ্ঠিত হবে:",
+    "options": [
+      "দুবাই",
+      "সিউল",
+      "কাতার",
+      "বার্লিন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 102,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "ইসলামী সহযোগিতা সংস্থা (ওআইসি) এর দাপ্তরিক ভাষার সংখ্যা হচ্ছে :",
+    "options": [
+      "৫",
+      "৩",
+      "৪",
+      "২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 103,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "নৈরাজ্য যে তত্ত্বের মূল উপাদান সেটি হচ্ছে:",
+    "options": [
+      "নয়া উদারতাবাদ",
+      "গঠনবাদ",
+      "বাস্তববাদ",
+      "নব্য মার্কসবাদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 104,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "সাবেক মার্কিন প্রেসিডেন্ট রোনাল্ড রিগ্যান কর্তৃক ঘোষিত স্ট্রেটেজিক ডিফেন্স ইনিসিয়েটিভ (এসডিআই) এর জনপ্রিয় নাম ছিল :",
+    "options": [
+      "থাড",
+      "শয়তানের সাম্রাজ্যে আক্রমণ",
+      "তারকা যুদ্ধ",
+      "ম্যাড"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 105,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "২০১৫ সালে প্যারিসে অনুষ্ঠিত কপ-২১ এ কত সংখ্যক জাতি অংশগ্রহণ করেছিল?",
+    "options": [
+      "১৯৩",
+      "১৬৮",
+      "১৯৯",
+      "১৯৬"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 106,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "মিয়ানমারে রোহিঙ্গারা তাদের নাগরিকত্ব হারায়:",
+    "options": [
+      "১৯৬২ সনে",
+      "১৯৮৬ সনে",
+      "১৯৭৮ সনে",
+      "১৯৮২ সনে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 107,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "গুয়াম-এর গভর্নরের নাম হচ্ছে:",
+    "options": [
+      "এ্যডি ক্যালভো",
+      "ডোনাল্ড ডাক",
+      "রন ব্লুম",
+      "গ্লেন বেক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 108,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "অক্টোবর বিপ্লবের নেতৃত্ব দিয়েছেন:",
+    "options": [
+      "কার্ল মার্কস",
+      "ফ্রেডরিক এঙ্গেলস",
+      "ভি.আই.লেনিন",
+      "মাও সে তুং"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 109,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "দুই বা ততোধিক প্রতিদ্বন্দ্বী বৃহৎ শক্তিসমূহের মাঝখানে অবস্থিত দেশকে বলা হয়:",
+    "options": [
+      "স্থলবেষ্টিত রাষ্ট্র",
+      "নিরপেক্ষ রাষ্ট্র",
+      "বাফার রাষ্ট্র",
+      "জিরো সাম রাষ্ট্র"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 110,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "পিং পং এর অর্থ হচ্ছে :",
+    "options": [
+      "ভলিবল",
+      "টেবিল টেনিস",
+      "বাস্কেট বল",
+      "লন টেনিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 111,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "বেল্ট ও রোড ইনিসিয়েটিভ (বিআরআই) প্রস্তাব করেছে:",
+    "options": [
+      "চীন",
+      "জাপান",
+      "ভারত",
+      "আসিয়ান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 112,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "কোনটি জাতিসংঘের সহযোগী নয়?",
+    "options": [
+      "ILO",
+      "হু (WHO)",
+      "ASEAN (আশিয়ান)",
+      "উপরের সবকটি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 113,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "সার্কের সদর দপ্তর কোথায়?",
+    "options": [
+      "ঢাকা",
+      "নয়াদিল্লী",
+      "কলম্বো",
+      "কাঠমান্ডু"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 114,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "১৯৯৫ সালটিকে কোন সংস্থাটির গোল্ডেন জুবিলি হিসেবে পালিত হচ্ছে?",
+    "options": [
+      "UNO",
+      "NAM",
+      "GATT",
+      "ASEAN"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 115,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "নিম্নের কোন কার্যক্রমের সাথে অ্যামনেস্টি ইন্টারন্যাশনাল যুক্ত?",
+    "options": [
+      "প্রাণীদের প্রতি নিষ্ঠুরতা রোধ",
+      "পরিবেশ সংরক্ষণ",
+      "মানবাধিকার সংরক্ষণ",
+      "ঐতিহাসিক স্থাপনা সংরক্ষণ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 116,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "UNHCR -এর সদর দপ্তর কোথায়?",
+    "options": [
+      "নিউইয়র্ক",
+      "রোম",
+      "জেনেভা",
+      "লন্ডন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 117,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "ভারতের সবচেয়ে প্রাচীন রাজনৈতিক দল কোনটি?",
+    "options": [
+      "ভারতীয় জনতা পার্টি",
+      "কমুনিস্ট পার্টি",
+      "ইন্ডিয়ান ন্যাশনাল কংগ্রেস",
+      "বহুজন সমাজ পার্টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 118,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "“Imperialism, the Highest Stage of Capitalism” বইটি কার লেখা?",
+    "options": [
+      "টমাস হবসন",
+      "ভি. আই লেনিন",
+      "কার্ল মার্কস",
+      "এন্টিনিওগ্রামসি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 119,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "প্রাকৃতিক আইনের উদ্ভব হয়:",
+    "options": [
+      "থমাস হবসন, হুগো, গ্রোসিয়াস ও জন লক-এর লেখনী থেকে",
+      "ম্যাগনা কার্টা থেকে",
+      "গ্রিক, খ্রিস্টান ও মধ্যযুগীয় ধর্মতত্ত্ব থেকে",
+      "কনফুসিয়ানিজম থেকে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 120,
+    "bank": "38th BCS",
+    "subject": "International Affairs",
+    "question": "ক্রমহ্রাসমান হারে ওজোনস্তর ক্ষয়কারী উপাদান বিলীনের বিষয়টি কোন চুক্তিতে বলা হয়েছে?",
+    "options": [
+      "মন্ট্রিল প্রটোকল",
+      "ক্লোরোফ্লোরো কার্বন চুক্তি",
+      "IPCC চুক্তি",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 121,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "ভূতাত্ত্বিকভাবে বাংলাদেশের সবচেয়ে পুরাতন ভূমিরূপ গঠিত হয়–",
+    "options": [
+      "টারশিয়ারী যুগে",
+      "প্লাইস্টোসিন যুগে",
+      "কোয়াটারনারী যুগে",
+      "সাম্প্রতিক কালে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 122,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের এফসিডিআই প্রকল্পের উদ্দেশ্য–",
+    "options": [
+      "বন্যা নিয়ন্ত্রণ",
+      "পানি নিষ্কাশন",
+      "পানি সেচ",
+      "উপরের তিনটি (ক, খ, গ)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 123,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "বাংলাদেশের জলবায়ু কী ধরনের?",
+    "options": [
+      "ক্রান্তীয় ও উপক্রান্তীয় জলবায়ু",
+      "ক্রান্তীয় মৌসুমী জলবায়ু",
+      "উপক্রান্তীয় জলবায়ু",
+      "আর্দ্র ক্রান্তীয় জলবায়ু"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 124,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোন জেলাতে প্লাইস্টোসিন চত্বরভূমি রয়েছে?",
+    "options": [
+      "চাঁদপুর",
+      "পিরোজপুর",
+      "মাদারীপুর",
+      "গাজীপুর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 125,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "আফ্রিকার সাব-সাহারা অঞ্চলকে কী নামে অভিহিত করা হয়?",
+    "options": [
+      "সাভানা",
+      "তুন্দ্রা",
+      "প্রেইরি",
+      "সাহেল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 126,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "কোনটি জলবায়ুর উপাদান নয়?",
+    "options": [
+      "উষ্ণতা",
+      "আর্দ্রতা",
+      "সমুদ্রস্রোত",
+      "বায়ুপ্রবাহ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 127,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "নিচের কোন ভৌগোলিক এলাকাটি ‘রামসার সাইট’ হিসেবে স্বীকৃত?",
+    "options": [
+      "রামসাগর",
+      "বগা লেইক (Lake)",
+      "টাঙ্গুয়ার হাওর",
+      "কাপ্তাই হ্রদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 128,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "‘পলল পাখা’ জাতীয় ভূমিরূপ গড়ে উঠে-",
+    "options": [
+      "পাহাড়ের পাদদেশে",
+      "নদীর নিম্ন অববাহিকায়",
+      "নদীর উৎপত্তিস্থলে",
+      "নদী মোহনায়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 129,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "‘সেন্দাই ফ্রেমওয়ার্ক ২০১৫-৩০’ হচ্ছে একটি-",
+    "options": [
+      "জাপানের উন্নয়ন কৌশল",
+      "সুনামি দুর্যোগের ঝুঁকি হ্রাস কৌশল",
+      "দুর্যোগের ঝুঁকি হ্রাস কৌশল",
+      "ভূমিকম্পের ঝুঁকি হ্রাস কৌশল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 130,
+    "bank": "38th BCS",
+    "subject": "Geography",
+    "question": "কোনটি জলজ আবহাওয়াজনিত (hydro-meteorological) দুর্যোগ নয়?",
+    "options": [
+      "ভূমিকম্প",
+      "ভূমিধস",
+      "নদীভাঙ্গন",
+      "ঘূর্ণিঝড়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 131,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "কোন গ্যাসটি ‘ড্রাই আইস’ তৈরিতে ব্যবহার করা হয়?",
+    "options": [
+      "অক্সিজেন",
+      "কার্বন ডাই-অক্সাইড",
+      "সালফার ডাই-অক্সাইড",
+      "নাইট্রোজেন ডাই-অক্সাইড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 132,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "বর্তমানে পরিবেশ-বান্ধব কোন গ্যাসটি রেফ্রিজারেটরের কম্প্রেসরে ব্যবহার করা হয়?",
+    "options": [
+      "টাইক্লোরোটাইফ্লুরো ইথেন",
+      "টেট্রাফ্লুরো ইথেন",
+      "ডাইক্লোরো ডাইফ্লুরো ইথেন",
+      "আর্গন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 133,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "ক্যান্সার চিকিৎসায় যে বিকিরণ ব্যবহার করা হয় তা হলো-",
+    "options": [
+      "আলফা রেস (Alpha rays)",
+      "বিটা রেস (Beta rays)",
+      "গামা রেস (Gama rays)",
+      "এক্স (এক্স) রেস (X-rays)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 134,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "ব্যাকটেরিয়ার কোষে নিচের কোনটি উপস্থিত?",
+    "options": [
+      "প্লাসটিড",
+      "মাইটোকন্ড্রিয়া",
+      "নিউক্লিওলাস",
+      "ক্রোমাটিন বস্তু"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 135,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "মস্তিষ্কের ডোপামিন তৈরির কোষগুলো নষ্ট হলে কি রোগ হয়?",
+    "options": [
+      "এপিলেপসি",
+      "পারকিনসন",
+      "প্যারালাইসিস",
+      "থ্রমবোসিন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 136,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "নিচের কোন উদ্ভিদ কেবল ম্যানগ্রোভ বনাঞ্চলে দেখা যায়?",
+    "options": [
+      "খেজুর পাম",
+      "সাগু পাম",
+      "নিপা পাম",
+      "তাল পাম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 137,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "বায়ুমণ্ডলের কোন স্তরে বজ্রপাত ঘটে?",
+    "options": [
+      "ট্রপোমণ্ডল (Troposphere)",
+      "স্ট্রাটোমণ্ডল (Stratosphere)",
+      "মেসোমণ্ডল (Mesosphere)",
+      "তাপমণ্ডল (Troposphere)"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 138,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "পৃথিবীর বারিমণ্ডলের জলরাশির শতকরা কতভাগ জল ভূগর্ভে ধারণ করে?",
+    "options": [
+      "২.০৫%",
+      "০.৬৮%",
+      "০.০১%",
+      "০.০০১%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 139,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "বাণিজ্যিকভাবে মৌমাছি পালনকে বলা হয়-",
+    "options": [
+      "পিসিকালচার",
+      "এপিকালচার",
+      "মেরিকালচার",
+      "সেরিকালচার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 140,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "মা-এর রক্তে হেপাটাইটিস –বি (Hepatitis –B) ভাইরাস থাকলে নবজাতকের স্বাস্থ্যঝুঁকি ব্যবস্থাপনা কি হওয়া উচিত?",
+    "options": [
+      "৩০ দিনের মধ্যে ভ্যাকসিন দিতে হবে",
+      "৭ দিন ইনকিউবেটরে রাখতে হবে",
+      "জন্মের ১২ ঘণ্টার মধ্যে ভ্যাকসিন ও এইচবিআইজি (HBIG) শট দিতে হবে",
+      "জন্মের ১ মাস পর কেবলমাত্র (HBIG) শট দিতে হবে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 141,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "ডেঙ্গু রোগ ছড়ায়-",
+    "options": [
+      "Aedes aegypti মশা",
+      "House flies",
+      "Anopheles মশা",
+      "ইঁদুর ও কাঠবেড়ালী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 142,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "বায়ুমণ্ডলের যে স্তরে বেতার তরঙ্গ প্রতিফলিত হয়-",
+    "options": [
+      "স্ট্রাটোস্ফিয়ার",
+      "ট্রপোস্ফিয়ার",
+      "আয়োনোস্ফিয়ার",
+      "ওজোনস্তর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 143,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "স্টিফেন হকিং একজন-",
+    "options": [
+      "দার্শনিক",
+      "পদার্থবিদ",
+      "রসায়নবিদ",
+      "কবি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 144,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "প্রাকৃতিক গ্যাসের প্রধান উপাদান হলো-",
+    "options": [
+      "নাইট্রোজেন গ্যাস",
+      "মিথেন গ্যাস",
+      "হাইড্রোজেন গ্যাস",
+      "কার্বন মনোক্সাইড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 145,
+    "bank": "38th BCS",
+    "subject": "Science",
+    "question": "কোনটি নবায়নযোগ্য শক্তির উৎস?",
+    "options": [
+      "তেল",
+      "সমুদ্রের ঢেউ",
+      "গ্যাস",
+      "কয়লা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 146,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "10101111 এর 1’s complement কোনটি?",
+    "options": [
+      "1111 1111",
+      "0000 0000",
+      "0101 0000",
+      "1100 0011"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 147,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোন মাধ্যমে আলোর পালস ব্যবহৃত হয়?",
+    "options": [
+      "তামার তার",
+      "কো-এক্সিয়াল ক্যাবল",
+      "অপটিক্যাল ফাইবার",
+      "ওয়্যারলেস মিডিয়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 148,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "ই-মেইল গ্রহণ করার অধিক ব্যবহৃত প্রোটকল কোনটি?",
+    "options": [
+      "POP3",
+      "POP9",
+      "HTML",
+      "SMTP"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 149,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোনটি সঠিক নয়?",
+    "options": [
+      "A + 0 = A",
+      "A. 1 = A",
+      "A + A' = 1",
+      "A.A' = 1"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 150,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "এক word কত বিট বিশিষ্ট হয়?",
+    "options": [
+      "8",
+      "16",
+      "4",
+      "2"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 151,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোন ধরনের bus ব্যবহৃত হয় না?",
+    "options": [
+      "address bus",
+      "input-reader bus",
+      "dat bus",
+      "control bus"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 152,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "ROM ভিত্তিক প্রোগ্রামের নাম কি?",
+    "options": [
+      "malware",
+      "irmware",
+      "virus",
+      "lip-lop"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 153,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "একটি লজিক গেট – এর আউটপুট 1 হয় যখন এর সব ইনপুট 0 থাকে। এই গেটটি-",
+    "options": [
+      "AND",
+      "OR",
+      "XOR",
+      "NAND"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 154,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোনটি মাইক্রোসফটের প্রথম প্রোগ্রাম?",
+    "options": [
+      "Windows XP",
+      "Windows 98",
+      "MS DOS",
+      "Windows 7"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 155,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "ডিস্ক ডিফ্রাগমেন্টেশান ব্যবহৃত হয়-",
+    "options": [
+      "ভাইরাস ধ্বংসের জন্য",
+      "খারাপ সেক্টরসমূহ পরীক্ষা করতে",
+      "ডিস্কের ফাইলগুলোকে পুনর্বিন্যস্ত করতে",
+      "ডিস্ক ফরমেট করতে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 156,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোন সাইটটি কেনা-বেচার জন্য নয়?",
+    "options": [
+      "ekhanei.com",
+      "olx.com",
+      "google.com",
+      "amazon.com"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 157,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কম্পিউটার নেটওয়ার্কে OSI মডেমের স্তর কয়টি?",
+    "options": [
+      "৭",
+      "৫",
+      "৯",
+      "৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 158,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোন প্রটোকলটি ইন্টারনেট সংযোগের ক্ষেত্রে সর্বাধিক ব্যবহৃত হয়?",
+    "options": [
+      "TCP/IP",
+      "Novel netware",
+      "Net BEUI",
+      "Linux"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 159,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "কোন চিহ্নটি ই-মেইল ঠিকানায় অবশ্যই থাকবে?",
+    "options": [
+      "$",
+      "#",
+      "&",
+      "@"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 160,
+    "bank": "38th BCS",
+    "subject": "ICT",
+    "question": "নিচের কোনটি সামঞ্জস্যপূর্ণ নয়?",
+    "options": [
+      "ফেসবুক",
+      "টুইটার",
+      "লিংকড ইন",
+      "উইকিপিডিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 161,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "সেট A=x:x Fibonacci সংখ্যা এবং x^2<64 হলে, P(A) এর উপাদান কয়টি?",
+    "options": [
+      "128",
+      "32",
+      "64",
+      "256"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 162,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "4 জন মহিলা ও 6 জন পুরুষের মধ্য থেকে 4 সদস্যবিশিষ্ট একটি উপ-কমিটি গঠন করতে হবে যাতে 1 জন নির্দিষ্ট পুরুষ সর্বদাই উপস্থিত থাকেন। কত প্রকারে ঐ কমিটি গঠন করা যেতে পারে?",
+    "options": [
+      "210",
+      "304",
+      "84",
+      "120"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 163,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "30 থেকে 40 পর্যন্ত সংখ্যা থেকে যেকোনো একটিকে ইচ্ছেমত নিলে সে সংখ্যাটি মৌলিক অথবা 5 এর গুণিতক হওয়ার সম্ভাবনা কত?",
+    "options": [
+      "5/11",
+      "1/2",
+      "3/5",
+      "6/11"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 164,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "টাকায় 5 টি মার্বেল বিক্রয় করায় 12% ক্ষতি হয়। 10% লাভ করতে হলে টাকায় কয়টি বিক্রয় করতে হবে?",
+    "options": [
+      "4টি",
+      "3টি",
+      "2টি",
+      "কোনোটিই নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 165,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "দুটি সংখ্যার অনুপাত 2 : 3 এবং গ.সা.গু. 4 হলে বৃহত্তম সংখ্যাটি কত?",
+    "options": [
+      "6",
+      "12",
+      "8",
+      "16"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 166,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "কোন আসল 3 বছরে মুনাফা-আসলে 5500 টাকা হয়। মুনাফা আসলের 3/8 অংশ হলে মুনাফার হার কত?",
+    "options": [
+      "10%",
+      "12.5%",
+      "15%",
+      "12%"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 167,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "মি. রেজা তাঁর সম্পদের 12% স্ত্রীকে, 58% ছেলেকে এবং অবশিষ্ট 720000/- টাকা মেয়েকে দিলেন। তার সম্পদের মোট মূল্য কত?",
+    "options": [
+      "2400000 টাকা",
+      "2000000 টাকা",
+      "1600000 টাকা",
+      "1200000 টাকা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 168,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "x=√3+√2 হলে, x^3+1/x^3 এর মান কত?",
+    "options": [
+      "3√2",
+      "18√3",
+      "12√3",
+      "8"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 169,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "log_x(1/8)= -2 হলে, x = কত?",
+    "options": [
+      "2",
+      "√2",
+      "2√2",
+      "4"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 170,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "2^x+2^1-x=3 হলে, x = কত?",
+    "options": [
+      "(1, 2)",
+      "(0, 2)",
+      "(1, 3)",
+      "(0, 1)"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 171,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "বাস্তব সংখ্যায় | 2x-3| ≤ 1 অসমতাটির সমাধান -",
+    "options": [
+      "1 < x < 2",
+      "x ≤ 1 অথবা x ≥ 2",
+      "1 ≤ x ≤ 2",
+      "– 1 < x < 2"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 172,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "একটি সমান্তর অনুক্রমে 5ম পদটি 18 এবং প্রথম 5টি পদের যোগফল 75 হলে প্রথম পদটি কত?",
+    "options": [
+      "2",
+      "10",
+      "4",
+      "12"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 173,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "একটি সমবাহু ত্রিভুজের একটি বাহুর দৈর্ঘ্য a একক হলে, ত্রিভুজটির ক্ষেত্রফল কত বর্গ একক?",
+    "options": [
+      "√3/2 a^2",
+      "2/3 a^2",
+      "2/√3 a^2",
+      "√3/4 a^2"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 174,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "একটি কোণের মান তার পূরক কোণের মানের অর্ধেকের সমান। কোনটির মান কত?",
+    "options": [
+      "60°",
+      "45°",
+      "30°",
+      "25°"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 175,
+    "bank": "38th BCS",
+    "subject": "Math",
+    "question": "",
+    "options": [
+      "45°",
+      "22.5°",
+      "30°",
+      "60°"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 176,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "\"RAPIS\" অক্ষরগুলোকে নতুন করে সাজালে নিচের কোনটি পাওয়া যাবে?",
+    "options": [
+      "একটি মহাসাগর",
+      "একটি শহর",
+      "একটি দেশ",
+      "একটি প্রাণী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 177,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "অম্বর এর প্রতিশব্দ কোনটি?",
+    "options": [
+      "পৃথিবী",
+      "জল",
+      "সমুদ্র",
+      "আকাশ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 178,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "১ থেকে ১০০ পর্যন্ত সংখ্যাসমূহের যোগফল কত?",
+    "options": [
+      "৪৯৯৯",
+      "৫৫০১",
+      "৫০৫০",
+      "৫০০১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 179,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "আগামী পরশুর পরের দিন যদি রবিবার হয় তবে, গতকালের আগের দিন কি বার ছিল?",
+    "options": [
+      "সোমবার",
+      "মঙ্গলবার",
+      "বৃহস্পতিবার",
+      "শনিবার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 180,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "১৯৯৪ সালের ১ ডিসেম্বর বৃহস্পতিবার হলে ১৯৯৫ সালের একই তারিখ কি বার হবে?",
+    "options": [
+      "বৃহস্পতিবার",
+      "শুক্রবার",
+      "বুধবার",
+      "শনিবার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 181,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "১৬৪",
+      "৯৭",
+      "১৯১",
+      "১৩৭"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 182,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "‘UNFARE’- এর আয়নায় দেখলে তার সঠিক রূপটি হবে-",
+    "options": [],
+    "answer": 0
+  },
+  {
+    "id": 183,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "The novelist has a hold of ___ in writing.",
+    "options": [
+      "manner",
+      "history",
+      "tradition",
+      "style"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 184,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "১",
+      "১০",
+      "২৯",
+      "৪৮"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 185,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "নিম্নের চারটির মধ্যে কোনটি ভিন্ন?",
+    "options": [
+      "পিতল",
+      "তামা",
+      "লোহা",
+      "টিন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 186,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "NJ",
+      "MI",
+      "NI",
+      "OJ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 187,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "দুই ব্যক্তি একটি কাজ একত্রে ৮ দিনে করতে পারে। প্রথম ব্যক্তি একা কাজটি ১২ দিনে করতে পারে। দ্বিতীয় ব্যক্তি একা ঐ কাজটি কত দিনে করতে পারবে?",
+    "options": [
+      "২০ দিনে",
+      "২৫ দিনে",
+      "২৪ দিনে",
+      "৩০ দিনে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 188,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [
+      "৬ : ১৫",
+      "৮ : ৪০",
+      "৭ : ২০",
+      "৭ : ৪০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 189,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "নিচের কোনটি মৌলিক সংখ্যা নয়?",
+    "options": [
+      "২৬৩",
+      "২৩৩",
+      "২৫৩",
+      "২৪১"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 190,
+    "bank": "38th BCS",
+    "subject": "Mental Ability",
+    "question": "একজন লোক একটি নির্দিষ্ট স্থান A থেকে যাত্রা শুরু করে ১২ কিলোমিটার উত্তর দিকে গেল এবং সেখান থেকে ৫ কিলোমিটার পূর্ব দিকে গেল। যাত্রা শেষে সে A অবস্থান থেকে কত দূরে থাকবে?",
+    "options": [
+      "১৭ কি. মি.",
+      "১৫ কি. মি.",
+      "১৪ কি. মি.",
+      "১৩ কি. মি."
+    ],
+    "answer": 3
+  },
+  {
+    "id": 191,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "গোল্ডেন মিন (Golden Mean) হলো-",
+    "options": [
+      "সমস্ত সম্ভাব্য কর্মের গড়",
+      "দুটি চরম পন্থার মধ্যবর্তী অবস্থা",
+      "ত্রিভুজের দুটি বাহুর ভূ-কেন্দ্রিক সম্পর্ক",
+      "একটি প্রাচীন দার্শনিক ধারার নাম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 192,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "কোন বছর ইউএনডিপি (UNDP) সুশাসনের সংজ্ঞা প্রবর্তন করে?",
+    "options": [
+      "১৯৯৫",
+      "১৯৯৭",
+      "১৯৯৮",
+      "১৯৯৯"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 193,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "শূন্যবাদ যে ল্যাটিন শব্দ থেকে উদ্ভূত তার অর্থ -",
+    "options": [
+      "সব",
+      "কিছুই না",
+      "সর্বজনীন",
+      "কিছু"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 194,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "ব্যক্তি সহনশীলতার শিক্ষা লাভ করে-",
+    "options": [
+      "সুশাসনের শিক্ষা থেকে",
+      "আইনের শিক্ষা থেকে",
+      "মূল্যবোধের শিক্ষা থেকে",
+      "কর্তব্যবোধ থেকে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 195,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "সুশাসনের কোন নীতি সংগঠনের স্বাধীনতাকে নিশ্চিত করে?",
+    "options": [
+      "অংশগ্রহণ",
+      "জবাবদিহিতা",
+      "স্বচ্ছতা",
+      "সাম্য ও সমতা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 196,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নিচের কোন রিপোর্টে বিশ্বব্যাংক সুশাসনের সংজ্ঞা প্রদান করেছে?",
+    "options": [
+      "শাসন প্রক্রিয়া ও মানব উন্নয়ন",
+      "শাসন প্রক্রিয়া এবং সুশাসন",
+      "শাসন প্রক্রিয়া এবং নৈতিক শাসন প্রক্রিয়া",
+      "শাসন প্রক্রিয়া এবং উন্নয়ন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 197,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নিচের কোনটি সুশাসনের উপাদান নয়?",
+    "options": [
+      "অংশগ্রহণ",
+      "স্বচ্ছতা",
+      "নৈতিক শাসন",
+      "জবাবদিহিতা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 198,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "নিচের কোনটি সংস্কৃতির উপাদান নয়?",
+    "options": [
+      "আইন",
+      "প্রতীক",
+      "ভাষা",
+      "মূল্যবোধ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 199,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "জেরেমি বেন্থাম কোন দেশের অধিবাসী ছিলেন?",
+    "options": [
+      "জার্মানি",
+      "ফ্রান্স",
+      "মার্কিন যুক্তরাষ্ট্র",
+      "যুক্তরাজ্য"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 200,
+    "bank": "38th BCS",
+    "subject": "Ethics & Good Governance",
+    "question": "মূল্যবোধ পরীক্ষা করে-",
+    "options": [
+      "ভাল ও মন্দ",
+      "ন্যায় ও অন্যায়",
+      "নৈতিকতা ও অনৈতিকতা",
+      "উপরের সবগুলো"
+    ],
+    "answer": 3
+  }
+]

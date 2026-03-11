@@ -1,0 +1,2602 @@
+[
+  {
+    "id": 1,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "Ballad কি?",
+    "options": [
+      "লোকগীতি",
+      "লোকগাঁথা",
+      "গীতিকা",
+      "গাথা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 2,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘শাহ্‌নামা’ মৌলিক গ্রন্থটি কার?",
+    "options": [
+      "মালিক জয়সী",
+      "ফেরদৌসী",
+      "সৈয়দ হামজা",
+      "কাজী দৌলত উজির বাহরাম খাঁ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 3,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "ড. মুহম্মদ শহীদুল্লাহর বাংলা সাহিত্যের ইতিহাস গ্রন্থের নাম-",
+    "options": [
+      "বঙ্গভাষা ও সাহিত্য",
+      "বাংলা সাহিত্যের কথা",
+      "বাঙ্গালা সাহিত্যের ইতিহাস",
+      "বাংলা সাহিত্যের ইতিবৃত্ত"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 4,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘চৌ-হদ্দি’ শব্দটি কোন কোন ভাষার শব্দ মিলে হয়েছে?",
+    "options": [
+      "বাংলা + ফারসি",
+      "সংস্কৃত + ফারসি",
+      "ফারসি + আরবি",
+      "সংস্কৃত + আরবি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 5,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘রুপ লাগি আঁখি ঝুরে গুণে মন ভোর’ কার রচনা?",
+    "options": [
+      "চণ্ডিদাস",
+      "জ্ঞানদাস",
+      "বিদ্যাপতি",
+      "লোচনদাস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 6,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘সাজাহান’ নাটকের প্রথম রচয়িতা কে?",
+    "options": [
+      "ক্ষীরোদপ্রসাদ বিদ্যাবিনোদ",
+      "তুলসী লাহিড়ি",
+      "দ্বিজেন্দ্রলাল রায়",
+      "বলাইচাঁদ মুখোপাধ্যায়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 7,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘নেমেসিস’ নাটকে নূরুল মোমেন কোন বিষয়কে তুলে ধরেছেন?",
+    "options": [
+      "দ্বিতীয় বিশ্বযুদ্ধ",
+      "ঊনপঞ্চাশের মন্বন্তর",
+      "বায়ান্নর ভাষা আন্দোলন",
+      "একাত্তরের মুক্তিযুদ্ধ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 8,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "ভারতচন্দ্র রায়গুণাকর কোন রাজসভার কবি?",
+    "options": [
+      "আরাকান রাজসভা",
+      "কৃষ্ণনগর রাজসভা",
+      "রাজা গণেশের রাজসভা",
+      "লক্ষ্মণ সেনের রাজসভা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 9,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘যা কিছু হারায় গিন্নী বলেন, কেষ্টা বেটাই চোর’-এখানে ‘হারায়’ কোন ধাতু?",
+    "options": [
+      "প্রযোজ্য ধাতু",
+      "ভাববাচ্যের ধাতু",
+      "সংযোগমূলক ধাতু",
+      "নাম ধাতু"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 10,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘মহুয়া’ পালাটির রচয়িতা-",
+    "options": [
+      "দ্বিজ কানাই",
+      "মনসুর বয়াতী",
+      "নয়নচাঁদ ঘোষ",
+      "দ্বিজ ঈশান"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 11,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "ফোর্ট উইলিয়াম কলেজে বাংলা বিভাগ খোলা হয়-",
+    "options": [
+      "১৮০০ সালে",
+      "১৮০১ সালে",
+      "১৮০২ সালে",
+      "১৮০৪ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 12,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "কে সর্বপ্রথম বাংলা টাইপ সহযোগে বাংলা ব্যাকরণ মুদ্রণ করেন?",
+    "options": [
+      "স্যার উইলিয়াম জোনস্",
+      "স্যার উইলিয়াম কেরি",
+      "রাজীব লোচন মুখোপাধ্যায়",
+      "ব্রাসি হ্যালহেড"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 13,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘তত্ত্ববোধিনী’ পত্রিকার সম্পাদক ছিলেন-",
+    "options": [
+      "ঈশ্বরচন্দ্র গুপ্ত",
+      "অক্ষয়কুমার দত্ত",
+      "প্যারিচাঁদ মিত্র",
+      "বঙ্কিমচন্দ্র চট্টোপাধ্যায়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 14,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "কোনটি দীনবন্ধু মিত্রের রচনা?",
+    "options": [
+      "কমলে কামিনী",
+      "চক্ষুদান",
+      "বিধবা বিবাহ",
+      "ভদ্রার্জুন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 15,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "কোন গ্রন্থটি মহাকাব্য?",
+    "options": [
+      "অবকাশ রঞ্জিনী",
+      "বৃত্রসংহার",
+      "বিরহ বিলাপ",
+      "বীরাঙ্গনা কাব্য"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 16,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘বত্রিশ সিংহাসন’ কার রচনা?",
+    "options": [
+      "মৃত্যুঞ্জয় বিদ্যালঙ্কার",
+      "রামরাম বসু",
+      "বিদ্যাসাগর",
+      "রাজীব লোচন মুখোপাধ্যায়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 17,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘ঠকচাচা’ চরিত্রটি কোন উপন্যাসের?",
+    "options": [
+      "হুতোম প্যাঁচার নক্সা",
+      "আলালের ঘরের দুলাল",
+      "সধবার একাদশী",
+      "বুড়ো শালিকের ঘাড়ে রোঁ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 18,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘উদাসীন পথিকের মনের কথা’ কোন জাতীয় রচনা?",
+    "options": [
+      "নাটক",
+      "কাব্য",
+      "আত্মজৈবনিক উপন্যাস",
+      "গীতি কবিতার সংকলন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 19,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘তাজকেরাতুল আওলিয়া’ অবলম্বনে ‘তাপসমালা’ কে রচনা করেন?",
+    "options": [
+      "মুন্সী আব্দুল লতিফ",
+      "কাজী আকরাম হোসেন",
+      "গিরিশচন্দ্র সেন",
+      "শেখ আব্দুল জব্বার"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 20,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "কোন নাটকটি সেলিম আল দীনের?",
+    "options": [
+      "মুনতাসীর ফ্যান্টাসী",
+      "পায়ের আওয়াজ পাওয়া যায়",
+      "কবর",
+      "বহুব্রীহি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 21,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "আন্তর্জাতিক মাতৃভাষা দিবস কোন সালে স্বীকৃত হয়?",
+    "options": [
+      "১৯৯৮",
+      "১৯৯৯",
+      "২০০০",
+      "২০০১"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 22,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "বাংলা একাডেমি কোন সালে প্রতিষ্ঠিত হয়?",
+    "options": [
+      "১৯৫৪ সালে",
+      "১৯৫৫ সালে",
+      "১৯৫৬ সালে",
+      "১৯৫৭ সালে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 23,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘দারিদ্র্য’ কবিতাটি নজরুল ইসলামের কোন কাব্যের অন্তর্ভুক্ত?",
+    "options": [
+      "সাম্যবাদী",
+      "বিষের বাঁশী",
+      "সিন্ধু হিন্দোল",
+      "নতুন চাঁদ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 24,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "কোন শব্দটি ফারসি?",
+    "options": [
+      "মুসাফির",
+      "তকদির",
+      "পেরেশান",
+      "মজলুম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 25,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "উপসর্গ কোনটি?",
+    "options": [
+      "অতি",
+      "থেকে",
+      "চেয়ে",
+      "দ্বারা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 26,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "দাপ্তরিক কোন শব্দটি ইংরেজি ভাষা থেকে আগত?",
+    "options": [
+      "আইন",
+      "দাখিল",
+      "এজেন্ট",
+      "মুচলেকা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 27,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘নেমেসিস’ কোন জাতীয় রচনা?",
+    "options": [
+      "কাব্য",
+      "নাটক",
+      "উপন্যাস",
+      "গীতি কবিতা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 28,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘তোমার সৃষ্টির পথ রেখেছ আকীর্ণ করি’-রবীন্দ্রনাথের কোন কাব্যের কবিতা?",
+    "options": [
+      "পূরবী",
+      "শেষলেখা",
+      "আকাশ প্রদীপ",
+      "সেজুঁতি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 29,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘জয়গুন’ কোন উপন্যাসের চরিত্র?",
+    "options": [
+      "জননী",
+      "সূর্য-দীঘল বাড়ী",
+      "সারেং বৌ",
+      "হাজার বছর ধরে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 30,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘নবান্ন’ শব্দটি কোন প্রক্রিয়ায় গঠিত?",
+    "options": [
+      "সমাস",
+      "সন্ধি",
+      "প্রত্যয়",
+      "উপসর্গ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 31,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "কোনটির অর্থ পক্ক অর্থে প্রকাশ পায়?",
+    "options": [
+      "পাকা বাড়ি",
+      "পাকা রং",
+      "পাকা কাজ",
+      "পাকা আম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 32,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘পাখি সব করে রব রাতি পোহাইল’-পংক্তিটির রচয়িতা কে?",
+    "options": [
+      "মদনমোহন তর্কালংকার",
+      "রামনারায়ণ তর্করত্ন",
+      "বিহারীলাল চক্রবর্তী",
+      "কৃষ্ণচন্দ্র মজুমদার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 33,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘বনফুল’ কার ছদ্মনাম?",
+    "options": [
+      "প্রমথ চৌধুরী",
+      "বলাইচাঁদ মুখোপাধ্যায়",
+      "যতীন্দ্রমোহন বাগচী",
+      "মোহিতলাল মজুমদার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 34,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "কাজী নজরুল ইসলামের উপন্যাস কোনটি?",
+    "options": [
+      "মৃত্যুক্ষুধা",
+      "আলেয়া",
+      "ঝিলিমিলি",
+      "মধুমালা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 35,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘যে-ই তার দর্শন পেলাম, সে-ই আমরা প্রস্থান করলাম।’-এটি কোন জাতীয় বাক্য?",
+    "options": [
+      "সরল বাক্য",
+      "যৌগিক বাক্য",
+      "মৌলিক বাক্য",
+      "মিশ্র বাক্য"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 36,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "‘লাঠালাঠি’- এটি কোন সমাস?",
+    "options": [
+      "প্রাদি সমাস",
+      "ব্যতিহার বহুব্রীহি সমাস",
+      "তৎপুরুষ সমাস",
+      "কর্মধারয় সমাস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 37,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "‘ভানুসিংহ ঠাকুরের পদাবলী’-এর রচয়িতা কে?",
+    "options": [
+      "ভানু বন্দ্যোপাধ্যায়",
+      "চণ্ডীদাস",
+      "রবীন্দ্রনাথ ঠাকুর",
+      "ভারতচন্দ্র চট্টোপাধ্যায়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 38,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "প্র, পরা, অপ-",
+    "options": [
+      "বাংলা উপসর্গ",
+      "সংস্কৃত উপসর্গ",
+      "বিদেশী উপসর্গ",
+      "উপসর্গ স্থানীয় অব্যয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 39,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Language",
+    "question": "টা, টি, খানা ইত্যাদি-",
+    "options": [
+      "পদাশ্রিত নির্দেশক",
+      "প্রকৃতি",
+      "বিভক্তি",
+      "উপসর্গ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 40,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangla Literature",
+    "question": "কাজী নজরুল ইসলাম কোন কবিতা রচনার জন্য কারাবরণ করেন?",
+    "options": [
+      "বিদ্রোহী",
+      "প্রলয়োল্লাস",
+      "আনন্দময়ীর আগমনে",
+      "নারী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 41,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct sentence.",
+    "options": [
+      "Everybody have gone there.",
+      "Everybody are gone there",
+      "Everybody has gone there.",
+      "Everybody has went there."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 42,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct sentence.",
+    "options": [
+      "The train is running in time",
+      "The train is running on time",
+      "The train is running with time",
+      "The train is running to time"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 43,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct preposition. My brother has no interest ––– music.",
+    "options": [
+      "for",
+      "in",
+      "with",
+      "at"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 44,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Fill in the blank with right option. I am looking forward ––– you.",
+    "options": [
+      "to seeing",
+      "seeing",
+      "to see",
+      "to have seen"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 45,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct form (passive) of- ‘Who will do the work?’",
+    "options": [
+      "Who will be done the work?",
+      "Who will done the work?",
+      "By whom will the work be done?",
+      "Whom will the work be done?"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 46,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct sentence.",
+    "options": [
+      "I have looked for a good doctor before I met you",
+      "I had looked for a good doctor before I met you.",
+      "I looked for a good doctor before I had met you",
+      "I am looking for a good doctor before meeting you."
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Fill in the blank with correct preposition. He is devoid –––– commonsense.",
+    "options": [
+      "of",
+      "from",
+      "introduction",
+      "at"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 48,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Select the right word. He ran fast lest he –– miss the train.",
+    "options": [
+      "can",
+      "should",
+      "could",
+      "has"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "The Arabian Nights –––– still a great favourite.",
+    "options": [
+      "has",
+      "are",
+      "is",
+      "were"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 50,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct preposition. The police is looking ––– the case.",
+    "options": [
+      "after",
+      "on",
+      "up",
+      "into"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 51,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct spelling .",
+    "options": [
+      "ascertain",
+      "assertain",
+      "asertain",
+      "asartain"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 52,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Select the correct sentence.",
+    "options": [
+      "The man was tall who stole my bag.",
+      "The man stole my bag who was tall.",
+      "The man who stole my bag was tall.",
+      "The man was tall who is stealing tall my bag."
+    ],
+    "answer": 2
+  },
+  {
+    "id": 53,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Complete the sentence with the correct verb from: ‘Neela ––– her hand when she was cooking dinner.",
+    "options": [
+      "is burning",
+      "burnt",
+      "will burn",
+      "was burning"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 54,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the correct preposition. The tree has been blown –––– by the storm.",
+    "options": [
+      "away",
+      "up",
+      "off",
+      "out"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 55,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Identify the correct passive form of ‘He is going to open a shop.’",
+    "options": [
+      "He is being gone to open a shop.",
+      "A shop is being gone opened by him.",
+      "A shop will be opened by him.",
+      "A shop is going to be opened by him."
+    ],
+    "answer": 3
+  },
+  {
+    "id": 56,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Identify the correct synonym for the word ‘Magnanimous.’",
+    "options": [
+      "generous",
+      "unkind",
+      "revengeful",
+      "friendly"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 57,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Fill in the blank with the correct phrase: ––––– your shoes before entering the mosque.",
+    "options": [
+      "put out",
+      "put off",
+      "put away",
+      "put on"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 58,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Fill in the blank with the correct phrase: He –––– arrested if he had tried to leave the country.",
+    "options": [
+      "would",
+      "could be",
+      "would have been",
+      "must be"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 59,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the right word to fill the blank: Two of the children have to sleep in one bed, but the other three have ––––– ones.",
+    "options": [
+      "different",
+      "separate",
+      "complete",
+      "lonely"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 60,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the right word to fill the blank: The Democratic party’s candidate ––– defeat in the small hours of the morning.",
+    "options": [
+      "consented",
+      "agreed",
+      "accepted",
+      "granted"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 61,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "The proper function of the press is surely to –––– the man in the street with facts.",
+    "options": [
+      "equip",
+      "deliver",
+      "proffer",
+      "provide"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 62,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the right word to fill the blank: Since his retirement, Mr. Chowdhury, who was –––– a teacher, has written four novels.",
+    "options": [
+      "usually",
+      "presently",
+      "already",
+      "formerly"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 63,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the right word to fill the blank: I should appreciate it if you could complete this work ––––Thursday.",
+    "options": [
+      "till",
+      "untill",
+      "upto",
+      "by"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 64,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Choose the right word to fill the blank: It will be your task to make sure the ––– of traffic is maintained without interruption.",
+    "options": [
+      "circulation",
+      "flow",
+      "current",
+      "procession"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 65,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "‘Paediatric’ relates to the treatment of:",
+    "options": [
+      "Adults",
+      "Children",
+      "Women",
+      "Old people"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 66,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "The word ‘ecological’ is related to –––:",
+    "options": [
+      "Demography",
+      "Pollution",
+      "Atmosphere",
+      "Environment"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 67,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "The correct spelling is––:",
+    "options": [
+      "Humorious",
+      "Humorous",
+      "Humourius",
+      "Humurious"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 68,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "A ‘pilgrim’ is a person who undertakes a journey to a ––––.",
+    "options": [
+      "Mosque",
+      "A new country",
+      "Holy place",
+      "Bazar"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 69,
+    "bank": "26th BCS Edu.",
+    "subject": "English Literature",
+    "question": "A person who writes about his own life writes–.",
+    "options": [
+      "A biography",
+      "A diary",
+      "A chronicle",
+      "An autobiography"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 70,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "What is the meaning of ‘White Elephant’?",
+    "options": [
+      "An elephant of white colour",
+      "A hoarder",
+      "A black marketer",
+      "A very costly or troublesome possession"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 71,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "If we want concrete proof, we are looking for–.",
+    "options": [
+      "Building material",
+      "Something to cover a path",
+      "Clear evidence",
+      "A cement Mixer"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 72,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "The lights have been blown-by the strong wind.",
+    "options": [
+      "Out",
+      "Away",
+      "Up",
+      "Off"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 73,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "As the sun––, I decided to go out.",
+    "options": [
+      "has shone",
+      "shine",
+      "shines",
+      "was shining"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 74,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Maiden speech means-",
+    "options": [
+      "Late speech",
+      "Early speech",
+      "Final speech",
+      "First speech"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 75,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "‘Out and out’ mean-",
+    "options": [
+      "Not at all",
+      "Brave",
+      "Thoroughly",
+      "Whole heatedly"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 76,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "He divided the money –––– the two children.",
+    "options": [
+      "over",
+      "In between",
+      "Among",
+      "Between"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 77,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "No one can ––––– that he is clever.",
+    "options": [
+      "Deny",
+      "Defy",
+      "Denounce",
+      "Discard"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 78,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "Do not make a noise while your father ––––?",
+    "options": [
+      "Is sleeping",
+      "Has slept",
+      "Asleep",
+      "Is being asleep"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 79,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "He gave up ––– football when he got married.",
+    "options": [
+      "Of playing",
+      "To play",
+      "Playing",
+      "Play"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 80,
+    "bank": "26th BCS Edu.",
+    "subject": "English Language",
+    "question": "He has been ill ––– Friday last.",
+    "options": [
+      "From",
+      "On",
+      "In",
+      "Since"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 81,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "ঢাকায় বাংলার রাজধানী স্থাপনের সময় মোগল সুবেদার কে ছিলেন?",
+    "options": [
+      "ইসলাম খান",
+      "ইব্রাহীম খান",
+      "শায়েস্তা খান",
+      "মীর জুমলা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 82,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "শিক্ষা বিভাগের ট্রেনিংয়ের শীর্ষ প্রতিষ্ঠান কোনটি?",
+    "options": [
+      "বিয়াম",
+      "নায়েম",
+      "টিটিসি",
+      "ইউজিসি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 83,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "‘সাবাশ বাংলাদেশ’ ভাস্কর্যটির শিল্পী কে?",
+    "options": [
+      "হামিদুজ্জামান",
+      "নিতুন কুণ্ডু",
+      "মৃণাল হক",
+      "শামিম শিকদার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 84,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "‘সূর্য দীঘল বাড়ি’ চলচ্চিত্রের পরিচালক কে?",
+    "options": [
+      "শেখ নিয়ামত শাকের",
+      "জহির রায়হান",
+      "সুভাষ দত্ত",
+      "খান আতা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 85,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "স্টক শেয়ারে প্রবর্তিত নতুন পদ্ধতি কোনটি?",
+    "options": [
+      "ডিভিডেন্ড",
+      "ডিভ্যালু",
+      "ডিম্যাট",
+      "ডিসকাউন্ট"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 86,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে চিনি শিল্পের ট্রেনিং ইনস্টিটিউট কোথায় অবস্থিত?",
+    "options": [
+      "দিনাজপুর",
+      "রংপুর",
+      "ঈশ্বরদী",
+      "যশোর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 87,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "মানবাধিকার দিবস পালিত হয় কবে?",
+    "options": [
+      "২৬ জুন",
+      "১ আগস্ট",
+      "১ মে",
+      "১০ ডিসেম্বর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 88,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "শহীদ চান্দু স্টেডিয়াম কোন শহরে অবস্থিত?",
+    "options": [
+      "রাজশাহী",
+      "বগুড়া",
+      "কুমিল্লা",
+      "চট্টগ্রাম"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 89,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলা একাডেমির প্রথম মহাপরিচালক কে ছিলেন?",
+    "options": [
+      "প্রফেসর আব্দল হাই",
+      "ড. মুহম্মদ শহীদুল্লাহ",
+      "কাজী মোতাহার হোসেন",
+      "ড. এনামুল হক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 90,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সর্ববৃহৎ ঈদের জামাত সাধারণত কোথায় হয়ে থাকে?",
+    "options": [
+      "বায়তুল মোককাররম-ঢাকা",
+      "শাহ মখদুম মসজিদ-রাজশাহী",
+      "জাতীয় ঈদগাহ-ঢাকা",
+      "শোলাকিয়া-কিশোরগঞ্জ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 91,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের GDP তে কৃষিখাতের অবদান কত?",
+    "options": [
+      "৭০ শতাংশ",
+      "৭৩ শতাংশ",
+      "৭৫ শতাংশ",
+      "৭৭ শতাংশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 92,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "দক্ষিণ তালপট্টি দ্বীপ কোন নদীর মোহনায় অবস্থিত?",
+    "options": [
+      "রূপসা",
+      "বালেশ্বর",
+      "হাড়িয়াভাঙ্গা",
+      "ভৈরব"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 93,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে মোট আবাদযোগ্য জমির পরিমাণ কত?",
+    "options": [
+      "২ কোটি ৪০ লক্ষ একর",
+      "২ কোটি ৫০ লক্ষ একর",
+      "২ কোটি ২৫ লক্ষ একর",
+      "২ কোটি একর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 94,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলা নববর্ষ পহেলা বৈশাখ চালু করেছিলেন–",
+    "options": [
+      "ফখরুদ্দিন মোবারক শাহ",
+      "ইলিয়াস শাহ",
+      "সম্রাট আকবর",
+      "সম্রাট বাবর"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 95,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "‘কান্তজীর মন্দির’ কোন জেলায় অবস্থিত?",
+    "options": [
+      "জয়পুরহাট",
+      "কুমিল্লা",
+      "রাঙ্গামাটি",
+      "দিনাজপুর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 96,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "মহাখালী ফ্লাইওভারে কয়টি স্প্যান আছে?",
+    "options": [
+      "১৭টি",
+      "১৮টি",
+      "১৯টি",
+      "২১টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 97,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "চলতি আর্থিক বাজেটে কৃষিতে ভর্তুকি কত টাকা ধরা হয়েছে?",
+    "options": [
+      "৩০০ কোটি টাকা",
+      "৪০০ কোটি টাকা",
+      "৫০০ কোটি টাকা",
+      "৬০০ কোটি টাকা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 98,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের সীমান্তবর্তী কোন জেলার সাথে ভারতের কোন সংযোগ নেই?",
+    "options": [
+      "বান্দরবান",
+      "চাঁপাইনবাবগঞ্জ",
+      "পঞ্চগড়",
+      "দিনাজপুর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 99,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের একমাত্র মৎস্য গবেষণা ইনস্টিটিউট কোথায় অবস্থিত?",
+    "options": [
+      "রাজশাহী",
+      "ঢাকা",
+      "চট্টগ্রাম",
+      "চাঁদপুর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 100,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের একমাত্র পাহাড়ি দ্বীপ কোনটি?",
+    "options": [
+      "সেন্টমার্টিন",
+      "মহেশখালী",
+      "ছেড়া দ্বীপ",
+      "নিঝুম দ্বীপ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 101,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে সর্বপ্রথম ডিজিটাল টেলিফোন ব্যবস্থা কবে চালু হয়?",
+    "options": [
+      "৪ জানুয়ারি ১৯৯০",
+      "৩ ফেব্রুয়ারি ১৯৯০",
+      "৩ মার্চ ১৯৯০",
+      "৪ জানুয়ারি ১৯৯১"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 102,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "সংবিধানের কোন অনুচ্ছেদ অনুযায়ী বাংলাদেশের নাগরিকগণ বাংলাদেশী বলে পরিচিত হবেন?",
+    "options": [
+      "৬ (১)",
+      "৬ (২)",
+      "৭",
+      "৮"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 103,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ OIC-এর সদস্য হয় কোন সনে?",
+    "options": [
+      "১৯৭৩",
+      "১৯৭৪",
+      "১৯৭৫",
+      "১৯৭৬"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 104,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "কতজন ব্যক্তি নিয়ে গ্রাম সরকার গঠিত?",
+    "options": [
+      "৯ জন",
+      "১১ জন",
+      "১৩ জন",
+      "১৫ জন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 105,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "মুক্তিযুদ্ধ বিষয়ক মন্ত্রণালয় কোন সনে গঠিত হয়?",
+    "options": [
+      "১৯৯২ সনে",
+      "২০০০ সনে",
+      "২০০১ সনে",
+      "২০০২ সনে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 106,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "ভারতের সাথে বাংলাদেশের সীমান্ত জেলা কয়টি?",
+    "options": [
+      "২৮",
+      "৩০",
+      "৩১",
+      "৩৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 107,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ কোন সনে বিশ্ব বাণিজ্য সংস্থার সদস্য হয়?",
+    "options": [
+      "১৯৯১",
+      "১৯৯৪",
+      "১৯৯২",
+      "১৯৯৫"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 108,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম বেসরকারি ব্যাংক কোনটি?",
+    "options": [
+      "ন্যাশনাল ব্যাংক",
+      "আরব-বাংলাদেশ ব্যাংক",
+      "আইএফআইসি ব্যাংক",
+      "দি সিটি ব্যাংক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 109,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "SPARRSO কোন মন্ত্রণালয়ের অধীন?",
+    "options": [
+      "শিল্প মন্ত্রণালয়",
+      "শিক্ষা মন্ত্রণালয়",
+      "পরিবেশ মন্ত্রণালয়",
+      "প্রতিরক্ষা মন্ত্রণালয়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 110,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে রঙিন টিভি সম্প্রচার কোন সনে শুরু হয়?",
+    "options": [
+      "১৯৭৯",
+      "১৯৮০",
+      "১৯৮১",
+      "১৯৮২"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 111,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের বৃহত্তম সেচ প্রকল্প কোনটি?",
+    "options": [
+      "গঙ্গা-কপোতাক্ষ প্রকল্প",
+      "তিস্তা সেচ প্রকল্প",
+      "কাপ্তাই সেচ প্রকল্প",
+      "ফেনী সেচ প্রকল্প"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 112,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "‘মনপুরা-৭০’ কি?",
+    "options": [
+      "একটি উপজেলা",
+      "একটি নদীবন্দর",
+      "একটি উপন্যাস",
+      "একটি চিত্রশিল্প"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 113,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "কোন আইন সংস্কার করে ‘র‌্যাব’ (Rapid Action Battalion) গঠন করা হয়?",
+    "options": [
+      "ডিএমপি অ্যাক্ট ১৯৭৬",
+      "ডিবি পুলিশ অ্যাক্ট ১৯৮৩",
+      "র‌্যাপিড একশন ব্যাটালিয়ন অ্যাক্ট ২০০৩",
+      "আর্মড পুলিশ ব্যাটালিয়ন অ্যাক্ট ১৯৭৯"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 114,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোন প্রতিষ্ঠান মাইক্রোক্রেডিট সম্মেলনের অন্যতম উদ্যোক্তা?",
+    "options": [
+      "চার্টার্ড ব্যাংক",
+      "ন্যাশনাল ব্যাংক",
+      "গ্রামীণ ব্যাংক",
+      "এবি ব্যাংক"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 115,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "‘ইরাটম’ কি?",
+    "options": [
+      "উন্নত জাতের ধান",
+      "উন্নত জাতের ইক্ষু",
+      "উন্নত জাতের পাট",
+      "উন্নত জাতের চা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 116,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "গ্রিন হাউজ ইফেক্টের জন্য বাংলাদেশে কোন ধরনের ক্ষতি হতে পারে?",
+    "options": [
+      "নিম্নভূমি নিমজ্জিত হবে",
+      "ক্রমশ উত্তাপ বেড়ে যাবে",
+      "বৃষ্টিপাত কমে যাবে",
+      "বৃষ্টিপাতের পরিমাণ বাড়বে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 117,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বেসরকারি বিল কাকে বলে?",
+    "options": [
+      "স্পিকার যে বিলকে বেসরকারি বলে ঘোষণা দেন",
+      "সংসদ সদস্যদের উত্থাপিত বিল",
+      "বিরোধী দলের সদস্যদের উত্থাপিত বিল",
+      "রাষ্ট্রপতি কর্তৃক ঘোষিত বিল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 118,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে কৃষিক্ষেত্রে ‘বলাকা’ ও ‘দোয়েল’ নাম দুটি কিসের?",
+    "options": [
+      "দুটি কৃষি যন্ত্রপাতির নাম",
+      "দুটি কৃষি সংস্থার নাম",
+      "উন্নতজাতের গম শস্য",
+      "কৃষি খামারের নাম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 119,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রথম আইসিসি ট্রফিতে বাংলাদেশ দলের অধিনায়ক কে ছিলেন?",
+    "options": [
+      "গাজী আশরাফ হোসেন লীপু",
+      "আকরাম খান",
+      "আমিনুল ইসলাম বুলবুল",
+      "শফিকুল হক হীরা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 120,
+    "bank": "26th BCS Edu.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের কোথায় সুরমা ও কুশিয়ারা নদী মিলিত হয়ে মেঘনা নাম ধারণ করেছে?",
+    "options": [
+      "ভৈরব",
+      "চাঁদপুর",
+      "দেওয়ানগঞ্জ",
+      "আজমিরীগঞ্জ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 121,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নাসাউ কোন দেশটির রাজধানী?",
+    "options": [
+      "নিকোবর দ্বীপপুঞ্জ",
+      "মাদাগাস্কার দ্বীপপুঞ্জ",
+      "বাহামা দ্বীপপুঞ্জ",
+      "ফিজি দ্বীপপুঞ্জ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 122,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "জাপানের পার্লামেন্টের নাম কি?",
+    "options": [
+      "রাইখস্ট্যাগ",
+      "রিকসড্যাগ",
+      "ফোকেটিং",
+      "ডায়েট"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 123,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "শান্তির জন্য প্রথম কোন মহিলা নোবেল পুরস্কার পান?",
+    "options": [
+      "আলভা মায়ারডাল",
+      "অং সান সুচি",
+      "শিরিন এবাদি",
+      "মাদার তেরেসা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 124,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "আটলান্টিক সনদে যুক্তরাষ্ট্র এবং ব্রিটিশের পক্ষে স্বাক্ষর করেন কে কে?",
+    "options": [
+      "রোনাল্ড রিগ্যান ও মার্গারেট থেচার",
+      "জর্জ ডব্লিউ বুশ ও টনি ব্লেয়ার",
+      "জিমি কার্টার ও রানী দ্বিতীয় এলিজাবেথ",
+      "ফ্রাঙ্কলিন ডি রুজভেল্ট ও উইনস্টোন চার্চিল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 125,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "গ্রিনপিস (Green Peace) কোন দেশের পরিবেশবাদী গ্রুপ?",
+    "options": [
+      "হল্যান্ড",
+      "পোল্যান্ড",
+      "ফিনল্যান্ড",
+      "নিউজিল্যান্ড"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 126,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ব্রিটেনের রানী কোন দেশটির সাংবিধানিক রাষ্ট্রপ্রধান নন?",
+    "options": [
+      "ফিজি",
+      "কানাডা",
+      "অস্ট্রিয়া",
+      "অস্ট্রেলিয়া"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 127,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ফ্রান্সের মহান সম্রাট নেপোলিয়নের জীবনাবসান হয় কোথায়?",
+    "options": [
+      "ওয়াটার লু নামক স্থানে",
+      "দ্বীপ এনাবার্তে",
+      "ভার্সাই নগরীতে",
+      "সেন্ট হেলেনা দ্বীপে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 128,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "গারুদা কোন দেশের বিমান সংস্থা?",
+    "options": [
+      "গ্রিস",
+      "জার্মানি",
+      "ইন্দোনেশিয়া",
+      "নেদারল্যান্ড"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 129,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "কোনটি ভারতের সেভেন সিস্টার্স রাজ্যসমূহের অন্তর্ভুক্ত নয়?",
+    "options": [
+      "কেরালা",
+      "ত্রিপুরা",
+      "মণিপুর",
+      "মিজোরাম"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 130,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ফিলিস্তিনের প্রেসিডেন্ট ইয়াসির আরাফাত-এর আনুষ্ঠানিক অন্ত্যেষ্টিক্রিয়া অনুষ্ঠানে যোগদানের জন্য বিশ্বের বিভিন্ন দেশের রাষ্ট্রপ্রধান/সরকারপ্রধানগণ কোথায় মিলিত হন?",
+    "options": [
+      "রামাল্লা",
+      "প্যারিস",
+      "কায়রো",
+      "জেরুজালেম"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 131,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "United Nations Conference on Trade and Development (UNCTAD)-এর সদর দপ্তর কোথায়?",
+    "options": [
+      "হেগে",
+      "জেনেভায়",
+      "নিউইয়র্কে",
+      "ক্যানবেরায়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 132,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্রের প্রেসিডেন্ট নির্বাচিত হতে হলে ন্যূনতম কত ইলেক্টোরাল ভোটের প্রয়োজন?",
+    "options": [
+      "২৭২",
+      "২৭১",
+      "২৭০",
+      "২৬৮"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 133,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ইন্টারপোলের সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "লন্ডন",
+      "লিঁও",
+      "রোম",
+      "প্যারিস"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 134,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ফিলিস্তিনিদের মাতৃভূমিতে কখন ইসরাইল রাষ্ট্র প্রতিষ্ঠিত হয়?",
+    "options": [
+      "১৯৪৮",
+      "১৯৫০",
+      "১৯৬৭",
+      "১৯৭০"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 135,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "পশ্চিম তিমুর-এর বর্তমান মর্যাদা কি?",
+    "options": [
+      "ইন্দোনেশিয়ার একটি অঙ্গরাজ্য",
+      "একটি স্বাধীন দেশ",
+      "অস্ট্রেলিয়ার একটি প্রদেশ",
+      "কোনোটি ঠিক নয়"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 136,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "কফি আনান আফ্রিকা মহাদেশ থেকে নিয়োগকৃত জাতিসংঘের কততম মহাসচিব?",
+    "options": [
+      "প্রথম",
+      "তৃতীয়",
+      "দ্বিতীয়",
+      "চতুর্থ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 137,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "TI-এর সদর দপ্তর কোথায়?",
+    "options": [
+      "ম্যানিলা",
+      "বার্লিন",
+      "ব্যাংকক",
+      "সিঙ্গাপুর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 138,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "২০০৪ সালে শান্তির জন্য নোবেল পুরস্কার লাভ করেন কোন দেশের নাগরিক?",
+    "options": [
+      "ব্রাজিল",
+      "ইরান",
+      "সুইডেন",
+      "কেনিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 139,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ভারতীয় লোকসভার নির্বাচিত সদস্য সংখ্যা কত?",
+    "options": [
+      "৫৪৫",
+      "৫৪৩",
+      "৬১০",
+      "৪১৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 140,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "সুয়েজ খাল কোন দুটি সাগরকে সংযোজিত করে?",
+    "options": [
+      "লোহিত সাগর ও ভূমধ্যসাগর",
+      "ভূমধ্যসাগর ও আরব সাগর",
+      "লোহিত সাগর ও আরব সাগর",
+      "ভূমধ্যসাগর ও কাস্পিয়ান সাগর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 141,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "কোন তারিখে আন্তর্জাতিক পরিবেশ দিবস পালিত হয়?",
+    "options": [
+      "৫ জুলাই",
+      "২১ মার্চ",
+      "৫ জুন",
+      "২১ জুন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 142,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "লেবানন কোন দেশের কাছ থেকে স্বাধীনতা লাভ করে?",
+    "options": [
+      "ব্রিটেন",
+      "ফ্রান্স",
+      "তুরস্ক",
+      "স্পেন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 143,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "গ্রিনিচ মান সময়ের সঙ্গে বাংলাদেশের সময়ের পার্থক্য কত ঘণ্টা?",
+    "options": [
+      "ছয় ঘণ্টা",
+      "আট ঘণ্টা",
+      "দশ ঘণ্টা",
+      "পাঁচ ঘণ্টা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 144,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ভারতের কোন রাজ্যের রাজধানী ইম্ফল?",
+    "options": [
+      "মিজোরাম",
+      "অরুণাচল",
+      "মণিপুর",
+      "মেঘালয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 145,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "ইউরো মুদ্রা কখন চালু হয়?",
+    "options": [
+      "১৯৯৭ সালের ১ জানুয়ারি",
+      "২০০০ সালের ১ মার্চ",
+      "২০০১ সালের ১ জানুয়ারি",
+      "১৯৯৮ সালের ১ নভেম্বর"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 146,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "সহস্রাব্দ উন্নয়ন লক্ষ্যসমূহের সময়সীমা নির্ধারণ করা হয়েছে কোন সাল পর্যন্ত?",
+    "options": [
+      "২০১০",
+      "২০১৫",
+      "২০২০",
+      "২০২৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 147,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "আবু সায়েফ গেরিলা গোষ্ঠী কোন দেশে তৎপর?",
+    "options": [
+      "ইরাক",
+      "ফিলিপাইন",
+      "ইন্দোনেশিয়া",
+      "থাইল্যান্ড"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 148,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "মাদার তেরেসা কোন দেশে জন্মগ্রহণ করেন?",
+    "options": [
+      "আলবেনিয়া",
+      "মেসেডোনিয়া",
+      "সার্বিয়া",
+      "ইতালি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 149,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "জাতিসংঘের প্রথম মহাসচিব কে ছিলেন?",
+    "options": [
+      "কুর্ট ওয়াল্ডহেইম",
+      "পেরেজ দ্য কুয়েলার",
+      "ট্রাইগভেলাই",
+      "উ থান্ট"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 150,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "নারীর প্রতি সকল রকম বৈষম্য নির্মূল কনভেনশন (UN Convention on the Elimination of All Forms of Discrimination Against Women) স্বাক্ষরিত হয়-",
+    "options": [
+      "১৯৭৫ সালে",
+      "১৯৭৬ সালে",
+      "১৯৭৯ সালে",
+      "১৯৮৯ সালে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 151,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্রের একজন প্রেসিডেন্ট ১২ বছর ক্ষমতায় ছিলেন। তিনি হচ্ছেন-",
+    "options": [
+      "জেমস মনরো",
+      "ফ্রাঙ্কলিন রুজভেল্ট",
+      "হ্যারি এস ট্রুম্যান",
+      "তথ্যটি সঠিক নয়"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 152,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্রের কোন স্টেট-এ নির্বাচকমণ্ডলীর ভোটের (Electoral vote) সংখ্যা বেশি?",
+    "options": [
+      "নিউইয়র্ক",
+      "ক্যালিফোর্নিয়া",
+      "টেক্সাস",
+      "ফ্লোরিডা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 153,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "শেনজেন চুক্তি হচ্ছে-",
+    "options": [
+      "বাণিজ্য চুক্তি",
+      "কর হ্রাস করা চুক্তি",
+      "অবাধ চলাচল সংক্রান্ত চুক্তি",
+      "এর কোনোটিই নয়"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 154,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "অভিন্ন ইউরোপ গঠনের লক্ষ্যে ম্যাসট্রিক্ট চুক্তি অনুমোদনের জন্য কোন দেশ দুবার গণভোটের আয়োজন করেছিল?",
+    "options": [
+      "লুক্সেমবার্গ",
+      "আয়ারল্যান্ড",
+      "গ্রিস",
+      "ডেনমার্ক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 155,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্ট্র ইউনিয়নে কোন স্টেট সর্বশেষে যোগ দেয়?",
+    "options": [
+      "হাওয়াই",
+      "অ্যারিজোনা",
+      "টেক্সাস",
+      "ফ্লোরিডা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 156,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "জাপান ও রাশিয়ার মধ্যকার বিরোধপূর্ণ দ্বীপটির নাম কি?",
+    "options": [
+      "কুড়িল দ্বীপপুঞ্জ",
+      "মার্শাল দ্বীপপুঞ্জ",
+      "দিয়াগো গার্সিয়া",
+      "গ্রেট বেরিয়ার রিফ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 157,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "যুক্তরাষ্টের কোন স্টেটটি ফ্রান্সের নিকট থেকে ক্রয় করা হয়েছিল?",
+    "options": [
+      "লুইসিয়ানা",
+      "উইসকনসিন",
+      "ফ্লোরিডা",
+      "নেবারাস্কা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 158,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "উরুগুয়ে রাউন্ডের সংলাপ কত বছর ধরে চলেছিল?",
+    "options": [
+      "২ বছর",
+      "৮ বছর",
+      "৫ বছর",
+      "৬ বছর"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 159,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "বিশ্বব্যাংকের SOFT LOAN WINDOW হলো-",
+    "options": [
+      "MIGA",
+      "IBRD",
+      "IDA",
+      "IFC"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 160,
+    "bank": "26th BCS Edu.",
+    "subject": "International Affairs",
+    "question": "IAEA- এর নির্বাহী প্রধান হলেন-",
+    "options": [
+      "মোহাম্মদ আল বারাদি",
+      "আমর মুসা",
+      "আয়াদ আলাওয়ি",
+      "হামিদ কারজাই"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 161,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "কোন ভিটামিন ক্ষতস্থান হতে রক্ত পড়া বন্ধ করতে সাহায্য করে?",
+    "options": [
+      "ভিটামিন সি",
+      "ভিটামিন বি",
+      "ভিটামিন B_2",
+      "ভিটামিন কে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 162,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "আকাশে বিজলী চমকায়-",
+    "options": [
+      "দুই খণ্ড মেঘ পর পর এলে",
+      "মেঘের মধ্যে বিদ্যুৎ কোষ তৈরি হলে",
+      "মেঘ বিদ্যুৎ পরিবাহী অবস্থায় এলে",
+      "মেঘের অসংখ্য পানি ও বরফ কণার মধ্যে চার্জ সঞ্চিত হলে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 163,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "বিদ্যুৎবাহী তারে পাখি বসলে সাধারণত বিদ্যুৎ স্পৃষ্ট হয় না, কারণ-",
+    "options": [
+      "পাখির গায়ে বিদ্যুৎরোধী আবরণ থাকে",
+      "পাখির দেহের ভিতর দিয়ে বিদ্যুৎ প্রবাহিত হয় না",
+      "বিদ্যুৎ স্পৃষ্ট হলেও পাখি মরে না",
+      "মাটির সঙ্গে সংযোগ হয় না"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 164,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "সালোকসংশ্লেষণ সবচেয়ে বেশি পরিমাণে হয়-",
+    "options": [
+      "সবুজ আলোতে",
+      "নীল আলোতে",
+      "লাল আলোতে",
+      "বেগুনী আলোতে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 165,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "ম্যালিক এসিড-",
+    "options": [
+      "আমলকিতে পাওয়া যায়",
+      "কমলালেবুতে পাওয়া যায়",
+      "আঙ্গুরে পাওয়া যায়",
+      "টমেটোতে পাওয়া যায়"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 166,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "হাড় ও দাঁতকে মজবুত করে-",
+    "options": [
+      "আয়োডিন",
+      "আয়রন",
+      "ম্যাগনেসিয়াম",
+      "ফসফরাস"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 167,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "নিউমোনিয়া রোগে আক্রান্ত হয় মানব দেহের-",
+    "options": [
+      "ফুসফুস",
+      "যকৃত",
+      "কিডনি",
+      "প্লীহা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 168,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "শুষ্ক বরফ বলা হয়-",
+    "options": [
+      "হিমায়িত অক্সিজেনকে",
+      "হিমায়িত কার্বন মনোক্সাইডকে",
+      "হিমায়িত কার্বন-ডাই-অক্সাইডকে",
+      "ক্যালসিয়াম অক্সাইডকে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 169,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "বৈদ্যুতিক ইস্ত্রি এবং হিটারে ব্যবহৃত হয়-",
+    "options": [
+      "টাংস্টেন তার",
+      "নাইক্রোম তার",
+      "এন্টিমনি তার",
+      "কপার তার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 170,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "শব্দের তীব্রতা নির্ণায়ক যন্ত্র-",
+    "options": [
+      "অডিও মিটার",
+      "অ্যামিটার",
+      "অডিওফোন",
+      "অলটিমিটার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 171,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "ডিজিটাল ঘড়ি বা ক্যালকুলেটরে কালচে অনুজ্জ্বল যে লেখা ফুটে উঠে তা কিসের ভিত্তিতে তৈরি?",
+    "options": [
+      "এলইডি",
+      "আইসি",
+      "এলসিডি",
+      "সিলিকন চিপ"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 172,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "দিনাজপুর জেলার বড়পুকুরিয়ায় কোন খনিজ প্রকল্পের কাজ চলছে?",
+    "options": [
+      "কঠিন শিলা",
+      "কয়লা",
+      "চুনাপাথর",
+      "কাদামটি"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 173,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "Adult Cell ক্লোন করে যে ভেড়ার জন্ম হয়েছে তার নাম দেয়া হয়েছে-",
+    "options": [
+      "শেলী",
+      "ডলি",
+      "মলি",
+      "নেলী"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 174,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "বৃত্তের পরিধি ও ব্যাসের অনুপাত-",
+    "options": [
+      "৩",
+      "২২/৭",
+      "২৫/৯",
+      "প্রায় ৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 175,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "মানুষের ক্রোমোজোমের সংখ্যা কত?",
+    "options": [
+      "২৫ জোড়া",
+      "২৬ জোড়া",
+      "২৩ জোড়া",
+      "২৪ জোড়া"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 176,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "সমুদ্রপৃষ্ঠে বায়ুর চাপ প্রতি বর্গ সে. মি. এ-",
+    "options": [
+      "৫ কি.মি.",
+      "১০ কি.মি.",
+      "২৭ কি. গ্রাম",
+      "১০ নিউটন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 177,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "কাচ তৈরির প্রধান কাঁচামাল হলো-",
+    "options": [
+      "শাজিমাটি",
+      "চুনাপাথর",
+      "জিপসাম",
+      "বালি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 178,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "জীবাশ্ম জ্বালানি দহনের ফলে বায়ুমণ্ডলে যে গ্রিন হাউজ গ্যাসের পরিমাণ সব চাইতে বেশি বৃদ্ধি পাচ্ছে-",
+    "options": [
+      "জলীয় বাষ্প",
+      "ক্লোরোফ্লোরো কার্বন",
+      "কার্বন-ডাই-অক্সাইড",
+      "মিথেন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 179,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "বস্তুর ওজন কোথায় সবচেয়ে বেশি?",
+    "options": [
+      "খনির ভিতর",
+      "পাহাড়ের উপর",
+      "মেরু অঞ্চলে",
+      "বিষুব অঞ্চলে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 180,
+    "bank": "26th BCS Edu.",
+    "subject": "Science",
+    "question": "নাইট্রোজেন গ্যাস থেকে কোন সার প্রস্তুত করা হয়?",
+    "options": [
+      "টিএসপি",
+      "সবুজ সার",
+      "পটাশ",
+      "ইউরিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 181,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "১, ৩, ৬, ১০, ১৫, ২১ ……. ধারাটির দশম পদ–",
+    "options": [
+      "৪৫",
+      "৫৫",
+      "৬২",
+      "৬৫"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 182,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "পিতা ও মাতার বয়সের গড় ৪৫ বছর। আবার পিতা, মাতা ও এক পুত্রের বয়সের গড় ৩৬ বছর। পুত্রের বয়স-",
+    "options": [
+      "৯ বছর",
+      "১৪ বছর",
+      "১৫ বছর",
+      "১৮ বছর"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 183,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি জারে দুধ ও পানির অনুপাত ৫ : ১। দুধের পরিমাণ যদি পানি অপেক্ষা ৮ লিটার বেশি হয় তবে পানির পরিমাণ কত?",
+    "options": [
+      "২ লিটার",
+      "৪ লিটার",
+      "৬ লিটার",
+      "১০ লিটার"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 184,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "টাকায় ৩টি করে লেবু কিনে টাকায় ২টি করে বিক্রি করলে শতকরা কত লাভ হবে?",
+    "options": [
+      "৫০%",
+      "৩০%",
+      "৩৩%",
+      "৩১%"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 185,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "১২ জন শ্রমিক ৩ দিনে ৭২০ টাকা আয় করে। তবে ৯ জন শ্রমিক সমপরিমাণ টাকা আয় করবে-",
+    "options": [
+      "৫ দিনে",
+      "৪ দিনে",
+      "৬ দিনে",
+      "৩ দিনে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 186,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "লঞ্চ ও স্রোতের গতিবেগ যথাক্রমে ঘণ্টায় ১৮ কি.মি. ও ৬ কি.মি.। নদীপথে ৪৮ কি.মি. অতিক্রম করে পুনরায় ফিরে আসতে সময় লাগবে-",
+    "options": [
+      "১০ ঘণ্টা",
+      "৫ ঘণ্টা",
+      "৬ ঘণ্টা",
+      "৮ ঘণ্টা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 187,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "কোন সংখ্যার ১/ ২ অংশের সাথে ৬ যোগ করলে সংখ্যাটির ২/ ৩ অংশ হবে। সংখ্যাটি কত?",
+    "options": [
+      "৫৩",
+      "৬৩",
+      "৩৬",
+      "৩৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 188,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "৪৩ থেকে ৬০ এর মধ্যে মৌলিক সংখ্যার সংখ্যা–",
+    "options": [
+      "৫",
+      "৩",
+      "৭",
+      "৪"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 189,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "যদি p একটি মৌলিক সংখ্যা হয় তবে √ p-",
+    "options": [
+      "একটি স্বাভাবিক সংখ্যা",
+      "একটি পূর্ণ সংখ্যা",
+      "একটি মূলদ সংখ্যা",
+      "একটি অমূলদ সংখ্যা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 190,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "(√ 3. √ 5)^4- এর মান কত?",
+    "options": [
+      "30",
+      "60",
+      "225",
+      "15"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 191,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "ক এবং খ একত্রে একটি কাজ ১২ দিনে করতে পারে। ক একা কাজটি ২০ দিনে করতে পারে, খ একা কাজটি করতে পারবে-",
+    "options": [
+      "২৫ দিনে",
+      "৩০ দিনে",
+      "৩৫ দিনে",
+      "৪০ দিনে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 192,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "৭২ সংখ্যাটির মোট ভাজক আছে-",
+    "options": [
+      "৯টি",
+      "১০টি",
+      "১১টি",
+      "১২টি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 193,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "দুটি ক্রমিক পূর্ণসংখ্যা নির্ণয় করুন, যাদের বর্গের অন্তর ৪৭-",
+    "options": [
+      "২১ এবং ২২",
+      "২২ এবং ২৩",
+      "২৩ এবং ২৪",
+      "২৪ এবং ২৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 194,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "x+y=8,x-y=6 হলে, x^2+y^2 এর মান –",
+    "options": [
+      "40",
+      "60",
+      "50",
+      "80"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 195,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "a+1/ a=√ 3 হলে, a^2+1/ a^2 এর মান–",
+    "options": [
+      "6",
+      "4",
+      "2",
+      "1"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 196,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "একটি বর্গক্ষেত্রের বাহুর দৈর্ঘ্য ৮ ফুট হলে, ঐ বর্গক্ষেত্রের কর্ণের ওপর অঙ্কিত বর্গক্ষেত্রের ক্ষেত্রফল কত?",
+    "options": [
+      "১৫৬ বর্গফুট",
+      "১৬৪ বর্গফুট",
+      "১২৮ বর্গফুট",
+      "২১৮ বর্গফুট"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 197,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "√ 2 /√6+2 সমান-",
+    "options": [
+      "√ 3+√ 2",
+      "8-√ 2",
+      "√ 3-√2",
+      "√ 3+2"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 198,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "x^2-8x-8y+16+y^2-এর সঙ্গে কত যোগ করলে যোগফল একটি পূর্ণবর্গ হবে?",
+    "options": [
+      "-2xy",
+      "8xy",
+      "6xy",
+      "2xy"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 199,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "x^2-y^2+2y-1 এর একটি উৎপাদক-",
+    "options": [
+      "x+y+1",
+      "x-y",
+      "x+y-1",
+      "x-y-1"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 200,
+    "bank": "26th BCS Edu.",
+    "subject": "Math",
+    "question": "১৩ সেমি ব্যাসার্ধের বৃত্তের কেন্দ্র হতে ৫ সেমি দূরত্বে অবস্থিত জ্যা-এর দৈর্ঘ্য-",
+    "options": [
+      "২৪ সেমি",
+      "১৮ সেমি",
+      "১৬ সেমি",
+      "১২ সেমি"
+    ],
+    "answer": 0
+  }
+]

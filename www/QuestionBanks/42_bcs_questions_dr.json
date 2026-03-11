@@ -1,0 +1,1297 @@
+[
+  {
+    "id": 1,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "What is the correct indirect form of : He said, “You had better see a doctor”",
+    "options": [
+      "He advised him to see a doctor",
+      "He advised that he should see a doctor",
+      "He suggested that he had seen a doctor",
+      "He proposed to see a doctor"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 2,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Identify the word that remains same in plural form:",
+    "options": [
+      "deer",
+      "horse",
+      "elephant",
+      "tiger"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 3,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "সঠিক বানান নয় কোনটি?",
+    "options": [
+      "ধরণি",
+      "মূর্ছা",
+      "গুণ",
+      "প্রানী"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 4,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "যদি ICE : COLDNESS হয়, তবে EARTH:?",
+    "options": [
+      "weight",
+      "jungle",
+      "sea",
+      "Gravity"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 5,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "নওগাঁ জেলার পাহাড়পুরে অবস্থিত ‘সোমপুর বিহার’ এর প্রতিষ্ঠাতা কে?",
+    "options": [
+      "গোপাল",
+      "ধর্মপাল",
+      "মহীপাল",
+      "বিগ্রহপাল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 6,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "IUCN এর কাজ হলো বিশ্বব্যাপী-",
+    "options": [
+      "পানি সম্পদ রক্ষা করা",
+      "সন্ত্রাস দমন করা",
+      "প্রাকৃতিক সম্পদ রক্ষা করা",
+      "পরিবেশ দূষণ রোধ করা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 7,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "কোন চুক্তির মাধ্যমে ইউরোপের “Thirty years’ war” এর সমাপ্তি ঘটে?",
+    "options": [
+      "ভাসাই চুক্তি, ১৯১৯",
+      "ওয়েস্টফেলিয়া শান্তি চুক্তি, ১৬৪৮",
+      "প্যারিস চুক্তি, ১৭৮৩",
+      "লুজান চুক্তি, ১৯২৩"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 8,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "P(A)=1/ 3;P(B)=2/ 3;A ও B স্বাধীন হলে, P(B/A) = কত?",
+    "options": [
+      "3/ 4",
+      "2/ 3",
+      "1/ 3",
+      "1/ 4"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 9,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Which word is correct?",
+    "options": [
+      "Furnitures",
+      "Informations",
+      "Sceneries",
+      "Proceeds"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 10,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "মার্কিন-তালেবান ঐতিহাসিক চুক্তি স্বাক্ষরিত হয়-",
+    "options": [
+      "২ মার্চ, ২০২০",
+      "২৫ জানুয়ারি, ২০২০",
+      "৩০ এপ্রিল, ২০২০",
+      "২৯ ফেব্রুয়ারি, ২০২০"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 11,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "5 + 8 + 11 + 14 + ...... ধারাটির কত তম পদ 302।",
+    "options": [
+      "60তম পদ",
+      "70তম পদ",
+      "90তম পদ",
+      "100তম পদ"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 12,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "৩০ কি.মি. পথ পাড়ি দিতে জয়নুলের রনির থেকে ২ ঘণ্টা সময় বেশি লেগেছে। জয়নুল যদি তার গতি দ্বিগুণ করত তাহলে রনির থেকে ১ ঘণ্টা সময় কম লাগত। জয়নুলের গতি কত ছিল?",
+    "options": [
+      "৪ কি.মি./ঘণ্টা",
+      "৫ কি.মি./ঘণ্টা",
+      "৬ কি.মি./ঘণ্টা",
+      "৭.৫ কি.মি./ঘণ্টা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 13,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "বঙ্গালি উপভাষা অঞ্চল কোনটি?",
+    "options": [
+      "নদীয়া",
+      "ত্রিপুরা",
+      "পুরুলিয়া",
+      "বরিশাল"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 14,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "“D-8 Organization for Economic Cooperation” বা D-8 এর দশম শীর্ষ সম্মেলন কোথায় অনুষ্ঠিত হবে?",
+    "options": [
+      "আবুজা",
+      "ঢাকা",
+      "তেহরান",
+      "ইস্তাম্বুল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 15,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "To doctor an animal means:",
+    "options": [
+      "to treat it",
+      "to sterilize it",
+      "to poison it",
+      "to cure it"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 16,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Literature",
+    "question": "সবুজপত্র পত্রিকাটির সম্পাদক কে?",
+    "options": [
+      "রবীন্দ্রনাথ ঠাকুর",
+      "শেখ ফজলুল করিম",
+      "প্রমথ চৌধুরী",
+      "মোহাম্মদ নাসির উদ্দিন"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 17,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশ সরকারী কর্ম কমিশন সংবিধানের কত অনুচ্ছেদ অনুযায়ী গঠিত?",
+    "options": [
+      "১৩৬",
+      "১৩৭",
+      "১৩৮",
+      "১৪০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 18,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯৪৮-১৯৫২ সালের ভাষা আন্দোলনের সময় ‘ভাষা দিবস’ হিসেবে কোন দিনটি পালন করা হতো?",
+    "options": [
+      "২৫শে জানুয়ারি",
+      "১১ই ফেব্রুয়ারি",
+      "১১ই মার্চ",
+      "২৫শে এপ্রিল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 19,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের জাতীয় আয়ে কোন খাতে প্রবৃদ্ধির হার সবচেয়ে বেশি?",
+    "options": [
+      "কৃষি ও বনজ",
+      "মৎস্য",
+      "শিল্প",
+      "স্বাস্থ্য ও সামাজিক সেবা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 20,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "১৯৭১ সালে মুজিবনগর সরকার কর্তৃক প্রকাশিত পত্রিকার নাম ছিল-",
+    "options": [
+      "জয় বাংলা",
+      "বাংলাদেশ",
+      "স্বাধীনতা",
+      "মুক্তির ডাক"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 21,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "ভারতে বছরের কোন দিনটি সিভিল সার্ভিস দিবস (Civil Service Day) হিসেবে পালিত হয়?",
+    "options": [
+      "২১ এপ্রিল",
+      "২ অক্টোবর",
+      "২৬ জানুয়ারি",
+      "১০ মে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 22,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "প্রতিবছর কোন তারিখে বাংলাদেশ জাতীয় জনসংখ্যা দিবস পালন করা হয়?",
+    "options": [
+      "২ ফেব্রুয়ারি",
+      "৮ ফেব্রুয়ারি",
+      "৮ মার্চ",
+      "৭ এপ্রিল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 23,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "‘বাবা’ কোন ভাষার অন্তর্গত শব্দ?",
+    "options": [
+      "তৎসম",
+      "তদ্ভদ",
+      "ফারসী",
+      "তুর্কি"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 24,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "১৯৭১ সালে ‘The Concert for Bangladesh’ কোথায় অনুষ্ঠিত হয়?",
+    "options": [
+      "চট্টগ্রাম",
+      "কলকাতা",
+      "লন্ডন",
+      "নিউইয়র্ক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 25,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "ঢাকা গেইট এর নির্মাতা কে?",
+    "options": [
+      "শায়েস্তা খাঁ",
+      "নবাব আবদুল গণি",
+      "লর্ড কার্জন",
+      "মীর জুমলা"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 26,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "মুক্তিযুদ্ধভিত্তিক নভেল কোনটি?",
+    "options": [
+      "ক্রীতদাসের হাসি",
+      "জীবন ও রাজনৈতিক বাস্তবতা",
+      "কান্নাপর্ব",
+      "প্রদোষে প্রাকৃতজন"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 27,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "Sustainable Development Goals (SDG) কয়টি?",
+    "options": [
+      "১৩টি",
+      "১৫টি",
+      "১৭টি",
+      "৩১টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 28,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "শুদ্ধ বাক্য নয় কোনটি?",
+    "options": [
+      "বিদ্বান হলেও তার কোনো অহংকার নেই",
+      "ইশ! যদি পাখির মত পাখা পেতাম",
+      "অকারণে ঋণ করিও না",
+      "হয়তো সোহমা আসতে পারে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 29,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "একটি চৌবাচ্চায় ৮০০০ লিটার পানি ধরে। চৌবাচ্চাটির দৈর্ঘ্য ২.৫৬ মিটার এবং প্রস্থ ১.২৫ মিটার। চৌবাচ্চাটির গভীরতা কত?",
+    "options": [
+      "১.৫ মিটার",
+      "২.৫ মিটার",
+      "৩ মিটার",
+      "৩.৫ মিটার"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 30,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "The word “flying” in the sentence “Look at the flying bird” is a:",
+    "options": [
+      "gerund",
+      "participle",
+      "verbal noun",
+      "gerundial infinitive"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 31,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "বাক্যের দুটি অংশ থাকে-",
+    "options": [
+      "প্রসাদগুণ, মাধুর্যগুণ",
+      "উপমা, অলংকার",
+      "উদ্দেশ্য, বিধেয়",
+      "সাধু, চলিত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 32,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Identify the determiner in the sentence “Bring me that book”",
+    "options": [
+      "bring",
+      "me",
+      "that",
+      "book"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 33,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "কোন তারিখে মার্কিন যুক্তরাষ্ট্র ইরানের উপর অর্থনৈতিক নিষেধাজ্ঞা পুনরায় আরোপ করে?",
+    "options": [
+      "২০ আগস্ট ২০২০",
+      "১৯ সেপ্টেম্বর ২০২০",
+      "১৮ অক্টোবর ২০২০",
+      "১৫ জুলাই ২০২০"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 34,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "নিচের ধারার শেষ সংখ্যা কত? ৩, ৯, ২৭, ৮১ ......?",
+    "options": [
+      "২৪১",
+      "২৪৩",
+      "২৪৫",
+      "২৪৭"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 35,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "Global Vaccine Summit অনুষ্ঠিত হয়-",
+    "options": [
+      "৫ মে ২০২০",
+      "৪ জুন ২০২০",
+      "৬ জুলাই ২০২০",
+      "৮ আগস্ট ২০২০"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 36,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "WIPO এর সদর দপ্তর কোথায় অবস্থিত?",
+    "options": [
+      "জেনেভা",
+      "রোম",
+      "নিউইয়র্ক",
+      "ওয়াশিংটন ডিসি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 37,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Literature",
+    "question": "“A Passage to India” is written by:",
+    "options": [
+      "E.M. Forster",
+      "Nirad C. Chaudhuri",
+      "Rudyard Kipling",
+      "Walt Whitman"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 38,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "বঙ্গবন্ধু কত সালে এবং কোন শহরে জোট নিরপেক্ষ আন্দোলনের শীর্ষ সম্মেলনে অংশগ্রহণ করেন?",
+    "options": [
+      "১৯৭২, কায়রো",
+      "১৯৭৪, নয়া দিল্লী",
+      "১৯৭৫, বেলগ্রেড",
+      "১৯৭৩, আলজিয়ার্স"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 39,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "বাংলাদেশের ছয় ঋতুর সঠিক অনুক্রম কোনটি?",
+    "options": [
+      "গ্রীষ্ম, বর্ষা, বসন্ত, হেমন্ত, শীত ও শরৎ",
+      "বর্ষা, শরৎ, হেমন্ত, শীত, বসন্ত ও গ্রীষ্ম",
+      "শরৎ, হেমন্ত, শীত, বসন্ত, গ্রীষ্ম ও বর্ষা",
+      "গ্রীষ্ম, বর্ষা, শরৎ, হেমন্ত, শীত ও বসন্ত"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 40,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "ডিসেম্বর ২০২০ এ অনুষ্ঠিত বাংলাদেশ-ভারত দ্বিপাক্ষিক ভার্চুয়াল শীর্ষ সম্মেলনে কযটি সমঝোতা স্মারক স্বাক্ষরিত হয়?",
+    "options": [
+      "৩টি",
+      "৫টি",
+      "৭টি",
+      "৯টি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 41,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "log_x1/ 9=-2 হলে x এর মান কোনটি?",
+    "options": [
+      "3",
+      "2",
+      "1/ 3",
+      "-1/ 3"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 42,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "কার্টাগেনা প্রটোকল কোন সালে স্বাক্ষরিত হয়?",
+    "options": [
+      "২০০০ সালে",
+      "২০০১ সালে",
+      "২০০৩ সালে",
+      "২০০৫ সালে"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 43,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Literature",
+    "question": "‘কিত্তনখোলা’ নাটকটির বিষয়-",
+    "options": [
+      "যন্ত্রণাদগ্ধ শহরজীবন",
+      "স্নিগ্ধ-শ্যামল প্রকৃতির রূপ",
+      "লোকায়ত জীবন-সংস্কৃতি",
+      "দেশবিভাগজনিত জীবন যন্ত্রণা"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 44,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "কোনটি “Bretton Woods Institutions” এর অন্তর্ভুক্ত?",
+    "options": [
+      "IDB",
+      "IMF",
+      "WTO",
+      "ADB"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 45,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "টাকার ৩টি এবং টাকায় ৫টি দরে সমান সংখ্যাক আমলকি ক্রয় করে এক ব্যক্তি টাকায় ৪টি করে আমলকি বিক্রয় করলেন। ঐ ব্যক্তির শতকরা কত লাভ বা ক্ষতি হলো তা নির্ণয় করুন।",
+    "options": [
+      "৪.২৫% লাভ",
+      "৫.২৫% ক্ষতি",
+      "৬.২৫% ক্ষতি",
+      "৭.২৫% ভাল"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 46,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "সম্প্রতি (সেপ্টেম্বর ২০২০) কোন অঞ্চলের নিয়ন্ত্রণ নিয়ে আজারবাইজান ও আর্মেনিয়ার মাঝে সংঘর্ষ হয়?",
+    "options": [
+      "আর্টসাথ প্রজাতন্ত্র",
+      "নাগার্নো-কারাবাখ",
+      "ইয়েরেভান",
+      "নাকার্চভান ছিটমহল"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 47,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "উদ্বাসন শব্দের অর্থ কী?",
+    "options": [
+      "বাসভূমি থেকে বিতাড়িত হওয়া",
+      "বাসভূমির সম্মুখস্থ ভূমি",
+      "অজ্ঞাত বিষয় প্রকাশ করা",
+      "বিকাশ"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 48,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "x^2-3x-10>0 অসমতাটির সমাধান কোনটি",
+    "options": [
+      "(-∞,-1)∪(4,+∞)",
+      "(-∞,-2)∪(5,+∞)",
+      "(∞,2)∪(5,+∞)",
+      "(-5,-∞)∪(∞,2)"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 49,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "What is the meaning of musk?",
+    "options": [
+      "a form of drama",
+      "a face cover",
+      "a substance used making perfume",
+      "a disguise"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 50,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "secA+tanA=5/ 2 হলে secA-tanA=?",
+    "options": [
+      "1/ 2",
+      "1/ 5",
+      "2/ 5",
+      "5/ 2"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 51,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলা আদি অধিবাসীগণ কোন ভাষাভাষী ছিলেন?",
+    "options": [
+      "বাংলা",
+      "সংস্কৃত",
+      "হিন্দি",
+      "অস্ট্রিক"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 52,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশের প্রথম সামুদ্রিক গ্যাসক্ষেত্র কোনটি?",
+    "options": [
+      "হাতিয়া প্রণালী",
+      "জাফোর্ড পয়েন্ট",
+      "সাঙ্গু ভ্যালি",
+      "মাতারবাড়ি"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 53,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "ব্রিটিশ কৃষি বিপ্লব কখন সংঘটিত হয়েছিল?",
+    "options": [
+      "ঊনবিংশ শতাব্দীতে",
+      "অষ্টাদশ শতাব্দীতে",
+      "ষোড়শ শতাব্দীতে",
+      "চতর্দশ শতাব্দীতে"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 54,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "গ্রীন হাউস গ্যাসসমূহ নিঃসরণ নিয়ন্ত্রণ সংক্রান্ত চুক্তি “The Kyoto Protocol” জাতিসংঘ কর্তৃক কত সালে গৃহীত হয়?",
+    "options": [
+      "১৯৯৭",
+      "১৯৯৯",
+      "২০০৩",
+      "২০০৫"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 55,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Literature",
+    "question": "মহাকবি আলাওল রচিত কাব্য-",
+    "options": [
+      "চন্দ্রাবতী",
+      "পদ্মাবতী",
+      "মধুমালতী",
+      "লাইলী মজনু"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 56,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "‘সাবাস বাংলাদেশ’ ভাস্কর্যটির স্থপতি কে?",
+    "options": [
+      "হামিদুজ্জামান খান",
+      "রবিউল হুসাইন",
+      "আব্দুর রাজ্জাক",
+      "নিতুন কুণ্ডু"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 57,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "বঙ্গবন্ধু শেখ মুজিবুর রহমানের ‘অসমাপ্ত আত্মজীবনী’ প্রথম প্রকাশিত হয় কত সালে?",
+    "options": [
+      "২০১০",
+      "২০১১",
+      "২০১২",
+      "২০১৫"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 58,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "কৃষিক্ষেত্রে রবি মৌসুম কোনটি?",
+    "options": [
+      "কার্তিক-ফাল্গুন",
+      "চৈত্র-বৈশাখ",
+      "ভাদ্র-অগ্রহায়ণ",
+      "শ্রাবণ-আশ্বিন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 59,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "অনুকম্পা শব্দের ইংরেজি কোনটি?",
+    "options": [
+      "Clemency",
+      "Enthral",
+      "Erudition",
+      "Fathom"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 60,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "১ থেকে ৪৯ পর্যন্ত সংখ্যাগুলোর গড় কত?",
+    "options": [
+      "২৫",
+      "৩০",
+      "৩৫",
+      "৪৯"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 61,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "আপনার মোবাইল ফোনের মাসিক বিল এসেছে ৪২০ টাকা। যদি ১ বছর পর ১০% বৃদ্ধি পায় এবং আরো ৬ মাস পর ২০% বৃদ্ধি পায়, তাহলে ১৮ মাস পর আপনার বিল কত হবে?",
+    "options": [
+      "৪৬০.২০ টাকা",
+      "৫৫৪.৪০ টাকা",
+      "৬২০.৬০ টাকা",
+      "৭৩০.৮০ টাকা"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 62,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "বাংলাদেশের বর্তমান সভাপতির পূর্বে কোন দেশ CVF-এর সভাপতি ছিল?",
+    "options": [
+      "মার্শাল আইল্যান্ড",
+      "মালদ্বীপ",
+      "গ্রানাডা",
+      "বাহামা"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 63,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Identify the correctly spelled one:",
+    "options": [
+      "Caesarean",
+      "caesarean",
+      "ciserian",
+      "scissorian"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 64,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "কোথায় শেনজেন (Schengen) চুক্তি স্বাক্ষরিত হয়?",
+    "options": [
+      "১৯৯৫ সালে ডেনমার্কে",
+      "১৯৮৪ সালে বেলজিয়ামে",
+      "১৯৮৫ সালে লুক্সেমবার্গে",
+      "১৯৯৬ সালে হাঙ্গেরিতে"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 65,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "‘Notification’-এর বাংলা পরিভাষা কোনটি?",
+    "options": [
+      "বিজ্ঞাপন",
+      "বিজ্ঞপ্তি",
+      "বিজ্ঞপ্তি ফলক",
+      "প্রজ্ঞাপন"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 66,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "কোনটি যমুনার উপনদী?",
+    "options": [
+      "তিস্তা",
+      "ধলেশ্বরী",
+      "খোয়াই",
+      "বংশী"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 67,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "What is the function of a topic sentence?",
+    "options": [
+      "to introduce the topic",
+      "to analyse the topic",
+      "to present the main idea",
+      "to expand the idea"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 68,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "নিচের কোনটি মুক্তিযুদ্ধভিত্তিক স্বল্পদৈর্ঘ্য চলচ্চিত্র?",
+    "options": [
+      "ধীরে বহে মেঘনা",
+      "কলমিলতা",
+      "আবার তোরা মানুষ হ",
+      "হুলিয়া"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 69,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "এক বর্গক্ষেত্রের এক বাহু অপর একটি বর্গক্ষেত্রের পরিসীমার সমান হলে বর্গক্ষেত্র দুটির কর্ণের অনুপাত কত হবে?",
+    "options": [
+      "1 ∶ 2",
+      "5 ∶ 2",
+      "2 ∶ 1",
+      "4 ∶ 1"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 70,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "মধ্যপদলোপী কর্মধারয় সমাস কোনটি?",
+    "options": [
+      "সিংহ চিহ্নিত আসন = সিংহাসন",
+      "মহান যে পুরুষ = মহাপুরুষ",
+      "কুসুমের মতো কোমল = কুসুমকোমল",
+      "জায়া ও পতি = দম্পতি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 71,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "কোনটি শুদ্ধ নয়?",
+    "options": [
+      "যন্ত্রনা",
+      "শূদ্র",
+      "সহযোগিতা",
+      "স্বতঃস্ফূর্ত"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 72,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Literature",
+    "question": "Who wrote Dr. Zivago?",
+    "options": [
+      "Maxim Gorky",
+      "Boris Pastornak",
+      "Fyodor Dostoevsky",
+      "Leo Tolstoy"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 73,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Would you please find out Bangladesh ––– the map.",
+    "options": [
+      "in",
+      "on",
+      "over",
+      "at"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 74,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "কোন দেশটি সম্প্রতি ইসরাইলের সাথে কূটনৈতিক সম্পর্ক স্থাপন করেছে?",
+    "options": [
+      "সৌদিআরব",
+      "কুয়েত",
+      "সংযুক্ত আরব আমিরাত",
+      "ওমান"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 75,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "‘যিনি ন্যায়শাস্ত্র জানেন’ এর এককথায় প্রকাশিত রূপ হলো-",
+    "options": [
+      "ন্যায়বাগীশ",
+      "নৈয়ায়িক",
+      "ন্যায়পাল",
+      "ন্যায়ঋদ্ধ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 76,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Hasan has read most of the –––– of Shakespeare:",
+    "options": [
+      "poem",
+      "play",
+      "drama",
+      "works"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 77,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Literature",
+    "question": "“For God’s sake, hold your tongue and let me love” occurs in a novel by:",
+    "options": [
+      "Jane Austen",
+      "Syed Waliullah",
+      "Somerset Maugham",
+      "Rabindranath Tagore"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 78,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "বাংলাদেশে প্রধান বীজ উৎপাদনকারী সরকারী প্রতিষ্ঠান-",
+    "options": [
+      "BARI",
+      "BRRI",
+      "BADC",
+      "BINA"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 79,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Complete the sentence: If I were you, I –––– take the money:",
+    "options": [
+      "shall",
+      "will",
+      "would",
+      "may"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 80,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "রাষ্ট্রভাষা আন্দোলনে কোন সংস্থা গুরুত্বপূর্ণ ভূমিকা পালন করে?",
+    "options": [
+      "তমদ্দুন মজলিস",
+      "ভাষা পরিষদ",
+      "মাতৃভাষা পরিষদ",
+      "আমরা বাঙালি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 81,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "‘উলুবনে মুক্তা ছড়ানো’ প্রচলিত এমন শব্দগুচ্ছকে বলে-",
+    "options": [
+      "প্রবাদ-প্রবচন",
+      "এককথায় প্রকাশ",
+      "ভাবসম্প্রসারণ",
+      "বাক্য সংকোচন"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 82,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "কুষ্টি শব্দের সঠিক প্রকৃতি-প্রত্যয়-",
+    "options": [
+      "কৃষ্+তি",
+      "কৃষ্+টি",
+      "কৃ+ইষ্টি",
+      "কৃষ্+ইষ্টি"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 83,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Go and catch the falling star. Here the “falling” is-",
+    "options": [
+      "an adverb",
+      "a preposition",
+      "an adjective",
+      "a verb"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 84,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "এক ব্যক্তি ব্যাংকে ৫১০ টাকার চেক দিয়ে ২০ টাকার এবং ৫০ টাকার নোট প্রদানের জন্য অনুরোধ করলেন। কত প্রকারে তার অনুরোধ রক্ষা করা সম্ভব?",
+    "options": [
+      "৩ প্রকারে",
+      "৪ প্রকারে",
+      "৬ প্রকারে",
+      "৫ প্রকারে"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 85,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "",
+    "options": [],
+    "answer": 1
+  },
+  {
+    "id": 86,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Fill in the gap with the correct form of verb : The police ____ informed yesterday:",
+    "options": [
+      "is",
+      "are",
+      "was",
+      "were"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 87,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "বঙ্গভঙ্গের ফলে কোন নতুন প্রদেশ সৃষ্টি হয়েছিল?",
+    "options": [
+      "পূর্ববঙ্গ",
+      "পশ্চিমবঙ্গ ও ত্রিপুরা",
+      "পূর্ববঙ্গ ও পশ্চিমবঙ্গ",
+      "পূর্ববঙ্গ ও আসাম"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 88,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "“Giveing someone the cold should” means-",
+    "options": [
+      "to torture somebody",
+      "to harm someone",
+      "to appreciate someone",
+      "to ignore somebody"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 89,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "“আমার জ্বর জ্বর লাগছে”- জ্বর জ্বর শব্দ দুটি অবিকৃতভাবে উচ্চারিত হওয়াকে বলে-",
+    "options": [
+      "দিরুক্ত শব্দ",
+      "সমার্থক শব্দ",
+      "যুগ্মশব্দ",
+      "শব্দদ্বিত্ব"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 90,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "মানুষের দেহের যে সব অঙ্গ-প্রত্যঙ্গ ধ্বনি তৈরিতে সহায়তা করে তাকে বলে?",
+    "options": [
+      "বাক প্রত্যঙ্গ",
+      "অঙ্গধ্বনি",
+      "স্বরতন্ত্রী",
+      "নাসিকাতন্ত্র"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 91,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Literature",
+    "question": "কোন সাহিত্যকর্মে সান্ধ্যভাষার প্রয়োগ আছে?",
+    "options": [
+      "পদাবলী",
+      "গীতগোবিন্দ",
+      "চর্যাপদ",
+      "চৈতন্যজীবনী"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 92,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "মুক্তিযুদ্ধ জাদুঘর কত সালে প্রতিষ্ঠিত হয়?",
+    "options": [
+      "১৯৯৬",
+      "১৯৯৮",
+      "২০০০",
+      "২০০৮"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 93,
+    "bank": "42nd BCS Dr.",
+    "subject": "International Affairs",
+    "question": "আধুনিক মেধাভিত্তিক সিভিল সার্ভিস এর উন্মেষ ঘটে কোন দেশ হতে?",
+    "options": [
+      "যুক্তরাজ্য",
+      "যুক্তরাষ্ট্র",
+      "চীন",
+      "ভারত"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 94,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Literature",
+    "question": "“September on the Jessore Road” is written by:",
+    "options": [
+      "Madhusudan Dutt",
+      "Allen Ginsberg",
+      "Kaiser Huq",
+      "Vikram Seth"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 95,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "ঐহিক এর বিপরীতার্থক শব্দ কোনটি?",
+    "options": [
+      "ঈদৃশ",
+      "পারত্রিক",
+      "মাঙ্গলিক",
+      "আকস্মিক"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 96,
+    "bank": "42nd BCS Dr.",
+    "subject": "English Language",
+    "question": "Liza had given me two:",
+    "options": [
+      "pair of jean",
+      "pairs of jean",
+      "pair of jeans",
+      "pairs of jeans"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 97,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangladesh Affairs",
+    "question": "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধানের খসড়া সর্বপ্রথম গণপরিষদে ১৯৭২ সালের কোন তারিখে উত্থাপিত হয়?",
+    "options": [
+      "১১ নভেম্বর",
+      "১২ অক্টোবর",
+      "১৬ ডিসেম্বর",
+      "৩ মার্চ"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 98,
+    "bank": "42nd BCS Dr.",
+    "subject": "Bangla Language",
+    "question": "অধিত্যকা এর বিপরীতার্থক শব্দ কোনটি?",
+    "options": [
+      "উপত্যকা",
+      "ধিত্যকা",
+      "পার্বত্য",
+      "সমতল"
+    ],
+    "answer": 0
+  },
+  {
+    "id": 99,
+    "bank": "42nd BCS Dr.",
+    "subject": "Mental Ability",
+    "question": "নিচের প্রশ্নবোধক স্থানে কোনটি বসবে? 15/ A,G/ 21,28/ N,?/ ?",
+    "options": [
+      "54/ N",
+      "T / 19",
+      "L / 52",
+      "V / 36"
+    ],
+    "answer": 3
+  },
+  {
+    "id": 100,
+    "bank": "42nd BCS Dr.",
+    "subject": "Math",
+    "question": "বৃত্তের ব্যাস চারগুণ বৃদ্ধি পেলে ক্ষেত্রফল কতগুণ বৃদ্ধি পাবে?",
+    "options": [
+      "৪",
+      "৮",
+      "১২",
+      "১৬"
+    ],
+    "answer": 3
+  }
+]
