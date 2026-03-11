@@ -33,11 +33,20 @@ jobs:
       - name: Add Android Platform
         run: cordova platform add android
 
-      # This step creates a real keystore file on the server using your secret text
+      # Recreates your Keystore file secretly
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > my-release-key.keystore
 
-      # Builds the AAB and signs it automatically using your passwords
+      # Builds and signs the APK (For your device)
+      - name: Build and Sign Release APK
+        run: |
+          cordova build android --release \
+          --keystore=my-release-key.keystore \
+          --alias=${{ secrets.KEY_ALIAS }} \
+          --storePassword=${{ secrets.KEY_PASSWORD }} \
+          --password=${{ secrets.KEY_PASSWORD }}
+
+      # Builds and signs the AAB (For Google Play Store)
       - name: Build and Sign Release AAB
         run: |
           cordova build android --release -- --packageType=bundle \
@@ -45,6 +54,12 @@ jobs:
           --alias=${{ secrets.KEY_ALIAS }} \
           --storePassword=${{ secrets.KEY_PASSWORD }} \
           --password=${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-mcq-release-apk
+          path: platforms/android/app/build/outputs/apk/release/*.apk
 
       - name: Upload Release AAB
         uses: actions/upload-artifact@v4
