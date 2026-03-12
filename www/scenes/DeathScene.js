@@ -253,6 +253,7 @@ class DeathScene extends Phaser.Scene {
         currentY += 20; 
     }
 
+    // --- SMOOTH SCROLLING LOGIC ---
     if (currentY > listHeight) {
         const minScroll = listHeight - currentY;
         let startY = 0;
@@ -263,7 +264,8 @@ class DeathScene extends Phaser.Scene {
         this.scrollState = { isDragging: false, velocityY: 0 };
         this.scrollData = { contentContainer, listStartY, minScroll };
 
-        const scrollZone = this.add.rectangle(cx, listStartY + listHeight/2, w, listHeight, 0x000000, 0).setInteractive();
+        // Changed to zone for more reliable hit detection
+        const scrollZone = this.add.zone(cx, listStartY + listHeight/2, w, listHeight).setInteractive();
         
         scrollZone.on('pointerdown', (pointer) => {
             this.scrollState.isDragging = true;
@@ -279,23 +281,33 @@ class DeathScene extends Phaser.Scene {
                 const diff = pointer.y - startY;
                 let newY = containerStartY + diff;
 
+                // Smoother rubber-banding when dragging out of bounds
                 if (newY > listStartY) {
-                    newY = listStartY + (newY - listStartY) * 0.3;
+                    newY = listStartY + (newY - listStartY) * 0.4;
                 } else if (newY < listStartY + minScroll) {
-                    newY = listStartY + minScroll + (newY - (listStartY + minScroll)) * 0.3;
+                    newY = listStartY + minScroll + (newY - (listStartY + minScroll)) * 0.4;
                 }
                 
                 contentContainer.y = newY;
 
                 const now = this.time.now;
                 const dt = now - lastTime;
-                if (dt > 0) this.scrollState.velocityY = (pointer.y - lastY) / dt;
+                
+                // Track instantaneous velocity and average it to prevent sudden jumps
+                if (dt > 0) {
+                    const instantVelocity = (pointer.y - lastY) / dt;
+                    this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (instantVelocity * 0.6);
+                }
+                
                 lastTime = now;
                 lastY = pointer.y;
             }
         });
 
-        const stopDrag = () => { this.scrollState.isDragging = false; };
+        const stopDrag = () => { 
+            this.scrollState.isDragging = false; 
+        };
+        
         this.input.on('pointerup', stopDrag);
         this.input.on('pointerout', stopDrag);
     }
@@ -379,10 +391,11 @@ class DeathScene extends Phaser.Scene {
       this.scene.launch("QuestionScene");
   }
 
-  update() {
+  update(time, delta) {
     if (this.scrollingBg) {
         this.scrollingBg.tilePositionY -= 0.6;
     }
+    
     if (this.backgroundLayers) {
         this.backgroundLayers.forEach(layer => {
             layer.group.children.iterate(star => {
@@ -397,26 +410,34 @@ class DeathScene extends Phaser.Scene {
         });
     }
 
+    // Delta-time adjusted scrolling physics
     if (this.scrollData && this.scrollState) {
         if (!this.scrollState.isDragging) {
             let { contentContainer, listStartY, minScroll } = this.scrollData;
             let vY = this.scrollState.velocityY;
             let currentY = contentContainer.y;
 
+            // Normalize speed to roughly ~60fps regardless of actual framerate
+            const timeScale = delta / 16.66;
+
             if (Math.abs(vY) > 0.01) {
-                currentY += vY * 16;
-                this.scrollState.velocityY *= 0.9;
+                currentY += vY * 16 * timeScale;
+                this.scrollState.velocityY *= Math.pow(0.92, timeScale); // Apply smooth friction
             }
 
+            // Delta-adjusted spring logic for bounds
             if (currentY > listStartY) {
-                currentY += (listStartY - currentY) * 0.2;
+                currentY += (listStartY - currentY) * 0.15 * timeScale;
+                if (Math.abs(listStartY - currentY) < 0.5) currentY = listStartY;
             } else if (currentY < listStartY + minScroll) {
-                currentY += ((listStartY + minScroll) - currentY) * 0.2;
+                currentY += ((listStartY + minScroll) - currentY) * 0.15 * timeScale;
+                if (Math.abs((listStartY + minScroll) - currentY) < 0.5) currentY = listStartY + minScroll;
             }
 
             contentContainer.y = currentY;
         } else {
-            this.scrollState.velocityY *= 0.8; 
+            // Very slowly decay momentum while holding still
+            this.scrollState.velocityY *= 0.9; 
         }
     }
   }

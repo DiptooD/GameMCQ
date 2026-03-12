@@ -999,15 +999,15 @@ class MenuScene extends Phaser.Scene {
     }
 
     createTipsBox(x, y, width) {
-        const height = 80;
+        const height = 75;
         const container = this.add.container(x, y);
 
         // Box background
         const bg = this.add.graphics();
-        bg.fillStyle(0x001122, 0.35);
+        bg.fillStyle(0x001122, 0.25);
         bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
-        bg.lineStyle(1, 0x0066aa, 0.3);
-        bg.strokeRoundedRect(-width/2, -height/2, width, height, 15);
+       // bg.lineStyle(1, 0x0066aa, 0.2);
+       // bg.strokeRoundedRect(-width/2, -height/2, width, height, 15);
 
         // Array of helpful game tips in Bangla
         const tips = [

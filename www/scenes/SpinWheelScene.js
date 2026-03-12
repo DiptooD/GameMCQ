@@ -598,7 +598,7 @@ class SpinWheelScene extends Phaser.Scene {
     showError(msg) {
         this.playSound('sfx_error');
         
-        const errorContainer = this.add.container(360, 1000).setDepth(2000);
+        const errorContainer = this.add.container(360, 1120).setDepth(2000);
         
         const txt = this.add.text(0, 0, msg, {
             fontSize: "32px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, 
@@ -632,9 +632,9 @@ class SpinWheelScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: errorContainer,
-            y: 920,
+            y: 1000,
             alpha: 0,
-            duration: 5500, 
+            duration: 6500, 
             ease: "Power2",
             onComplete: () => errorContainer.destroy()
         });

@@ -5,15 +5,14 @@ class ShopScene extends Phaser.Scene {
         this.scrollVelocity = 0;
         this.backgroundLayers = [];
         this.contentHeight = 0;
-        this.containerY = 0; // Track container position manually for better control
+        this.containerY = 0; 
     }
 
     init() {
         this.currentTab = "ships";
-        this.scrollVelocity = 0;
         this.contentHeight = 0;
-        // Reset container position logic on init
-        this.containerY = 310; 
+        this.listStartY = 310; 
+        this.containerY = this.listStartY; 
     }
 
     create() {
@@ -23,12 +22,10 @@ class ShopScene extends Phaser.Scene {
         const h = this.cameras.main.height;
 
         // --- 0. AUDIO MANAGEMENT ---
-        // Initialize SFX wrapper if available
         if (typeof GameSFX !== 'undefined') {
             GameSFX.init(this);
         }
 
-        // Handle Background Music (Seamless Transition & Volume Sync)
         let menuMusic = this.sound.get('menubgm');
         const targetMusicVol = (window.GameState && window.GameState.musicVolume !== undefined) ? window.GameState.musicVolume : 0.5;
 
@@ -36,7 +33,6 @@ class ShopScene extends Phaser.Scene {
             menuMusic = this.sound.add('menubgm', { loop: true, volume: targetMusicVol });
             menuMusic.play();
         } else {
-            // If already playing, just ensure volume matches global setting
             menuMusic.setVolume(targetMusicVol);
             if (!menuMusic.isPlaying) {
                 menuMusic.play();
@@ -49,7 +45,6 @@ class ShopScene extends Phaser.Scene {
             this.scene.start("MenuScene");
         };
 
-        // Handle Browser/Android Back Button
         if (window.history && window.history.pushState) {
             window.history.pushState(null, null, window.location.href);
             window.onpopstate = () => this.handleBack();
@@ -85,80 +80,137 @@ class ShopScene extends Phaser.Scene {
         this.createTabs(cx);
 
         // --- 4. SCROLLABLE CONTAINER ---
-        // Define visible area
         const topMargin = 310;
         const bottomMargin = 20;
-        const visibleHeight = h - topMargin - bottomMargin;
+        this.visibleHeight = h - topMargin - bottomMargin;
 
-        // Masking
         const maskShape = this.make.graphics();
         maskShape.fillStyle(0xffffff);
-        maskShape.fillRect(0, topMargin, w, visibleHeight);
+        maskShape.fillRect(0, topMargin, w, this.visibleHeight);
         const mask = maskShape.createGeometryMask();
 
         this.container = this.add.container(0, topMargin);
         this.container.setMask(mask);
-        this.containerY = topMargin; // Sync variable
+        this.containerY = topMargin; 
 
         // --- 5. CONTENT GENERATION ---
         this.refreshContent();
 
-        // --- 6. SCROLL INPUT LOGIC ---
+        // --- 6. SMOOTH SCROLL INPUT LOGIC ---
+        this.scrollState = { isDragging: false, velocityY: 0 };
+        let startY = 0;
+        let lastY = 0;
+        let containerStartY = 0;
+        let lastTime = 0;
+
+        this.input.on('pointerdown', (pointer) => {
+            if (pointer.y < topMargin) return; 
+            if (this.contentHeight <= this.visibleHeight) return; 
+
+            this.scrollState.isDragging = true;
+            this.scrollState.velocityY = 0;
+            startY = pointer.y;
+            lastY = pointer.y;
+            containerStartY = this.container.y;
+            lastTime = this.time.now;
+        });
+
         this.input.on('pointermove', (pointer) => {
-            if (pointer.isDown && pointer.y > 250) { // Only scroll if touching below header
-                const delta = pointer.y - pointer.prevPosition.y;
-                this.containerY += delta;
+            if (this.scrollState.isDragging) {
+                const diff = pointer.y - startY;
+                let newY = containerStartY + diff;
 
-                // Calculate limits
-                const maxY = topMargin;
-                let minY = topMargin;
+                const minScroll = this.visibleHeight - this.contentHeight - 50; 
 
-                // Only allow scrolling up if content is taller than screen
-                if (this.contentHeight > visibleHeight) {
-                    minY = topMargin - (this.contentHeight - visibleHeight + 150); // +150 padding
+                // Rubber banding limits
+                if (newY > this.listStartY) {
+                    newY = this.listStartY + (newY - this.listStartY) * 0.4;
+                } else if (newY < this.listStartY + minScroll) {
+                    newY = this.listStartY + minScroll + (newY - (this.listStartY + minScroll)) * 0.4;
                 }
+                
+                this.container.y = newY;
 
-                // Clamp
-                if (this.containerY > maxY) this.containerY = maxY;
-                if (this.containerY < minY) this.containerY = minY;
-
-                this.container.y = this.containerY;
+                const now = this.time.now;
+                const dt = now - lastTime;
+                
+                if (dt > 0) {
+                    const instantVelocity = (pointer.y - lastY) / dt;
+                    this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (instantVelocity * 0.6);
+                }
+                
+                lastTime = now;
+                lastY = pointer.y;
             }
         });
 
+        const stopDrag = () => { 
+            this.scrollState.isDragging = false; 
+        };
+        
+        this.input.on('pointerup', stopDrag);
+        this.input.on('pointerout', stopDrag);
+
         // --- 7. TIMERS ---
-        // For crafting logic
         this.time.addEvent({
             delay: 1000,
             loop: true,
             callback: () => this.updateTimers()
         });
 
-        // Cleanup on shutdown
         this.events.on('shutdown', () => {
             document.removeEventListener("backbutton", this.handleBack);
             window.onpopstate = null;
         });
     }
 
-    update() {
-        // Parallax Background
+    update(time, delta) {
         if (this.scrollingBg) {
             this.scrollingBg.tilePositionY -= 0.6;
         }
 
-        if (!this.backgroundLayers) return;
-        this.backgroundLayers.forEach(layer => {
-            layer.group.children.iterate(star => {
-                if (star) {
-                    star.y += layer.speed;
-                    if (star.y > this.cameras.main.height) {
-                        star.y = -10;
-                        star.x = Phaser.Math.Between(0, 720);
+        if (this.backgroundLayers) {
+            this.backgroundLayers.forEach(layer => {
+                layer.group.children.iterate(star => {
+                    if (star) {
+                        star.y += layer.speed;
+                        if (star.y > this.cameras.main.height) {
+                            star.y = -10;
+                            star.x = Phaser.Math.Between(0, 720);
+                        }
                     }
-                }
+                });
             });
-        });
+        }
+
+        // Delta-time adjusted scrolling physics (inertia)
+        if (this.contentHeight > this.visibleHeight && this.scrollState) {
+            if (!this.scrollState.isDragging) {
+                const minScroll = this.visibleHeight - this.contentHeight - 50;
+                let vY = this.scrollState.velocityY;
+                let currentY = this.container.y;
+
+                const timeScale = delta / 16.66; // Normalize to ~60FPS
+
+                if (Math.abs(vY) > 0.01) {
+                    currentY += vY * 16 * timeScale;
+                    this.scrollState.velocityY *= Math.pow(0.92, timeScale);
+                }
+
+                // Elastic Bounds Recovery
+                if (currentY > this.listStartY) {
+                    currentY += (this.listStartY - currentY) * 0.15 * timeScale;
+                    if (Math.abs(this.listStartY - currentY) < 0.5) currentY = this.listStartY;
+                } else if (currentY < this.listStartY + minScroll) {
+                    currentY += ((this.listStartY + minScroll) - currentY) * 0.15 * timeScale;
+                    if (Math.abs((this.listStartY + minScroll) - currentY) < 0.5) currentY = this.listStartY + minScroll;
+                }
+
+                this.container.y = currentY;
+            } else {
+                this.scrollState.velocityY *= 0.9; 
+            }
+        }
     }
 
     // --- AUDIO HELPER ---
@@ -313,8 +365,9 @@ class ShopScene extends Phaser.Scene {
         this.shipTabTxt.setColor(tab === "ships" ? "#ffffff" : "#88bbdd");
         this.boosterTabTxt.setColor(tab === "boosters" ? "#ffffff" : "#88bbdd");
 
-        this.containerY = 310; // Reset scroll position to top
-        this.container.y = 310;
+        // Reset scroll position
+        this.containerY = this.listStartY;
+        this.container.y = this.listStartY;
         this.refreshContent();
     }
 
@@ -328,63 +381,72 @@ class ShopScene extends Phaser.Scene {
     }
 
     renderShipList() {
-        let yPos = 10;
-        // Ensure data exists
         const shipData = window.ShipData || [];
         const allShips = [{ id: "default", name: "Standard Issue", costType: "free", desc: "নির্ভরযোগ্য এবং শক্তপোক্ত।" }, ...shipData];
 
-        allShips.forEach((ship) => {
-            this.createShipCard(ship, yPos);
-            yPos += 225;
-        });
+        allShips.forEach((ship, i) => {
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            
+            // X: center coordinates for 2 columns within 720 width
+            const xPos = col === 0 ? 190 : 530; 
+            // Y: Card height ~400, spacing 420. Start at Y=220 to align properly
+            const yPos = row * 430 + 220; 
 
-        this.contentHeight = yPos;
+            this.createShipCard(ship, xPos, yPos);
+            this.contentHeight = yPos + 220; // Extend height to bottom of the card
+        });
     }
 
     renderBoosterList() {
-        let yPos = 10;
         const boosterData = window.BoosterData || [];
         
-        boosterData.forEach(item => {
-            this.createBoosterCard(item, yPos);
-            yPos += 225;
-        });
+        boosterData.forEach((item, i) => {
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            
+            const xPos = col === 0 ? 190 : 530;
+            const yPos = row * 430 + 220; 
 
-        this.contentHeight = yPos;
+            this.createBoosterCard(item, xPos, yPos);
+            this.contentHeight = yPos + 220;
+        });
     }
 
-    createShipCard(ship, y) {
+    createShipCard(ship, x, y) {
+        const cardContainer = this.add.container(x, y);
+
         // --- Card Background ---
-        const bg = this.add.graphics({ x: 360, y: y + 100 });
+        const bg = this.add.graphics();
         bg.fillStyle(0x000c22, 0.75);
-        bg.fillRoundedRect(-340, -100, 680, 200, 24);
+        bg.fillRoundedRect(-155, -205, 310, 410, 20); // Compact vertical layout
         bg.lineStyle(3, 0x0066aa, 0.6);
-        bg.strokeRoundedRect(-340, -100, 680, 200, 24);
+        bg.strokeRoundedRect(-155, -205, 310, 410, 20);
 
         // --- Ship Preview ---
         const previewKey = ship.id !== "default" ? `${ship.id}_lv1` : "player_lv1";
-        // Fallback if texture missing
         const finalKey = this.textures.exists(previewKey) ? previewKey : "player_lv1";
-        const preview = this.add.image(100, y + 100, finalKey).setScale(0.85);
+        const preview = this.add.image(0, -95, finalKey).setScale(0.75);
 
         // --- Text Info ---
-        const name = this.add.text(200, y + 40, ship.name, {
-            fontSize: "38px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff"
-        });
+        const name = this.add.text(0, 10, ship.name, {
+            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
+            align: 'center', wordWrap: { width: 280 }
+        }).setOrigin(0.5);
 
-        const desc = this.add.text(200, y + 90, ship.desc, {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#aaccff", wordWrap: { width: 340 }, lineSpacing: 4
-        });
+        const desc = this.add.text(0, 65, ship.desc, {
+            fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
+            align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
+        }).setOrigin(0.5);
 
-        this.container.add([bg, preview, name, desc]);
+        cardContainer.add([bg, preview, name, desc]);
 
         // --- Button Logic ---
         const isOwned = GameState.ownedShips.includes(ship.id);
         const isEquipped = GameState.equippedShip === ship.id;
         const craftingEnd = GameState.craftingQueue[ship.id];
 
-        let btnColor1 = 0x000000, btnColor2 = 0x000000;
-        let btnStroke = 0x000000;
+        let btnColor1 = 0x000000, btnColor2 = 0x000000, btnStroke = 0x000000;
         let btnTextStr = "";
         let onClick = null;
 
@@ -401,7 +463,6 @@ class ShopScene extends Phaser.Scene {
         } else if (craftingEnd) {
             const now = Date.now();
             if (now >= craftingEnd) {
-                // Claim State
                 btnColor1 = 0x008800; btnColor2 = 0x004400; btnStroke = 0x00ff00; btnTextStr = "CLAIM";
                 onClick = () => {
                     this.playSound('sfx_jackpot');
@@ -411,7 +472,6 @@ class ShopScene extends Phaser.Scene {
                     this.refreshContent();
                 };
             } else {
-                // Waiting State
                 btnColor1 = 0x222222; btnColor2 = 0x111111; btnStroke = 0x555555;
                 const msLeft = craftingEnd - now;
                 const hrs = Math.floor(msLeft / 3600000);
@@ -420,13 +480,11 @@ class ShopScene extends Phaser.Scene {
                 onClick = () => { this.playSound('sfx_error', 0.5); };
             }
         } else {
-            // Purchase/Craft State
             if (ship.costType === "keys") {
                 const canAfford = GameState.keys >= ship.cost;
                 btnColor1 = canAfford ? 0xaa6600 : 0x442200; btnColor2 = canAfford ? 0x663300 : 0x221100;
                 btnStroke = canAfford ? 0xffaa00 : 0x664400;
                 btnTextStr = `${ship.cost} KEYS`;
-
                 onClick = () => {
                     if (canAfford) {
                         this.playSound('sfx_coin');
@@ -444,7 +502,6 @@ class ShopScene extends Phaser.Scene {
                 btnColor1 = canAfford ? 0x006688 : 0x002233; btnColor2 = canAfford ? 0x003344 : 0x001122;
                 btnStroke = canAfford ? 0x00ffff : 0x004466;
                 btnTextStr = `CRAFT (${ship.cost})`;
-
                 onClick = () => {
                     if (canAfford) {
                         this.playSound('sfx_coin');
@@ -463,59 +520,75 @@ class ShopScene extends Phaser.Scene {
         }
 
         // --- Action Button ---
-        const btnContainer = this.add.container(580, y + 100);
+        const btnContainer = this.add.container(0, 145);
 
         const btnBg = this.add.graphics();
         btnBg.fillGradientStyle(btnColor1, btnColor1, btnColor2, btnColor2, 1);
-        btnBg.fillRoundedRect(-85, -35, 170, 70, 35);
+        btnBg.fillRoundedRect(-110, -30, 220, 60, 30);
         btnBg.lineStyle(3, btnStroke, 1);
-        btnBg.strokeRoundedRect(-85, -35, 170, 70, 35);
+        btnBg.strokeRoundedRect(-110, -30, 220, 60, 30);
 
-        const hitArea = this.add.rectangle(0, 0, 170, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
         const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "22px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
+            fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
-        // Tags for timer updates
         btnLabel.shipId = ship.id;
         btnLabel.isTimer = (craftingEnd && Date.now() < craftingEnd);
 
         btnContainer.add([btnBg, btnLabel, hitArea]);
-        this.container.add(btnContainer);
+        cardContainer.add(btnContainer);
+        this.container.add(cardContainer);
 
         if (onClick) {
-            hitArea.on('pointerdown', () => {
-                this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50, yoyo: true });
-                onClick();
+            let downY = 0;
+            hitArea.on('pointerdown', (pointer) => {
+                downY = pointer.y;
+                this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
+            });
+            // Separating pointerup from pointerdown ensures we don't accidentally click while scrolling
+            hitArea.on('pointerup', (pointer) => {
+                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
+                if (Math.abs(pointer.y - downY) < 15) {
+                    onClick();
+                }
+            });
+            hitArea.on('pointerout', () => {
+                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
             });
         }
     }
 
-    createBoosterCard(item, y) {
+    createBoosterCard(item, x, y) {
+        const cardContainer = this.add.container(x, y);
+
         // --- Card Background ---
-        const bg = this.add.graphics({ x: 360, y: y + 100 });
+        const bg = this.add.graphics();
         bg.fillStyle(0x000c22, 0.75);
-        bg.fillRoundedRect(-340, -100, 680, 200, 24);
+        bg.fillRoundedRect(-155, -205, 310, 410, 20);
         bg.lineStyle(3, 0x5500aa, 0.6);
-        bg.strokeRoundedRect(-340, -100, 680, 200, 24);
+        bg.strokeRoundedRect(-155, -205, 310, 410, 20);
 
         // --- Icon & Text ---
         const iconKey = this.textures.exists(item.icon) ? item.icon : "ui_debris_icon";
-        const icon = this.add.image(100, y + 100, iconKey).setScale(1.7);
+        const icon = this.add.image(0, -90, iconKey).setScale(1.5);
 
-        const name = this.add.text(200, y + 35, item.name, {
-            fontSize: "36px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff"
-        });
-        const desc = this.add.text(200, y + 80, item.desc, {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ddaaff", wordWrap: { width: 340 }, lineSpacing: 4
-        });
+        const name = this.add.text(0, 5, item.name, {
+            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
+            align: 'center', wordWrap: { width: 280 }
+        }).setOrigin(0.5);
+
+        const desc = this.add.text(0, 60, item.desc, {
+            fontSize: "17px", fontFamily: "'Anek Bangla'", color: "#ddaaff", 
+            align: 'center', wordWrap: { width: 280 }, lineSpacing: 3
+        }).setOrigin(0.5);
 
         const count = GameState.boosters[item.id] || 0;
-        const countText = this.add.text(200, y + 145, `মজুদ আছে (Owned): ${count}`, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#00ff00"
-        });
+        const countText = this.add.text(0, 110, `মজুদ (Owned): ${count}`, {
+            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00"
+        }).setOrigin(0.5);
 
-        this.container.add([bg, icon, name, desc, countText]);
+        cardContainer.add([bg, icon, name, desc, countText]);
 
         // --- Purchase Button ---
         const canAfford = GameState.debris >= item.cost;
@@ -523,38 +596,50 @@ class ShopScene extends Phaser.Scene {
         const btnColor2 = canAfford ? 0x4400aa : 0x110022;
         const btnStroke = canAfford ? 0xff00ff : 0x440088;
 
-        const btnContainer = this.add.container(580, y + 100);
+        const btnContainer = this.add.container(0, 155);
         const btnBg = this.add.graphics();
         btnBg.fillGradientStyle(btnColor1, btnColor1, btnColor2, btnColor2, 1);
-        btnBg.fillRoundedRect(-85, -35, 170, 70, 35);
+        btnBg.fillRoundedRect(-110, -25, 220, 50, 25);
         btnBg.lineStyle(3, btnStroke, 1);
-        btnBg.strokeRoundedRect(-85, -35, 170, 70, 35);
+        btnBg.strokeRoundedRect(-110, -25, 220, 50, 25);
 
-        const hitArea = this.add.rectangle(0, 0, 170, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const hitArea = this.add.rectangle(0, 0, 220, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
         const btnTxt = this.add.text(0, 0, `${item.cost} Debris`, {
-            fontSize: "22px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
+            fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnContainer.add([btnBg, btnTxt, hitArea]);
-        this.container.add(btnContainer);
+        cardContainer.add(btnContainer);
+        this.container.add(cardContainer);
 
         if (!canAfford) {
             btnContainer.setAlpha(0.5);
         }
 
-        hitArea.on('pointerdown', () => {
-            this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50, yoyo: true });
-
-            if (canAfford) {
-                this.playSound('sfx_coin');
-                GameState.debris -= item.cost;
-                GameState.boosters[item.id] = (GameState.boosters[item.id] || 0) + 1;
-                this.updateCurrencyDisplay();
-                this.refreshContent();
-            } else {
-                this.playSound('sfx_error');
-                this.cameras.main.shake(100, 0.005);
+        let downY = 0;
+        hitArea.on('pointerdown', (pointer) => {
+            downY = pointer.y;
+            this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
+        });
+        
+        hitArea.on('pointerup', (pointer) => {
+            this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
+            if (Math.abs(pointer.y - downY) < 15) { // Prevent trigger if scrolling
+                if (canAfford) {
+                    this.playSound('sfx_coin');
+                    GameState.debris -= item.cost;
+                    GameState.boosters[item.id] = (GameState.boosters[item.id] || 0) + 1;
+                    this.updateCurrencyDisplay();
+                    this.refreshContent();
+                } else {
+                    this.playSound('sfx_error');
+                    this.cameras.main.shake(100, 0.005);
+                }
             }
+        });
+
+        hitArea.on('pointerout', () => {
+            this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
         });
     }
 
@@ -568,26 +653,28 @@ class ShopScene extends Phaser.Scene {
         if (this.currentTab !== "ships") return;
 
         // Iterate through UI elements to find active timers
-        this.container.list.forEach(child => {
-            // Check inside button containers
-            if (child.type === 'Container' && child.list) {
-                child.list.forEach(grandChild => {
-                    if (grandChild.isTimer && grandChild.shipId) {
-                        const end = GameState.craftingQueue[grandChild.shipId];
-                        if (end) {
-                            const now = Date.now();
-                            if (now >= end) {
-                                // Timer finished, refresh to show "CLAIM" button
-                                this.refreshContent();
-                            } else {
-                                // Update text
-                                const msLeft = end - now;
-                                const hrs = Math.floor(msLeft / 3600000);
-                                const mins = Math.floor((msLeft % 3600000) / 60000);
-                                const secs = Math.floor((msLeft % 60000) / 1000);
-                                grandChild.setText(`${hrs}h ${mins}m ${secs}s`);
+        this.container.list.forEach(cardContainer => {
+            if (cardContainer.type === 'Container' && cardContainer.list) {
+                cardContainer.list.forEach(item => {
+                    // Check inside button containers
+                    if (item.type === 'Container' && item.list) {
+                        item.list.forEach(grandChild => {
+                            if (grandChild.isTimer && grandChild.shipId) {
+                                const end = GameState.craftingQueue[grandChild.shipId];
+                                if (end) {
+                                    const now = Date.now();
+                                    if (now >= end) {
+                                        this.refreshContent();
+                                    } else {
+                                        const msLeft = end - now;
+                                        const hrs = Math.floor(msLeft / 3600000);
+                                        const mins = Math.floor((msLeft % 3600000) / 60000);
+                                        const secs = Math.floor((msLeft % 60000) / 1000);
+                                        grandChild.setText(`${hrs}h ${mins}m ${secs}s`);
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
                 });
             }

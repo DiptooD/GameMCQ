@@ -115,7 +115,7 @@ const debrisX = leftAnchor + 75;
             fontSize: "20px", 
             fontFamily: "'Anek Bangla', sans-serif",
             fontWeight: 700,
-            color: "#9e9d9d",
+            color: "#b6b6b6",
             backgroundColor: "rgba(0, 255, 255, 0.08)",
             padding: { x: 12, y: 6 },
         }).setOrigin(1, 0.5); 
