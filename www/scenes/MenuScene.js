@@ -140,7 +140,11 @@ class MenuScene extends Phaser.Scene {
         const startY = panelY + 270;
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
-        // 5. Floating Bottom Menu 
+        // 5. Game Tips Box
+        const tipsY = startY + 165;
+        this.createTipsBox(cx, tipsY, UI_WIDTH + 60);
+
+        // 6. Floating Bottom Menu 
         this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90); 
         
         // Global Input to close dropdowns
@@ -991,6 +995,80 @@ class MenuScene extends Phaser.Scene {
         hitArea.on("pointerdown", () => {
             this.playSound('sfx_powerup');
             this.tweens.add({ targets: container, scale: 0.92, duration: 100, yoyo: true, onComplete: () => this.startGame() });
+        });
+    }
+
+    createTipsBox(x, y, width) {
+        const height = 80;
+        const container = this.add.container(x, y);
+
+        // Box background
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 0.35);
+        bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
+        bg.lineStyle(1, 0x0066aa, 0.3);
+        bg.strokeRoundedRect(-width/2, -height/2, width, height, 15);
+
+        // Array of helpful game tips in Bangla
+        const tips = [
+            "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
+            "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন শিপ আনলক করুন।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
+            "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
+            "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
+            "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ (Pause) বাটনে ক্লিক করুন।",
+            "💡 টিপস: 'Fire Shield' বুস্টার ব্যবহার করলে নির্দিষ্ট সময়ের জন্য আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
+            "💡 টিপস: লাল রঙের ব্যাটারি সংগ্রহ করলে অনেক বেশি চার্জ পাওয়া যায়।",
+            "💡 টিপস: সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
+            "💡 টিপস: ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।",
+            "💡 টিপস: চুম্বক (Magnet) পাওয়ার-আপ নিলে ব্যাটারিগুলো আপনাআপনি আপনার দিকে চলে আসবে।",
+            "💡 টিপস: গেম ওভার হয়ে গেলে 'চাবি' (Key) ব্যবহার করে আবার জীবন ফিরে পেতে পারেন।",
+            "💡 টিপস: শপ থেকে কেনা নতুন শিপ 'Customize' মেনু থেকে সজ্জিত (Equip) করতে পারবেন।",
+            "💡 টিপস: টিএনটি (TNT) বা শকওয়েভ পাওয়ার-আপ ব্যবহার করলে স্ক্রিনের সব শত্রু একসাথে ধ্বংস হয়ে যায়।",
+            "💡 টিপস: সেটিংস থেকে আপনার সুবিধামতো 'কুইক প্যানেল' (Quick Panel) ডান বা বাম দিকে সরিয়ে নিতে পারবেন অথবা বন্ধ করে রাখতে পারবেন।",
+            "💡 টিপস: রিভিশন মোডে খেলে আগের ভুল করা প্রশ্নগুলো ঝালাই করে নিন।"
+            
+        ];
+
+        let currentTipIndex = Phaser.Math.Between(0, tips.length - 1);
+
+        const tipText = this.add.text(0, 0, tips[currentTipIndex], {
+            fontSize: "21px",
+            fontFamily: "'Anek Bangla'",
+            color: "#aaccff",
+            align: "center",
+            padding: { x: 10, y: 10 },
+            wordWrap: { width: width - 30 },
+            lineSpacing: 10
+        }).setOrigin(0.5);
+
+        container.add([bg, tipText]);
+
+        // Timer for changing tips every 8 seconds
+        this.time.addEvent({
+            delay: 8000,
+            loop: true,
+            callback: () => {
+                this.tweens.add({
+                    targets: tipText,
+                    alpha: 0,
+                    duration: 300,
+                    onComplete: () => {
+                        let newIndex = currentTipIndex;
+                        while(newIndex === currentTipIndex) {
+                            newIndex = Phaser.Math.Between(0, tips.length - 1);
+                        }
+                        currentTipIndex = newIndex;
+                        tipText.setText(tips[currentTipIndex]);
+                        
+                        this.tweens.add({ 
+                            targets: tipText, 
+                            alpha: 1, 
+                            duration: 300 
+                        });
+                    }
+                });
+            }
         });
     }
 
