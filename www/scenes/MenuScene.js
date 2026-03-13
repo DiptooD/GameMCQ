@@ -497,8 +497,8 @@ create() {
     createHangarButton(x, y) {
         const container = this.add.container(x, y);
 
-        const pedestal = this.add.ellipse(0, 90, 240, 50, 0x00ffff, 0.1);
-        pedestal.setStrokeStyle(2, 0x00ffff, 0.5);
+        const pedestal = this.add.ellipse(0, 90, 240, 50, 0x00A6FF, 0.1);
+        pedestal.setStrokeStyle(2, 0x00A6FF, 0.2);
         
         const ringGraphics = this.make.graphics();
         ringGraphics.lineStyle(3, 0x00ffff, 0.4);

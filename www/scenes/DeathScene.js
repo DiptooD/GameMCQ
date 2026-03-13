@@ -111,7 +111,7 @@ class DeathScene extends Phaser.Scene {
     this.add.rectangle(cx, 160, w, 3, 0x0066aa, 0.5); 
 
     // --- 3. TITLE ---
-    const titleY = isViewingHistory ? 60 : 80;
+    const titleY = isViewingHistory ? 70 : 85;
     const titleText = isViewingHistory ? "ম্যাচ ডিটেইলস" : "গেম ওভার"; 
     
     this.add.text(cx, titleY, titleText, {
