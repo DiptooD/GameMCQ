@@ -15,7 +15,7 @@ const config = {
     default: "arcade",
     arcade: { debug: false }
   },
-  scene: [MenuScene, ShopScene, SpinWheelScene, GameScene, QuestionScene, PauseScene, DeathScene]
+  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, GameScene, QuestionScene, PauseScene, DeathScene]
 };
 
 // Explicitly force the browser to download and load the fonts
@@ -34,6 +34,10 @@ Promise.all([
 // --- Cordova Device Ready Android Logic ---
 document.addEventListener("deviceready", () => {
     
+    // INSTANTLY HIDE CORDOVA SPLASH SCREEN 
+    if (navigator.splashscreen) {
+        navigator.splashscreen.hide();
+    }    
     // 2. Handle "App Pause" (Screen Locking / Minimization)
     const handleAppPause = () => {
         if (!window.game) return;

@@ -23,11 +23,11 @@
     <preference name="android-compileSdkVersion" value="36" />
     <preference name="AndroidXEnabled" value="true" />
 
-    <icon src="icon.png" />
+<icon src="icon.png" />
     
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="SplashScreenDelay" value="3000" />
-    <preference name="FadeSplashScreen" value="true" />
-  </platform>
+    <preference name="SplashScreenDelay" value="0" /> 
+    <preference name="FadeSplashScreen" value="false" /> 
+    </platform>
 </widget>

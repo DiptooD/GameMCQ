@@ -43,7 +43,7 @@ class QuestionScene extends Phaser.Scene {
             fontSize: "26px", fontFamily: "Arial", color: "#ffd700", stroke: "#000000", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-const debrisX = leftAnchor + 75;
+        const debrisX = leftAnchor + 75;
         this.debrisIcon = this.add.image(debrisX, headerY, "ui_debris_icon")
             .setScale(0.95).setOrigin(0.38, 0.41);
         this.debrisText = this.add.text(debrisX + 25, headerY, GameState.debris || "0", {
@@ -237,6 +237,41 @@ const debrisX = leftAnchor + 75;
 
                 this.quickBtns.push({ bg: btnBg, txt: btnTxt, originalY: btnY });
             }
+
+            // --- 6.1 QUICK SKIP BUTTON (Separated Block) ---
+            const qSkipY = 489; // Placed nicely beneath the glass panel
+            const qSkipBg = this.add.rectangle(45, qSkipY, 112, 60, 0x000510, 0.3);
+            qSkipBg.setStrokeStyle(3, 0xffffff, 0.15);
+            qSkipBg.setInteractive({ useHandCursor: true });
+            
+            this.quickSkipTxt = this.add.text(45, qSkipY, `Skip(${GameState.skipsLeft})`, {
+                fontSize: "22px", 
+                fontFamily: "'Anek Bangla'",
+                fontWeight: 800,
+                color: "#d8d8d8",
+                lineSpacing: 2,
+                align: "center"
+            }).setOrigin(0.5);
+            
+            this.quickAnsContainer.add([qSkipBg, this.quickSkipTxt]);
+
+            qSkipBg.on("pointerdown", () => {
+                if (this.quickAnsContainer.alpha < 0.5) return; // Fail-safe to avoid clicking when invisible
+                
+                const gameScene = this.scene.get("GameScene");
+                if (gameScene && gameScene.isResuming) return;
+                if (this.isProcessing) return;
+                
+                qSkipBg.y = qSkipY + 4;
+                this.quickSkipTxt.y = qSkipY + 4;
+                
+                this.trySkipQuestion();
+            });
+            
+            qSkipBg.on("pointerup", () => { qSkipBg.y = qSkipY; this.quickSkipTxt.y = qSkipY; });
+            qSkipBg.on("pointerout", () => { qSkipBg.y = qSkipY; this.quickSkipTxt.y = qSkipY; });
+            
+            this.quickSkipBtn = { bg: qSkipBg, txt: this.quickSkipTxt, originalY: qSkipY };
         }
         
         // --- 7. BOTTOM HUD ---
@@ -362,7 +397,12 @@ const debrisX = leftAnchor + 75;
         
         this.keyText.setText(GameState.keys || 0);
         this.debrisText.setText(GameState.debris || 0);
+        
+        // Update both standard and quick skip buttons
         this.skipBtn.setText(`Skip (${GameState.skipsLeft})`);
+        if (this.quickSkipTxt) {
+            this.quickSkipTxt.setText(`Skip\n(${GameState.skipsLeft})`);
+        }
 
         if (GameState.battery !== this.lastBattery) {
             this.updateBatteryVisuals();
@@ -382,8 +422,7 @@ const debrisX = leftAnchor + 75;
             }
             
             this.setButtonsState(isNowReady);
-            this.updateReadyText(isNowReady);
-            this.updateReadyMessage(isNowReady);
+            this.updateReadyState(isNowReady);
             this.wasReady = isNowReady;
         }
     }
@@ -412,15 +451,19 @@ const debrisX = leftAnchor + 75;
         }
     }
 
-    updateReadyText(isReady) {
+    // Consolidated unified ready text logic (fixes prior conflict bug)
+    updateReadyState(isReady) {
         if (isReady && !GameState.bossActive) {
             this.instructionText.setAlpha(0);
-            this.readyText.setAlpha(1);
+            if (this.warningTween) this.warningTween.stop();
 
-            if (!this.tweens.isTweening(this.readyText)) {
-                this.tweens.add({
+            this.readyText.setAlpha(1);
+            
+            if (!this.readyTween || !this.readyTween.isPlaying()) {
+                this.readyTween = this.tweens.add({
                     targets: this.readyText,
-                    alpha: 0.2,
+                    alpha: 0.4,
+                    scale: 1.05, 
                     duration: 500,
                     yoyo: true,
                     repeat: -1
@@ -429,7 +472,11 @@ const debrisX = leftAnchor + 75;
         } else {
             this.readyText.setAlpha(0);
             this.tweens.killTweensOf(this.readyText);
-            this.readyText.setAlpha(0); 
+            if (this.readyTween) {
+                this.readyTween.stop();
+                this.readyTween = null;
+            }
+            this.readyText.setScale(1); 
         }
     }
 
@@ -477,6 +524,7 @@ const debrisX = leftAnchor + 75;
                 btn.bg.setStrokeStyle(3, 0xffffff, 0.5);
                 btn.txt.setColor("#ffffff");
             });
+            if (this.quickSkipBtn) this.quickSkipBtn.bg.setInteractive();
         } else {
             this.tweens.add({ targets: this.quickAnsContainer, alpha: 0, duration: 200 });
             this.quickBtns.forEach(btn => {
@@ -490,31 +538,12 @@ const debrisX = leftAnchor + 75;
                 btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
                 btn.txt.setColor("#d3d3d3");
             });
-        }
-    }
-
-    updateReadyMessage(isReady) {
-        if (isReady && !GameState.bossActive) {
-            this.instructionText.setAlpha(0);
-            if (this.warningTween) this.warningTween.stop();
-
-            this.readyText.setAlpha(1);
-            
-            if (!this.readyTween || !this.readyTween.isPlaying()) {
-                this.readyTween = this.tweens.add({
-                    targets: this.readyText,
-                    alpha: 0.4,
-                    scale: 1.05, 
-                    duration: 500,
-                    yoyo: true,
-                    repeat: -1
-                });
-            }
-        } else {
-            this.readyText.setAlpha(0);
-            if (this.readyTween) {
-                this.readyTween.stop();
-                this.readyText.setScale(1); 
+            if (this.quickSkipBtn) {
+                if (GameState.bossActive) {
+                    this.quickSkipBtn.bg.disableInteractive();
+                } else {
+                    this.quickSkipBtn.bg.setInteractive();
+                }
             }
         }
     }
@@ -630,7 +659,7 @@ const debrisX = leftAnchor + 75;
         this.isProcessing = true;
         
         this.wasReady = false; 
-        this.updateReadyText(false);
+        this.updateReadyState(false);
 
         const q = this.questions[this.qIdx % this.questions.length];
         const record = {
@@ -715,6 +744,16 @@ const debrisX = leftAnchor + 75;
                 duration: 100,
                 yoyo: true
             });
+            
+            if (this.quickSkipTxt) {
+                this.tweens.add({
+                    targets: this.quickSkipTxt,
+                    scale: 1.15,
+                    duration: 100,
+                    yoyo: true
+                });
+            }
+            
         } else {
             this.playSFX('sfx_q_low_battery', 0.6, false); 
             this.cameras.main.shake(200, 0.005);
@@ -747,6 +786,7 @@ const debrisX = leftAnchor + 75;
         if (isBossFight) {
             this.quickAnsContainer.setAlpha(0);
             this.quickBtns.forEach(btn => btn.bg.disableInteractive());
+            if (this.quickSkipBtn) this.quickSkipBtn.bg.disableInteractive();
             
             this.readyText.setAlpha(0);
             this.instructionText.setAlpha(0);

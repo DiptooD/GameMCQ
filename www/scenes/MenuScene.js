@@ -13,13 +13,9 @@ class MenuScene extends Phaser.Scene {
         this.backgroundLayers = [];
     }
 
-    preload() {
-        this.load.json('bank_directory', 'bank_directory.json');
-        this.load.audio('bg_music', 'bgm.mp3'); 
-        this.load.audio('menubgm', 'menubgm.mp3'); 
-    }
+    // REMOVED preload() completely!
 
-    create() {
+create() {
         // Clear history viewing state if returning from a detailed view
         if (window.GameState && window.GameState.viewingHistoryMatch) {
             window.GameState.viewingHistoryMatch = null;
@@ -59,34 +55,14 @@ class MenuScene extends Phaser.Scene {
             }
         }
 
-        // --- 1. Manifest Handling ---
+        // Fetch manifest from cache (already loaded by LoadingScene!)
         const manifest = this.cache.json.get('bank_directory');
-        if (!manifest) {
-            this.load.once('complete', () => this.scene.restart());
-            this.load.start();
-            return; 
-        }
-
-        let missingFiles = false;
-        manifest.banks.forEach(bank => {
-            if (!this.cache.json.exists(bank.key)) {
-                this.load.json(bank.key, bank.url);
-                missingFiles = true;
-            }
-        });
-
-        if (missingFiles) {
-            this.load.once('complete', () => this.scene.restart());
-            this.load.start();
-            return;
-        }
 
         // --- Verify Current Mode ---
         if (this.selectedMode === "revision" && this.getAvailableQuestionCount("revision") === 0) {
             this.selectedMode = "normal";
             localStorage.setItem('saved_mode', "normal");
         }
-
         // --- VISUALS ---
         this.createBackground();
 

@@ -70,7 +70,7 @@ window.updateLevelTargets = function() {
 
 window.resetGameState = function () {
     GameState.score = 0;
-    GameState.battery = 0;
+    GameState.battery = 100;
     GameState.lives = 3;
     GameState.weaponLevel = 1;
     GameState.correctCount = 0; 
