@@ -2,7 +2,6 @@ class MenuScene extends Phaser.Scene {
     constructor() {
         super("MenuScene");
         
-        // --- Load saved settings or use defaults ---
         this.selectedBankKey = localStorage.getItem('saved_bankKey') || "all";
         this.selectedSubject = localStorage.getItem('saved_subject') || "all_no_math";
         this.selectedMode = localStorage.getItem('saved_mode') || "normal"; 
@@ -14,12 +13,10 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        // Clear history viewing state if returning from a detailed view
         if (window.GameState && window.GameState.viewingHistoryMatch) {
             window.GameState.viewingHistoryMatch = null;
         }
 
-        // --- 0. Initialize State & Textures ---
         if (typeof window.GameState === 'undefined') {
             window.GameState = { 
                 equippedShip: "default", 
@@ -37,7 +34,6 @@ class MenuScene extends Phaser.Scene {
         if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
 
-        // --- MUSIC MANAGER ---
         if (this.sound.get('bg_music')) {
             this.sound.get('bg_music').stop();
         }
@@ -53,26 +49,21 @@ class MenuScene extends Phaser.Scene {
             }
         }
 
-        // Fetch manifest from cache (already loaded by LoadingScene!)
         const manifest = this.cache.json.get('bank_directory');
 
-        // --- Verify Current Mode ---
         if (this.selectedMode === "revision" && this.getAvailableQuestionCount("revision") === 0) {
             this.selectedMode = "normal";
             localStorage.setItem('saved_mode', "normal");
         }
-        // --- VISUALS ---
         this.createBackground();
 
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
         const UI_WIDTH = 520;      
         
-        // --- COMPONENTS ---
         this.createCurrencyUI();
         this.createTopLeftIcons();
 
-        // 1. Title
         const titleContainer = this.add.container(cx, cy - 420);
         const titleText = this.add.text(0, 0, "গেইম MCQ", { 
             fontSize: "100px",
@@ -103,49 +94,44 @@ class MenuScene extends Phaser.Scene {
             }
         });
 
-        // 2. Hangar/Customize Display
         this.createHangarButton(cx, cy - 220);
 
-        // 3. Settings Panel
         const panelY = cy + 40;
         this.createSettingsPanel(cx, panelY, UI_WIDTH, manifest);
 
-        // 4. Start Button
         const startY = panelY + 270;
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
-        // 5. Game Tips Box
         const tipsY = startY + 165;
         this.createTipsBox(cx, tipsY, UI_WIDTH + 60);
 
-        // 6. Floating Bottom Menu 
         this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90); 
         
-        // Global Input to close dropdowns
         this.input.on('pointerdown', (pointer, gameObjects) => {
             if (gameObjects.length === 0) {
                 this.closeAllDropdowns();
             }
         });
 
-
-    if (GameState.showHistoryPopupOnLoad) {
-        GameState.showHistoryPopupOnLoad = false;
-        this.showMatchHistoryPopup(); 
+        if (GameState.showHistoryPopupOnLoad) {
+            GameState.showHistoryPopupOnLoad = false;
+            this.showMatchHistoryPopup(); 
+        }
     }
 
-    }
+    update(time, delta) {
+        // Safe time scaling for animations and physics on varying screen refresh rates
+        const safeTimeScale = Phaser.Math.Clamp(delta / 16.66, 0.1, 2.5);
 
-    update() {
         if (this.scrollingBg) {
-            this.scrollingBg.tilePositionY -= 0.6;
+            this.scrollingBg.tilePositionY -= 0.6 * safeTimeScale;
         }
 
         if (this.backgroundLayers) {
             this.backgroundLayers.forEach(layer => {
                 layer.group.children.iterate(star => {
                     if (star) {
-                        star.y += layer.speed;
+                        star.y += layer.speed * safeTimeScale;
                         if (star.y > this.cameras.main.height) {
                             star.y = -10;
                             star.x = Phaser.Math.Between(0, 720);
@@ -156,27 +142,24 @@ class MenuScene extends Phaser.Scene {
         }
 
         if (this.reactorRing) {
-            this.reactorRing.rotation += 0.015;
+            this.reactorRing.rotation += 0.015 * safeTimeScale;
         }
 
-        // --- Physics-Based Smooth Scrolling logic for History Popup ---
         if (this.historyScrollData && this.historyScrollState) {
             if (!this.historyScrollState.isDragging) {
                 let { contentContainer, listStartY, minScroll } = this.historyScrollData;
                 let vY = this.historyScrollState.velocityY;
                 let currentY = contentContainer.y;
 
-                // Apply velocity momentum
                 if (Math.abs(vY) > 0.01) {
-                    currentY += vY * 16;
-                    this.historyScrollState.velocityY *= 0.9; // Friction
+                    currentY += vY * 16 * safeTimeScale;
+                    this.historyScrollState.velocityY *= Math.pow(0.9, safeTimeScale); 
                 }
 
-                // Elastic Bounds
                 if (currentY > listStartY) {
-                    currentY += (listStartY - currentY) * 0.2;
+                    currentY += (listStartY - currentY) * 0.2 * safeTimeScale;
                 } else if (currentY < listStartY + minScroll) {
-                    currentY += ((listStartY + minScroll) - currentY) * 0.2;
+                    currentY += ((listStartY + minScroll) - currentY) * 0.2 * safeTimeScale;
                 }
 
                 contentContainer.y = currentY;
@@ -186,7 +169,6 @@ class MenuScene extends Phaser.Scene {
         }
     }
 
-    // --- UTILITIES ---
     playSound(key, baseVolume = 1.0) {
         if (this.cache.audio.exists(key)) {
             const finalVolume = baseVolume * (window.GameState.sfxVolume !== undefined ? window.GameState.sfxVolume : 1.0);
@@ -220,7 +202,6 @@ class MenuScene extends Phaser.Scene {
             if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
         }
         
-        // --- SKIP EMPTY QUESTIONS ---
         finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
         if (this.selectedSubject === "all_no_math") {
@@ -239,7 +220,6 @@ class MenuScene extends Phaser.Scene {
         return finalQuestions.length;
     }
 
-    // --- TOP LEFT ICONS (EXIT & SETTINGS) ---
     createTopLeftIcons() {
         const iconY = 65;
 
@@ -266,7 +246,6 @@ class MenuScene extends Phaser.Scene {
         });
     }
 
-    // --- SETTINGS POPUP ---
     showAppConfigPopup() {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
@@ -450,7 +429,7 @@ class MenuScene extends Phaser.Scene {
         yesHit.on('pointerdown', () => {
             this.playSound('sfx_explode');
             localStorage.removeItem('seenQuestions');
-            GameState.matchHistory = []; // Wipe match history
+            GameState.matchHistory = []; 
             if (window.saveGame) window.saveGame();
 
             warningBox.destroy();
@@ -979,14 +958,10 @@ class MenuScene extends Phaser.Scene {
         const height = 75;
         const container = this.add.container(x, y);
 
-        // Box background
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 0.25);
         bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
-       // bg.lineStyle(1, 0x0066aa, 0.2);
-       // bg.strokeRoundedRect(-width/2, -height/2, width, height, 15);
 
-        // Array of helpful game tips in Bangla
         const tips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন শিপ আনলক করুন।",
@@ -994,17 +969,16 @@ class MenuScene extends Phaser.Scene {
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
             "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ (Pause) বাটনে ক্লিক করুন।",
-            "💡 টিপস: 'Fire Shield' বুস্টার ব্যবহার করলে নির্দিষ্ট সময়ের জন্য আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
-            "💡 টিপস: লাল রঙের ব্যাটারি সংগ্রহ করলে অনেক বেশি চার্জ পাওয়া যায়।",
-            "💡 টিপস: সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
+            "💡 টিপস: 'Fire Shield' বুস্টার ব্যবহার করলে নির্দিষ্ট সময়ের জন্য আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
+            "💡 টিপস: লাল রঙের ব্যাটারি সংগ্রহ করলে অনেক বেশি চার্জ পাওয়া যায়।",
+            "💡 টিপস: সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
             "💡 টিপস: ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।",
-            "💡 টিপস: চুম্বক (Magnet) পাওয়ার-আপ নিলে ব্যাটারিগুলো আপনাআপনি আপনার দিকে চলে আসবে।",
-            "💡 টিপস: গেম ওভার হয়ে গেলে 'চাবি' (Key) ব্যবহার করে আবার জীবন ফিরে পেতে পারেন।",
+            "💡 টিপস: চুম্বক (Magnet) পাওয়ার-আপ নিলে ব্যাটারিগুলো আপনাআপনি আপনার দিকে চলে আসবে।",
+            "💡 টিপস: গেম ওভার হয়ে গেলে 'চাবি' (Key) ব্যবহার করে আবার জীবন ফিরে পেতে পারেন।",
             "💡 টিপস: শপ থেকে কেনা নতুন শিপ 'Customize' মেনু থেকে সজ্জিত (Equip) করতে পারবেন।",
-            "💡 টিপস: টিএনটি (TNT) বা শকওয়েভ পাওয়ার-আপ ব্যবহার করলে স্ক্রিনের সব শত্রু একসাথে ধ্বংস হয়ে যায়।",
-            "💡 টিপস: সেটিংস থেকে আপনার সুবিধামতো 'কুইক প্যানেল' (Quick Panel) ডান বা বাম দিকে সরিয়ে নিতে পারবেন অথবা বন্ধ করে রাখতে পারবেন।",
+            "💡 টিপস: টিএনটি (TNT) বা শকওয়েভ পাওয়ার-আপ ব্যবহার করলে স্ক্রিনের সব শত্রু একসাথে ধ্বংস হয়ে যায়।",
+            "💡 টিপস: সেটিংস থেকে আপনার সুবিধামতো 'কুইক প্যানেল' (Quick Panel) ডান বা বাম দিকে সরিয়ে নিতে পারবেন অথবা বন্ধ করে রাখতে পারবেন।",
             "💡 টিপস: রিভিশন মোডে খেলে আগের ভুল করা প্রশ্নগুলো ঝালাই করে নিন।"
-            
         ];
 
         let currentTipIndex = Phaser.Math.Between(0, tips.length - 1);
@@ -1021,7 +995,6 @@ class MenuScene extends Phaser.Scene {
 
         container.add([bg, tipText]);
 
-        // Timer for changing tips every 8 seconds
         this.time.addEvent({
             delay: 8000,
             loop: true,
@@ -1059,10 +1032,8 @@ class MenuScene extends Phaser.Scene {
         bg.strokeRoundedRect(-totalWidth/2, -height/2, totalWidth, height, height/2);
         container.add(bg);
 
-        // Break into 3 Buttons (Shop | History | Spin)
         const btnWidth = totalWidth / 3;
 
-        // 1. SHOP Button
         const shopHitArea = this.add.rectangle(-totalWidth/2 + btnWidth/2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
         const bagIcon = this.add.text(-totalWidth/2 + btnWidth/2 - 35, -5, "🛒", { fontSize: "28px" }).setOrigin(0.4);
         const shopText = this.add.text(-totalWidth/2 + btnWidth/2 + 15, 0, "শপ", { 
@@ -1078,7 +1049,6 @@ class MenuScene extends Phaser.Scene {
 
         const div1 = this.add.rectangle(-totalWidth/2 + btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        // 2. HISTORY Button
         const histHitArea = this.add.rectangle(0, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
         const histIcon = this.add.text(-35, -5, "📜", { fontSize: "28px" }).setOrigin(0.4);
         const histText = this.add.text(15, 0, "হিস্ট্রি", { 
@@ -1094,7 +1064,6 @@ class MenuScene extends Phaser.Scene {
 
         const div2 = this.add.rectangle(totalWidth/2 - btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        // 3. SPIN Button
         const wheelHitArea = this.add.rectangle(totalWidth/2 - btnWidth/2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
         const wheelIcon = this.add.text(totalWidth/2 - btnWidth/2 - 35, -4, "🌀", { fontSize: "30px" }).setOrigin(0.4);
         const wheelText = this.add.text(totalWidth/2 - btnWidth/2 + 15, 0, "স্পিন", { 
@@ -1113,7 +1082,6 @@ class MenuScene extends Phaser.Scene {
         container.add([shopHitArea, bagIcon, shopText, div1, histHitArea, histIcon, histText, div2, wheelHitArea, wheelIcon, wheelText]);
     }
 
-    // --- MATCH HISTORY POPUP LIST ---
     showMatchHistoryPopup() {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
@@ -1193,7 +1161,6 @@ class MenuScene extends Phaser.Scene {
                 const stats = `মোট: ${match.total} | সঠিক: ${match.correct} | ভুল: ${match.wrong} | স্কিপ: ${match.skipped}`;
                 const statTxt = this.add.text(-listWidth/2 + 30, currentY + 65, stats, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff" });
 
-                // Interactive HitArea for jumping into DeathScene to see Match Details
                 const hitArea = this.add.rectangle(0, currentY + cardH/2, listWidth - 20, cardH, 0x000000, 0).setInteractive({ useHandCursor: true });
                 
                 let downY = 0;
@@ -1202,7 +1169,6 @@ class MenuScene extends Phaser.Scene {
                     drawCard(true);
                 });
                 hitArea.on('pointerup', (pointer) => {
-                    // Check if it was a distinct click and not a swipe scroll
                     if (Math.abs(pointer.y - downY) < 15) {
                         this.playSound('sfx_click');
                         GameState.viewingHistoryMatch = match;
@@ -1221,7 +1187,6 @@ class MenuScene extends Phaser.Scene {
 
         popup.add(contentContainer);
 
-        // --- Smooth Scrolling for History Popup List ---
         if (currentY > listHeight) {
             const minScroll = listHeight - currentY - 20;
             let startY = 0;

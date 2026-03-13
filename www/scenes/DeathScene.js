@@ -4,12 +4,10 @@ class DeathScene extends Phaser.Scene {
     this.backgroundLayers = [];
   }
 
-  // init() runs every time the scene starts, unlike constructor() which runs only once.
   init() {
       this.matchSaved = false; 
   }
 
-  // --- AUDIO HELPER ---
   playSound(key, baseVolume = 1.0) {
     if (this.cache.audio.exists(key)) {
         const finalVolume = baseVolume * (window.GameState.sfxVolume !== undefined ? window.GameState.sfxVolume : 1.0);
@@ -31,7 +29,6 @@ class DeathScene extends Phaser.Scene {
   }
 
   create() {
-    // --- 0. INITIALIZE SFX ---
     if (typeof GameSFX !== 'undefined') {
         GameSFX.init(this);
     }
@@ -40,20 +37,18 @@ class DeathScene extends Phaser.Scene {
     const h = this.cameras.main.height;
     const cx = w / 2;
 
-    // --- 1. DATA PREPARATION ---
     const isViewingHistory = !!GameState.viewingHistoryMatch;
     
     let history = [];
     let safeCorrect = 0, safeWrong = 0, safeSkipped = 0;
     
     if (isViewingHistory) {
-        // Load data dynamically from the clicked history object
         const matchData = GameState.viewingHistoryMatch;
         history = matchData.sessionHistory || [];
         safeCorrect = matchData.correct;
         safeWrong = matchData.wrong;
         safeSkipped = matchData.skipped;
-        this.matchSaved = true; // DO NOT re-save historical entries
+        this.matchSaved = true; 
     } else {
         history = GameState.sessionHistory || [];
         history.forEach(h => {
@@ -67,17 +62,14 @@ class DeathScene extends Phaser.Scene {
     const percent = totalQs > 0 ? (safeCorrect / totalQs) : 0; 
     const percentText = Math.round(percent * 100);
 
-    // Play Outcome Sound
     if (percentText >= 50) {
         this.playSound('sfx_victory', 0.1);
     } else {
         this.playSound('sfx_shield_break', 0); 
     }
 
-    // --- SAVE NEW MATCH TO HISTORY (Includes session answers array) ---
     if (!this.matchSaved && totalQs > 0 && !isViewingHistory) {
         
-        // --- ADD BEGINNER TRACKING ON REAL MATCH SAVE ---
         if (typeof GameState.gamesPlayed !== 'undefined') {
             GameState.gamesPlayed++;
         }
@@ -92,7 +84,7 @@ class DeathScene extends Phaser.Scene {
             wrong: safeWrong,
             skipped: safeSkipped,
             percent: percentText,
-            sessionHistory: JSON.parse(JSON.stringify(history)) // Deep copy active history questions
+            sessionHistory: JSON.parse(JSON.stringify(history)) 
         };
         
         GameState.matchHistory.unshift(matchSummary);
@@ -117,13 +109,11 @@ class DeathScene extends Phaser.Scene {
         }
     }
 
-    // --- 2. BACKGROUND ---
     this.createBackground();
 
     this.add.graphics().fillStyle(0x051025, 0.8).fillRect(0, 0, w, 160); 
     this.add.rectangle(cx, 160, w, 3, 0x0066aa, 0.5); 
 
-    // --- 3. TITLE ---
     const titleY = isViewingHistory ? 70 : 85;
     const titleText = isViewingHistory ? "ম্যাচ ডিটেইলস" : "গেম ওভার"; 
     
@@ -140,7 +130,6 @@ class DeathScene extends Phaser.Scene {
         }).setOrigin(0.5);
     }
 
-    // --- 4. SUMMARY PANEL ---
     const panelY = 180; 
     const panelH = 280; 
     const panelW = w - 40; 
@@ -152,7 +141,6 @@ class DeathScene extends Phaser.Scene {
     glass.lineStyle(3, 0x0066aa, 0.6); 
     glass.strokeRoundedRect(panelX, panelY, panelW, panelH, 20);
 
-    // --- A. BIG PIE CHART ---
     const chartX = panelX + 115; 
     const chartY = panelY + (panelH / 2); 
     const radius = 85; 
@@ -176,7 +164,6 @@ class DeathScene extends Phaser.Scene {
         fontSize: "46px", fontFamily: "'Anek Bangla'", color: "#fff", fontStyle: "bold", stroke: "#000", strokeThickness: 5 
     }).setOrigin(0.5);
 
-    // --- B. RIGHT SIDE (Stats) ---
     const rightStart = panelX + 230; 
     const rightWidth = panelW - 240;
     const colWidth = rightWidth / 4; 
@@ -204,7 +191,6 @@ class DeathScene extends Phaser.Scene {
     glass.lineStyle(2, 0x003355, 0.6);
     glass.lineBetween(rightStart + 10, panelY + 140, rightStart + rightWidth - 10, panelY + 140);
 
-    // 2. SUBJECTS ROW
     const subStats = {};
     history.forEach(h => { 
         const cat = h.category || "General"; 
@@ -240,7 +226,6 @@ class DeathScene extends Phaser.Scene {
         }
     }
 
-    // --- 5. SCROLLABLE QUESTION LIST ---
     const footerH = 170; 
     const listStartY = panelY + panelH + 20; 
     const listEndY = h - footerH - 10;
@@ -272,7 +257,6 @@ class DeathScene extends Phaser.Scene {
         currentY += 20; 
     }
 
-    // --- SMOOTH SCROLLING LOGIC ---
     if (currentY > listHeight) {
         const minScroll = listHeight - currentY;
         let startY = 0;
@@ -283,7 +267,6 @@ class DeathScene extends Phaser.Scene {
         this.scrollState = { isDragging: false, velocityY: 0 };
         this.scrollData = { contentContainer, listStartY, minScroll };
 
-        // Changed to zone for more reliable hit detection
         const scrollZone = this.add.zone(cx, listStartY + listHeight/2, w, listHeight).setInteractive();
         
         scrollZone.on('pointerdown', (pointer) => {
@@ -300,7 +283,6 @@ class DeathScene extends Phaser.Scene {
                 const diff = pointer.y - startY;
                 let newY = containerStartY + diff;
 
-                // Smoother rubber-banding when dragging out of bounds
                 if (newY > listStartY) {
                     newY = listStartY + (newY - listStartY) * 0.4;
                 } else if (newY < listStartY + minScroll) {
@@ -312,7 +294,6 @@ class DeathScene extends Phaser.Scene {
                 const now = this.time.now;
                 const dt = now - lastTime;
                 
-                // Track instantaneous velocity and average it to prevent sudden jumps
                 if (dt > 0) {
                     const instantVelocity = (pointer.y - lastY) / dt;
                     this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (instantVelocity * 0.6);
@@ -331,7 +312,6 @@ class DeathScene extends Phaser.Scene {
         this.input.on('pointerout', stopDrag);
     }
 
-    // --- 6. FOOTER BUTTONS ---
     const btnY = h - 85; 
 
     this.add.graphics().fillStyle(0x051025, 0.4).fillRect(0, h - 170, w, 170);
@@ -340,7 +320,7 @@ class DeathScene extends Phaser.Scene {
     if (isViewingHistory) {
         this.createModernButton(cx, btnY, "মেনুতে ফিরে যান", true, () => {
             GameState.viewingHistoryMatch = null;
-            GameState.showHistoryPopupOnLoad = true; // <--- ADD THIS FLAG
+            GameState.showHistoryPopupOnLoad = true; 
             this.scene.start("MenuScene");
         });
     } else {
@@ -413,15 +393,18 @@ class DeathScene extends Phaser.Scene {
   }
 
   update(time, delta) {
+    // Delta clamping prevents massive lag spikes from causing NaN positioning
+    const safeTimeScale = Phaser.Math.Clamp(delta / 16.66, 0.1, 2.5);
+
     if (this.scrollingBg) {
-        this.scrollingBg.tilePositionY -= 0.6;
+        this.scrollingBg.tilePositionY -= 0.6 * safeTimeScale;
     }
     
     if (this.backgroundLayers) {
         this.backgroundLayers.forEach(layer => {
             layer.group.children.iterate(star => {
                 if (star) {
-                    star.y += layer.speed;
+                    star.y += layer.speed * safeTimeScale;
                     if (star.y > this.cameras.main.height) {
                         star.y = -10;
                         star.x = Phaser.Math.Between(0, this.cameras.main.width);
@@ -431,33 +414,27 @@ class DeathScene extends Phaser.Scene {
         });
     }
 
-    // Delta-time adjusted scrolling physics
     if (this.scrollData && this.scrollState) {
         if (!this.scrollState.isDragging) {
             let { contentContainer, listStartY, minScroll } = this.scrollData;
             let vY = this.scrollState.velocityY;
             let currentY = contentContainer.y;
 
-            // Normalize speed to roughly ~60fps regardless of actual framerate
-            const timeScale = delta / 16.66;
-
             if (Math.abs(vY) > 0.01) {
-                currentY += vY * 16 * timeScale;
-                this.scrollState.velocityY *= Math.pow(0.92, timeScale); // Apply smooth friction
+                currentY += vY * 16 * safeTimeScale;
+                this.scrollState.velocityY *= Math.pow(0.92, safeTimeScale); 
             }
 
-            // Delta-adjusted spring logic for bounds
             if (currentY > listStartY) {
-                currentY += (listStartY - currentY) * 0.15 * timeScale;
+                currentY += (listStartY - currentY) * 0.15 * safeTimeScale;
                 if (Math.abs(listStartY - currentY) < 0.5) currentY = listStartY;
             } else if (currentY < listStartY + minScroll) {
-                currentY += ((listStartY + minScroll) - currentY) * 0.15 * timeScale;
+                currentY += ((listStartY + minScroll) - currentY) * 0.15 * safeTimeScale;
                 if (Math.abs((listStartY + minScroll) - currentY) < 0.5) currentY = listStartY + minScroll;
             }
 
             contentContainer.y = currentY;
         } else {
-            // Very slowly decay momentum while holding still
             this.scrollState.velocityY *= 0.9; 
         }
     }

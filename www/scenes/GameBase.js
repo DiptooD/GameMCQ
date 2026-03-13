@@ -12,65 +12,44 @@ class GameBase extends Phaser.Scene {
   }
 
   // --- PROGRESSION & DIFFICULTY ---
-  
-  /**
-   * Calculates the scaled Beginner's Luck Modifiers based on matches played.
-   * Scales gracefully over the first 5 matches: 100% -> 80% -> 60% -> 40% -> 20% -> 0%
-   */
   getLuckModifiers() {
     let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
-    let luckFactor = Math.max(0, 5 - played) / 5; // Scales from 1.0 down to 0.0
+    let luckFactor = Math.max(0, 5 - played) / 5; 
 
     return {
-        factor: luckFactor,                  // 1.0 = 100%, 0.8 = 80%, 0.6 = 60%, etc.
-        speedMult: 1.0 - (0.4 * luckFactor), // 0.6 (slower game at 100% luck) -> 1.0 (normal)
-        delayMult: 1.0 + (0.5 * luckFactor), // 1.5 (slower spawns at 100% luck) -> 1.0 (normal)
-        batteryDropMult: 1.0 + (1.0 * luckFactor), // Up to 2x more battery charge value per drop
-        batteryDropChance: 0.4 * luckFactor, // Up to +40% flat increase to enemy drop chance
-        batteryTarget: Math.round(100 - (50 * luckFactor)) // Requires only 50% battery at 100% luck instead of 100%
+        factor: luckFactor,                  
+        speedMult: 1.0 - (0.4 * luckFactor), 
+        delayMult: 1.0 + (0.5 * luckFactor), 
+        batteryDropMult: 1.0 + (1.0 * luckFactor), 
+        batteryDropChance: 0.4 * luckFactor, 
+        batteryTarget: Math.round(100 - (50 * luckFactor)) 
     };
   }
   
-  /**
-   * Calculates the absolute difficulty rating of the game (0 to 22+).
-   * Level 1: 0-10
-   * Level 2: 10-17
-   * Level 3: 17-22
-   * Void: 22+
-   */
   getGlobalProgress() {
     let base = 0;
+    if (GameState.bossStage > 0) base += 10; 
+    if (GameState.bossStage > 1) base += 7;  
+    if (GameState.bossStage > 2) base += 5;  
     
-    // Add completed levels to the base score
-    if (GameState.bossStage > 0) base += 10; // Level 1 completed
-    if (GameState.bossStage > 1) base += 7;  // Level 2 completed
-    if (GameState.bossStage > 2) base += 5;  // Level 3 completed
-    
-    // Add current correct count for the active level
     return base + GameState.correctCount;
   }
 
   updateGameSpeed() {
-    const progress = this.getGlobalProgress(); // Range: 0 to 22 (and beyond for void)
-    const luck = this.getLuckModifiers(); // Fetch the current graduated modifiers
+    const progress = this.getGlobalProgress(); 
+    const luck = this.getLuckModifiers(); 
     
-    // 1. Scale Player Fire Rate (Get faster as you progress)
-    // Starts at 250ms delay, drops to 150ms cap
     this.fireRate = Math.max(120, 350 - (progress * 10)); 
     if(this.weaponTimer) this.weaponTimer.delay = this.fireRate;
 
-    // 2. Scale Background Speed
     this.backgroundSpeed = (1 + (progress * 0.2)) * luck.speedMult;
     
-    // 3. Adjust Spawn Rates (Enemies appear faster)
     let spawnDelay = Math.max(900, 2200 - (progress * 45)) * luck.delayMult;
     if(this.spawnTimer) this.spawnTimer.delay = spawnDelay;
     
-    // --- ENEMY FIRE RATE ---
     let enemyFireDelay = Math.max(500, 3000 - (progress * 150)) * luck.delayMult;
     if(this.enemyFireTimer) this.enemyFireTimer.delay = enemyFireDelay;
      
-    // Start at 180 frames (3 seconds) and decrease to 60 frames (1 second)
     this.dragonFireThreshold = Math.max(60, 180 - (progress * 6)) * luck.delayMult; 
   }
 
@@ -79,14 +58,11 @@ class GameBase extends Phaser.Scene {
     const h = this.cameras.main.height;
     const w = 720;
 
-    // 1. Initial Gradient (Vibrant Start)
     this.bgGradient = this.add.graphics();
     this.bgGradient.fillGradientStyle(0x1a0033, 0x1a0033, 0x002b36, 0x002b36, 1);
     this.bgGradient.fillRect(0, 0, w, h);
   
-    // 2. High Density Nebulae
     this.nebulae = this.add.group();
-    // Start with Blue/Purple jewel tones
     const colors = [0x242424, 0x373737, 0x161616]; 
     for(let i = 0; i < 2; i++) { 
       let nebula = this.add.ellipse(
@@ -95,12 +71,11 @@ class GameBase extends Phaser.Scene {
         Phaser.Math.Between(300, 600),
         Phaser.Math.Between(200, 400),
         Phaser.Utils.Array.GetRandom(colors),
-        0.12 // Constant visibility
+        0.12 
       );
       this.nebulae.add(nebula);
     }
 
-    // 3. Background Debris (Asteroids)
     this.bgDebris = this.add.group();
     for(let i = 0; i < 5; i++) {
       let d = this.add.circle(
@@ -155,7 +130,7 @@ class GameBase extends Phaser.Scene {
     this.engineEmitter = this.add.particles(0, 0, 'engine_flame', {
       speedY: { min: 100, max: 200 },
       speedX: { min: -20, max: 20 },
-      scale: { start: 1.5, end: 0 }, // Scaled up
+      scale: { start: 1.5, end: 0 }, 
       alpha: { start: 0.8, end: 0 },
       lifespan: 300,
       blendMode: 'ADD',
@@ -165,7 +140,7 @@ class GameBase extends Phaser.Scene {
 
     this.hitEmitter = this.add.particles(0, 0, 'spark', {
       speed: { min: 100, max: 300 },
-      scale: { start: 1.2, end: 0 }, // Scaled up
+      scale: { start: 1.2, end: 0 }, 
       alpha: { start: 1, end: 0 },
       lifespan: 400,
       blendMode: 'ADD',
@@ -174,7 +149,7 @@ class GameBase extends Phaser.Scene {
 
     this.explosionEmitter = this.add.particles(0, 0, 'explosion_particle', {
       speed: { min: 50, max: 200 },
-      scale: { start: 1.8, end: 0 }, // Scaled up
+      scale: { start: 1.8, end: 0 }, 
       alpha: { start: 1, end: 0 },
       lifespan: 500,
       blendMode: 'ADD',
@@ -183,8 +158,6 @@ class GameBase extends Phaser.Scene {
   }
 
   createExplosion(x, y, color, particleCount = 10) { 
-    // Increased base particles
-    // 1. NEON SHARD BURST
     for(let i = 0; i < particleCount; i++) {
       const angle = (i / particleCount) * Math.PI * 2 + Math.random();
       const speed = Phaser.Math.Between(150, 300); 
@@ -194,7 +167,7 @@ class GameBase extends Phaser.Scene {
       let p = this.add.image(x, y, 'explosion_particle');
       p.setTint(color);
       p.setAlpha(1);
-      p.setScale(Phaser.Math.FloatBetween(0.8, 1.8)); // Scaled up
+      p.setScale(Phaser.Math.FloatBetween(0.8, 1.8)); 
       
       this.physics.add.existing(p);
       p.body.setVelocity(vx, vy);
@@ -213,21 +186,19 @@ class GameBase extends Phaser.Scene {
       });
     }
     
-    // 2. THE DIGITAL FLASH
     const flash = this.add.image(x, y, 'explosion_particle');
     flash.setTint(0xffffff);
-    flash.setScale(0.8); // Scaled up
+    flash.setScale(0.8); 
     
     this.tweens.add({
       targets: flash,
-      scale: 8, // Bigger flash
+      scale: 8, 
       alpha: 0,
       duration: 200,
       ease: 'Power2',
       onComplete: () => flash.destroy()
     });
     
-    // 3. EMITTER TRIGGER
     if (this.explosionEmitter) {
         this.explosionEmitter.emitParticle(particleCount, x, y);
     }
@@ -261,7 +232,6 @@ class GameBase extends Phaser.Scene {
     });
   }
 
-  // --- ENTITY SPAWNING ---
   spawnObstacle() {
     if (GameState.bossActive) return;
     const types = ["obstacle_asteroid", "obstacle_debris", "obstacle_mine"];
@@ -280,14 +250,13 @@ class GameBase extends Phaser.Scene {
     obs.maxHp = obs.hp; 
     obs.obstacleType = type; 
     
-    // Scaled up obstacle size and hitbox
     obs.setScale(1.3);
     obs.setSize(55, 55);
     
     if (type === "obstacle_mine") {
       this.tweens.add({
         targets: obs,
-        scale: { from: 1.3, to: 1.5 }, // Scaled up tween
+        scale: { from: 1.3, to: 1.5 }, 
         alpha: { from: 1, to: 0.8 },
         yoyo: true,
         duration: 400,
@@ -343,7 +312,6 @@ class GameBase extends Phaser.Scene {
     e.tier = tier;
     e.enemyType = enemyType;
     
-    // --- MOVEMENT & SIZE (Scaled up versions) ---
     if (tier === "ultra") {
       e.setSize(55, 65); e.setScale(1.2); e.movePattern = "wave"; e.moveTimer = 0;
     } else if (tier === "rare") {
@@ -357,9 +325,9 @@ class GameBase extends Phaser.Scene {
     } else if (tier === "spinner") {
       e.setSize(40, 40); e.setScale(1.1); e.movePattern = "spiral"; e.moveTimer = 0;
     } else {
-      e.body.setCircle(28); // Increased circle radius
+      e.body.setCircle(28); 
       e.setOffset(3, 3);
-      e.setScale(1.5); // Much larger commons
+      e.setScale(1.5); 
       e.movePattern = "straight";
       const baseSpeed = Phaser.Math.Between(1, 2);
       e.rotSpeed = baseSpeed + (progress * 0.5);
@@ -389,7 +357,6 @@ class GameBase extends Phaser.Scene {
     head.maxHp = head.hp;
     head.tier = "centipede";
     head.enemyType = "centipede";
-    // Scaled up head
     head.setScale(1.3);
     head.setSize(45, 45);
     head.segments = [];
@@ -397,13 +364,11 @@ class GameBase extends Phaser.Scene {
     head.setCollideWorldBounds(true);
     
     for (let i = 0; i < segmentCount; i++) {
-      // Adjusted spacing for larger segments
       const segment = this.enemies.create(x - ((i + 1) * 45), -100, "enemy_centipede");
       segment.hp = 50 + (progress * 2);
       segment.maxHp = segment.hp;
       segment.tier = "centipede_segment";
       segment.enemyType = "centipede";
-      // Scaled up segments
       segment.setScale(1.3);
       segment.setSize(45, 45);
       segment.parentHead = head;
@@ -435,12 +400,10 @@ class GameBase extends Phaser.Scene {
     const powerUp = this.powerUps.create(x, y, powerUpType);
     powerUp.setVelocityY(150);
     powerUp.powerUpType = powerUpType;
-    // Scaled up powerup
     powerUp.setScale(1.3);
     powerUp.setSize(45, 45);
   }
 
-  // --- POWER UP ABILITIES ---
   activateShield() {
     this.hasShield = true;
     this.shieldArc.setVisible(true);
@@ -453,7 +416,7 @@ class GameBase extends Phaser.Scene {
       this.magnetActive = true;
       this.magnetDuration = 20000;
       
-      const magnetField = this.add.circle(this.player.x, this.player.y, 80, 0x9900cc, 0.3); // Increased radius
+      const magnetField = this.add.circle(this.player.x, this.player.y, 80, 0x9900cc, 0.3); 
       this.tweens.add({
         targets: magnetField,
         scale: 3,
@@ -493,7 +456,7 @@ class GameBase extends Phaser.Scene {
   activateTNT() {
     this.triggerShockwave();
     this.cameras.main.shake(600, 0.025);
-    this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); // More particles
+    this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
   }
 
   addExtraLife() {
@@ -512,9 +475,9 @@ class GameBase extends Phaser.Scene {
       for(let i = 0; i < 12; i++) {
         const angle = (i / 12) * Math.PI * 2;
         const heart = this.add.circle(
-          this.player.x + Math.cos(angle) * 40, // Wider spread
+          this.player.x + Math.cos(angle) * 40, 
           this.player.y + Math.sin(angle) * 40,
-          6, // Larger heart particles
+          6, 
           0x00ff00,
           1
         );
@@ -532,7 +495,7 @@ class GameBase extends Phaser.Scene {
     }
   }
 
-triggerShockwave() {
+  triggerShockwave() {
     this.cameras.main.shake(500, 0.03); 
     this.cameras.main.flash(400, 255, 200, 50, 0.5); 
 
@@ -544,15 +507,11 @@ triggerShockwave() {
         const color = (i % 2 === 0) ? 0xffaa00 : 0xffffff;
         wave.setTint(color);
         wave.setAlpha(0.7);
-        wave.setScale(0.15); // Start small
+        wave.setScale(0.15); 
         
-        // FIX: Remove arcade physics body from the wave.
-        // Arcade physics bodies don't scale automatically with tweens without manual resets.
-        // We will use geometric distance checks instead.
-
         this.tweens.add({
             targets: wave,
-            scale: 20,       // Expand massive
+            scale: 20,       
             alpha: 0,
             duration: 1000, 
             delay: i * 150, 
@@ -560,19 +519,23 @@ triggerShockwave() {
             onUpdate: () => {
                 wave.x += Math.sin(this.time.now * 0.1) * 0.5;
 
-                // FIX: Calculate actual radius dynamically based on visual scale
                 const currentRadius = 80 * (wave.scale / 0.15);
-                const targets = [...this.enemies.getChildren(), ...this.obstacles.getChildren(), ...this.bossBullets.getChildren()];
+                
+                // CRASH FIX: Safe fallback if this is called early before enemies/bossBullets are instantiated
+                const targets = [
+                    ...(this.enemies ? this.enemies.getChildren() : []), 
+                    ...(this.obstacles ? this.obstacles.getChildren() : []), 
+                    ...(this.bossBullets ? this.bossBullets.getChildren() : [])
+                ];
                 
                 targets.forEach(target => {
                     if (target.active && !target.hitByWave) {
                         const dist = Phaser.Math.Distance.Between(wave.x, wave.y, target.x, target.y);
                         
-                        // Hit registration
                         if (dist <= currentRadius) {
                             target.hitByWave = true;
                             this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
-                                if (this.enemies.contains(target)) {
+                                if (this.enemies && this.enemies.contains(target)) {
                                      this.destroyEnemy(target);
                                 } else {
                                      this.createExplosion(target.x, target.y, 0xffff00, 20);

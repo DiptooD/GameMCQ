@@ -10,9 +10,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* Added touch-action: none to prevent Android pull-to-refresh or double-tap zooming */
-    body { margin:0; padding:0; background-color:#000; overflow: hidden; height: 100vh; width: 100vw; touch-action: none; }
-    canvas { display: block; width: 100% !important; height: 100% !important; }
+    /* Prevents Android pull-to-refresh, double-tap zooming, and UI-locking text highlighting */
+    body { 
+        margin:0; 
+        padding:0; 
+        background-color:#000; 
+        overflow: hidden; 
+        height: 100vh; 
+        width: 100vw; 
+        touch-action: none; 
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+    }
+    canvas { 
+        display: block; 
+        width: 100% !important; 
+        height: 100% !important; 
+    }
   </style>
   
   <script src="cordova.js"></script> 

@@ -4,7 +4,6 @@ class GameScene extends GameBase {
     }
 
     create() {
-        // --- BEGINNER'S LUCK TRACKER ---
         if (typeof GameState.gamesPlayed === 'undefined') GameState.gamesPlayed = 0;
         this.luckMods = this.getLuckModifiers();
 
@@ -14,7 +13,6 @@ class GameScene extends GameBase {
         this.isResuming = false;
         this.hasRevived = false;
 
-        // --- 1. WAKE LOCK & VISIBILITY HANDLER ---
         if ('wakeLock' in navigator) {
             try {
                 navigator.wakeLock.request('screen').then(lock => {
@@ -45,7 +43,6 @@ class GameScene extends GameBase {
         };
         document.addEventListener("visibilitychange", this.visibilityHandler);
 
-        // --- 2. STATE INITIALIZATION ---
         if (typeof GameState.keys === 'undefined') GameState.keys = 0;
         if (typeof GameState.debris === 'undefined') GameState.debris = 0;
         if (typeof GameState.boosters === 'undefined') GameState.boosters = {};
@@ -75,7 +72,6 @@ class GameScene extends GameBase {
         this.lastRegenTime = 0;
         this.isRegenerating = false;
 
-        // --- 3. SCENE SETUP ---
         this.createSpaceBackground();
         this.createParticleSystems();
 
@@ -102,7 +98,6 @@ class GameScene extends GameBase {
         this.magnetArc = this.add.graphics().setDepth(9).setVisible(false);
         this.fireShieldArc = this.add.graphics().setDepth(11).setVisible(false);
 
-        // --- 4. INPUT HANDLING ---
         this.input.on("pointermove", p => {
             let minY = 480;
             let maxY = h - 100;
@@ -112,13 +107,11 @@ class GameScene extends GameBase {
             this.targetY = Phaser.Math.Clamp(p.y, minY, maxY);
         });
 
-        // --- 5. TIMERS ---
         this.weaponTimer = this.time.addEvent({ delay: this.fireRate, loop: true, callback: this.fireWeapon, callbackScope: this });
         this.spawnTimer = this.time.addEvent({ delay: 1500, loop: true, callback: this.spawnEnemy, callbackScope: this });
         this.enemyFireTimer = this.time.addEvent({ delay: 1800, loop: true, callback: this.enemiesFireBack, callbackScope: this });
         this.obstacleTimer = this.time.addEvent({ delay: 4500, loop: true, callback: this.spawnObstacle, callbackScope: this });
 
-        // --- 6. COLLISIONS ---
         this.physics.add.overlap(this.bullets, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.missiles, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.sideBullets, this.enemies, this.damageEnemy, null, this);
@@ -150,7 +143,6 @@ class GameScene extends GameBase {
             this.createBeginnersLuckUI();
         }
 
-        // --- 7. MUSIC MANAGER ---
         const menuBgm = this.sound.get('menubgm');
         if (menuBgm) menuBgm.stop();
 
@@ -359,12 +351,10 @@ class GameScene extends GameBase {
                             seg.x += Math.cos(angle) * (dist - targetDist) * 0.3;
                             seg.y += Math.sin(angle) * (dist - targetDist) * 0.3;
                         }
-                        this.engineEmitter.emitParticleAt(seg.x, seg.y - 20, 1);
                     }
                 });
             }
 
-            this.engineEmitter.emitParticleAt(e.x, e.y - 35, 1);
             if (e.y > 1500) { e.destroy(); return; }
 
             if (e.texture.key === "enemy_common") e.angle += (e.rotSpeed || 1);
@@ -1169,7 +1159,6 @@ class GameScene extends GameBase {
         else if (weaponType === "bullet") damage = 2;
         else if (weaponType === "lightning_bolt") { 
             damage = 6; 
-            // FIXED: Initialize pierceCount so it doesn't crash on NaN evaluation
             shot.pierceCount = (shot.pierceCount || 0) + 1; 
             if (shot.pierceCount >= 3) shot.destroy(); 
         }

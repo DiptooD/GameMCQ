@@ -17,7 +17,7 @@ class QuestionScene extends Phaser.Scene {
         if (GameState.currentQuestions && GameState.currentQuestions.length > 0) {
             this.questions = GameState.currentQuestions;
         } else {
-            this.questions = this.cache.json.get('questions_data');
+            this.questions = this.cache.json.get('questions_data') || [];
         }
         this.qIdx = 0;
 
@@ -50,11 +50,11 @@ class QuestionScene extends Phaser.Scene {
             fontSize: "26px", fontFamily: "Arial", color: "#aaccff", stroke: "#000000", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        // Hide debris UI if playing in revision mode
         if (GameState.gameMode === "revision") {
             this.debrisIcon.setVisible(false);
             this.debrisText.setVisible(false);
         }
+        
         // B. CENTER GROUP: HEARTS 
         this.hearts = this.add.group();
 
@@ -68,7 +68,6 @@ class QuestionScene extends Phaser.Scene {
             .setOrigin(0.5, 0.5);
 
         pauseBtn.on("pointerdown", () => {
-            // Block pause during countdown
             const gameScene = this.scene.get("GameScene");
             if (gameScene && gameScene.isResuming) return;
 
@@ -85,7 +84,6 @@ class QuestionScene extends Phaser.Scene {
         }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true }).setAlpha(0.8);
 
         this.skipBtn.on("pointerdown", () => { 
-            // Block skip during countdown
             const gameScene = this.scene.get("GameScene");
             if (gameScene && gameScene.isResuming) return;
 
@@ -155,10 +153,8 @@ class QuestionScene extends Phaser.Scene {
             container.add([bg, txt]);
 
             bg.on("pointerdown", () => {
-                // Block answer clicks during countdown
                 const gameScene = this.scene.get("GameScene");
                 if (gameScene && gameScene.isResuming) return;
-
                 if (this.isProcessing) return;
 
                 if (GameState.battery >= 100) {
@@ -180,7 +176,6 @@ class QuestionScene extends Phaser.Scene {
             bg.on("pointerup", () => container.y = y);
             bg.on("pointerout", () => container.y = y);
 
-            // Added a specific property to safely store the button pulse tween
             this.optionBtns.push({ container, bg, txt, originalY: y, pulseTween: null });
         }
 
@@ -217,10 +212,8 @@ class QuestionScene extends Phaser.Scene {
                 this.quickAnsContainer.add([btnBg, btnTxt]);
 
                 btnBg.on("pointerdown", () => {
-                    // Block answer clicks during countdown
                     const gameScene = this.scene.get("GameScene");
                     if (gameScene && gameScene.isResuming) return;
-
                     if (this.isProcessing) return;
                     
                     if (GameState.battery >= 100) {
@@ -238,8 +231,8 @@ class QuestionScene extends Phaser.Scene {
                 this.quickBtns.push({ bg: btnBg, txt: btnTxt, originalY: btnY });
             }
 
-            // --- 6.1 QUICK SKIP BUTTON (Separated Block) ---
-            const qSkipY = 489; // Placed nicely beneath the glass panel
+            // --- 6.1 QUICK SKIP BUTTON ---
+            const qSkipY = 489; 
             const qSkipBg = this.add.rectangle(45, qSkipY, 112, 60, 0x000510, 0.3);
             qSkipBg.setStrokeStyle(3, 0xffffff, 0.15);
             qSkipBg.setInteractive({ useHandCursor: true });
@@ -256,7 +249,7 @@ class QuestionScene extends Phaser.Scene {
             this.quickAnsContainer.add([qSkipBg, this.quickSkipTxt]);
 
             qSkipBg.on("pointerdown", () => {
-                if (this.quickAnsContainer.alpha < 0.5) return; // Fail-safe to avoid clicking when invisible
+                if (this.quickAnsContainer.alpha < 0.5) return; 
                 
                 const gameScene = this.scene.get("GameScene");
                 if (gameScene && gameScene.isResuming) return;
@@ -398,7 +391,6 @@ class QuestionScene extends Phaser.Scene {
         this.keyText.setText(GameState.keys || 0);
         this.debrisText.setText(GameState.debris || 0);
         
-        // Update both standard and quick skip buttons
         this.skipBtn.setText(`Skip (${GameState.skipsLeft})`);
         if (this.quickSkipTxt) {
             this.quickSkipTxt.setText(`Skip\n(${GameState.skipsLeft})`);
@@ -451,7 +443,6 @@ class QuestionScene extends Phaser.Scene {
         }
     }
 
-    // Consolidated unified ready text logic (fixes prior conflict bug)
     updateReadyState(isReady) {
         if (isReady && !GameState.bossActive) {
             this.instructionText.setAlpha(0);
@@ -555,25 +546,28 @@ class QuestionScene extends Phaser.Scene {
         const elements = [this.qText, this.qBankTag, ...this.optionBtns.map(b => b.container)];
         const bankName = q.bank || q.category || "Unknown"; 
         
+        // Helper to strip specific punctuation
+        const cleanStr = (str) => typeof str === 'string' ? str.replace(/।/g, '') : str;
+        const cleanQuestion = cleanStr(q.question);
+
         if (this.qText.text === "") {
-            // Apply Dynamic Question Font Sizing
-            if (q.question.length > 80) {
+            if (cleanQuestion.length > 80) {
                 this.qText.setFontSize("26px");
             } else {
                 this.qText.setFontSize("34px");
             }
 
-            this.qText.setText(q.question);
+            this.qText.setText(cleanQuestion);
             this.qBankTag.setText(bankName); 
             
             this.optionBtns.forEach((btn, i) => {
-                // Apply Dynamic Option Font Sizing
-                if (q.options[i].length > 40) {
+                const cleanOpt = cleanStr(q.options[i]);
+                if (cleanOpt.length > 40) {
                     btn.txt.setFontSize("22px");
                 } else {
                     btn.txt.setFontSize("30px");
                 }
-                btn.txt.setText(q.options[i]);
+                btn.txt.setText(cleanOpt);
             });
 
             this.markQuestionAsSeen(q.question);
@@ -590,14 +584,13 @@ class QuestionScene extends Phaser.Scene {
             duration: 180,
             ease: 'Power2.easeIn',
             onComplete: () => {
-                // Apply Dynamic Question Font Sizing
-                if (q.question.length > 80) {
+                if (cleanQuestion.length > 80) {
                     this.qText.setFontSize("26px");
                 } else {
                     this.qText.setFontSize("34px");
                 }
 
-                this.qText.setText(q.question);
+                this.qText.setText(cleanQuestion);
                 this.qText.y = this.qText.originalY + 20; 
                 this.markQuestionAsSeen(q.question);
                 
@@ -605,14 +598,14 @@ class QuestionScene extends Phaser.Scene {
                 this.qBankTag.y = this.qBankTag.originalY + 20;
                 
                 this.optionBtns.forEach((btn, i) => {
-                    // Apply Dynamic Option Font Sizing
-                    if (q.options[i].length > 40) {
+                    const cleanOpt = cleanStr(q.options[i]);
+                    if (cleanOpt.length > 40) {
                         btn.txt.setFontSize("22px");
                     } else {
                         btn.txt.setFontSize("30px");
                     }
 
-                    btn.txt.setText(q.options[i]);
+                    btn.txt.setText(cleanOpt);
                     btn.container.y = btn.originalY + 20; 
                     
                     btn.bg.setFillStyle(0x000000, 0.07); 
@@ -646,7 +639,6 @@ class QuestionScene extends Phaser.Scene {
                     }
                 });
                 
-                // FAILSAFE FIX: Ensure processing always unlocks even if animation is interrupted
                 this.time.delayedCall(400, () => {
                     this.isProcessing = false;
                 });
