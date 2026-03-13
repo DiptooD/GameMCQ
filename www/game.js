@@ -5,6 +5,7 @@ window.saveCurrency = function() {
 
 // Helper to save game state to local storage
 window.saveGame = function() {
+    try {
     localStorage.setItem('game_keys', GameState.keys || 0);
     localStorage.setItem('game_debris', GameState.debris || 0);
     localStorage.setItem('game_ownedShips', JSON.stringify(GameState.ownedShips));
@@ -13,6 +14,10 @@ window.saveGame = function() {
     localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
     localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory)); // <-- Save History
     localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0); // <-- Save Beginner Tracking
+
+} catch (e) {
+        console.warn("Save failed: LocalStorage is full or disabled.");
+    }
 };
 
 // Centralized settings saver

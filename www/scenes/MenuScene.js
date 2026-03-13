@@ -1352,8 +1352,13 @@ class MenuScene extends Phaser.Scene {
             }
         }
 
+// Find the logic for Revision/New mode checks
         if (finalQuestions.length === 0) {
-            alert("No questions found for this selection!");
+            if (typeof showToast === 'function') {
+                showToast("No questions found! Play a game first.");
+            } else {
+                alert("No questions found!");
+            }
             return;
         }
 

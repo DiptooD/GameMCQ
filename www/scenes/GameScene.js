@@ -23,11 +23,9 @@ class GameScene extends GameBase {
             } catch (err) { }
         }
 
-        // Handle tab switching (Pause game & Music)
         this.visibilityHandler = () => {
             if (document.hidden) {
                 if (this.scene.isActive("GameScene")) {
-                    // Pause Music
                     const bgMusic = this.sound.get('bg_music');
                     if (bgMusic && bgMusic.isPlaying) bgMusic.pause();
 
@@ -52,13 +50,11 @@ class GameScene extends GameBase {
         if (typeof GameState.debris === 'undefined') GameState.debris = 0;
         if (typeof GameState.boosters === 'undefined') GameState.boosters = {};
 
-        // Initialize Textures & SFX Wrappers
         if (typeof GameTextures !== 'undefined') GameTextures.init(this);
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
 
         this.events.on('shutdown', this.shutdown, this);
 
-        // Game Variables
         this.fireRate = 250;
         this.backgroundSpeed = 1;
         this.fireShieldActive = false;
@@ -83,7 +79,6 @@ class GameScene extends GameBase {
         this.createSpaceBackground();
         this.createParticleSystems();
 
-        // Player Setup
         this.targetX = 360;
         this.targetY = h - 150;
 
@@ -92,7 +87,6 @@ class GameScene extends GameBase {
             .setScale(0.9);
         this.player.setSize(90, 90);
 
-        // Physics Groups
         this.bullets = this.physics.add.group();
         this.missiles = this.physics.add.group();
         this.sideBullets = this.physics.add.group();
@@ -104,7 +98,6 @@ class GameScene extends GameBase {
         this.obstacles = this.physics.add.group();
         this.powerUps = this.physics.add.group();
 
-        // Visual Effects (Shields/Magnets)
         this.shieldArc = this.add.graphics().setDepth(10).setVisible(false);
         this.magnetArc = this.add.graphics().setDepth(9).setVisible(false);
         this.fireShieldArc = this.add.graphics().setDepth(11).setVisible(false);
@@ -120,56 +113,28 @@ class GameScene extends GameBase {
         });
 
         // --- 5. TIMERS ---
-        this.weaponTimer = this.time.addEvent({
-            delay: this.fireRate,
-            loop: true,
-            callback: this.fireWeapon,
-            callbackScope: this
-        });
-
-        this.spawnTimer = this.time.addEvent({
-            delay: 1500,
-            loop: true,
-            callback: this.spawnEnemy,
-            callbackScope: this
-        });
-
-        this.enemyFireTimer = this.time.addEvent({
-            delay: 1800,
-            loop: true,
-            callback: this.enemiesFireBack,
-            callbackScope: this
-        });
-
-        this.obstacleTimer = this.time.addEvent({
-            delay: 4500,
-            loop: true,
-            callback: this.spawnObstacle,
-            callbackScope: this
-        });
+        this.weaponTimer = this.time.addEvent({ delay: this.fireRate, loop: true, callback: this.fireWeapon, callbackScope: this });
+        this.spawnTimer = this.time.addEvent({ delay: 1500, loop: true, callback: this.spawnEnemy, callbackScope: this });
+        this.enemyFireTimer = this.time.addEvent({ delay: 1800, loop: true, callback: this.enemiesFireBack, callbackScope: this });
+        this.obstacleTimer = this.time.addEvent({ delay: 4500, loop: true, callback: this.spawnObstacle, callbackScope: this });
 
         // --- 6. COLLISIONS ---
-        // Player Attacks vs Enemies
         this.physics.add.overlap(this.bullets, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.missiles, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.sideBullets, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.specialWeapons, this.enemies, this.damageEnemy, null, this);
         
-        // Player Attacks vs Obstacles
         this.physics.add.overlap(this.bullets, this.obstacles, this.damageObstacle, null, this);
         this.physics.add.overlap(this.missiles, this.obstacles, this.damageObstacle, null, this);
         this.physics.add.overlap(this.sideBullets, this.obstacles, this.damageObstacle, null, this);
         this.physics.add.overlap(this.specialWeapons, this.obstacles, this.damageObstacle, null, this);
 
-        // Enemies/Env vs Player
         this.physics.add.overlap(this.player, [this.enemies, this.bossBullets], this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.obstacles, this.hitPlayer, null, this);
         
-        // Collectibles
         this.physics.add.overlap(this.player, this.batteries, this.collectBattery, null, this);
         this.physics.add.overlap(this.player, this.powerUps, this.collectPowerUp, null, this);
 
-        // Boss UI
         this.bossBarBg = this.add.rectangle(360, 110, 600, 16, 0x333333).setVisible(false).setAlpha(.3);
         this.bossBarFill = this.add.rectangle(60, 110, 0, 16, 0x6E6E6E).setOrigin(0, 0.5).setVisible(false).setAlpha(.6);
         this.warningText = this.add.text(360, h / 2, "BOSS APPROACHING!", {
@@ -177,12 +142,10 @@ class GameScene extends GameBase {
             stroke: '#000000', strokeThickness: 8
         }).setOrigin(0.5).setVisible(false);
 
-        // Global Logic Updates
         window.updateLevelTargets();
         this.updateGameSpeed();
         this.createBoosterUI();
         
-        // UI Notification for beginner's luck
         if (this.luckMods.factor > 0) {
             this.createBeginnersLuckUI();
         }
@@ -224,9 +187,6 @@ class GameScene extends GameBase {
         });
     }
 
-    /**
-     * Helper Method to play programmatic sounds with volume control and jitter.
-     */
     playSFX(key, baseVolume = 0.5, allowJitter = true) {
         if (!this.sound || !this.cache.audio.exists(key)) return;
 
@@ -244,7 +204,6 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
-    // --- CLEANUP ---
     shutdown() {
         if (this.visibilityHandler) {
             document.removeEventListener("visibilitychange", this.visibilityHandler);
@@ -261,7 +220,6 @@ class GameScene extends GameBase {
         if (this.magnetTimer) this.magnetTimer.remove();
         if (this.bossTeleportTimer) this.bossTeleportTimer.remove();
 
-        // Prevent memory leak if scene shuts down while revive interval is active
         if (this.reviveInterval) {
             clearInterval(this.reviveInterval);
         }
@@ -286,7 +244,6 @@ class GameScene extends GameBase {
         const bottomEdge = hView + 100;
         const topEdge = -100;
 
-        // Background Animation
         this.updateDynamicBackground();
         const layers = [
             { group: this.nebulae, speed: 1 * this.backgroundSpeed * dt },
@@ -308,7 +265,6 @@ class GameScene extends GameBase {
         this.player.x = Phaser.Math.Linear(this.player.x, this.targetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
 
-        // --- Visual Effects Update ---
         if (this.hasShield) {
             this.shieldArc.clear();
             const pulse = Math.sin(this.time.now / 100);
@@ -365,7 +321,6 @@ class GameScene extends GameBase {
             this.fireShieldArc.strokePath();
         }
 
-        // --- Ship Texture Update ---
         const equipped = GameState.equippedShip || "default";
         const level = GameState.weaponLevel || 1;
         let shipTexture = (equipped === "default") ? `player_lv${level}` : `${equipped}_lv${level}`;
@@ -376,7 +331,6 @@ class GameScene extends GameBase {
             this.tweens.add({ targets: this.player, scaleX: 1.3, scaleY: 1.3, duration: 100, yoyo: true });
         }
 
-        // --- Entity Logic Loops ---
         this.distantStars.children.each(s => { s.y += 0.3 * this.backgroundSpeed; if (s.y > hView) s.y = -10; });
         this.stars.children.each(s => { 
             s.y += 2 * this.backgroundSpeed * dt; 
@@ -390,7 +344,6 @@ class GameScene extends GameBase {
 
         this.engineEmitter.emitParticleAt(this.player.x, this.player.y + 55, 2);
 
-        // Enemy Logic
         this.enemies.children.each(e => {
             if (!e.active) return;
 
@@ -456,7 +409,6 @@ class GameScene extends GameBase {
             }
         });
 
-        // Homing Missile Logic
         this.missiles.children.each(missile => {
             if (!missile.active) return;
             if (missile.y < topEdge || missile.x < -100 || missile.x > 820 || missile.y > bottomEdge) {
@@ -497,7 +449,6 @@ class GameScene extends GameBase {
             }
         });
 
-        // Garbage Collection
         this.obstacles.children.each(obs => { if (obs.active && obs.y > bottomEdge) obs.destroy(); });
         this.powerUps.children.each(pu => { if (pu.active && pu.y > bottomEdge) pu.destroy(); });
         [this.bullets, this.sideBullets, this.specialWeapons].forEach(group => {
@@ -510,7 +461,6 @@ class GameScene extends GameBase {
             });
         }
 
-        // Health Regen Logic
         if (GameState.lives < 3 && !GameState.bossActive) {
             if (!this.isRegenerating) {
                 this.lastRegenTime = this.time.now;
@@ -525,7 +475,6 @@ class GameScene extends GameBase {
         }
     }
 
-    // --- BOOSTERS ---
     createBoosterUI() {
         if (typeof GameState.boosters === 'undefined') GameState.boosters = {};
         this.fireShieldActive = false;
@@ -605,9 +554,9 @@ class GameScene extends GameBase {
         }
 
         GameState.weaponLevel = 3;
-        this.physics.world.timeScale = 0.5; // Slow Motion physics
-        this.time.timeScale = 1; // Normal Time for UI
-        this.backgroundSpeed = 4.0; // Fast visual speed
+        this.physics.world.timeScale = 0.5; 
+        this.time.timeScale = 1; 
+        this.backgroundSpeed = 4.0; 
 
         const txt = this.add.text(360, 540, "SPEED & LEVEL 3 BOOST", {
             fontSize: '34px', color: '#00ffff', fontStyle: 'bold', stroke: '#000', strokeThickness: 8
@@ -636,7 +585,6 @@ class GameScene extends GameBase {
         this.time.delayedCall(60000, () => { this.batteryMultiplier = 1.0; });
     }
 
-    // --- COMBAT SYSTEM ---
     fireWeapon() {
         const x = this.player.x;
         const y = this.player.y - 60;
@@ -793,8 +741,6 @@ class GameScene extends GameBase {
         }
 
         let dropChance = enemy.tier === "ultra" ? 0.7 : enemy.tier === "rare" ? 0.6 : enemy.tier === "dragon" ? 0.6 : enemy.tier === "spinner" ? 0.9 : enemy.tier === "centipede" ? 0.2 : 0.8;
-        
-        // --- Beginner's Luck: Increased Battery Drops! ---
         dropChance += this.luckMods.batteryDropChance; 
 
         if (!GameState.bossActive && Math.random() < dropChance) {
@@ -802,7 +748,6 @@ class GameScene extends GameBase {
             if (enemy.tier === "ultra" || enemy.tier === "centipede") { batteryTexture = "battery_red"; batteryValue = 80; }
             else if (enemy.tier === "rare" || enemy.tier === "spinner" || enemy.tier === "dragon") { batteryTexture = "battery_yellow"; batteryValue = 50; }
 
-            // Apply Beginner's Luck extra value multiplier
             batteryValue = Math.ceil(batteryValue * this.luckMods.batteryDropMult);
 
             const battery = this.batteries.create(enemy.x, enemy.y, batteryTexture);
@@ -1010,7 +955,7 @@ class GameScene extends GameBase {
         });
     }
 
-winBossFight() {
+    winBossFight() {
         this.playSFX('sfx_victory', 0.8, false);
 
         if (GameState.gameMode !== "revision") {
@@ -1020,14 +965,12 @@ winBossFight() {
 
             const rewardContainer = this.add.container(360, 700);
             
-            // 1. Keys Notification (shifted up to y: -30)
             const keyIcon = this.add.image(0, -30, "ui_key").setScale(1.0);
             const keyTxt = this.add.text(35, -30, `+${keysWon} চাবি পাওয়া গেছে`, { fontSize: '50px', fontFamily: "'Anek Bangla'", color: '#ffd700', stroke: '#000000', strokeThickness: 7 }).setOrigin(0, 0.5);
             const totalWidth = keyIcon.displayWidth + keyTxt.width + 10;
             keyIcon.x = -totalWidth / 2 + (keyIcon.displayWidth / 2);
             keyTxt.x = keyIcon.x + (keyIcon.displayWidth / 2) + 15;
             
-            // 2. Skips Notification (placed below the keys at y: 35)
             const skipTxt = this.add.text(0, 35, "+5 Skips পাওয়া গেছে", { 
                 fontSize: '40px', 
                 fontFamily: "'Anek Bangla'", 
@@ -1058,9 +1001,6 @@ winBossFight() {
         this.bossBarFill.setVisible(false);
         this.updateGameSpeed();
 
-        // --- DELAY ADDED HERE ---
-        // Waits 4.5 seconds to let the player read rewards and see fireworks
-        // before bringing the question UI back.
         const qScene = this.scene.get('QuestionScene');
         if (qScene) {
             this.time.delayedCall(4500, () => {
@@ -1069,7 +1009,6 @@ winBossFight() {
         }
     }
 
-    
     collectBattery(player, battery) {
         this.playSFX('sfx_battery_collect', 0.4);
 
@@ -1228,7 +1167,12 @@ winBossFight() {
         if (weaponType === "missile") damage = 8;
         else if (weaponType === "side_bullet") damage = 3;
         else if (weaponType === "bullet") damage = 2;
-        else if (weaponType === "lightning_bolt") { damage = 6; shot.pierceCount++; if (shot.pierceCount >= 3) shot.destroy(); }
+        else if (weaponType === "lightning_bolt") { 
+            damage = 6; 
+            // FIXED: Initialize pierceCount so it doesn't crash on NaN evaluation
+            shot.pierceCount = (shot.pierceCount || 0) + 1; 
+            if (shot.pierceCount >= 3) shot.destroy(); 
+        }
         else if (weaponType === "plasma_wave") damage = 8;
 
         if (weaponType !== "lightning_bolt" && weaponType !== "plasma_wave" && weaponType !== "ice_shard") {
@@ -1428,7 +1372,7 @@ winBossFight() {
     startBossCombatLoop(stage) {
         this.boss.spiralAngle = 0;
         
-        const luckMult = this.luckMods.speedMult; // Slow down boss attacks if luck is on
+        const luckMult = this.luckMods.speedMult; 
         
         this.bossAttackTimer = this.time.addEvent({
             delay: stage >= 2 ? 600 : 800,

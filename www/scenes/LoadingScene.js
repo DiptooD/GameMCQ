@@ -169,6 +169,15 @@ class LoadingScene extends Phaser.Scene {
             this.updateBar(1.0);
             this.finishLoading();
         }
+
+
+        this.input.once('pointerdown', () => {
+    if (this.sound.context.state === 'suspended') {
+        this.sound.context.resume();
+    }
+});
+
+
     }
 
     update() {
