@@ -17,6 +17,19 @@ class DeathScene extends Phaser.Scene {
     }
   }
 
+  showToast(msg) {
+      if (typeof window.showToast === 'function') {
+          window.showToast(msg);
+          return;
+      }
+      const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
+          fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+          backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 20, y: 12}
+      }).setOrigin(0.5).setDepth(5000).setAlpha(0);
+      
+      this.tweens.add({ targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() });
+  }
+
   create() {
     // --- 0. INITIALIZE SFX ---
     if (typeof GameSFX !== 'undefined') {
@@ -341,7 +354,7 @@ class DeathScene extends Phaser.Scene {
     }
   }
 
-  restartGameWithLogic() {
+    restartGameWithLogic() {
       const savedBank = localStorage.getItem('saved_bankKey') || "all";
       const savedSubject = localStorage.getItem('saved_subject') || "all_no_math";
       const savedMode = localStorage.getItem('saved_mode') || "normal";
@@ -359,7 +372,6 @@ class DeathScene extends Phaser.Scene {
           if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
       }
       
-      // --- SKIP EMPTY QUESTIONS ---
       finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
       if (savedSubject === "all_no_math") {
@@ -373,19 +385,19 @@ class DeathScene extends Phaser.Scene {
       if (savedMode === "revision") {
           finalQuestions = finalQuestions.filter(q => seenQuestions.includes(q.question));
           if (finalQuestions.length === 0) {
-              alert("No previous questions found! Play a normal game first.");
+              this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
               return;
           }
       } else if (savedMode === "new") {
           finalQuestions = finalQuestions.filter(q => !seenQuestions.includes(q.question));
           if (finalQuestions.length === 0) {
-              alert("You have already answered all questions in this category!");
+              this.showToast("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!");
               return;
           }
       }
 
       if (finalQuestions.length === 0) {
-          alert("No questions found for this selection!");
+          this.showToast("এই বিভাগে কোনো প্রশ্ন নেই!");
           return;
       }
 

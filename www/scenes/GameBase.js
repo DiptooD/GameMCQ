@@ -532,7 +532,7 @@ class GameBase extends Phaser.Scene {
     }
   }
 
-  triggerShockwave() {
+triggerShockwave() {
     this.cameras.main.shake(500, 0.03); 
     this.cameras.main.flash(400, 255, 200, 50, 0.5); 
 
@@ -544,14 +544,15 @@ class GameBase extends Phaser.Scene {
         const color = (i % 2 === 0) ? 0xffaa00 : 0xffffff;
         wave.setTint(color);
         wave.setAlpha(0.7);
-        wave.setScale(0.15); // Slightly larger start
+        wave.setScale(0.15); // Start small
         
-        this.physics.add.existing(wave);
-        wave.body.setCircle(80); // Bigger physical wave
+        // FIX: Remove arcade physics body from the wave.
+        // Arcade physics bodies don't scale automatically with tweens without manual resets.
+        // We will use geometric distance checks instead.
 
         this.tweens.add({
             targets: wave,
-            scale: 20,       // Much larger expansion for screen covering
+            scale: 20,       // Expand massive
             alpha: 0,
             duration: 1000, 
             delay: i * 150, 
@@ -559,19 +560,27 @@ class GameBase extends Phaser.Scene {
             onUpdate: () => {
                 wave.x += Math.sin(this.time.now * 0.1) * 0.5;
 
-                this.physics.overlap(wave, [this.enemies, this.obstacles, this.bossBullets], (w, target) => {
-                    if (!target.hitByWave) {
-                        target.hitByWave = true;
+                // FIX: Calculate actual radius dynamically based on visual scale
+                const currentRadius = 80 * (wave.scale / 0.15);
+                const targets = [...this.enemies.getChildren(), ...this.obstacles.getChildren(), ...this.bossBullets.getChildren()];
+                
+                targets.forEach(target => {
+                    if (target.active && !target.hitByWave) {
+                        const dist = Phaser.Math.Distance.Between(wave.x, wave.y, target.x, target.y);
                         
-                        this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
-                            if (this.enemies.contains(target)) {
-                                 this.destroyEnemy(target);
-                            } else {
-                                 this.createExplosion(target.x, target.y, 0xffff00, 20);
-                                 target.destroy();
-                                 GameState.score += 20;
-                            }
-                        });
+                        // Hit registration
+                        if (dist <= currentRadius) {
+                            target.hitByWave = true;
+                            this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
+                                if (this.enemies.contains(target)) {
+                                     this.destroyEnemy(target);
+                                } else {
+                                     this.createExplosion(target.x, target.y, 0xffff00, 20);
+                                     target.destroy();
+                                     GameState.score += 20;
+                                }
+                            });
+                        }
                     }
                 });
             },
@@ -579,7 +588,7 @@ class GameBase extends Phaser.Scene {
         });
     }
   }
-
+  
   updateDynamicBackground() {
     const progress = this.getGlobalProgress();
     const ratio = Math.min(progress / 25, 1);

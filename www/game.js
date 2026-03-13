@@ -6,17 +6,27 @@ window.saveCurrency = function() {
 // Helper to save game state to local storage
 window.saveGame = function() {
     try {
-    localStorage.setItem('game_keys', GameState.keys || 0);
-    localStorage.setItem('game_debris', GameState.debris || 0);
-    localStorage.setItem('game_ownedShips', JSON.stringify(GameState.ownedShips));
-    localStorage.setItem('game_equippedShip', GameState.equippedShip);
-    localStorage.setItem('game_crafting', JSON.stringify(GameState.craftingQueue));
-    localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
-    localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory)); // <-- Save History
-    localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0); // <-- Save Beginner Tracking
+        localStorage.setItem('game_keys', GameState.keys || 0);
+        localStorage.setItem('game_debris', GameState.debris || 0);
+        localStorage.setItem('game_ownedShips', JSON.stringify(GameState.ownedShips));
+        localStorage.setItem('game_equippedShip', GameState.equippedShip);
+            localStorage.setItem('game_crafting', JSON.stringify(GameState.craftingQueue));
+        localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
+        localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
 
-} catch (e) {
-        console.warn("Save failed: LocalStorage is full or disabled.");
+        // Limit match history to last 20 games so LocalStorage doesn't explode
+        if (GameState.matchHistory && GameState.matchHistory.length > 20) {
+            GameState.matchHistory = GameState.matchHistory.slice(-20);
+        }
+        localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
+
+    } catch (e) {
+        console.warn("Save failed: Storage is full.");
+        // If history is the culprit, clear oldest half to make room
+        if (e.name === 'QuotaExceededError') {
+             GameState.matchHistory = GameState.matchHistory.slice(-5);
+             localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
+        }
     }
 };
 

@@ -1313,7 +1313,7 @@ class MenuScene extends Phaser.Scene {
         createLayer(15, 2.2, 0xffffff, 2.5, 1); 
     }
 
-    startGame() {
+startGame() {
         const manifest = this.cache.json.get('bank_directory');
         let finalQuestions = [];
 
@@ -1327,7 +1327,6 @@ class MenuScene extends Phaser.Scene {
             if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
         }
         
-        // --- SKIP EMPTY QUESTIONS ---
         finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
         if (this.selectedSubject === "all_no_math") {
@@ -1341,24 +1340,19 @@ class MenuScene extends Phaser.Scene {
         if (this.selectedMode === "revision") {
             finalQuestions = finalQuestions.filter(q => seenQuestions.includes(q.question));
             if (finalQuestions.length === 0) {
-                alert("No previous questions found! Play a normal game first.");
+                this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
                 return;
             }
         } else if (this.selectedMode === "new") {
             finalQuestions = finalQuestions.filter(q => !seenQuestions.includes(q.question));
             if (finalQuestions.length === 0) {
-                alert("You have already answered all questions in this category!");
+                this.showToast("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!");
                 return;
             }
         }
 
-// Find the logic for Revision/New mode checks
         if (finalQuestions.length === 0) {
-            if (typeof showToast === 'function') {
-                showToast("No questions found! Play a game first.");
-            } else {
-                alert("No questions found!");
-            }
+            this.showToast("এই বিভাগে কোনো প্রশ্ন নেই!");
             return;
         }
 

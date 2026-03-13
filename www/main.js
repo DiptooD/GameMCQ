@@ -13,7 +13,24 @@ const config = {
   },
   physics: {
     default: "arcade",
-    arcade: { debug: false }
+    arcade: { 
+        debug: false,
+        fps: 60,                // Force physics to calculate at 60fps
+        fixedStep: true,        // Prevents objects passing through each other during lag
+        gravity: { y: 0 } 
+    }
+  },
+  // Add this to prevent the "Black Screen" on some Android WebViews
+  render: {
+    antialias: true,
+    pixelArt: false,
+    roundPixels: true
+  },
+  audio: {
+    disableWebAudio: false // Ensures WebAudio API is prioritized for better performance
+  },
+  input: {
+    activePointers: 2, // Allows for multi-touch (e.g., shooting while tapping an answer)
   },
   scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, GameScene, QuestionScene, PauseScene, DeathScene]
 };

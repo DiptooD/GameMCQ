@@ -477,7 +477,7 @@ class ShopScene extends Phaser.Scene {
                 const hrs = Math.floor(msLeft / 3600000);
                 const mins = Math.floor((msLeft % 3600000) / 60000);
                 btnTextStr = `${hrs}h ${mins}m`;
-                onClick = () => { this.playSound('sfx_error', 0.5); };
+                onClick = () => { this.playSound('sfx_error', 0.4); };
             }
         } else {
             if (ship.costType === "keys") {
@@ -493,7 +493,7 @@ class ShopScene extends Phaser.Scene {
                         this.updateCurrencyDisplay();
                         this.refreshContent();
                     } else {
-                        this.playSound('sfx_error');
+                        this.playSound('sfx_error', 0.4);
                         this.cameras.main.shake(100, 0.005);
                     }
                 };
@@ -510,7 +510,7 @@ class ShopScene extends Phaser.Scene {
                         this.updateCurrencyDisplay();
                         this.refreshContent();
                     } else {
-                        this.playSound('sfx_error');
+                        this.playSound('sfx_error', 0.4);
                         this.cameras.main.shake(100, 0.005);
                     }
                 };
@@ -632,7 +632,7 @@ class ShopScene extends Phaser.Scene {
                     this.updateCurrencyDisplay();
                     this.refreshContent();
                 } else {
-                    this.playSound('sfx_error');
+                    this.playSound('sfx_error', 0.4);
                     this.cameras.main.shake(100, 0.005);
                 }
             }
