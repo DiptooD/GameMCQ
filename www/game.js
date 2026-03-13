@@ -11,7 +11,8 @@ window.saveGame = function() {
     localStorage.setItem('game_equippedShip', GameState.equippedShip);
     localStorage.setItem('game_crafting', JSON.stringify(GameState.craftingQueue));
     localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
-    localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory)); // <-- NEW: Save History
+    localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory)); // <-- Save History
+    localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0); // <-- Save Beginner Tracking
 };
 
 // Centralized settings saver
@@ -52,7 +53,8 @@ window.GameState = {
         speedBoost: 0, 
         batteryEff: 0 
     },
-    matchHistory: JSON.parse(localStorage.getItem('game_matchHistory')) || [] // <-- NEW: Load History
+    matchHistory: JSON.parse(localStorage.getItem('game_matchHistory')) || [],
+    gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 // <-- Load Beginner Tracking
 };
 
 window.updateLevelTargets = function() {
@@ -70,7 +72,7 @@ window.updateLevelTargets = function() {
 
 window.resetGameState = function () {
     GameState.score = 0;
-    GameState.battery = 100;
+    GameState.battery = 0;
     GameState.lives = 3;
     GameState.weaponLevel = 1;
     GameState.correctCount = 0; 
@@ -79,7 +81,7 @@ window.resetGameState = function () {
     GameState.skipsLeft = 10; 
     GameState.sessionHistory = [];
     
-    // DO NOT RESET: keys, debris, ownedShips, equippedShip, craftingQueue, boosters, volumes, matchHistory
+    // DO NOT RESET: keys, debris, ownedShips, equippedShip, craftingQueue, boosters, volumes, matchHistory, gamesPlayed
     window.updateLevelTargets(); 
 };
 

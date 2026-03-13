@@ -4,6 +4,10 @@ class GameScene extends GameBase {
     }
 
     create() {
+        // --- BEGINNER'S LUCK TRACKER ---
+        if (typeof GameState.gamesPlayed === 'undefined') GameState.gamesPlayed = 0;
+        this.luckMods = this.getLuckModifiers();
+
         const h = this.cameras.main.height;
         const w = 720;
 
@@ -177,6 +181,11 @@ class GameScene extends GameBase {
         window.updateLevelTargets();
         this.updateGameSpeed();
         this.createBoosterUI();
+        
+        // UI Notification for beginner's luck
+        if (this.luckMods.factor > 0) {
+            this.createBeginnersLuckUI();
+        }
 
         // --- 7. MUSIC MANAGER ---
         const menuBgm = this.sound.get('menubgm');
@@ -192,6 +201,27 @@ class GameScene extends GameBase {
             bgMusic.setVolume(globalMusicVol); 
             if (!bgMusic.isPlaying) bgMusic.play();
         }
+    }
+
+    createBeginnersLuckUI() {
+        const startX = 60;
+        const buttonY = 1280;
+
+        const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '40px' }).setOrigin(0.5);
+        const percent = Math.round(this.luckMods.factor * 100);
+        
+        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck\n(${percent}% Active)`, { 
+            fontSize: '16px', color: '#00ff00', fontStyle: 'bold', align: 'left',
+            stroke: '#000000', strokeThickness: 3
+        }).setOrigin(0, 0.5);
+
+        this.tweens.add({ targets: [icon, txt], alpha: 0.5, duration: 800, yoyo: true, repeat: -1 });
+
+        this.time.delayedCall(20000, () => {
+            this.tweens.add({ targets: [icon, txt], alpha: 0, scale: 0, duration: 500, onComplete: () => {
+                icon.destroy(); txt.destroy();
+            }});
+        });
     }
 
     /**
@@ -403,7 +433,7 @@ class GameScene extends GameBase {
                 if (e.fireTimer >= this.dragonFireThreshold) {
                     e.fireTimer = 0;
                     const flame = this.bossBullets.create(e.x, e.y + 30, "enemyBullet");
-                    flame.setVelocityY(500);
+                    flame.setVelocityY(500 * this.luckMods.speedMult);
                     flame.setTint(0xFF00FF);
                     flame.setScale(1.1);
                     this.playSFX('sfx_enemy_shoot', 0.1);
@@ -416,7 +446,7 @@ class GameScene extends GameBase {
                     [-20, 0, 20].forEach(angle => {
                         const b = this.bossBullets.create(e.x, e.y + 40, "bullet_octopus");
                         const rad = Phaser.Math.DegToRad(angle + 90);
-                        b.setVelocity(Math.cos(rad) * 220, Math.sin(rad) * 220);
+                        b.setVelocity(Math.cos(rad) * 220 * this.luckMods.speedMult, Math.sin(rad) * 220 * this.luckMods.speedMult);
                         b.body.setCircle(6);
                         b.body.setOffset(9, 9);
                         b.body.checkCollision.none = true;
@@ -762,12 +792,18 @@ class GameScene extends GameBase {
             });
         }
 
-        const dropChance = enemy.tier === "ultra" ? 0.7 : enemy.tier === "rare" ? 0.6 : enemy.tier === "dragon" ? 0.6 : enemy.tier === "spinner" ? 0.9 : enemy.tier === "centipede" ? 0.2 : 0.8;
+        let dropChance = enemy.tier === "ultra" ? 0.7 : enemy.tier === "rare" ? 0.6 : enemy.tier === "dragon" ? 0.6 : enemy.tier === "spinner" ? 0.9 : enemy.tier === "centipede" ? 0.2 : 0.8;
+        
+        // --- Beginner's Luck: Increased Battery Drops! ---
+        dropChance += this.luckMods.batteryDropChance; 
 
         if (!GameState.bossActive && Math.random() < dropChance) {
             let batteryTexture = "battery_green", batteryValue = 35;
             if (enemy.tier === "ultra" || enemy.tier === "centipede") { batteryTexture = "battery_red"; batteryValue = 80; }
             else if (enemy.tier === "rare" || enemy.tier === "spinner" || enemy.tier === "dragon") { batteryTexture = "battery_yellow"; batteryValue = 50; }
+
+            // Apply Beginner's Luck extra value multiplier
+            batteryValue = Math.ceil(batteryValue * this.luckMods.batteryDropMult);
 
             const battery = this.batteries.create(enemy.x, enemy.y, batteryTexture);
             battery.setVelocityY(220);
@@ -829,7 +865,7 @@ class GameScene extends GameBase {
 
     enemiesFireBack() {
         let fireCount = 0;
-        const bulletSpeedMultiplier = 1 + (this.getGlobalProgress() * 0.03);
+        let bulletSpeedMultiplier = (1 + (this.getGlobalProgress() * 0.03)) * this.luckMods.speedMult;
 
         this.enemies.children.each(e => {
             if (!e.active || fireCount > 8 || e.tier === "common") return;
@@ -941,10 +977,10 @@ class GameScene extends GameBase {
                     this.bossBarFill.setVisible(true);
 
                     if (stage === 0) {
-                        this.boss.setVelocityX(150);
+                        this.boss.setVelocityX(150 * this.luckMods.speedMult);
                         this.boss.setCollideWorldBounds(true).setBounce(1, 0);
                     } else if (stage === 1) {
-                        this.boss.setVelocityX(200);
+                        this.boss.setVelocityX(200 * this.luckMods.speedMult);
                         this.boss.setCollideWorldBounds(true).setBounce(1, 0);
                         this.bossDipTween = this.tweens.add({ targets: this.boss, y: 350, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
                     } else if (stage >= 2) {
@@ -1391,6 +1427,9 @@ winBossFight() {
 
     startBossCombatLoop(stage) {
         this.boss.spiralAngle = 0;
+        
+        const luckMult = this.luckMods.speedMult; // Slow down boss attacks if luck is on
+        
         this.bossAttackTimer = this.time.addEvent({
             delay: stage >= 2 ? 600 : 800,
             loop: true,
@@ -1404,7 +1443,8 @@ winBossFight() {
                     this.spawnBossMinions(stage);
                     if (stage === 0 || stage === 1) {
                         const currentVel = this.boss.body.velocity.x;
-                        this.boss.setVelocityX(currentVel > 0 ? (250 + stage * 50) : -(250 + stage * 50));
+                        let newVel = (250 + stage * 50) * luckMult;
+                        this.boss.setVelocityX(currentVel > 0 ? newVel : -newVel);
                     } else if (stage >= 2) {
                         this.bossAttackTimer.delay = 350;
                     }
@@ -1418,13 +1458,13 @@ winBossFight() {
                     if (rand < 60) {
                         for (let i = -(isPhase2 ? 2 : 1); i <= (isPhase2 ? 2 : 1); i++) {
                             const b = this.bossBullets.create(this.boss.x + (i * 20), this.boss.y + 60, "bossBullet");
-                            b.setVelocity(i * 50, 400);
+                            b.setVelocity(i * 50 * luckMult, 400 * luckMult);
                         }
                         bossFired = true;
                     } else if (rand < 85) {
                         const b = this.bossBullets.create(this.boss.x, this.boss.y + 60, "bossBullet_tracking");
                         b.trackingBullet = true;
-                        b.setVelocityY(isPhase2 ? 450 : 300);
+                        b.setVelocityY((isPhase2 ? 450 : 300) * luckMult);
                         bossFired = true;
                     } else if (isPhase2 && this.enemies.countActive() < 3) this.spawnBossMinions(stage, 1);
                 }
@@ -1432,7 +1472,7 @@ winBossFight() {
                     if (rand < 40) {
                         for (let i = -(isPhase2 ? 3 : 2); i <= (isPhase2 ? 3 : 2); i++) {
                             const b = this.bossBullets.create(this.boss.x + (i * 15), this.boss.y + 50, "bossBullet");
-                            b.setVelocity(i * 60, 450);
+                            b.setVelocity(i * 60 * luckMult, 450 * luckMult);
                         }
                         bossFired = true;
                     } else if (rand < 75) {
@@ -1441,7 +1481,7 @@ winBossFight() {
                             const angle = (i * (Math.PI * 2)) / bullets;
                             const b = this.bossBullets.create(this.boss.x, this.boss.y + 40, "poison_drop");
                             b.setData('isPoison', true);
-                            b.setVelocity(Math.cos(angle) * 200, Math.sin(angle) * 200 + 150);
+                            b.setVelocity(Math.cos(angle) * 200 * luckMult, (Math.sin(angle) * 200 + 150) * luckMult);
                         }
                         bossFired = true;
                     } else {
@@ -1449,7 +1489,7 @@ winBossFight() {
                         else {
                             [-30, 30].forEach(offset => {
                                 const b = this.bossBullets.create(this.boss.x + offset, this.boss.y + 60, "bossBullet_tracking");
-                                b.trackingBullet = true; b.setVelocityY(400);
+                                b.trackingBullet = true; b.setVelocityY(400 * luckMult);
                             });
                             bossFired = true;
                         }
@@ -1462,7 +1502,7 @@ winBossFight() {
                             const offset = (Math.PI * 2 / branches) * i;
                             const b = this.bossBullets.create(this.boss.x, this.boss.y + 40, "enemyBullet");
                             b.setTint(0xff00ff);
-                            b.setVelocity(Math.cos(this.boss.spiralAngle + offset) * 350, Math.sin(this.boss.spiralAngle + offset) * 350 + 100);
+                            b.setVelocity(Math.cos(this.boss.spiralAngle + offset) * 350 * luckMult, (Math.sin(this.boss.spiralAngle + offset) * 350 + 100) * luckMult);
                         }
                         this.boss.spiralAngle += 0.4;
                         bossFired = true;
@@ -1470,7 +1510,7 @@ winBossFight() {
                         const startX = this.boss.x - 100;
                         for (let i = 0; i < 5; i++) {
                             const b = this.bossBullets.create(startX + (i * 50), this.boss.y + 40, "bossBullet");
-                            b.setVelocity(0, isPhase2 ? 550 : 400);
+                            b.setVelocity(0, (isPhase2 ? 550 : 400) * luckMult);
                         }
                         bossFired = true;
                     } else if (rand < 85) {
@@ -1478,7 +1518,7 @@ winBossFight() {
                         for (let i = 0; i < count; i++) {
                             const b = this.bossBullets.create(this.boss.x + Phaser.Math.Between(-40, 40), this.boss.y + 40, "bossBullet_tracking");
                             b.trackingBullet = true;
-                            b.setVelocity(Phaser.Math.Between(-100, 100), 200);
+                            b.setVelocity(Phaser.Math.Between(-100, 100) * luckMult, 200 * luckMult);
                         }
                         bossFired = true;
                     } else if (isPhase2 && this.enemies.countActive() < 5) this.spawnBossMinions(stage, 2);

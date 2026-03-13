@@ -63,6 +63,12 @@ class DeathScene extends Phaser.Scene {
 
     // --- SAVE NEW MATCH TO HISTORY (Includes session answers array) ---
     if (!this.matchSaved && totalQs > 0 && !isViewingHistory) {
+        
+        // --- ADD BEGINNER TRACKING ON REAL MATCH SAVE ---
+        if (typeof GameState.gamesPlayed !== 'undefined') {
+            GameState.gamesPlayed++;
+        }
+
         const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         const dateStr = new Date().toLocaleString('bn-BD', dateOptions); 
         

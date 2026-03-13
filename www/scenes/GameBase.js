@@ -4,7 +4,6 @@ class GameBase extends Phaser.Scene {
   }
 
   // --- AUDIO HELPER ---
-  // Added here so GameScene (which extends this) can easily play volume-synced sounds
   playSound(key, baseVolume = 1.0) {
     if (this.cache.audio.exists(key)) {
         const finalVolume = baseVolume * (window.GameState.sfxVolume !== undefined ? window.GameState.sfxVolume : 1.0);
@@ -13,6 +12,24 @@ class GameBase extends Phaser.Scene {
   }
 
   // --- PROGRESSION & DIFFICULTY ---
+  
+  /**
+   * Calculates the scaled Beginner's Luck Modifiers based on matches played.
+   * Scales gracefully over the first 5 matches: 100% -> 80% -> 60% -> 40% -> 20% -> 0%
+   */
+  getLuckModifiers() {
+    let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
+    let luckFactor = Math.max(0, 5 - played) / 5; // Scales from 1.0 down to 0.0
+
+    return {
+        factor: luckFactor,                  // 1.0 = 100%, 0.8 = 80%, 0.6 = 60%, etc.
+        speedMult: 1.0 - (0.4 * luckFactor), // 0.6 (slower game at 100% luck) -> 1.0 (normal)
+        delayMult: 1.0 + (0.5 * luckFactor), // 1.5 (slower spawns at 100% luck) -> 1.0 (normal)
+        batteryDropMult: 1.0 + (1.0 * luckFactor), // Up to 2x more battery charge value per drop
+        batteryDropChance: 0.4 * luckFactor, // Up to +40% flat increase to enemy drop chance
+        batteryTarget: Math.round(100 - (50 * luckFactor)) // Requires only 50% battery at 100% luck instead of 100%
+    };
+  }
   
   /**
    * Calculates the absolute difficulty rating of the game (0 to 22+).
@@ -35,6 +52,7 @@ class GameBase extends Phaser.Scene {
 
   updateGameSpeed() {
     const progress = this.getGlobalProgress(); // Range: 0 to 22 (and beyond for void)
+    const luck = this.getLuckModifiers(); // Fetch the current graduated modifiers
     
     // 1. Scale Player Fire Rate (Get faster as you progress)
     // Starts at 250ms delay, drops to 150ms cap
@@ -42,21 +60,18 @@ class GameBase extends Phaser.Scene {
     if(this.weaponTimer) this.weaponTimer.delay = this.fireRate;
 
     // 2. Scale Background Speed
-    this.backgroundSpeed = 1 + (progress * 0.2);
+    this.backgroundSpeed = (1 + (progress * 0.2)) * luck.speedMult;
     
     // 3. Adjust Spawn Rates (Enemies appear faster)
-    // Starts at 1600ms, drops to 700ms minimum
-    if(this.spawnTimer) this.spawnTimer.delay = Math.max(900, 2200 - (progress * 45));
+    let spawnDelay = Math.max(900, 2200 - (progress * 45)) * luck.delayMult;
+    if(this.spawnTimer) this.spawnTimer.delay = spawnDelay;
     
     // --- ENEMY FIRE RATE ---
-    // Start at 4000 (Very Slow - 4 seconds between shots)
-    // Subtract 150ms per progress point. Minimum cap is 500.
-    if(this.enemyFireTimer) 
-        this.enemyFireTimer.delay = Math.max(500, 3000 - (progress * 150));
+    let enemyFireDelay = Math.max(500, 3000 - (progress * 150)) * luck.delayMult;
+    if(this.enemyFireTimer) this.enemyFireTimer.delay = enemyFireDelay;
      
     // Start at 180 frames (3 seconds) and decrease to 60 frames (1 second)
-    // Lower number = faster firing
-    this.dragonFireThreshold = Math.max(60, 180 - (progress * 6)); 
+    this.dragonFireThreshold = Math.max(60, 180 - (progress * 6)) * luck.delayMult; 
   }
 
   // --- VISUALS & ENVIRONMENT ---
@@ -254,7 +269,10 @@ class GameBase extends Phaser.Scene {
     const obs = this.obstacles.create(Phaser.Math.Between(60, 660), -100, type);
     
     const progress = this.getGlobalProgress(); 
-    obs.setVelocityY(200 + (progress * 10));
+    const luck = this.getLuckModifiers();
+
+    let speedY = (200 + (progress * 10)) * luck.speedMult;
+    obs.setVelocityY(speedY);
 
     let baseHp = (type === "obstacle_mine") ? 2 : 3;
     obs.hp = baseHp + (progress * 0.4); 
@@ -283,6 +301,7 @@ class GameBase extends Phaser.Scene {
     
     const stage = GameState.bossStage;
     const progress = this.getGlobalProgress();
+    const luck = this.getLuckModifiers();
     const roll = Phaser.Math.Between(1, 100);
     let type, hp, tier, enemyType;
     
@@ -315,13 +334,16 @@ class GameBase extends Phaser.Scene {
     else if (type === "enemy_ultra") hp = 35 * hpMultiplier;
     
     const e = this.enemies.create(Phaser.Math.Between(60, 660), -100, type);
-    e.setVelocityY(160 + (progress * 8));
+    
+    let speedY = (160 + (progress * 8)) * luck.speedMult;
+    e.setVelocityY(speedY);
+    
     e.hp = hp;
     e.maxHp = hp;
     e.tier = tier;
     e.enemyType = enemyType;
     
-    // --- 3. MOVEMENT & SIZE (Scaled up versions) ---
+    // --- MOVEMENT & SIZE (Scaled up versions) ---
     if (tier === "ultra") {
       e.setSize(55, 65); e.setScale(1.2); e.movePattern = "wave"; e.moveTimer = 0;
     } else if (tier === "rare") {
@@ -329,7 +351,9 @@ class GameBase extends Phaser.Scene {
     } else if (tier === "octopus") {
       e.setSize(55, 75); e.setScale(1.15); e.movePattern = "jet_pulse"; e.pulseTimer = 0;
     } else if (tier === "dragon") {
-      e.setSize(80, 65); e.setScale(1.2); e.movePattern = "zigzag"; e.setVelocityX(Phaser.Math.Between(-100, 100));
+      e.setSize(80, 65); e.setScale(1.2); e.movePattern = "zigzag"; 
+      let vx = Phaser.Math.Between(-100, 100) * luck.speedMult;
+      e.setVelocityX(vx);
     } else if (tier === "spinner") {
       e.setSize(40, 40); e.setScale(1.1); e.movePattern = "spiral"; e.moveTimer = 0;
     } else {
@@ -349,12 +373,17 @@ class GameBase extends Phaser.Scene {
     if (existing) return;
 
     const progress = this.getGlobalProgress();
+    const luck = this.getLuckModifiers();
     const segmentCount = 6 + Math.floor(progress / 5);
     
     const x = Phaser.Math.Between(100, 620);
     const head = this.enemies.create(x, -100, "enemy_centipede");
-    head.setVelocityY(120 + (progress * 3));
-    head.setVelocityX(150);
+    
+    let speedY = (120 + (progress * 3)) * luck.speedMult;
+    let speedX = 150 * luck.speedMult;
+    
+    head.setVelocityY(speedY);
+    head.setVelocityX(speedX);
     
     head.hp = 100 + (progress * 3);
     head.maxHp = head.hp;
