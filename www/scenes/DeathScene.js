@@ -358,6 +358,9 @@ class DeathScene extends Phaser.Scene {
           const data = this.cache.json.get(savedBank);
           if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
       }
+      
+      // --- SKIP EMPTY QUESTIONS ---
+      finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
       if (savedSubject === "all_no_math") {
           finalQuestions = finalQuestions.filter(q => q.subject !== "Math");

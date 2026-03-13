@@ -13,9 +13,7 @@ class MenuScene extends Phaser.Scene {
         this.backgroundLayers = [];
     }
 
-    // REMOVED preload() completely!
-
-create() {
+    create() {
         // Clear history viewing state if returning from a detailed view
         if (window.GameState && window.GameState.viewingHistoryMatch) {
             window.GameState.viewingHistoryMatch = null;
@@ -133,7 +131,7 @@ create() {
 
     if (GameState.showHistoryPopupOnLoad) {
         GameState.showHistoryPopupOnLoad = false;
-        this.showMatchHistoryPopup(); // (Replace with your actual method name that opens the popup)
+        this.showMatchHistoryPopup(); 
     }
 
     }
@@ -221,6 +219,9 @@ create() {
             const data = this.cache.json.get(this.selectedBankKey);
             if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
         }
+        
+        // --- SKIP EMPTY QUESTIONS ---
+        finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
         if (this.selectedSubject === "all_no_math") {
             finalQuestions = finalQuestions.filter(q => q.subject !== "Math");
@@ -1325,6 +1326,9 @@ create() {
             const data = this.cache.json.get(this.selectedBankKey);
             if (Array.isArray(data)) finalQuestions = finalQuestions.concat(data);
         }
+        
+        // --- SKIP EMPTY QUESTIONS ---
+        finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
         if (this.selectedSubject === "all_no_math") {
             finalQuestions = finalQuestions.filter(q => q.subject !== "Math");
