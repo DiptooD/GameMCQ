@@ -81,19 +81,23 @@ class MenuScene extends Phaser.Scene {
             targets: titleContainer, y: titleContainer.y - 15, duration: 2500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
         });
 
-        this.time.addEvent({
-            delay: 80, loop: true,
+this.time.addEvent({
+            delay: 400, // Slightly slower updates
+            loop: true,
             callback: () => {
-                if (Math.random() > 0.6) {
-                    titleText.x = Phaser.Math.FloatBetween(-1.5, 1.5);
-                    titleText.y = Phaser.Math.FloatBetween(-1.5, 1.5);
-                    titleText.angle = Phaser.Math.FloatBetween(-0.5, 0.5);
+                // Change 0.6 to 0.85 so it only shakes 15% of the time instead of 40%
+                if (Math.random() > 0.85) { 
+                    // Reduce the movement from 1.5 to 0.5
+                    titleText.x = Phaser.Math.FloatBetween(-0.5, 0.5);
+                    titleText.y = Phaser.Math.FloatBetween(-0.5, 0.5);
+                    // Reduce the rotation from 0.5 to 0.2
+                    titleText.angle = Phaser.Math.FloatBetween(-0.2, 0.2);
                 } else {
                     titleText.x = 0; titleText.y = 0; titleText.angle = 0;
                 }
             }
         });
-
+        
         this.createHangarButton(cx, cy - 220);
 
         const panelY = cy + 40;

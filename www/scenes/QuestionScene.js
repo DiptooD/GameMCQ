@@ -164,17 +164,20 @@ class QuestionScene extends Phaser.Scene {
                     this.playSFX('sfx_q_low_battery', 0.5);
                     this.showBatteryWarning();
                     
-                    this.tweens.add({
-                        targets: container,
-                        x: x + 6,
-                        duration: 50,
-                        yoyo: true,
-                        repeat: 2
-                    });
+                    if (!this.tweens.isTweening(container)) {
+                        this.tweens.add({
+                            targets: container,
+                            x: x + 6,
+                            duration: 50,
+                            yoyo: true,
+                            repeat: 2,
+                            onComplete: () => { container.x = x; }
+                        });
+                    }
                 }
             });
-            bg.on("pointerup", () => container.y = y);
-            bg.on("pointerout", () => container.y = y);
+            bg.on("pointerup", () => { if (container.y !== y) container.y = y; });
+            bg.on("pointerout", () => { if (container.y !== y) container.y = y; });
 
             this.optionBtns.push({ container, bg, txt, originalY: y, pulseTween: null });
         }
@@ -232,9 +235,9 @@ class QuestionScene extends Phaser.Scene {
             }
 
             // --- 6.1 QUICK SKIP BUTTON ---
-            const qSkipY = 489; 
+            const qSkipY = -50; 
             const qSkipBg = this.add.rectangle(45, qSkipY, 112, 60, 0x000510, 0.3);
-            qSkipBg.setStrokeStyle(3, 0xffffff, 0.15);
+            qSkipBg.setStrokeStyle(3, 0xffffff, 0.2);
             qSkipBg.setInteractive({ useHandCursor: true });
             
             this.quickSkipTxt = this.add.text(45, qSkipY, `Skip(${GameState.skipsLeft})`, {
@@ -325,7 +328,7 @@ class QuestionScene extends Phaser.Scene {
             });
 
             this.warningTimer = this.time.delayedCall(5000, () => {
-                this.warningTween.stop();
+                if (this.warningTween) this.warningTween.stop();
                 this.tweens.add({ targets: this.instructionText, alpha: 0, duration: 500 });
             });
         };
@@ -409,7 +412,9 @@ class QuestionScene extends Phaser.Scene {
         
         const isNowReady = GameState.battery >= 100;
         if (isNowReady !== this.wasReady) {
-            if (isNowReady && !GameState.bossActive) {
+            // Check !this.isProcessing so it doesn't overlap the tick sound 
+            // if the battery is collected *during* a question transition
+            if (isNowReady && !GameState.bossActive && !this.isProcessing) {
                 this.playSFX('sfx_q_ready', 0.6, false); 
             }
             
@@ -634,8 +639,13 @@ class QuestionScene extends Phaser.Scene {
                     ease: 'Cubic.easeOut',
                     onComplete: () => {
                         this.isProcessing = false;
-                        this.wasReady = false; 
+                        
                         this.playSFX('sfx_tick', 0.2);
+                        
+                        // Safety: If battery filled up during transition, announce it now
+                        if (GameState.battery >= 100 && !GameState.bossActive) {
+                            this.playSFX('sfx_q_ready', 0.6, false);
+                        }
                     }
                 });
                 
@@ -681,13 +691,19 @@ class QuestionScene extends Phaser.Scene {
             const gameScene = this.scene.get('GameScene');
             if (gameScene) {
                 const originalPlaySFX = gameScene.playSFX;
-                gameScene.playSFX = function(key, vol, allowJitter) {
-                    if (key !== 'sfx_shockwave') {
-                        originalPlaySFX.call(gameScene, key, vol, allowJitter);
-                    }
-                };
-                gameScene.triggerSmallShockwave();
-                gameScene.playSFX = originalPlaySFX; 
+                
+                // Use Try...Finally block to ensure we don't break the game scene's audio
+                // if an error occurs while triggering the shockwave
+                try {
+                    gameScene.playSFX = function(key, vol, allowJitter) {
+                        if (key !== 'sfx_shockwave') {
+                            originalPlaySFX.call(gameScene, key, vol, allowJitter);
+                        }
+                    };
+                    gameScene.triggerSmallShockwave();
+                } finally {
+                    gameScene.playSFX = originalPlaySFX; 
+                }
             }
         } else {
             this.playSFX('sfx_q_wrong', 0.6, false);
@@ -730,14 +746,16 @@ class QuestionScene extends Phaser.Scene {
             this.qIdx++;
             this.refreshQuestion();
             
-            this.tweens.add({
-                targets: this.skipBtn,
-                scale: 1.15,
-                duration: 100,
-                yoyo: true
-            });
+            if (!this.tweens.isTweening(this.skipBtn)) {
+                this.tweens.add({
+                    targets: this.skipBtn,
+                    scale: 1.15,
+                    duration: 100,
+                    yoyo: true
+                });
+            }
             
-            if (this.quickSkipTxt) {
+            if (this.quickSkipTxt && !this.tweens.isTweening(this.quickSkipTxt)) {
                 this.tweens.add({
                     targets: this.quickSkipTxt,
                     scale: 1.15,

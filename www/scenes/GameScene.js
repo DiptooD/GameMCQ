@@ -166,8 +166,8 @@ class GameScene extends GameBase {
         const percent = Math.round(this.luckMods.factor * 100);
         
         const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck\n(${percent}% Active)`, { 
-            fontSize: '16px', color: '#00ff00', fontStyle: 'bold', align: 'left',
-            stroke: '#000000', strokeThickness: 3
+            fontSize: '18px', fontFamily: "'Anek Bangla'", color: '#00ff00', fontStyle: 'bold', align: 'left',
+            stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
 
         this.tweens.add({ targets: [icon, txt], alpha: 0.5, duration: 800, yoyo: true, repeat: -1 });
