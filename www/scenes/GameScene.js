@@ -112,6 +112,7 @@ class GameScene extends GameBase {
         this.enemyFireTimer = this.time.addEvent({ delay: 1800, loop: true, callback: this.enemiesFireBack, callbackScope: this });
         this.obstacleTimer = this.time.addEvent({ delay: 4500, loop: true, callback: this.spawnObstacle, callbackScope: this });
 
+        // Projectile Overlaps
         this.physics.add.overlap(this.bullets, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.missiles, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.sideBullets, this.enemies, this.damageEnemy, null, this);
@@ -122,11 +123,30 @@ class GameScene extends GameBase {
         this.physics.add.overlap(this.sideBullets, this.obstacles, this.damageObstacle, null, this);
         this.physics.add.overlap(this.specialWeapons, this.obstacles, this.damageObstacle, null, this);
 
+        // Player Overlaps
         this.physics.add.overlap(this.player, [this.enemies, this.bossBullets], this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.obstacles, this.hitPlayer, null, this);
-        
         this.physics.add.overlap(this.player, this.batteries, this.collectBattery, null, this);
         this.physics.add.overlap(this.player, this.powerUps, this.collectPowerUp, null, this);
+
+        // --- NEW COLLIDERS: Prevent enemies & obstacles from passing through each other ---
+        
+        // Enemies bouncing off each other
+        this.physics.add.collider(this.enemies, this.enemies, null, (e1, e2) => {
+            // Ignore centipede segments to prevent their physics structure from breaking
+            if (e1.enemyType === "centipede" || e2.enemyType === "centipede") return false;
+            return true;
+        }, this);
+
+        // Obstacles bouncing off each other
+        this.physics.add.collider(this.obstacles, this.obstacles);
+
+        // Enemies bouncing off obstacles
+        this.physics.add.collider(this.enemies, this.obstacles, null, (enemy, obs) => {
+            if (enemy.enemyType === "centipede") return false;
+            return true;
+        }, this);
+        // ---------------------------------------------------------------------------------
 
         this.bossBarBg = this.add.rectangle(360, 110, 600, 16, 0x333333).setVisible(false).setAlpha(.3);
         this.bossBarFill = this.add.rectangle(60, 110, 0, 16, 0x6E6E6E).setOrigin(0, 0.5).setVisible(false).setAlpha(.6);
@@ -162,11 +182,11 @@ class GameScene extends GameBase {
         const startX = 60;
         const buttonY = 1280;
 
-        const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '40px' }).setOrigin(0.5);
+        const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '38px',padding: { y: 10 } }).setOrigin(0.5);
         const percent = Math.round(this.luckMods.factor * 100);
         
         const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck\n(${percent}% Active)`, { 
-            fontSize: '18px', fontFamily: "'Anek Bangla'", color: '#00ff00', fontStyle: 'bold', align: 'left',
+            fontSize: '18px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
             stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
 

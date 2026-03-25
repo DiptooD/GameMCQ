@@ -113,8 +113,8 @@ class QuestionScene extends Phaser.Scene {
             fontSize: "20px", 
             fontFamily: "'Anek Bangla', sans-serif",
             fontWeight: 700,
-            color: "#b6b6b6",
-            backgroundColor: "rgba(0, 255, 255, 0.08)",
+            color: "#dbdbdb",
+            backgroundColor: "rgba(0, 255, 255, 0.12)",
             padding: { x: 12, y: 6 },
         }).setOrigin(1, 0.5); 
         this.qBankTag.originalY = tagY;
@@ -412,8 +412,6 @@ class QuestionScene extends Phaser.Scene {
         
         const isNowReady = GameState.battery >= 100;
         if (isNowReady !== this.wasReady) {
-            // Check !this.isProcessing so it doesn't overlap the tick sound 
-            // if the battery is collected *during* a question transition
             if (isNowReady && !GameState.bossActive && !this.isProcessing) {
                 this.playSFX('sfx_q_ready', 0.6, false); 
             }
@@ -642,8 +640,14 @@ class QuestionScene extends Phaser.Scene {
                         
                         this.playSFX('sfx_tick', 0.2);
                         
-                        // Safety: If battery filled up during transition, announce it now
-                        if (GameState.battery >= 100 && !GameState.bossActive) {
+                        // BUG FIX: Re-evaluate and apply button state based on current battery
+                        // This ensures skipped questions regain their "ready" styling
+                        const isReady = (GameState.battery >= 100);
+                        this.setButtonsState(isReady);
+                        this.updateReadyState(isReady);
+                        this.wasReady = isReady;
+
+                        if (isReady && !GameState.bossActive) {
                             this.playSFX('sfx_q_ready', 0.6, false);
                         }
                     }
