@@ -946,7 +946,7 @@ class GameScene extends GameBase {
     }
 
     winBossFight() {
-        this.playSFX('sfx_victory', 0.8, false);
+        this.playSFX('sfx_boss_win', 0.8, false);
 
         if (GameState.gameMode !== "revision") {
             const keysWon = GameState.bossStage + 1;

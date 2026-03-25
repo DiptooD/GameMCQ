@@ -123,6 +123,11 @@ class GameSFX {
             this.createArpeggio(ctx, 'sine', [880, 1108, 1318, 1760, 1318, 1760], 0.08, 0.2));
         registerSound('sfx_warning', 
             this.createSiren(ctx, 1.5, 300, 600, 4, 0.15));
+
+
+            // ADD THIS NEW LINE:
+        registerSound('sfx_boss_win', 
+            this.createBossWin(ctx));
             
         // =================================================================
         // 5. QUESTION SCENE SPECIFIC
@@ -670,6 +675,82 @@ class GameSFX {
 
 
 /**
+     * Upgraded Boss Win: A grand, cinematic 8-bit victory fanfare (2.5s).
+     * Starts with a collapsing rumble and resolves the tension of 'boss_phase2' 
+     * with a sweeping, triumphant sawtooth climb and vibrato sustain.
+     */
+    static createBossWin(ctx) {
+        const sr = ctx.sampleRate;
+        const duration = 2.5; 
+        const length = Math.floor(sr * duration);
+        const buffer = ctx.createBuffer(1, length, sr);
+        const data = buffer.getChannelData(0);
+
+        // A triumphant, escalating major arpeggio bridging the low and high frequencies
+        const notes = [
+            { freq: 261.63, start: 0.20 }, // C4
+            { freq: 392.00, start: 0.35 }, // G4
+            { freq: 523.25, start: 0.50 }, // C5
+            { freq: 659.25, start: 0.65 }, // E5
+            { freq: 783.99, start: 0.80 }, // G5
+            { freq: 1046.50, start: 1.00 } // C6 (Peak)
+        ];
+
+        let lastNoise = 0;
+
+        for (let i = 0; i < length; i++) {
+            const t = i / sr;
+            let sample = 0;
+
+            // --- 1. The Boss Destruction (Deep, rumbling explosion fading out) ---
+            if (t < 1.2) {
+                let rawNoise = Math.random() * 2 - 1;
+                // Low-pass filter plunging down to simulate a collapsing massive structure
+                let lpf = 0.05 + 0.1 * Math.exp(-t * 5);
+                lastNoise += lpf * (rawNoise - lastNoise);
+                
+                // Rumble envelope
+                let noiseEnv = Math.exp(-t * 3);
+                sample += lastNoise * noiseEnv * 1.5;
+            }
+
+            // --- 2. The Sawtooth Fanfare (Matches the grittiness of boss_phase2) ---
+            for (let j = 0; j < notes.length; j++) {
+                if (t >= notes[j].start) {
+                    const localT = t - notes[j].start;
+                    const f = notes[j].freq;
+                    
+                    // Add a classic retro vibrato to the final sustained note
+                    let vibrato = 0;
+                    if (j === notes.length - 1) {
+                        vibrato = Math.sin(2 * Math.PI * 6 * localT) * (f * 0.015);
+                    }
+
+                    const phase = 2 * Math.PI * (f + vibrato) * localT;
+                    
+                    // Pure sawtooth wave to match the phase 2 aesthetic
+                    const tone = 2 * ((phase / (2 * Math.PI)) % 1) - 1;
+                    
+                    let env;
+                    if (j === notes.length - 1) {
+                        // Final note holds and gracefully fades
+                        env = localT < 0.1 ? localT / 0.1 : Math.exp(-(localT - 0.1) * 1.2);
+                    } else {
+                        // Punchy, driving plucks for the climbing notes
+                        env = localT < 0.05 ? localT / 0.05 : Math.exp(-(localT - 0.05) * 12);
+                    }
+
+                    sample += tone * env * 0.4;
+                }
+            }
+
+            // --- 3. Mastering (Analog Soft-Clip & Fade) ---
+            sample = Math.tanh(sample * 1.5); // Warm saturation
+            const masterFade = Math.max(0, 1 - Math.pow(t / duration, 3));
+            data[i] = sample * masterFade * 0.65;
+        }
+        return buffer;
+    }/**
      * Tech Correct: A gritty, powerful "System Success" sound.
      * Matches the aggressive, distorted vibe of the TNT and Hit effects.
      * Uses a Power Chord (Perfect 5ths) and Saturation instead of sweet major scales.

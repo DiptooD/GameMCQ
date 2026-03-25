@@ -7,32 +7,39 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* Prevents Android pull-to-refresh, double-tap zooming, and UI-locking text highlighting */
     body { 
-        margin:0; 
-        padding:0; 
-        background-color:#000; 
-        overflow: hidden; 
-        height: 100vh; 
-        width: 100vw; 
-        touch-action: none; 
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
-        user-select: none;
+        margin:0; padding:0; background-color:#000; overflow: hidden; 
+        height: 100vh; width: 100vw; touch-action: none; 
+        -webkit-user-select: none; -webkit-touch-callout: none; user-select: none;
     }
-    canvas { 
-        display: block; 
-        width: 100% !important; 
-        height: 100% !important; 
-    }
+    canvas { display: block; width: 100% !important; height: 100% !important; }
   </style>
-  
+
+  <script>
+      var isOnline = navigator.onLine;
+
+      // 1. Load Fonts
+      if (isOnline) {
+          document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700;800&display=swap">');
+      } else {
+          document.write('<link rel="stylesheet" href="css/local-fonts.css">');
+      }
+
+      // 2. Load Phaser
+      if (isOnline) {
+          // Try CDN first
+          document.write('<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"><\/script>');
+          // If CDN fails despite being "online" (e.g. firewall, captive portal), fallback to local
+          document.write('<script>window.Phaser || document.write(\'<script src="js/phaser.min.js"><\\/script>\')<\/script>');
+      } else {
+          // Strictly offline
+          document.write('<script src="js/phaser.min.js"><\/script>');
+      }
+  </script>
+
   <script src="cordova.js"></script> 
-  
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
 </head>
 <body>
   <script src="game.js"></script>
