@@ -114,7 +114,7 @@ class QuestionScene extends Phaser.Scene {
             fontFamily: "'Anek Bangla', sans-serif",
             fontWeight: 700,
             color: "#dbdbdb",
-            backgroundColor: "rgba(0, 255, 255, 0.12)",
+            backgroundColor: "rgba(66, 66, 66, 0.12)",
             padding: { x: 12, y: 6 },
         }).setOrigin(1, 0.5); 
         this.qBankTag.originalY = tagY;
@@ -411,8 +411,10 @@ class QuestionScene extends Phaser.Scene {
         this.correctLabel.setText(`লেভেল: ${safeStage}  |  সঠিক: ${safeCount}/${safeTotal}`);
         
         const isNowReady = GameState.battery >= 100;
-        if (isNowReady !== this.wasReady) {
-            if (isNowReady && !GameState.bossActive && !this.isProcessing) {
+        
+        // MODIFICATION: Added && !this.isProcessing to prevent the colors from being overridden
+        if (isNowReady !== this.wasReady && !this.isProcessing) {
+            if (isNowReady && !GameState.bossActive) {
                 this.playSFX('sfx_q_ready', 0.6, false); 
             }
             
@@ -666,6 +668,15 @@ class QuestionScene extends Phaser.Scene {
         
         this.wasReady = false; 
         this.updateReadyState(false);
+
+        // MODIFICATION: Stop the bouncing pulse animation immediately so it stays steady while colored
+        this.optionBtns.forEach(btn => {
+            if (btn.pulseTween) {
+                btn.pulseTween.stop();
+                btn.pulseTween = null;
+            }
+            btn.container.setScale(1);
+        });
 
         const q = this.questions[this.qIdx % this.questions.length];
         const record = {
