@@ -75,13 +75,18 @@ window.GameState = {
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
 };
 
+// FIX: Update level targets now factors in Beginner's Luck to lower the question threshold
 window.updateLevelTargets = function() {
+    let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
+    let luckFactor = Math.max(0, 5 - played) / 5;
+    let discount = Math.floor(3 * luckFactor); // Reduces required questions by up to 3
+
     if (GameState.bossStage === 0) {
-        GameState.totalCorrectNeeded = 10; 
+        GameState.totalCorrectNeeded = Math.max(3, 10 - discount); 
     } else if (GameState.bossStage === 1) {
-        GameState.totalCorrectNeeded = 7;  
+        GameState.totalCorrectNeeded = Math.max(3, 7 - discount);  
     } else if (GameState.bossStage === 2) {
-        GameState.totalCorrectNeeded = 5;  
+        GameState.totalCorrectNeeded = Math.max(2, 5 - discount);  
     } else {
         GameState.totalCorrectNeeded = 9999; 
     }

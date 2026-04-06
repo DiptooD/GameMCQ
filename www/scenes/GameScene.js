@@ -178,6 +178,7 @@ class GameScene extends GameBase {
         }
     }
 
+    // FIX: Updated Beginner's Luck UI explicitly tells the player it's making enemies weaker
     createBeginnersLuckUI() {
         const startX = 60;
         const buttonY = 1280;
@@ -185,7 +186,7 @@ class GameScene extends GameBase {
         const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '38px',padding: { y: 10 } }).setOrigin(0.5);
         const percent = Math.round(this.luckMods.factor * 100);
         
-        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck\n(${percent}% Active)`, { 
+        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nWeaker Enemies, Better Drops!`, { 
             fontSize: '18px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
             stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
@@ -680,7 +681,10 @@ class GameScene extends GameBase {
         } else if (weaponType === "ice_shard") damage = 2;
         else if (weaponType === "plasma_wave") damage = 3;
 
-        obstacle.hp -= (damage * damageMultiplier);
+        // FIX: Factored in beginner's luck to make the player deal up to 2x more damage
+        const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
+        obstacle.hp -= finalDamage;
+        
         this.playSFX('sfx_rock_hit', 0.3); 
         obstacle.x += Phaser.Math.FloatBetween(-2, 2);
         obstacle.y += Phaser.Math.FloatBetween(-2, 2);
@@ -696,9 +700,12 @@ class GameScene extends GameBase {
             GameState.score += 15;
 
             if (GameState.gameMode !== "revision" && Math.random() < 0.5) {
-                GameState.debris = (GameState.debris || 0) + 1;
+                // FIX: Factored in beginner's luck for dropping more debris
+                let debrisEarned = Math.ceil(1 * this.luckMods.debrisDropMult);
+                GameState.debris = (GameState.debris || 0) + debrisEarned;
                 window.saveCurrency();
-                const txt = this.add.text(obstacle.x, obstacle.y, "+1 Debris", { fontSize: '28px', fontFamily: 'Arial', color: '#aaccff', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+                
+                const txt = this.add.text(obstacle.x, obstacle.y, `+${debrisEarned} Debris`, { fontSize: '28px', fontFamily: 'Arial', color: '#aaccff', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
                 this.tweens.add({ targets: txt, y: txt.y - 60, alpha: 0, duration: 1200, onComplete: () => txt.destroy() });
             }
 
@@ -809,7 +816,10 @@ class GameScene extends GameBase {
         }
 
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.15);
-        enemy.hp -= (damage * damageMultiplier);
+        // FIX: Applied Beginner's Luck player damage increase
+        const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
+        
+        enemy.hp -= finalDamage;
         enemy.setAlpha(0.3);
         this.time.delayedCall(60, () => { if (enemy && enemy.active) enemy.setAlpha(1); });
 
@@ -906,6 +916,9 @@ class GameScene extends GameBase {
         if (stage === 0) { bossTitle = "প্রিলি দানব (১ম বস)"; bossHp = 1500; bossKey = "boss_lv1"; }
         else if (stage === 1) { bossTitle = "লিখিত লড়াকু (২য় বস)"; bossHp = 2500; bossKey = "boss_lv2"; }
         else { bossTitle = "ভাইভা বিভীষিকা (সর্বশেষ বস)"; bossHp = 4000; bossKey = "boss_lv3"; }
+
+        // FIX: Make the boss easier if the player has beginner's luck
+        bossHp = Math.ceil(bossHp * this.luckMods.hpMult);
 
         this.warningText.setText(`${bossTitle}\nআসছে...`);
         this.warningText.setVisible(true);
@@ -1065,9 +1078,16 @@ class GameScene extends GameBase {
         });
     }
 
+    // FIX: Increment the total games played whenever the game completely ends to ensure beginner's luck fades
     finalizeGameOver() {
         const bgMusic = this.sound.get('bg_music');
         if (bgMusic) bgMusic.stop();
+
+        // Increment gamesPlayed to gradually phase out beginner's luck
+        if (GameState.gameMode !== "revision") {
+            GameState.gamesPlayed = (GameState.gamesPlayed || 0) + 1;
+            if (window.saveGame) window.saveGame();
+        }
 
         this.physics.pause();
         this.time.paused = false;
@@ -1188,8 +1208,11 @@ class GameScene extends GameBase {
             shot.destroy();
         }
 
+        // FIX: Factored in beginner's luck for 2x damage to boss
+        const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
+
         this.playSFX('sfx_enemy_hit', 0.25);
-        boss.hp -= (damage * damageMultiplier);
+        boss.hp -= finalDamage;
         boss.x += Phaser.Math.FloatBetween(-3, 3);
         boss.y += Phaser.Math.FloatBetween(-1, 1);
         this.bossBarFill.width = (boss.hp / boss.maxHp) * 600;

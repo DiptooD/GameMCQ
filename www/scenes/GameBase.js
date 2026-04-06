@@ -10,17 +10,20 @@ class GameBase extends Phaser.Scene {
     }
   }
 
+  // FIX: Greatly expanded Beginner's Luck stats to cover all aspects of gameplay
   getLuckModifiers() {
     let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
     let luckFactor = Math.max(0, 5 - played) / 5; 
 
     return {
         factor: luckFactor,                  
-        speedMult: 1.0 - (0.4 * luckFactor), 
-        delayMult: 1.0 + (0.5 * luckFactor), 
-        batteryDropMult: 1.0 + (1.0 * luckFactor), 
-        batteryDropChance: 0.4 * luckFactor, 
-        batteryTarget: Math.round(100 - (50 * luckFactor)) 
+        speedMult: 1.0 - (0.4 * luckFactor), // Up to 40% slower enemies and projectiles
+        delayMult: 1.0 + (0.5 * luckFactor), // Up to 50% slower fire rates
+        batteryDropMult: 1.0 + (2.0 * luckFactor), // Up to 3x battery drops
+        batteryDropChance: 0.5 * luckFactor, // Flat 50% extra drop chance
+        hpMult: 1.0 - (0.5 * luckFactor), // NEW: Enemies/Bosses have up to 50% less HP
+        playerDamageMult: 1.0 + (1.0 * luckFactor), // NEW: Player deals up to 2x damage
+        debrisDropMult: 1.0 + (2.0 * luckFactor) // NEW: Up to 3x debris dropping from obstacles
     };
   }
   
@@ -244,7 +247,7 @@ class GameBase extends Phaser.Scene {
     obs.setVelocityY(speedY);
 
     let baseHp = (type === "obstacle_mine") ? 2 : 3;
-    obs.hp = baseHp + (progress * 0.4); 
+    obs.hp = (baseHp + (progress * 0.4)) * luck.hpMult; // FIX: Luck scaling for obstacle HP
 
     obs.maxHp = obs.hp; 
     obs.obstacleType = type; 
@@ -293,7 +296,7 @@ class GameBase extends Phaser.Scene {
       else { type = "enemy_octopus"; tier = "octopus"; enemyType = "octopus"; }
     }
     
-    const hpMultiplier = 1 + (progress * 0.2); 
+    const hpMultiplier = (1 + (progress * 0.2)) * luck.hpMult; // FIX: Luck scaling for enemy HP
 
     if (type === "enemy_common") hp = 5 * hpMultiplier;
     else if (type === "enemy_rare" || type === "enemy_octopus") hp = 10 * hpMultiplier; 
@@ -352,7 +355,7 @@ class GameBase extends Phaser.Scene {
     head.setVelocityY(speedY);
     head.setVelocityX(speedX);
     
-    head.hp = 100 + (progress * 3);
+    head.hp = (100 + (progress * 3)) * luck.hpMult; // FIX: Luck scaling
     head.maxHp = head.hp;
     head.tier = "centipede";
     head.enemyType = "centipede";
@@ -364,7 +367,7 @@ class GameBase extends Phaser.Scene {
     
     for (let i = 0; i < segmentCount; i++) {
       const segment = this.enemies.create(x - ((i + 1) * 45), -100, "enemy_centipede");
-      segment.hp = 50 + (progress * 2);
+      segment.hp = (50 + (progress * 2)) * luck.hpMult; // FIX: Luck scaling
       segment.maxHp = segment.hp;
       segment.tier = "centipede_segment";
       segment.enemyType = "centipede";
