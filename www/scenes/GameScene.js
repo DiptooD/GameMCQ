@@ -112,7 +112,6 @@ class GameScene extends GameBase {
         this.enemyFireTimer = this.time.addEvent({ delay: 1800, loop: true, callback: this.enemiesFireBack, callbackScope: this });
         this.obstacleTimer = this.time.addEvent({ delay: 4500, loop: true, callback: this.spawnObstacle, callbackScope: this });
 
-        // Projectile Overlaps
         this.physics.add.overlap(this.bullets, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.missiles, this.enemies, this.damageEnemy, null, this);
         this.physics.add.overlap(this.sideBullets, this.enemies, this.damageEnemy, null, this);
@@ -123,30 +122,22 @@ class GameScene extends GameBase {
         this.physics.add.overlap(this.sideBullets, this.obstacles, this.damageObstacle, null, this);
         this.physics.add.overlap(this.specialWeapons, this.obstacles, this.damageObstacle, null, this);
 
-        // Player Overlaps
         this.physics.add.overlap(this.player, [this.enemies, this.bossBullets], this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.obstacles, this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.batteries, this.collectBattery, null, this);
         this.physics.add.overlap(this.player, this.powerUps, this.collectPowerUp, null, this);
 
-        // --- NEW COLLIDERS: Prevent enemies & obstacles from passing through each other ---
-        
-        // Enemies bouncing off each other
         this.physics.add.collider(this.enemies, this.enemies, null, (e1, e2) => {
-            // Ignore centipede segments to prevent their physics structure from breaking
             if (e1.enemyType === "centipede" || e2.enemyType === "centipede") return false;
             return true;
         }, this);
 
-        // Obstacles bouncing off each other
         this.physics.add.collider(this.obstacles, this.obstacles);
 
-        // Enemies bouncing off obstacles
         this.physics.add.collider(this.enemies, this.obstacles, null, (enemy, obs) => {
             if (enemy.enemyType === "centipede") return false;
             return true;
         }, this);
-        // ---------------------------------------------------------------------------------
 
         this.bossBarBg = this.add.rectangle(360, 110, 600, 16, 0x333333).setVisible(false).setAlpha(.3);
         this.bossBarFill = this.add.rectangle(60, 110, 0, 16, 0x6E6E6E).setOrigin(0, 0.5).setVisible(false).setAlpha(.6);
@@ -178,7 +169,7 @@ class GameScene extends GameBase {
         }
     }
 
-    // FIX: Updated Beginner's Luck UI explicitly tells the player it's making enemies weaker
+    // FIX: Updated UI string to indicate Slower & Weaker
     createBeginnersLuckUI() {
         const startX = 60;
         const buttonY = 1280;
@@ -186,7 +177,7 @@ class GameScene extends GameBase {
         const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '38px',padding: { y: 10 } }).setOrigin(0.5);
         const percent = Math.round(this.luckMods.factor * 100);
         
-        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nWeaker Enemies, Better Drops!`, { 
+        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nSlower & Weaker Enemies!`, { 
             fontSize: '18px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
             stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
@@ -681,7 +672,6 @@ class GameScene extends GameBase {
         } else if (weaponType === "ice_shard") damage = 2;
         else if (weaponType === "plasma_wave") damage = 3;
 
-        // FIX: Factored in beginner's luck to make the player deal up to 2x more damage
         const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
         obstacle.hp -= finalDamage;
         
@@ -699,13 +689,12 @@ class GameScene extends GameBase {
             this.createExplosion(obstacle.x, obstacle.y, 0x888888, 10);
             GameState.score += 15;
 
+            // FIX: Removed 3x multiplier, back to standard +1 Debris
             if (GameState.gameMode !== "revision" && Math.random() < 0.5) {
-                // FIX: Factored in beginner's luck for dropping more debris
-                let debrisEarned = Math.ceil(1 * this.luckMods.debrisDropMult);
-                GameState.debris = (GameState.debris || 0) + debrisEarned;
+                GameState.debris = (GameState.debris || 0) + 1;
                 window.saveCurrency();
                 
-                const txt = this.add.text(obstacle.x, obstacle.y, `+${debrisEarned} Debris`, { fontSize: '28px', fontFamily: 'Arial', color: '#aaccff', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
+                const txt = this.add.text(obstacle.x, obstacle.y, `+1 Debris`, { fontSize: '28px', fontFamily: 'Arial', color: '#aaccff', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
                 this.tweens.add({ targets: txt, y: txt.y - 60, alpha: 0, duration: 1200, onComplete: () => txt.destroy() });
             }
 
@@ -816,7 +805,6 @@ class GameScene extends GameBase {
         }
 
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.15);
-        // FIX: Applied Beginner's Luck player damage increase
         const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
         
         enemy.hp -= finalDamage;
@@ -917,7 +905,6 @@ class GameScene extends GameBase {
         else if (stage === 1) { bossTitle = "লিখিত লড়াকু (২য় বস)"; bossHp = 2500; bossKey = "boss_lv2"; }
         else { bossTitle = "ভাইভা বিভীষিকা (সর্বশেষ বস)"; bossHp = 4000; bossKey = "boss_lv3"; }
 
-        // FIX: Make the boss easier if the player has beginner's luck
         bossHp = Math.ceil(bossHp * this.luckMods.hpMult);
 
         this.warningText.setText(`${bossTitle}\nআসছে...`);
@@ -1078,12 +1065,10 @@ class GameScene extends GameBase {
         });
     }
 
-    // FIX: Increment the total games played whenever the game completely ends to ensure beginner's luck fades
     finalizeGameOver() {
         const bgMusic = this.sound.get('bg_music');
         if (bgMusic) bgMusic.stop();
 
-        // Increment gamesPlayed to gradually phase out beginner's luck
         if (GameState.gameMode !== "revision") {
             GameState.gamesPlayed = (GameState.gamesPlayed || 0) + 1;
             if (window.saveGame) window.saveGame();
@@ -1208,7 +1193,6 @@ class GameScene extends GameBase {
             shot.destroy();
         }
 
-        // FIX: Factored in beginner's luck for 2x damage to boss
         const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
 
         this.playSFX('sfx_enemy_hit', 0.25);
