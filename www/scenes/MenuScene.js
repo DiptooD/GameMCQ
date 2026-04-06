@@ -81,7 +81,7 @@ class MenuScene extends Phaser.Scene {
             targets: titleContainer, y: titleContainer.y - 15, duration: 2500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
         });
 
-this.time.addEvent({
+        this.time.addEvent({
             delay: 400, // Slightly slower updates
             loop: true,
             callback: () => {
@@ -969,7 +969,7 @@ this.time.addEvent({
         const tips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন শিপ আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন মস্তিষ্ক।",
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
             "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ (Pause) বাটনে ক্লিক করুন।",
@@ -1036,12 +1036,15 @@ this.time.addEvent({
         bg.strokeRoundedRect(-totalWidth/2, -height/2, totalWidth, height, height/2);
         container.add(bg);
 
-        const btnWidth = totalWidth / 3;
+        // Subdivided into 4 buttons now
+        const btnWidth = totalWidth / 4;
 
-        const shopHitArea = this.add.rectangle(-totalWidth/2 + btnWidth/2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const bagIcon = this.add.text(-totalWidth/2 + btnWidth/2 - 35, -5, "🛒", { fontSize: "28px" }).setOrigin(0.4);
-        const shopText = this.add.text(-totalWidth/2 + btnWidth/2 + 15, 0, "শপ", { 
-            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        // 1. SHOP
+        const shopCx = -totalWidth/2 + btnWidth/2;
+        const shopHitArea = this.add.rectangle(shopCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const bagIcon = this.add.text(shopCx - 22, -4, "🛒", { fontSize: "26px" }).setOrigin(0.5);
+        const shopText = this.add.text(shopCx + 18, 0, "শপ", { 
+            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
         }).setOrigin(0.5);
 
         shopHitArea.on('pointerdown', () => {
@@ -1053,10 +1056,29 @@ this.time.addEvent({
 
         const div1 = this.add.rectangle(-totalWidth/2 + btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const histHitArea = this.add.rectangle(0, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const histIcon = this.add.text(-35, -5, "📜", { fontSize: "28px" }).setOrigin(0.4);
-        const histText = this.add.text(15, 0, "হিস্ট্রি", { 
-            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        // 2. STUDY / READING
+        const studyCx = -totalWidth/2 + btnWidth*1.5;
+        const studyHitArea = this.add.rectangle(studyCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const studyIcon = this.add.text(studyCx - 22, -4, "📖", { fontSize: "26px" }).setOrigin(0.5);
+        const studyText = this.add.text(studyCx + 18, 0, "স্টাডি", { 
+            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        }).setOrigin(0.5);
+
+        studyHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.scene.start("ReadingScene");
+        });
+        studyHitArea.on('pointerover', () => studyText.setColor("#ffffff"));
+        studyHitArea.on('pointerout', () => studyText.setColor("#b3d4ff"));
+
+        const div2 = this.add.rectangle(0, 0, 3, height - 20, 0x0066aa, 0.7);
+
+        // 3. HISTORY
+        const histCx = totalWidth/2 - btnWidth*1.5;
+        const histHitArea = this.add.rectangle(histCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const histIcon = this.add.text(histCx - 22, -4, "📜", { fontSize: "26px" }).setOrigin(0.5);
+        const histText = this.add.text(histCx + 18, 0, "হিস্ট্রি", { 
+            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
         }).setOrigin(0.5);
 
         histHitArea.on('pointerdown', () => {
@@ -1066,12 +1088,14 @@ this.time.addEvent({
         histHitArea.on('pointerover', () => histText.setColor("#ffffff"));
         histHitArea.on('pointerout', () => histText.setColor("#b3d4ff"));
 
-        const div2 = this.add.rectangle(totalWidth/2 - btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
+        const div3 = this.add.rectangle(totalWidth/2 - btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const wheelHitArea = this.add.rectangle(totalWidth/2 - btnWidth/2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const wheelIcon = this.add.text(totalWidth/2 - btnWidth/2 - 35, -4, "🌀", { fontSize: "30px" }).setOrigin(0.4);
-        const wheelText = this.add.text(totalWidth/2 - btnWidth/2 + 15, 0, "স্পিন", { 
-            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+        // 4. SPIN
+        const wheelCx = totalWidth/2 - btnWidth/2;
+        const wheelHitArea = this.add.rectangle(wheelCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const wheelIcon = this.add.text(wheelCx - 22, -4, "🌀", { fontSize: "28px" }).setOrigin(0.5);
+        const wheelText = this.add.text(wheelCx + 18, 0, "স্পিন", { 
+            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
         }).setOrigin(0.5);
 
         this.tweens.add({ targets: wheelIcon, angle: 360, duration: 50000, repeat: -1, ease: "Linear" });
@@ -1083,7 +1107,12 @@ this.time.addEvent({
         wheelHitArea.on('pointerover', () => wheelText.setColor("#ffffff"));
         wheelHitArea.on('pointerout', () => wheelText.setColor("#b3d4ff"));
 
-        container.add([shopHitArea, bagIcon, shopText, div1, histHitArea, histIcon, histText, div2, wheelHitArea, wheelIcon, wheelText]);
+        container.add([
+            shopHitArea, bagIcon, shopText, div1, 
+            studyHitArea, studyIcon, studyText, div2,
+            histHitArea, histIcon, histText, div3, 
+            wheelHitArea, wheelIcon, wheelText
+        ]);
     }
 
     showMatchHistoryPopup() {
@@ -1282,7 +1311,7 @@ this.time.addEvent({
         createLayer(15, 2.2, 0xffffff, 2.5, 1); 
     }
 
-startGame() {
+    startGame() {
         const manifest = this.cache.json.get('bank_directory');
         let finalQuestions = [];
 

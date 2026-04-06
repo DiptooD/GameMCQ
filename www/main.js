@@ -24,7 +24,7 @@ const config = {
     antialias: true,
     pixelArt: false,
     roundPixels: true,
-    clearBeforeRender: false // Performance boost on mobile WebViews
+    clearBeforeRender: false
   },
   audio: {
     disableWebAudio: false 
@@ -32,7 +32,8 @@ const config = {
   input: {
     activePointers: 2, 
   },
-  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, GameScene, QuestionScene, PauseScene, DeathScene]
+  // ADDED ReadingScene TO THE SCENE ARRAY
+  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, GameScene, QuestionScene, PauseScene, DeathScene]
 };
 
 Promise.all([
@@ -53,14 +54,11 @@ document.addEventListener("deviceready", () => {
         navigator.splashscreen.hide();
     }    
     
-    // STRICTLY handling global audio context suspension to prevent duplicate scene pausing
     const handleAppPause = () => {
         if (!window.game) return;
         if (window.game.sound) {
             window.game.sound.pauseAll(); 
         }
-        // NOTE: Scene pausing is explicitly deferred to GameScene.js wakelock/visibility listener 
-        // to prevent duplicate SceneManager fatal crashes.
     };
 
     const handleAppResume = () => {
@@ -92,14 +90,18 @@ document.addEventListener("deviceready", () => {
         const isShopOpen = sceneManager.isActive("ShopScene");
         const isWheelOpen = sceneManager.isActive("SpinWheelScene");
         const isDeathOpen = sceneManager.isActive("DeathScene");
+        const isReadingOpen = sceneManager.isActive("ReadingScene"); // Added check
 
         if (!isMenuOpen) {
             if (now - lastBackTime < 300) return; 
             lastBackTime = now;
         }
 
-        if (isWheelOpen || isShopOpen) {
-            sceneManager.stop(isWheelOpen ? "SpinWheelScene" : "ShopScene");
+        if (isWheelOpen || isShopOpen || isReadingOpen) {
+            if(isWheelOpen) sceneManager.stop("SpinWheelScene");
+            if(isShopOpen) sceneManager.stop("ShopScene");
+            if(isReadingOpen) sceneManager.stop("ReadingScene");
+            
             sceneManager.start("MenuScene");
             return;
         }
