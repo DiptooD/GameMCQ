@@ -351,8 +351,8 @@ class ReadingScene extends Phaser.Scene {
         this.add.graphics().fillStyle(0x051025, 0.95).fillRect(0, 0, w, 100);
         this.add.rectangle(cx, 100, w, 3, 0x0066aa, 0.8);
 
-        this.add.text(cx, 50, "স্টাডি মোড (Reading Mode)", {
-            fontSize: "40px", fontFamily: "'Anek Bangla'", color: "#00e1ff",
+        this.add.text(cx, 50, "স্টাডি মোড", {
+            fontSize: "40px", fontFamily: "'Anek Bangla'", color: "#00e1ff", padding: { y: 5 },
             fontStyle: "bold", stroke: "#000000", strokeThickness: 5
         }).setOrigin(0.5);
 

@@ -3,7 +3,6 @@ class GameBase extends Phaser.Scene {
     super(key); 
   }
 
-  // --- AUDIO HELPER ---
   playSound(key, baseVolume = 1.0) {
     if (this.cache.audio.exists(key)) {
         const finalVolume = baseVolume * (window.GameState.sfxVolume !== undefined ? window.GameState.sfxVolume : 1.0);
@@ -11,7 +10,6 @@ class GameBase extends Phaser.Scene {
     }
   }
 
-  // --- PROGRESSION & DIFFICULTY ---
   getLuckModifiers() {
     let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
     let luckFactor = Math.max(0, 5 - played) / 5; 
@@ -57,20 +55,21 @@ class GameBase extends Phaser.Scene {
   createSpaceBackground() {
     const h = this.cameras.main.height;
     const w = 720;
+    
+    const themeColors = window.getThemeColors();
 
     this.bgGradient = this.add.graphics();
-    this.bgGradient.fillGradientStyle(0x1a0033, 0x1a0033, 0x002b36, 0x002b36, 1);
+    this.bgGradient.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
     this.bgGradient.fillRect(0, 0, w, h);
   
     this.nebulae = this.add.group();
-    const colors = [0x242424, 0x373737, 0x161616]; 
     for(let i = 0; i < 2; i++) { 
       let nebula = this.add.ellipse(
         Phaser.Math.Between(0, w),
         Phaser.Math.Between(0, h),
         Phaser.Math.Between(300, 600),
         Phaser.Math.Between(200, 400),
-        Phaser.Utils.Array.GetRandom(colors),
+        Phaser.Utils.Array.GetRandom(themeColors.nebulae),
         0.12 
       );
       this.nebulae.add(nebula);
@@ -82,7 +81,7 @@ class GameBase extends Phaser.Scene {
         Phaser.Math.Between(0, w),
         Phaser.Math.Between(0, h),
         Phaser.Math.Between(4, 10),
-        0x444444,
+        themeColors.debris,
         0.12
       );
       this.bgDebris.add(d);
@@ -94,7 +93,7 @@ class GameBase extends Phaser.Scene {
         Phaser.Math.Between(0, w),
         Phaser.Math.Between(0, h),
         Phaser.Math.Between(1, 2),
-        0xffffff,
+        themeColors.starDistant,
         0.2,
         Phaser.Math.FloatBetween(0.2, 0.4)
       );
@@ -107,7 +106,7 @@ class GameBase extends Phaser.Scene {
         Phaser.Math.Between(0, w),
         Phaser.Math.Between(0, h),
         Phaser.Math.Between(1, 4),
-        0x8888ff,
+        themeColors.starBase,
         Phaser.Math.FloatBetween(0.2, 0.4)
       );
       this.stars.add(s);
@@ -119,7 +118,7 @@ class GameBase extends Phaser.Scene {
         Phaser.Math.Between(0, w),
         Phaser.Math.Between(0, h),
         Phaser.Math.Between(1, 3),
-        0xCFCFCF,
+        themeColors.starFast,
         0.8
       );
       this.fastStars.add(s);
@@ -521,7 +520,6 @@ class GameBase extends Phaser.Scene {
 
                 const currentRadius = 80 * (wave.scale / 0.15);
                 
-                // CRASH FIX: Safe fallback if this is called early before enemies/bossBullets are instantiated
                 const targets = [
                     ...(this.enemies ? this.enemies.getChildren() : []), 
                     ...(this.obstacles ? this.obstacles.getChildren() : []), 
@@ -555,11 +553,13 @@ class GameBase extends Phaser.Scene {
   updateDynamicBackground() {
     const progress = this.getGlobalProgress();
     const ratio = Math.min(progress / 25, 1);
+    
+    const themeColors = window.getThemeColors();
 
-    const startTop = Phaser.Display.Color.ValueToColor(0x250049); 
-    const endTop = Phaser.Display.Color.ValueToColor(0x04002e);   
-    const startBot = Phaser.Display.Color.ValueToColor(0x004248); 
-    const endBot = Phaser.Display.Color.ValueToColor(0x001300);   
+    const startTop = Phaser.Display.Color.ValueToColor(themeColors.dynTopStart); 
+    const endTop = Phaser.Display.Color.ValueToColor(themeColors.dynTopEnd);   
+    const startBot = Phaser.Display.Color.ValueToColor(themeColors.dynBotStart); 
+    const endBot = Phaser.Display.Color.ValueToColor(themeColors.dynBotEnd);   
 
     const top = Phaser.Display.Color.Interpolate.ColorWithColor(startTop, endTop, 100, ratio * 100);
     const bot = Phaser.Display.Color.Interpolate.ColorWithColor(startBot, endBot, 100, ratio * 100);
@@ -573,8 +573,8 @@ class GameBase extends Phaser.Scene {
       this.bgGradient.fillRect(0, 0, 720, this.cameras.main.height);
     }
 
-    const startNebula = Phaser.Display.Color.ValueToColor(0xd5d5d5); 
-    const endNebula = Phaser.Display.Color.ValueToColor(0xcccccc);   
+    const startNebula = Phaser.Display.Color.ValueToColor(themeColors.dynNebStart); 
+    const endNebula = Phaser.Display.Color.ValueToColor(themeColors.dynNebEnd);   
     
     const nebColorObj = Phaser.Display.Color.Interpolate.ColorWithColor(startNebula, endNebula, 100, ratio * 100);
     const currentNebColor = Phaser.Display.Color.GetColor(nebColorObj.r, nebColorObj.g, nebColorObj.b);
@@ -586,7 +586,7 @@ class GameBase extends Phaser.Scene {
       });
     }
 
-    const starColor = ratio > 0.6 ? 0xff4400 : 0xaaaaaa;
+    const starColor = ratio > 0.6 ? 0xff4400 : themeColors.starBase;
     [this.stars, this.distantStars, this.bgDebris].forEach(g => {
       if(g) g.children.each(s => s.fillColor = starColor);
     });

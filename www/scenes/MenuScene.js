@@ -826,7 +826,7 @@ class MenuScene extends Phaser.Scene {
         });
     }
 
-    createModeSelector(x, y, totalWidth, height) {
+createModeSelector(x, y, totalWidth, height) {
         const container = this.add.container(x, y);
         
         const baseBg = this.add.graphics();
@@ -868,9 +868,19 @@ class MenuScene extends Phaser.Scene {
                 }
 
                 this.playSound('sfx_click');
+                const previousMode = this.selectedMode;
                 this.selectedMode = opt.value;
                 localStorage.setItem('saved_mode', this.selectedMode);
                 this.updateModeSelector(btnX);
+
+                // Dynamically update the tips box when mode changes
+                if (previousMode !== this.selectedMode && this.cycleTip) {
+                    if (this.tipTimerEvent) {
+                        this.tipTimerEvent.remove();
+                        this.tipTimerEvent = this.time.addEvent({ delay: 8000, loop: true, callback: this.cycleTip });
+                    }
+                    this.cycleTip();
+                }
             });
 
             this.modeButtons.push({ txt: txt, value: opt.value, x: btnX });
@@ -883,7 +893,7 @@ class MenuScene extends Phaser.Scene {
             defaultBtn.txt.setColor("#ffffff");
         }
     }
-
+    
     updateModeSelector(targetX) {
         this.tweens.add({ targets: this.modeHighlight, x: targetX, duration: 250, ease: 'Cubic.out' });
         this.modeButtons.forEach(btn => btn.txt.setColor(btn.value === this.selectedMode ? "#ffffff" : "#88bbdd"));
@@ -958,7 +968,7 @@ class MenuScene extends Phaser.Scene {
         });
     }
 
-    createTipsBox(x, y, width) {
+createTipsBox(x, y, width) {
         const height = 75;
         const container = this.add.container(x, y);
 
@@ -966,10 +976,10 @@ class MenuScene extends Phaser.Scene {
         bg.fillStyle(0x001122, 0.25);
         bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
 
-        const tips = [
+        this.normalTips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
-            "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন শিপ আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন মস্তিষ্ক।",
+            "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
             "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ (Pause) বাটনে ক্লিক করুন।",
@@ -979,15 +989,31 @@ class MenuScene extends Phaser.Scene {
             "💡 টিপস: ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।",
             "💡 টিপস: চুম্বক (Magnet) পাওয়ার-আপ নিলে ব্যাটারিগুলো আপনাআপনি আপনার দিকে চলে আসবে।",
             "💡 টিপস: গেম ওভার হয়ে গেলে 'চাবি' (Key) ব্যবহার করে আবার জীবন ফিরে পেতে পারেন।",
-            "💡 টিপস: শপ থেকে কেনা নতুন শিপ 'Customize' মেনু থেকে সজ্জিত (Equip) করতে পারবেন।",
+            "💡 টিপস: শপ থেকে কেনা নতুন রকেট 'Customize' মেনু থেকে সজ্জিত (Equip) করতে পারবেন।",
             "💡 টিপস: টিএনটি (TNT) বা শকওয়েভ পাওয়ার-আপ ব্যবহার করলে স্ক্রিনের সব শত্রু একসাথে ধ্বংস হয়ে যায়।",
             "💡 টিপস: সেটিংস থেকে আপনার সুবিধামতো 'কুইক প্যানেল' (Quick Panel) ডান বা বাম দিকে সরিয়ে নিতে পারবেন অথবা বন্ধ করে রাখতে পারবেন।",
-            "💡 টিপস: রিভিশন মোডে খেলে আগের ভুল করা প্রশ্নগুলো ঝালাই করে নিন।"
+            "💡 টিপস: প্রতিদিন 'স্টাডি' (Study) মোডে পড়াশোনা করলে আপনার প্রস্তুতি আরও মজবুত হবে।",
+            "💡 টিপস: 'New' মোড সিলেক্ট করে খেললে বারবার শুধু নতুন প্রশ্নই আসবে।",
+            "💡 টিপস: আপনার লাইফ ৩-এর নিচে নেমে গেলে বস ফাইট ছাড়া তা ধীরে ধীরে নিজে থেকেই বাড়তে থাকবে।",
+            "💡 টিপস: চাবি (Key) জমিয়ে রাখুন, এটি কঠিন লেভেলে গেম ওভার হওয়া থেকে বাঁচতে সাহায্য করবে।",
+            "💡 টিপস: মেনুর ফিল্টার থেকে 'All Without Math' সিলেক্ট করলে গণিত ছাড়া বাকি বিষয়ের প্রশ্ন আসবে।",
+            "💡 টিপস: 'স্টাডি Mode'-এ সাবজেক্ট ফিল্টার ব্যবহার করে নির্দিষ্ট বিষয়ের প্রশ্ন ঝালাই করে নিন।",
+            "💡 টিপস: 'হিস্ট্রি' চেক করে দেখুন আপনার স্কোর এবং কতগুলো সঠিক উত্তর দিয়েছেন।",
+            "💡 টিপস: 'হিস্ট্রি'দেখে আপনার ভুল করা প্রশ্নগুলো দেখে নিয়ে পরের গেমে আরও ভালো করার প্রস্তুতি নিন।",
+            "💡 টিপস: রিভিশন মোড খেলার আগে একবার স্টাডি মোড ঘুরে আসলে, আপনার মেমোরি বাড়াতে সাহায্য করবে।"
         ];
 
-        let currentTipIndex = Phaser.Math.Between(0, tips.length - 1);
+        this.revisionTips = [
+            "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে। পুরনো পড়া ঝালাই করার দারুণ সুযোগ!",
+            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+        ];
 
-        const tipText = this.add.text(0, 0, tips[currentTipIndex], {
+        const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
+
+        let activeTips = getActiveTips();
+        let currentTipIndex = Phaser.Math.Between(0, activeTips.length - 1);
+
+        this.tipText = this.add.text(0, 0, activeTips[currentTipIndex], {
             fontSize: "21px",
             fontFamily: "'Anek Bangla'",
             color: "#aaccff",
@@ -997,32 +1023,41 @@ class MenuScene extends Phaser.Scene {
             lineSpacing: 10
         }).setOrigin(0.5);
 
-        container.add([bg, tipText]);
+        container.add([bg, this.tipText]);
 
-        this.time.addEvent({
-            delay: 8000,
-            loop: true,
-            callback: () => {
-                this.tweens.add({
-                    targets: tipText,
-                    alpha: 0,
-                    duration: 300,
-                    onComplete: () => {
-                        let newIndex = currentTipIndex;
+        this.cycleTip = () => {
+            this.tweens.add({
+                targets: this.tipText,
+                alpha: 0,
+                duration: 300,
+                onComplete: () => {
+                    let tips = getActiveTips();
+                    let newIndex = currentTipIndex;
+                    
+                    if (tips.length > 1) {
                         while(newIndex === currentTipIndex) {
                             newIndex = Phaser.Math.Between(0, tips.length - 1);
                         }
-                        currentTipIndex = newIndex;
-                        tipText.setText(tips[currentTipIndex]);
-                        
-                        this.tweens.add({ 
-                            targets: tipText, 
-                            alpha: 1, 
-                            duration: 300 
-                        });
+                    } else {
+                        newIndex = 0;
                     }
-                });
-            }
+                    
+                    currentTipIndex = newIndex;
+                    this.tipText.setText(tips[currentTipIndex]);
+                    
+                    this.tweens.add({ 
+                        targets: this.tipText, 
+                        alpha: 1, 
+                        duration: 300 
+                    });
+                }
+            });
+        };
+
+        this.tipTimerEvent = this.time.addEvent({
+            delay: 8000,
+            loop: true,
+            callback: this.cycleTip
         });
     }
 
@@ -1133,7 +1168,7 @@ class MenuScene extends Phaser.Scene {
         bg.lineStyle(4, 0x0066aa, 1);
         bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
 
-        const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি (Recent History)", { 
+        const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি (History)", { 
             fontSize: '40px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 

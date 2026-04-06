@@ -55,7 +55,7 @@ class ShopScene extends Phaser.Scene {
         this.createBackground();
 
         // Title
-        const title = this.add.text(cx, 160, "দোকান (Shop)", {
+        const title = this.add.text(cx, 160, "দোকান", {
             fontSize: "76px",
             fontFamily: "'Anek Bangla'",
             fontWeight: 800,
@@ -122,7 +122,6 @@ class ShopScene extends Phaser.Scene {
 
                 const minScroll = this.visibleHeight - this.contentHeight - 50; 
 
-                // Rubber banding limits
                 if (newY > this.listStartY) {
                     newY = this.listStartY + (newY - this.listStartY) * 0.4;
                 } else if (newY < this.listStartY + minScroll) {
@@ -183,21 +182,19 @@ class ShopScene extends Phaser.Scene {
             });
         }
 
-        // Delta-time adjusted scrolling physics (inertia)
         if (this.contentHeight > this.visibleHeight && this.scrollState) {
             if (!this.scrollState.isDragging) {
                 const minScroll = this.visibleHeight - this.contentHeight - 50;
                 let vY = this.scrollState.velocityY;
                 let currentY = this.container.y;
 
-                const timeScale = delta / 16.66; // Normalize to ~60FPS
+                const timeScale = delta / 16.66; 
 
                 if (Math.abs(vY) > 0.01) {
                     currentY += vY * 16 * timeScale;
                     this.scrollState.velocityY *= Math.pow(0.92, timeScale);
                 }
 
-                // Elastic Bounds Recovery
                 if (currentY > this.listStartY) {
                     currentY += (this.listStartY - currentY) * 0.15 * timeScale;
                     if (Math.abs(this.listStartY - currentY) < 0.5) currentY = this.listStartY;
@@ -213,7 +210,6 @@ class ShopScene extends Phaser.Scene {
         }
     }
 
-    // --- AUDIO HELPER ---
     playSound(key, baseVolume = 1.0) {
         if (!this.sound || !this.cache.audio.exists(key)) return;
         
@@ -224,8 +220,6 @@ class ShopScene extends Phaser.Scene {
             this.sound.play(key, { volume: finalVolume });
         }
     }
-
-    // --- UI CREATION METHODS ---
 
     createTopUI() {
         const backContainer = this.add.container(100, 65);
@@ -278,19 +272,21 @@ class ShopScene extends Phaser.Scene {
 
     createBackground() {
         this.backgroundLayers = [];
+        const themeColors = window.getThemeColors();
+
         if (!this.textures.exists('animated_bg_grad')) {
             const gradBg = this.make.graphics({ x: 0, y: 0 });
-            gradBg.fillGradientStyle(0x020510, 0x020510, 0x0a1535, 0x0a1535, 1);
+            gradBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
             gradBg.fillRect(0, 0, 720, 1280);
-            gradBg.fillGradientStyle(0x0a1535, 0x0a1535, 0x020510, 0x020510, 1);
+            gradBg.fillGradientStyle(themeColors.bgBot, themeColors.bgBot, themeColors.bgTop, themeColors.bgTop, 1);
             gradBg.fillRect(0, 1280, 720, 1280);
             gradBg.generateTexture('animated_bg_grad', 720, 2560);
             gradBg.destroy();
         }
         this.scrollingBg = this.add.tileSprite(360, 640, 720, 1280, 'animated_bg_grad').setDepth(-100);
 
-        const neb1 = this.add.circle(250, 100, 250, 0x0044aa, 0.1).setDepth(-99);
-        const neb2 = this.add.circle(550, 1100, 300, 0x4400aa, 0.1).setDepth(-99);
+        const neb1 = this.add.circle(250, 100, 250, themeColors.nebulae[0], 0.1).setDepth(-99);
+        const neb2 = this.add.circle(550, 1100, 300, themeColors.nebulae[1] || themeColors.nebulae[0], 0.1).setDepth(-99);
         this.tweens.add({
             targets: [neb1, neb2], x: 650, y: 750, scale: 1.15, alpha: 0.15,
             duration: 8000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
@@ -306,15 +302,16 @@ class ShopScene extends Phaser.Scene {
             }
             this.backgroundLayers.push({ group: group, speed: speed });
         };
-        createLayer(50, 0.4, 0x555588, 1.5, 0.5);
-        createLayer(30, 1.0, 0x88aaff, 2, 0.8);
-        createLayer(15, 2.2, 0xffffff, 2.5, 1);
+        createLayer(50, 0.4, themeColors.debris, 1.5, 0.5);
+        createLayer(30, 1.0, themeColors.starFast, 2, 0.8);
+        createLayer(15, 2.2, themeColors.starDistant, 2.5, 1);
     }
 
     createTabs(cx) {
         const y = 250;
-        const totalWidth = 480;
+        const totalWidth = 540; 
         const height = 65;
+        const btnWidth = totalWidth / 3;
         const container = this.add.container(cx, y);
 
         const baseBg = this.add.graphics();
@@ -324,28 +321,33 @@ class ShopScene extends Phaser.Scene {
         baseBg.strokeRoundedRect(-totalWidth / 2, -height / 2, totalWidth, height, height / 2);
         container.add(baseBg);
 
-        const btnWidth = totalWidth / 2;
         this.tabHighlight = this.add.graphics();
         this.tabHighlight.fillStyle(0xffffff, 0.15);
         this.tabHighlight.fillRoundedRect(-btnWidth / 2 + 4, -height / 2 + 4, btnWidth - 8, height - 8, (height - 8) / 2);
-        this.tabHighlight.x = -btnWidth / 2;
+        this.tabHighlight.x = -btnWidth; 
         container.add(this.tabHighlight);
 
-        this.shipTabTxt = this.add.text(-btnWidth / 2, 0, "🚀 শীপ (Jahaj)", {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
+        this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 রকেট", {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
         }).setOrigin(0.5);
 
-        this.boosterTabTxt = this.add.text(btnWidth / 2, 0, "⚡ বুস্টার (Boosters)", {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
+        this.boosterTabTxt = this.add.text(0, 0, "⚡ বুস্টার", {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
         }).setOrigin(0.5);
 
-        const shipHitArea = this.add.rectangle(-btnWidth / 2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const boosterHitArea = this.add.rectangle(btnWidth / 2, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        this.themeTabTxt = this.add.text(btnWidth, 0, "🌌 থিম", {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
+        }).setOrigin(0.5);
+
+        const shipHitArea = this.add.rectangle(-btnWidth, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const boosterHitArea = this.add.rectangle(0, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const themeHitArea = this.add.rectangle(btnWidth, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         shipHitArea.on('pointerdown', () => this.switchTab("ships"));
         boosterHitArea.on('pointerdown', () => this.switchTab("boosters"));
+        themeHitArea.on('pointerdown', () => this.switchTab("themes"));
 
-        container.add([this.shipTabTxt, this.boosterTabTxt, shipHitArea, boosterHitArea]);
+        container.add([this.shipTabTxt, this.boosterTabTxt, this.themeTabTxt, shipHitArea, boosterHitArea, themeHitArea]);
     }
 
     switchTab(tab) {
@@ -354,18 +356,23 @@ class ShopScene extends Phaser.Scene {
 
         this.playSound('sfx_click', 0.7);
 
-        const btnWidth = 480 / 2;
+        const btnWidth = 540 / 3;
+        let targetX = 0;
+        if (tab === "ships") targetX = -btnWidth;
+        else if (tab === "boosters") targetX = 0;
+        else if (tab === "themes") targetX = btnWidth;
+
         this.tweens.add({
             targets: this.tabHighlight,
-            x: tab === "ships" ? -btnWidth / 2 : btnWidth / 2,
+            x: targetX,
             duration: 250,
             ease: 'Cubic.out'
         });
 
         this.shipTabTxt.setColor(tab === "ships" ? "#ffffff" : "#88bbdd");
         this.boosterTabTxt.setColor(tab === "boosters" ? "#ffffff" : "#88bbdd");
+        this.themeTabTxt.setColor(tab === "themes" ? "#ffffff" : "#88bbdd");
 
-        // Reset scroll position
         this.containerY = this.listStartY;
         this.container.y = this.listStartY;
         this.refreshContent();
@@ -375,8 +382,10 @@ class ShopScene extends Phaser.Scene {
         this.container.removeAll(true);
         if (this.currentTab === "ships") {
             this.renderShipList();
-        } else {
+        } else if (this.currentTab === "boosters") {
             this.renderBoosterList();
+        } else if (this.currentTab === "themes") {
+            this.renderThemeList();
         }
     }
 
@@ -388,19 +397,16 @@ class ShopScene extends Phaser.Scene {
             const col = i % 2;
             const row = Math.floor(i / 2);
             
-            // X: center coordinates for 2 columns within 720 width
             const xPos = col === 0 ? 190 : 530; 
-            // Y: Card height ~400, spacing 420. Start at Y=220 to align properly
             const yPos = row * 430 + 220; 
 
             this.createShipCard(ship, xPos, yPos);
-            this.contentHeight = yPos + 220; // Extend height to bottom of the card
+            this.contentHeight = yPos + 220; 
         });
     }
 
     renderBoosterList() {
         const boosterData = window.BoosterData || [];
-        
         boosterData.forEach((item, i) => {
             const col = i % 2;
             const row = Math.floor(i / 2);
@@ -413,22 +419,33 @@ class ShopScene extends Phaser.Scene {
         });
     }
 
+    renderThemeList() {
+        const themeData = window.ThemeData || [];
+        themeData.forEach((theme, i) => {
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            
+            const xPos = col === 0 ? 190 : 530;
+            const yPos = row * 430 + 220; 
+
+            this.createThemeCard(theme, xPos, yPos);
+            this.contentHeight = yPos + 220;
+        });
+    }
+
     createShipCard(ship, x, y) {
         const cardContainer = this.add.container(x, y);
 
-        // --- Card Background ---
         const bg = this.add.graphics();
         bg.fillStyle(0x000c22, 0.75);
-        bg.fillRoundedRect(-155, -205, 310, 410, 20); // Compact vertical layout
+        bg.fillRoundedRect(-155, -205, 310, 410, 20); 
         bg.lineStyle(3, 0x0066aa, 0.6);
         bg.strokeRoundedRect(-155, -205, 310, 410, 20);
 
-        // --- Ship Preview ---
         const previewKey = ship.id !== "default" ? `${ship.id}_lv1` : "player_lv1";
         const finalKey = this.textures.exists(previewKey) ? previewKey : "player_lv1";
         const preview = this.add.image(0, -95, finalKey).setScale(0.75);
 
-        // --- Text Info ---
         const name = this.add.text(0, 10, ship.name, {
             fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
             align: 'center', wordWrap: { width: 280 }
@@ -441,7 +458,6 @@ class ShopScene extends Phaser.Scene {
 
         cardContainer.add([bg, preview, name, desc]);
 
-        // --- Button Logic ---
         const isOwned = GameState.ownedShips.includes(ship.id);
         const isEquipped = GameState.equippedShip === ship.id;
         const craftingEnd = GameState.craftingQueue[ship.id];
@@ -519,7 +535,6 @@ class ShopScene extends Phaser.Scene {
             }
         }
 
-        // --- Action Button ---
         const btnContainer = this.add.container(0, 145);
 
         const btnBg = this.add.graphics();
@@ -546,7 +561,6 @@ class ShopScene extends Phaser.Scene {
                 downY = pointer.y;
                 this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
             });
-            // Separating pointerup from pointerdown ensures we don't accidentally click while scrolling
             hitArea.on('pointerup', (pointer) => {
                 this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
                 if (Math.abs(pointer.y - downY) < 15) {
@@ -562,14 +576,12 @@ class ShopScene extends Phaser.Scene {
     createBoosterCard(item, x, y) {
         const cardContainer = this.add.container(x, y);
 
-        // --- Card Background ---
         const bg = this.add.graphics();
         bg.fillStyle(0x000c22, 0.75);
         bg.fillRoundedRect(-155, -205, 310, 410, 20);
         bg.lineStyle(3, 0x5500aa, 0.6);
         bg.strokeRoundedRect(-155, -205, 310, 410, 20);
 
-        // --- Icon & Text ---
         const iconKey = this.textures.exists(item.icon) ? item.icon : "ui_debris_icon";
         const icon = this.add.image(0, -90, iconKey).setScale(1.5);
 
@@ -590,7 +602,6 @@ class ShopScene extends Phaser.Scene {
 
         cardContainer.add([bg, icon, name, desc, countText]);
 
-        // --- Purchase Button ---
         const canAfford = GameState.debris >= item.cost;
         const btnColor1 = canAfford ? 0x8800ff : 0x330055;
         const btnColor2 = canAfford ? 0x4400aa : 0x110022;
@@ -624,7 +635,7 @@ class ShopScene extends Phaser.Scene {
         
         hitArea.on('pointerup', (pointer) => {
             this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
-            if (Math.abs(pointer.y - downY) < 15) { // Prevent trigger if scrolling
+            if (Math.abs(pointer.y - downY) < 15) { 
                 if (canAfford) {
                     this.playSound('sfx_coin');
                     GameState.debris -= item.cost;
@@ -643,6 +654,119 @@ class ShopScene extends Phaser.Scene {
         });
     }
 
+    createThemeCard(theme, x, y) {
+        const cardContainer = this.add.container(x, y);
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0x000c22, 0.75);
+        bg.fillRoundedRect(-155, -205, 310, 410, 20);
+        bg.lineStyle(3, 0x0066aa, 0.6);
+        bg.strokeRoundedRect(-155, -205, 310, 410, 20);
+
+        // Preview rendering for the theme directly inside the card
+        const previewBg = this.add.graphics();
+        previewBg.fillGradientStyle(theme.colors.bgTop, theme.colors.bgTop, theme.colors.bgBot, theme.colors.bgBot, 1);
+        previewBg.fillRoundedRect(-130, -180, 260, 150, 10);
+        previewBg.lineStyle(2, 0xffffff, 0.3);
+        previewBg.strokeRoundedRect(-130, -180, 260, 150, 10);
+        
+        previewBg.fillStyle(theme.colors.starBase, 0.8);
+        previewBg.fillCircle(-80, -130, 2);
+        previewBg.fillCircle(-20, -150, 3);
+        previewBg.fillCircle(50, -110, 2);
+        previewBg.fillCircle(90, -140, 1);
+        previewBg.fillStyle(theme.colors.starFast, 0.6);
+        previewBg.fillCircle(-50, -80, 2);
+        previewBg.fillCircle(70, -60, 2);
+
+        const name = this.add.text(0, -10, theme.name, {
+            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
+            align: 'center', wordWrap: { width: 280 }
+        }).setOrigin(0.5);
+
+        const desc = this.add.text(0, 50, theme.desc, {
+            fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
+            align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
+        }).setOrigin(0.5);
+
+        cardContainer.add([bg, previewBg, name, desc]);
+
+        const isOwned = GameState.ownedThemes.includes(theme.id);
+        const isEquipped = GameState.equippedTheme === theme.id;
+
+        let btnColor1 = 0x000000, btnColor2 = 0x000000, btnStroke = 0x000000;
+        let btnTextStr = "";
+        let onClick = null;
+
+        if (isEquipped) {
+            btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "EQUIPPED";
+        } else if (isOwned) {
+            btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "EQUIP";
+            onClick = () => {
+                this.playSound('sfx_powerup');
+                GameState.equippedTheme = theme.id;
+                this.updateCurrencyDisplay();
+                // Also update shop background instantly
+                this.textures.remove('animated_bg_grad');
+                this.createBackground();
+                this.refreshContent();
+            };
+        } else {
+            if (theme.costType === "keys") {
+                const canAfford = GameState.keys >= theme.cost;
+                btnColor1 = canAfford ? 0xaa6600 : 0x442200; btnColor2 = canAfford ? 0x663300 : 0x221100;
+                btnStroke = canAfford ? 0xffaa00 : 0x664400;
+                btnTextStr = `${theme.cost} KEYS`;
+                onClick = () => {
+                    if (canAfford) {
+                        this.playSound('sfx_coin');
+                        GameState.keys -= theme.cost;
+                        GameState.ownedThemes.push(theme.id);
+                        this.updateCurrencyDisplay();
+                        this.refreshContent();
+                    } else {
+                        this.playSound('sfx_error', 0.4);
+                        this.cameras.main.shake(100, 0.005);
+                    }
+                };
+            } else {
+                btnTextStr = "FREE";
+            }
+        }
+
+        const btnContainer = this.add.container(0, 145);
+
+        const btnBg2 = this.add.graphics();
+        btnBg2.fillGradientStyle(btnColor1, btnColor1, btnColor2, btnColor2, 1);
+        btnBg2.fillRoundedRect(-110, -30, 220, 60, 30);
+        btnBg2.lineStyle(3, btnStroke, 1);
+        btnBg2.strokeRoundedRect(-110, -30, 220, 60, 30);
+
+        const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const btnLabel = this.add.text(0, 0, btnTextStr, {
+            fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
+        }).setOrigin(0.5);
+
+        btnContainer.add([btnBg2, btnLabel, hitArea]);
+        cardContainer.add(btnContainer);
+        this.container.add(cardContainer);
+
+        if (onClick) {
+            let downY = 0;
+            hitArea.on('pointerdown', (pointer) => {
+                downY = pointer.y;
+                this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
+            });
+            hitArea.on('pointerup', (pointer) => {
+                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
+                if (Math.abs(pointer.y - downY) < 15) onClick();
+            });
+            hitArea.on('pointerout', () => {
+                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
+            });
+        }
+    }
+
     updateCurrencyDisplay() {
         if (this.kText) this.kText.setText((GameState.keys || 0).toString());
         if (this.dText) this.dText.setText((GameState.debris || 0).toString());
@@ -652,11 +776,9 @@ class ShopScene extends Phaser.Scene {
     updateTimers() {
         if (this.currentTab !== "ships") return;
 
-        // Iterate through UI elements to find active timers
         this.container.list.forEach(cardContainer => {
             if (cardContainer.type === 'Container' && cardContainer.list) {
                 cardContainer.list.forEach(item => {
-                    // Check inside button containers
                     if (item.type === 'Container' && item.list) {
                         item.list.forEach(grandChild => {
                             if (grandChild.isTimer && grandChild.shipId) {
