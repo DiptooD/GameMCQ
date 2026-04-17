@@ -13,13 +13,15 @@ class QuestionScene extends Phaser.Scene {
         const h = this.cameras.main.height;
         const w = 720; 
 
-        // --- 1. DATA INITIALIZATION ---
         if (GameState.currentQuestions && GameState.currentQuestions.length > 0) {
             this.questions = GameState.currentQuestions;
         } else {
             this.questions = this.cache.json.get('questions_data') || [];
         }
         this.qIdx = 0;
+
+        // --- 1. MAIN UI CONTAINER (For user-adjusted UI scaling) ---
+        this.qContainer = this.add.container(0, 0);
 
         // --- 2. GLASS PANEL SETUP ---
         const boxX = 20;
@@ -29,15 +31,15 @@ class QuestionScene extends Phaser.Scene {
 
         this.qPanel = this.add.graphics();
         this.drawGlassPanel(this.qPanel, boxX, boxY, boxW, boxH);
+        this.qContainer.add(this.qPanel);
 
         // --- 3. THE "POWER ROW" HEADER ---
         const headerY = boxY + 45; 
         const edgePadding = 45;    
 
-        // A. LEFT GROUP: CURRENCY (Keys & Debris)
         const leftAnchor = boxX + edgePadding;
         
-        this.add.image(leftAnchor, headerY, "ui_key")
+        const keyIcon = this.add.image(leftAnchor, headerY, "ui_key")
             .setScale(0.70).setOrigin(0.7, 0.5); 
         this.keyText = this.add.text(leftAnchor + 15, headerY, GameState.keys || "0", {
             fontSize: "26px", fontFamily: "Arial", color: "#ffd700", stroke: "#000000", strokeThickness: 4
@@ -55,10 +57,9 @@ class QuestionScene extends Phaser.Scene {
             this.debrisText.setVisible(false);
         }
         
-        // B. CENTER GROUP: HEARTS 
-        this.hearts = this.add.group();
+        this.heartsContainer = this.add.container(0, 0);
+        this.qContainer.add([keyIcon, this.keyText, this.debrisIcon, this.debrisText, this.heartsContainer]);
 
-        // C. RIGHT GROUP: CONTROLS (Skip & Pause)
         const rightAnchor = (boxX + boxW - edgePadding) - 2;
 
         const pauseBtn = this.add.image(rightAnchor + 2, headerY, "ui_pause")
@@ -90,6 +91,8 @@ class QuestionScene extends Phaser.Scene {
             this.trySkipQuestion(); 
         });
         
+        this.qContainer.add([pauseBtn, this.skipBtn]);
+
         // --- 4. QUESTION TEXT SECTION ---
         const questionAreaY = boxY + 140; 
         this.qText = this.add.text(boxX + (boxW / 2), questionAreaY, "", {
@@ -118,6 +121,8 @@ class QuestionScene extends Phaser.Scene {
             padding: { x: 12, y: 6 },
         }).setOrigin(1, 0.5); 
         this.qBankTag.originalY = tagY;
+
+        this.qContainer.add([this.qText, this.qBankTag]);
 
         // --- 5. OPTION BUTTONS ---
         this.optionBtns = [];
@@ -151,6 +156,7 @@ class QuestionScene extends Phaser.Scene {
             }).setOrigin(0.5);
 
             container.add([bg, txt]);
+            this.qContainer.add(container);
 
             bg.on("pointerdown", () => {
                 const gameScene = this.scene.get("GameScene");
@@ -186,8 +192,7 @@ class QuestionScene extends Phaser.Scene {
         this.quickPanelState = localStorage.getItem('settings_quickPanel') || 'right';
         this.quickPanelEnabled = (this.quickPanelState !== 'hidden');
         
-        const qpX = (this.quickPanelState === 'left') ? 15 : 618;
-        this.quickAnsContainer = this.add.container(qpX, 760); 
+        this.quickAnsContainer = this.add.container(0, 760); 
         this.quickAnsContainer.setAlpha(0); 
         this.quickBtns = [];
 
@@ -234,7 +239,6 @@ class QuestionScene extends Phaser.Scene {
                 this.quickBtns.push({ bg: btnBg, txt: btnTxt, originalY: btnY });
             }
 
-            // --- 6.1 QUICK SKIP BUTTON ---
             const qSkipY = -50; 
             const qSkipBg = this.add.rectangle(45, qSkipY, 112, 60, 0x000510, 0.3);
             qSkipBg.setStrokeStyle(3, 0xffffff, 0.2);
@@ -269,8 +273,49 @@ class QuestionScene extends Phaser.Scene {
             
             this.quickSkipBtn = { bg: qSkipBg, txt: this.quickSkipTxt, originalY: qSkipY };
         }
+
+        // --- 7. INSTRUCTION TEXT ---
+        this.instructionText = this.add.text(boxX + (boxW / 2), boxY + boxH + 27, "উত্তর দিতে হলে আগে শত্রু মেরে ব্যাটারী সংগ্রহ করুন", {
+            fontSize: "28px", 
+            fontFamily: "'Anek Bangla'",
+            color: "#ffff00", 
+            stroke: "#000000",
+            strokeThickness: 1
+        }).setOrigin(0.5).setAlpha(0);
+
+        this.readyText = this.add.text(boxX + (boxW / 2), boxY + boxH + 27, "Ready! উত্তর দিন!", {
+            fontSize: "31px", 
+            fontFamily: "'Anek Bangla'",
+            fontWeight: 'bold',
+            color: "#00ff00", 
+            stroke: "#000000",
+            strokeThickness: 2
+        }).setOrigin(0.5).setAlpha(0);
+
+        this.qContainer.add([this.instructionText, this.readyText]);
         
-        // --- 7. BOTTOM HUD ---
+        // --- Apply UI Scale Overrides based on -5 to 5 Range ---
+        let uiScaleLevel = parseInt(localStorage.getItem('settings_uiScaleLevel'));
+        if (isNaN(uiScaleLevel)) uiScaleLevel = 0;
+        
+        // Map: -5 = 0.75x, 0 = 1.0x, +5 = 1.25x
+        let uiScale = 1.0 + (uiScaleLevel * 0.05); 
+        
+        this.qContainer.setScale(uiScale);
+        this.qContainer.setX(360 * (1 - uiScale));
+        this.qContainer.setY(10 * (1 - uiScale)); 
+        
+        if (this.quickPanelEnabled) {
+            this.quickAnsContainer.setScale(uiScale);
+            if (this.quickPanelState === 'left') {
+                this.quickAnsContainer.setX(15 * uiScale);
+            } else {
+                this.quickAnsContainer.setX(720 - (102 * uiScale));
+            }
+            this.quickAnsContainer.setY(760 - (460 * (uiScale - 1) / 2));
+        }
+
+        // --- 8. BOTTOM HUD (No Scaling applied here to ensure safety boundaries) ---
         const uiY = h - 80;
         
         const botBar = this.add.graphics();
@@ -294,24 +339,6 @@ class QuestionScene extends Phaser.Scene {
         this.refreshQuestion();
         this.updateBatteryVisuals();
         this.setButtonsState(false);
-        
-        // --- INSTRUCTION TEXT ---
-        this.instructionText = this.add.text(boxX + (boxW / 2), boxY + boxH + 27, "উত্তর দিতে হলে আগে শত্রু মেরে ব্যাটারী সংগ্রহ করুন", {
-            fontSize: "28px", 
-            fontFamily: "'Anek Bangla'",
-            color: "#ffff00", 
-            stroke: "#000000",
-            strokeThickness: 1
-        }).setOrigin(0.5).setAlpha(0);
-
-        this.readyText = this.add.text(boxX + (boxW / 2), boxY + boxH + 27, "Ready! উত্তর দিন!", {
-            fontSize: "31px", 
-            fontFamily: "'Anek Bangla'",
-            fontWeight: 'bold',
-            color: "#00ff00", 
-            stroke: "#000000",
-            strokeThickness: 2
-        }).setOrigin(0.5).setAlpha(0);
 
         this.showBatteryWarning = () => {
             if (this.warningTween) this.warningTween.stop();
@@ -362,7 +389,7 @@ class QuestionScene extends Phaser.Scene {
     }
 
     refreshHearts() {
-        this.hearts.clear(true, true);
+        this.heartsContainer.removeAll(true);
         const yPos = 65; 
         const heartSpacing = 40; 
         
@@ -372,8 +399,8 @@ class QuestionScene extends Phaser.Scene {
         const startX = boxCenter - (totalWidth / 2);
 
         for (let i = 0; i < currentLives; i++) {
-            const heart = this.hearts.create(startX + (i * heartSpacing), yPos, "ui_heart")
-                .setScale(0.95); 
+            const heart = this.add.image(startX + (i * heartSpacing), yPos, "ui_heart").setScale(0.95); 
+            this.heartsContainer.add(heart);
             
             this.tweens.add({
                 targets: heart,
@@ -387,7 +414,7 @@ class QuestionScene extends Phaser.Scene {
     }
 
     update() {
-        if (this.hearts.getLength() !== GameState.lives) {
+        if (this.heartsContainer && this.heartsContainer.list.length !== GameState.lives) {
             this.refreshHearts();
         }
         
@@ -412,7 +439,6 @@ class QuestionScene extends Phaser.Scene {
         
         const isNowReady = GameState.battery >= 100;
         
-        // MODIFICATION: Added && !this.isProcessing to prevent the colors from being overridden
         if (isNowReady !== this.wasReady && !this.isProcessing) {
             if (isNowReady && !GameState.bossActive) {
                 this.playSFX('sfx_q_ready', 0.6, false); 
@@ -551,7 +577,6 @@ class QuestionScene extends Phaser.Scene {
         const elements = [this.qText, this.qBankTag, ...this.optionBtns.map(b => b.container)];
         const bankName = q.bank || q.category || "Unknown"; 
         
-        // Helper to strip specific punctuation
         const cleanStr = (str) => typeof str === 'string' ? str.replace(/।/g, '') : str;
         const cleanQuestion = cleanStr(q.question);
 
@@ -642,8 +667,6 @@ class QuestionScene extends Phaser.Scene {
                         
                         this.playSFX('sfx_tick', 0.2);
                         
-                        // BUG FIX: Re-evaluate and apply button state based on current battery
-                        // This ensures skipped questions regain their "ready" styling
                         const isReady = (GameState.battery >= 100);
                         this.setButtonsState(isReady);
                         this.updateReadyState(isReady);
@@ -669,7 +692,6 @@ class QuestionScene extends Phaser.Scene {
         this.wasReady = false; 
         this.updateReadyState(false);
 
-        // MODIFICATION: Stop the bouncing pulse animation immediately so it stays steady while colored
         this.optionBtns.forEach(btn => {
             if (btn.pulseTween) {
                 btn.pulseTween.stop();
@@ -707,8 +729,6 @@ class QuestionScene extends Phaser.Scene {
             if (gameScene) {
                 const originalPlaySFX = gameScene.playSFX;
                 
-                // Use Try...Finally block to ensure we don't break the game scene's audio
-                // if an error occurs while triggering the shockwave
                 try {
                     gameScene.playSFX = function(key, vol, allowJitter) {
                         if (key !== 'sfx_shockwave') {

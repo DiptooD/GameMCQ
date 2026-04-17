@@ -32,8 +32,8 @@ const config = {
   input: {
     activePointers: 2, 
   },
-  // ADDED ReadingScene TO THE SCENE ARRAY
-  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, GameScene, QuestionScene, PauseScene, DeathScene]
+  // ADDED SettingsScene TO THE SCENE ARRAY
+  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, GameScene, QuestionScene, PauseScene, DeathScene]
 };
 
 Promise.all([
@@ -90,11 +90,18 @@ document.addEventListener("deviceready", () => {
         const isShopOpen = sceneManager.isActive("ShopScene");
         const isWheelOpen = sceneManager.isActive("SpinWheelScene");
         const isDeathOpen = sceneManager.isActive("DeathScene");
-        const isReadingOpen = sceneManager.isActive("ReadingScene"); // Added check
+        const isReadingOpen = sceneManager.isActive("ReadingScene"); 
+        const isSettingsOpen = sceneManager.isActive("SettingsScene"); 
 
         if (!isMenuOpen) {
             if (now - lastBackTime < 300) return; 
             lastBackTime = now;
+        }
+
+        if (isSettingsOpen) {
+            sceneManager.stop("SettingsScene");
+            sceneManager.resume("MenuScene");
+            return;
         }
 
         if (isWheelOpen || isShopOpen || isReadingOpen) {
