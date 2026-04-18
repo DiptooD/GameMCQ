@@ -298,7 +298,6 @@ class QuestionScene extends Phaser.Scene {
         let uiScaleLevel = parseInt(localStorage.getItem('settings_uiScaleLevel'));
         if (isNaN(uiScaleLevel)) uiScaleLevel = 0;
         
-        // Map: -5 = 0.75x, 0 = 1.0x, +5 = 1.25x
         let uiScale = 1.0 + (uiScaleLevel * 0.05); 
         
         this.qContainer.setScale(uiScale);
@@ -315,7 +314,7 @@ class QuestionScene extends Phaser.Scene {
             this.quickAnsContainer.setY(760 - (460 * (uiScale - 1) / 2));
         }
 
-        // --- 8. BOTTOM HUD (No Scaling applied here to ensure safety boundaries) ---
+        // --- 8. BOTTOM HUD ---
         const uiY = h - 80;
         
         const botBar = this.add.graphics();
@@ -432,10 +431,12 @@ class QuestionScene extends Phaser.Scene {
         }
 
         const safeStage = (GameState.bossStage || 0) + 1;
+        // CHANGED: Automatically renames Level 4+ to "মহাশূন্য"
+        const stageText = safeStage >= 4 ? "Void" : safeStage;
         const safeCount = GameState.correctCount || 0;
         const safeTotal = GameState.totalCorrectNeeded || 10;
 
-        this.correctLabel.setText(`লেভেল: ${safeStage}  |  সঠিক: ${safeCount}/${safeTotal}`);
+        this.correctLabel.setText(`লেভেল: ${stageText}  |  সঠিক: ${safeCount}/${safeTotal}`);
         
         const isNowReady = GameState.battery >= 100;
         
@@ -602,6 +603,13 @@ class QuestionScene extends Phaser.Scene {
 
             this.markQuestionAsSeen(q.question);
             this.tweens.add({ targets: elements, alpha: { from: 0, to: 1 }, duration: 400 });
+
+            // CHANGED: Fixed bug where options remain disabled after Boss Fight UI restores
+            const isReady = (GameState.battery >= 100);
+            this.setButtonsState(isReady);
+            this.updateReadyState(isReady);
+            this.wasReady = isReady;
+
             return;
         }
 
@@ -650,9 +658,12 @@ class QuestionScene extends Phaser.Scene {
                     btn.txt.setColor("#d3d3d3");
                 });
 
-                if (GameState.bossActive) {
+                // CHANGED: Ensure tween sequence does not proceed if Boss Phase intercepts it
+                const gameScene = this.scene.get('GameScene');
+                if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
                     this.isProcessing = false; 
                     elements.forEach(el => el.setAlpha(0)); 
+                    this.quickAnsContainer.setAlpha(0);
                     return; 
                 }
 
@@ -758,6 +769,14 @@ class QuestionScene extends Phaser.Scene {
         this.time.delayedCall(i === q.answer ? 1500 : 3500, () => {
             this.isProcessing = false;  
             this.qIdx++;
+
+            // CHANGED: Prevent refreshing question if the Game Scene is actively transitioning to Boss
+            const gameScene = this.scene.get('GameScene');
+            if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
+                this.toggleBattleMode(true);
+                return;
+            }
+
             this.refreshQuestion();
         });
     }
@@ -818,17 +837,27 @@ class QuestionScene extends Phaser.Scene {
     toggleBattleMode(isBossFight) {
         const alpha = isBossFight ? 0 : 1;
         
-        this.qPanel.setAlpha(alpha);
-        this.qText.setAlpha(alpha);
-        this.qBankTag.setAlpha(alpha);
-        this.skipBtn.setAlpha(alpha); 
-        
-        this.optionBtns.forEach(btn => {
-            btn.container.setAlpha(alpha);
-            if (isBossFight) btn.bg.disableInteractive(); 
-        });
+        // CHANGED: Force kill all active tweens to prevent ghost components appearing
+        const elementsToKill = [this.qPanel, this.qText, this.qBankTag, this.skipBtn, this.quickAnsContainer];
+        this.optionBtns.forEach(btn => elementsToKill.push(btn.container, btn.bg, btn.txt));
+        this.quickBtns.forEach(btn => elementsToKill.push(btn.bg, btn.txt));
+        if (this.quickSkipBtn) elementsToKill.push(this.quickSkipBtn.bg, this.quickSkipBtn.txt);
+
+        this.tweens.killTweensOf(elementsToKill);
 
         if (isBossFight) {
+            this.qPanel.setAlpha(0);
+            this.qText.setAlpha(0);
+            this.qBankTag.setAlpha(0);
+            this.skipBtn.setAlpha(0);
+            
+            this.optionBtns.forEach(btn => {
+                btn.container.setAlpha(0);
+                btn.bg.disableInteractive();
+                if (btn.pulseTween) { btn.pulseTween.stop(); btn.pulseTween = null; }
+                btn.container.setScale(1);
+            });
+
             this.quickAnsContainer.setAlpha(0);
             this.quickBtns.forEach(btn => btn.bg.disableInteractive());
             if (this.quickSkipBtn) this.quickSkipBtn.bg.disableInteractive();
@@ -839,6 +868,8 @@ class QuestionScene extends Phaser.Scene {
             if (this.readyTween) this.readyTween.stop();
         } else {
             this.wasReady = null; 
+            this.qPanel.setAlpha(1);
+            this.skipBtn.setAlpha(1);
         }
     }
 }
