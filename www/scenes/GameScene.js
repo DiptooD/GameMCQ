@@ -50,6 +50,7 @@ class GameScene extends GameBase {
         if (typeof GameState.boosters === 'undefined') GameState.boosters = {};
 
         if (typeof GameTextures !== 'undefined') GameTextures.init(this);
+        if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
 
         this.events.on('shutdown', this.shutdown, this);
@@ -84,6 +85,9 @@ class GameScene extends GameBase {
             .setCollideWorldBounds(true)
             .setScale(0.9);
         this.player.setSize(90, 90);
+        
+        // Initial setup for ship animation
+        this.applyShipAnimation(GameState.equippedShip || "default");
 
         this.bullets = this.physics.add.group();
         this.missiles = this.physics.add.group();
@@ -171,6 +175,44 @@ class GameScene extends GameBase {
             bgMusic.setVolume(globalMusicVol); 
             if (!bgMusic.isPlaying) bgMusic.play();
         }
+    }
+
+    applyShipAnimation(shipId) {
+        if (this.shipAnimTween) {
+            this.shipAnimTween.stop();
+        }
+
+        // UNIFIED SIZE! No more tiny or giant birds based on tier. 
+        let baseScale = 0.9;
+        let scaleTarget = 0.75;
+        let duration = 200;
+        
+        // Keep the varied flap animation speeds so they feel different
+        if (["ship_d1", "ship_d2", "ship_k1"].includes(shipId)) {
+            duration = 100; // very fast flutter
+        } else if (["ship_k3", "ship_k7", "ship_d5"].includes(shipId)) {
+            duration = 180;
+        } else if (["ship_k4", "ship_k8", "ship_d6", "ship_d7"].includes(shipId)) {
+            duration = 450; // slow majestic soar
+        } else if (shipId === "ship_d4") {
+            duration = 150; // bat snap
+        } else {
+            duration = 250;
+        }
+
+        this.player.setScale(baseScale);
+        this.player.setAngle(0);
+
+        // Realistic bird flap
+        this.shipAnimTween = this.tweens.add({
+            targets: this.player,
+            scaleX: scaleTarget,
+            duration: duration,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Quad.easeIn',
+            yoyoEase: 'Sine.easeOut'
+        });
     }
 
     applyEnemyModifiers(e) {
@@ -334,6 +376,7 @@ class GameScene extends GameBase {
         }
         this.time.timeScale = 1.0;
 
+        if (this.shipAnimTween) this.shipAnimTween.stop();
         this.tweens.killAll();
         this.time.removeAllEvents();
         
@@ -434,6 +477,7 @@ class GameScene extends GameBase {
         if (this.player.texture.key !== shipTexture) {
             this.player.setTexture(shipTexture);
             this.tweens.add({ targets: this.player, scaleX: 1.3, scaleY: 1.3, duration: 100, yoyo: true });
+            this.applyShipAnimation(equipped);
         }
 
         this.distantStars.children.each(s => { s.y += 0.3 * this.backgroundSpeed; if (s.y > hView) s.y = -10; });
@@ -742,32 +786,36 @@ class GameScene extends GameBase {
         const y = this.player.y - 60;
         const stage = GameState.bossStage;
         const level = GameState.weaponLevel;
+        const equip = GameState.equippedShip || "default";
+
+        let mainTex = this.textures.exists(`bullet_${equip}`) ? `bullet_${equip}` : "bullet_default";
+        let sideTex = this.textures.exists(`side_bullet_${equip}`) ? `side_bullet_${equip}` : "side_bullet_default";
 
         this.playSFX('sfx_shoot', 0.5);
 
         if (level === 1) {
-            this.bullets.create(x, y, "bullet").setVelocityY(-1100).setScale(1.2);
+            this.bullets.create(x, y, mainTex).setVelocityY(-1100).setScale(1.2);
         } else if (level === 2) {
-            this.bullets.create(x - 22, y, "bullet").setVelocityY(-1100).setScale(1.1);
-            this.bullets.create(x + 22, y, "bullet").setVelocityY(-1100).setScale(1.1);
+            this.bullets.create(x - 22, y, mainTex).setVelocityY(-1100).setScale(1.1);
+            this.bullets.create(x + 22, y, mainTex).setVelocityY(-1100).setScale(1.1);
         } else if (level === 3) {
-            this.bullets.create(x - 18, y, "bullet").setVelocityY(-1100).setScale(1.1);
-            this.bullets.create(x + 18, y, "bullet").setVelocityY(-1100).setScale(1.1);
+            this.bullets.create(x - 18, y, mainTex).setVelocityY(-1100).setScale(1.1);
+            this.bullets.create(x + 18, y, mainTex).setVelocityY(-1100).setScale(1.1);
 
             const speed = 900;
             const leftAngle = Phaser.Math.DegToRad(-94);
-            const left = this.sideBullets.create(x - 30, y + 10, "side_bullet").setScale(1.2);
+            const left = this.sideBullets.create(x - 30, y + 10, sideTex).setScale(1.2);
             left.setVelocity(Math.cos(leftAngle) * speed, Math.sin(leftAngle) * speed);
             left.setRotation(leftAngle + Math.PI / 2);
 
             const rightAngle = Phaser.Math.DegToRad(-86);
-            const right = this.sideBullets.create(x + 30, y + 10, "side_bullet").setScale(1.2);
+            const right = this.sideBullets.create(x + 30, y + 10, sideTex).setScale(1.2);
             right.setVelocity(Math.cos(rightAngle) * speed, Math.sin(rightAngle) * speed);
             right.setRotation(rightAngle + Math.PI / 2);
 
         } else if (level >= 4) {
-            this.bullets.create(x - 18, y - 10, "bullet").setVelocityY(-1200).setScale(1.1);
-            this.bullets.create(x + 18, y - 10, "bullet").setVelocityY(-1200).setScale(1.1);
+            this.bullets.create(x - 18, y - 10, mainTex).setVelocityY(-1200).setScale(1.1);
+            this.bullets.create(x + 18, y - 10, mainTex).setVelocityY(-1200).setScale(1.1);
 
             const speed = 1050;
             this.sideWeaponCounter++;
@@ -780,7 +828,7 @@ class GameScene extends GameBase {
 
                 angles.forEach((deg, i) => {
                     const rad = Phaser.Math.DegToRad(deg);
-                    const b = this.sideBullets.create(x + xOffsets[i], y + yOffsets[i], "side_bullet");
+                    const b = this.sideBullets.create(x + xOffsets[i], y + yOffsets[i], sideTex);
                     b.setVelocity(Math.cos(rad) * speed, Math.sin(rad) * speed);
                     b.setRotation(rad + Math.PI / 2);
                     b.setScale((i === 0 || i === 3) ? 1.3 : 1.1);
@@ -814,7 +862,7 @@ class GameScene extends GameBase {
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.1);
 
         if (weaponType === "missile") damage = 4;
-        else if (weaponType === "side_bullet") damage = 2;
+        else if (weaponType.includes("side_bullet")) damage = 2;
         else if (weaponType === "lightning_bolt") {
             damage = 3;
             projectile.pierceCount = (projectile.pierceCount || 0) + 1;
@@ -955,7 +1003,7 @@ class GameScene extends GameBase {
         let damage = 1;
 
         if (enemy.hasEnemyShield) {
-            this.playSFX('sfx_enemy_shield_hit', 0.8);
+            this.playSFX('sfx_enemy_shield_hit', 0.05);
             this.hitEmitter.emitParticle(4, projectile.x, projectile.y);
             
             if (weaponType !== "lightning" && weaponType !== "plasma") {
@@ -971,7 +1019,7 @@ class GameScene extends GameBase {
 
             if (enemy.enemyShieldHp <= 0) {
                 enemy.hasEnemyShield = false;
-                this.playSFX('sfx_enemy_shield_break', 0.2);
+                this.playSFX('sfx_enemy_shield_break', 0.1);
                 this.createExplosion(enemy.x, enemy.y, 0xffcc00, 8); 
             }
             return; 
@@ -989,8 +1037,8 @@ class GameScene extends GameBase {
         }
 
         if (weaponType === "missile") damage = 8;
-        else if (weaponType === "side_bullet") damage = 3;
-        else if (weaponType === "bullet") damage = 2;
+        else if (weaponType.includes("side_bullet")) damage = 3;
+        else if (weaponType.includes("bullet")) damage = 2;
         else if (weaponType === "lightning") { damage = 15; this.cameras.main.shake(100, 0.005); this.createExplosion(enemy.x, enemy.y, 0xffff00, 4); }
         else if (weaponType === "ice") {
             damage = 5;
@@ -1303,7 +1351,6 @@ class GameScene extends GameBase {
         const qScene = this.scene.get('QuestionScene');
         if (qScene) {
             this.time.delayedCall(4500, () => {
-                // CHANGED: Trigger choice dialog if returning after Boss 3 (Stage 3)
                 if (GameState.bossStage === 3) {
                     this.showVoidChoiceMenu();
                 } else {
@@ -1315,7 +1362,6 @@ class GameScene extends GameBase {
         }
     }
 
-    // CHANGED: New Feature - Gives the player an elegant prompt after completing the game (Boss 3)
     showVoidChoiceMenu() {
         this.physics.pause();
         this.time.paused = true;
@@ -1346,7 +1392,6 @@ class GameScene extends GameBase {
 
         const btnW = 480, btnH = 86, radius = btnH / 2;
 
-        // Button 1: Continue to Void
         const voidBtnContainer = this.add.container(cx, panelY + 280);
         const voidBg = this.add.graphics();
         const drawVoidBtn = (hover) => {
@@ -1386,7 +1431,6 @@ class GameScene extends GameBase {
         voidHitArea.on('pointerover', () => { this.playSFX('sfx_tick', 0.2); drawVoidBtn(true); });
         voidHitArea.on('pointerout', () => { drawVoidBtn(false); });
 
-        // Button 2: End Game
         const endBtnContainer = this.add.container(cx, panelY + 400);
         const endBg = this.add.graphics();
         const drawEndBtn = (hover) => {
@@ -1593,8 +1637,8 @@ class GameScene extends GameBase {
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.15);
 
         if (weaponType === "missile") damage = 8;
-        else if (weaponType === "side_bullet") damage = 3;
-        else if (weaponType === "bullet") damage = 2;
+        else if (weaponType.includes("side_bullet")) damage = 3;
+        else if (weaponType.includes("bullet")) damage = 2;
         else if (weaponType === "lightning_bolt") { 
             damage = 6; 
             shot.pierceCount = (shot.pierceCount || 0) + 1; 

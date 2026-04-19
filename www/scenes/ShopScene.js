@@ -279,7 +279,7 @@ class ShopScene extends Phaser.Scene {
             gradBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
             gradBg.fillRect(0, 0, 720, 1280);
             gradBg.fillGradientStyle(themeColors.bgBot, themeColors.bgBot, themeColors.bgTop, themeColors.bgTop, 1);
-            gradBg.fillRect(0, 1280, 720, 1280);
+            gradBg.fillRect(0, 1280, 720, 2560);
             gradBg.generateTexture('animated_bg_grad', 720, 2560);
             gradBg.destroy();
         }
@@ -327,7 +327,7 @@ class ShopScene extends Phaser.Scene {
         this.tabHighlight.x = -btnWidth; 
         container.add(this.tabHighlight);
 
-        this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 রকেট", {
+        this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 প্রাণী", {
             fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
         }).setOrigin(0.5);
 
@@ -391,7 +391,8 @@ class ShopScene extends Phaser.Scene {
 
     renderShipList() {
         const shipData = window.ShipData || [];
-        const allShips = [{ id: "default", name: "Standard Issue", costType: "free", desc: "নির্ভরযোগ্য এবং শক্তপোক্ত।" }, ...shipData];
+        // CHANGED: The default bird now has a proper Bangla name in the shop UI
+        const allShips = [{ id: "default", name: "সাধারণ দোয়েল (Standard)", costType: "free", desc: "নির্ভরযোগ্য এবং শক্তপোক্ত।" }, ...shipData];
 
         allShips.forEach((ship, i) => {
             const col = i % 2;

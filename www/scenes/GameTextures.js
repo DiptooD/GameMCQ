@@ -1,158 +1,96 @@
 class GameTextures {
-  /**
-   * Generates all programmatic textures for the game
-   * @param {Phaser.Scene} scene - The scene context to generate textures in
-   */
   static init(scene) {
     if (scene.textures.exists('player_lv1')) return; 
     
-    // Create a graphics object not added to the display list
     let g = scene.make.graphics({ add: false });
     
-// --- PLAYER SHIPS (Standardized 180x180 Center: 90,90) ---
-    
-    // Level 1
-    g.fillStyle(0x0099cc, 1);
-    g.fillRoundedRect(65, 55, 50, 75, 10); // Main Body
-    g.fillStyle(0x00ffff, 0.8);
-    g.fillEllipse(90, 75, 22, 30); // Cockpit
-    g.fillStyle(0xffffff, 0.6);
-    g.fillEllipse(90, 72, 12, 18);
-    g.fillStyle(0x006699, 1);
-    g.beginPath(); // Nose
-    g.moveTo(90, 15);
-    g.lineTo(70, 55);
-    g.lineTo(110, 55);
-    g.closePath();
-    g.fillPath();
-    g.fillStyle(0x0099cc, 1);
-    g.beginPath(); // Left Wing
-    g.moveTo(65, 80);
-    g.lineTo(35, 100);
-    g.lineTo(40, 125);
-    g.lineTo(65, 115);
-    g.closePath();
-    g.fillPath();
-    g.beginPath(); // Right Wing
-    g.moveTo(115, 80);
-    g.lineTo(145, 100);
-    g.lineTo(140, 125);
-    g.lineTo(115, 115);
-    g.closePath();
-    g.fillPath();
-    g.lineStyle(4, 0x00ffff, 1);
-    g.strokeRoundedRect(67, 57, 46, 71, 8); // Outline
-    g.fillStyle(0x003366, 1); // Thrusters
-    g.fillRect(72, 130, 10, 15);
-    g.fillRect(98, 130, 10, 15);
-    g.fillStyle(0x00ffff, 0.6);
-    g.fillRect(73, 137, 8, 8);
-    g.fillRect(99, 137, 8, 8);
-    g.generateTexture("player_lv1", 180, 180);
+    // ==========================================================
+    // --- DEFAULT PLAYER BIRD: DOEL (Magpie Robin) ---
+    // ==========================================================
+    const drawDoel = (level) => {
+        g.clear();
+        
+        // Wing layers (White stripes on black) 
+        // WINGS EXPANDED: 15 to 165 for unified sizing!
+        g.fillStyle(0x1a1a1a, 1);
+        g.lineStyle(4, 0xffffff, 1); // Thick white outline
+        
+        g.beginPath(); g.moveTo(90, 70); g.lineTo(15, 95); g.lineTo(65, 115); g.fillPath(); g.strokePath();
+        g.beginPath(); g.moveTo(90, 70); g.lineTo(165, 95); g.lineTo(115, 115); g.fillPath(); g.strokePath();
+        
+        g.fillStyle(0xffffff, 1);
+        g.fillRect(35, 90, 25, 6);
+        g.fillRect(120, 90, 25, 6);
+
+        // Tail (Raised and stiff)
+        g.fillStyle(0x1a1a1a, 1);
+        g.beginPath(); g.moveTo(85, 100); g.lineTo(70, 145); g.lineTo(110, 145); g.lineTo(95, 100); g.fillPath(); g.strokePath();
+        g.fillStyle(0xffffff, 1);
+        g.fillRect(72, 115, 5, 30); g.fillRect(103, 115, 5, 30);
+
+        // Body & Belly
+        g.fillStyle(0x111111, 1); 
+        g.fillEllipse(90, 80, 40, 60); g.strokeEllipse(90, 80, 40, 60);
+        g.fillStyle(0xffffff, 1); 
+        g.fillEllipse(90, 88, 24, 40);
+
+        // Head & Beak
+        g.fillStyle(0x111111, 1);
+        g.fillCircle(90, 55, 16); g.strokeCircle(90, 55, 16);
+        g.fillStyle(0x00ffff, 1); // Bright cyan beak 
+        g.fillTriangle(86, 45, 94, 45, 90, 25); g.strokeTriangle(86, 45, 94, 45, 90, 25);
+
+        // Enhancements based on Level
+        if (level >= 2) {
+            g.fillStyle(0x00ffff, 1); 
+            g.fillCircle(35, 100, 4); g.fillCircle(145, 100, 4);
+        }
+        if (level >= 3) {
+            g.lineStyle(4, 0x00ffff, 1);
+            g.strokeEllipse(90, 80, 44, 64);
+        }
+        if (level >= 4) {
+            g.fillStyle(0x00ffff, 0.9);
+            g.fillTriangle(75, 140, 105, 140, 90, 175); 
+            g.fillStyle(0xffffff, 1);
+            g.fillTriangle(82, 140, 98, 140, 90, 165);
+        }
+    };
+
+    drawDoel(1); g.generateTexture("player_lv1", 180, 180);
+    drawDoel(2); g.generateTexture("player_lv2", 180, 180);
+    drawDoel(3); g.generateTexture("player_lv3", 180, 180);
+    drawDoel(4); g.generateTexture("player_lv4", 180, 180);
     g.clear();
 
-    // Level 2 (Enhanced Wings)
-    g.fillStyle(0x0099cc, 1);
-    g.fillRoundedRect(65, 55, 50, 75, 10);
-    g.fillStyle(0x00ffff, 0.8);
-    g.fillEllipse(90, 75, 22, 30);
-    g.fillStyle(0xffffff, 0.6);
-    g.fillEllipse(90, 72, 12, 18);
-    g.fillStyle(0x006699, 1);
-    g.beginPath(); // Nose
-    g.moveTo(90, 15);
-    g.lineTo(70, 55);
-    g.lineTo(110, 55);
-    g.closePath();
-    g.fillPath();
-    g.fillStyle(0x0099cc, 1);
-    g.beginPath(); // Larger Wings
-    g.moveTo(65, 80);
-    g.lineTo(25, 100);
-    g.lineTo(35, 125);
-    g.lineTo(65, 115);
-    g.closePath();
-    g.fillPath();
-    g.beginPath();
-    g.moveTo(115, 80);
-    g.lineTo(155, 100);
-    g.lineTo(145, 125);
-    g.lineTo(115, 115);
-    g.closePath();
-    g.fillPath();
-    g.fillStyle(0xffaa00, 1); // Extra details
-    g.fillRect(35, 105, 10, 15);
-    g.fillRect(135, 105, 10, 15);
-    g.lineStyle(4, 0x00ffff, 1);
-    g.strokeRoundedRect(67, 57, 46, 71, 8);
-    g.fillStyle(0x003366, 1);
-    g.fillRect(72, 130, 10, 15);
-    g.fillRect(98, 130, 10, 15);
-    g.generateTexture("player_lv2", 180, 180);
+    // FIXED: Massive, super bright Default Bullets
+    g.fillStyle(0x00FFFF, 1); 
+    g.fillTriangle(12, 0, 2, 36, 22, 36); 
+    g.fillStyle(0xFFFFFF, 1); 
+    g.fillTriangle(12, 4, 6, 32, 18, 32);
+    g.generateTexture("bullet_default", 24, 36);
     g.clear();
 
-    // Level 3 (Heavy/Wide)
-    g.fillStyle(0x0099cc, 1);
-    g.fillRoundedRect(58, 48, 64, 88, 12); // Wider Body
-    g.fillStyle(0x00ffff, 0.8);
-    g.fillEllipse(90, 75, 28, 38);
-    g.fillStyle(0xffffff, 0.6);
-    g.fillEllipse(90, 72, 15, 22);
-    g.fillStyle(0x006699, 1);
-    g.beginPath(); // Long Nose
-    g.moveTo(90, 8);
-    g.lineTo(65, 48);
-    g.lineTo(115, 48);
-    g.closePath();
-    g.fillPath();
-    g.fillStyle(0x006699, 1); // Side Pods
-    g.fillRect(25, 85, 33, 45);
-    g.fillRect(122, 85, 33, 45);
-    g.fillStyle(0x0099cc, 1);
-    g.fillTriangle(25, 130, 25, 85, 38, 107);
-    g.fillTriangle(155, 130, 155, 85, 142, 107);
-    g.fillStyle(0x00ff00, 0.8);
-    g.fillCircle(40, 100, 5);
-    g.fillCircle(140, 100, 5);
-    g.lineStyle(4, 0x00ffff, 1);
-    g.strokeRoundedRect(60, 50, 60, 84, 11);
-    g.fillStyle(0x003366, 1); // Triple Thrusters
-    g.fillRect(75, 136, 12, 15);
-    g.fillRect(93, 136, 12, 15);
-    g.generateTexture("player_lv3", 180, 180);
+    g.fillStyle(0x00FFaa, 1); 
+    g.beginPath(); g.moveTo(12, 0); g.lineTo(2, 28); g.lineTo(12, 40); g.lineTo(22, 28); g.closePath(); g.fillPath();
+    g.fillStyle(0xffffff, 1);
+    g.beginPath(); g.moveTo(12, 8); g.lineTo(6, 28); g.lineTo(12, 32); g.lineTo(18, 28); g.closePath(); g.fillPath();
+    g.generateTexture("side_bullet_default", 24, 40);
     g.clear();
 
-    // Level 4 (The Goliath)
-    g.fillStyle(0x0066aa, 1);
-    g.fillRoundedRect(52, 42, 76, 100, 15); // Large Body
-    g.fillStyle(0x00ddff, 0.9);
-    g.fillEllipse(90, 75, 35, 45);
-    g.fillStyle(0xffffff, 0.7);
-    g.fillEllipse(90, 72, 18, 25);
-    g.fillStyle(0x004488, 1);
-    g.beginPath(); // Tip
-    g.moveTo(90, 0);
-    g.lineTo(58, 42);
-    g.lineTo(122, 42);
-    g.closePath();
-    g.fillPath();
-    g.fillStyle(0x004488, 1); // Massive Side Pods
-    g.fillRect(20, 75, 32, 55);
-    g.fillRect(128, 75, 32, 55);
-    g.fillStyle(0x0066aa, 1);
-    g.fillTriangle(20, 130, 20, 75, 35, 105);
-    g.fillTriangle(160, 130, 160, 75, 145, 105);
-    g.fillStyle(0xff00ff, 0.9);
-    g.fillCircle(35, 95, 7);
-    g.fillCircle(145, 95, 7);
-    g.lineStyle(4, 0x00ffff, 1);
-    g.strokeRoundedRect(54, 44, 72, 96, 14);
-    g.fillStyle(0x002244, 1); // Quad Thrusters
-    g.fillRect(70, 142, 10, 15);
-    g.fillRect(85, 142, 10, 15);
-    g.fillRect(100, 142, 10, 15);
-    g.generateTexture("player_lv4", 180, 180);
+    // Fallback bullets (Orange/Yellow classic) made large
+    g.fillStyle(0xFF8800, 1); 
+    g.fillTriangle(12, 0, 2, 36, 22, 36); 
+    g.fillStyle(0xFFFF00, 1); 
+    g.fillTriangle(12, 4, 6, 32, 18, 32);
+    g.generateTexture("bullet", 24, 36);
     g.clear();
+
+    g.fillStyle(0xFF00FF, 1); 
+    g.beginPath(); g.moveTo(12, 0); g.lineTo(2, 28); g.lineTo(12, 40); g.lineTo(22, 28); g.closePath(); g.fillPath();
+    g.generateTexture("side_bullet", 24, 40);
+    g.clear();
+
 
     // --- VOID BARNACLE (Common) ---
     g.fillStyle(0x1a0033, 1);
@@ -177,7 +115,7 @@ class GameTextures {
     g.fillCircle(32, 18, 2);
     g.fillCircle(20, 30, 2);
     g.fillCircle(30, 28, 2);
-    g.lineStyle(3, 0x9966ff, 0.8); // THICKER
+    g.lineStyle(3, 0x9966ff, 0.8);
     g.strokeCircle(25, 25, 21);
     g.generateTexture("enemy_common", 50, 50);
     g.clear();
@@ -216,7 +154,7 @@ class GameTextures {
     g.clear();
 
     // --- Corrupted Starlight Guardian (Ultra) ---
-    g.lineStyle(4, 0xFF0000, 1); // THICKER
+    g.lineStyle(4, 0xFF0000, 1);
     g.fillStyle(0x440000, 1);    
     g.beginPath();
     g.moveTo(40, 0);   
@@ -239,12 +177,12 @@ class GameTextures {
     g.fillStyle(0x1A001A, 1); 
     g.fillCircle(40, 45, 20);
 
-    g.lineStyle(3, 0xFF2200, 0.8); // THICKER
+    g.lineStyle(3, 0xFF2200, 0.8);
     g.beginPath();
     g.arc(40, 45, 19, 0.1 * Math.PI, 0.9 * Math.PI); 
     g.strokePath();
 
-    g.lineStyle(3, 0xFF0000, 1); // THICKER
+    g.lineStyle(3, 0xFF0000, 1);
     g.fillStyle(0x880000, 1); 
     g.beginPath();
     g.moveTo(40, 10);
@@ -281,7 +219,7 @@ class GameTextures {
     g.fillStyle(0xff0000, 0.9);
     g.fillCircle(14, 14, 3);
     g.fillCircle(26, 14, 3);
-    g.lineStyle(3, 0x55dd55, 1); // THICKER
+    g.lineStyle(3, 0x55dd55, 1);
     g.strokeCircle(20, 20, 16);
     g.generateTexture("enemy_centipede", 40, 40);
     g.clear();
@@ -333,7 +271,7 @@ class GameTextures {
     g.fillStyle(accentColor, 0.8);
     g.fillRect(33, 50, 2, 4);
     g.fillRect(45, 50, 2, 4);
-    g.lineStyle(3, highlightColor, 1); // THICKER
+    g.lineStyle(3, highlightColor, 1);
     g.strokeRoundedRect(26, 11, 28, 23, 5);
     g.generateTexture("enemy_dragon", 80, 60);
     g.clear();
@@ -356,7 +294,7 @@ class GameTextures {
         x + Math.cos(angle - 0.5) * 8, y + Math.sin(angle - 0.5) * 8
       );
     }
-    g.lineStyle(3, 0x00ffff, 1); // THICKER
+    g.lineStyle(3, 0x00ffff, 1);
     g.strokeCircle(25, 25, 20);
     g.generateTexture("enemy_spinner", 50, 50);
     g.clear();
@@ -382,39 +320,25 @@ class GameTextures {
     for(let i = 0; i < 6; i++) {
         g.fillCircle(Phaser.Math.Between(25, 55), Phaser.Math.Between(15, 35), 2);
     }
-    g.lineStyle(3, 0xff00ff, 0.8); // THICKER
+    g.lineStyle(3, 0xff00ff, 0.8);
     g.strokeEllipse(40, 35, 45, 50);
     g.generateTexture("enemy_octopus", 80, 100);
     g.clear();
 
     // --- LIQUID INK / THERMAL VAPOR PULSE (Octopus Bullet) ---
     g.fillStyle(0xff8800, 0.8);
-    g.fillCircle(15, 15, 8); // Scaled up
+    g.fillCircle(15, 15, 8); 
     g.fillStyle(0xff4400, 0.4);
-    g.fillCircle(15, 15, 12); // Scaled up
+    g.fillCircle(15, 15, 12); 
     g.fillStyle(0xaa0000, 0.2);
-    g.fillCircle(15, 15, 16); // Scaled up
+    g.fillCircle(15, 15, 16); 
     g.fillStyle(0xffcc00, 0.6);
     for(let i = 0; i < 5; i++) {
         let rx = Phaser.Math.Between(5, 25);
         let ry = Phaser.Math.Between(5, 25);
-        g.fillCircle(rx, ry, 2.5); // Scaled up
+        g.fillCircle(rx, ry, 2.5); 
     }
     g.generateTexture("bullet_octopus", 30, 30);
-    g.clear();
-
-    // --- WEAPONS ---
-
-    // 1. MAIN BULLET
-    g.fillStyle(0xffaa00, 1); 
-    g.fillTriangle(9, 0, 0, 32, 18, 32); 
-    g.fillStyle(0xffff00, 1); 
-    g.fillTriangle(9, 4, 3, 28, 15, 28);
-    g.fillStyle(0xffffff, 0.8); 
-    g.fillCircle(9, 6, 3);
-    g.lineStyle(3, 0xffdd00, 0.7); // THICKER
-    g.strokeTriangle(9, 0, 0, 32, 18, 32);
-    g.generateTexture("bullet", 16, 32);
     g.clear();
 
     // 2. MISSILE
@@ -436,37 +360,13 @@ class GameTextures {
     g.fillRect(12, 70, 12, 8);
     g.fillStyle(0xff8800, 0.8);
     g.fillRect(13, 72, 10, 5);
-    g.lineStyle(3, 0xff5500, 1); // THICKER
+    g.lineStyle(3, 0xff5500, 1);
     g.strokeRoundedRect(8, 20, 20, 50, 6);
     g.generateTexture("missile", 36, 78);
     g.clear();
-    
-    // 3. SIDE BULLETS
-    g.fillStyle(0x4C005F, 1); 
-    g.beginPath();
-    g.moveTo(15, 0);   
-    g.lineTo(6, 20);   
-    g.lineTo(15, 40);  
-    g.lineTo(24, 20);  
-    g.closePath();
-    g.fillPath();
-    g.fillStyle(0xffffff, 0.9);
-    g.beginPath();
-    g.moveTo(15, 8);   
-    g.lineTo(10, 20);  
-    g.lineTo(15, 32);  
-    g.lineTo(20, 20);  
-    g.closePath();
-    g.fillPath();
-    g.lineStyle(2.5, 0xffffff, 0.6); // THICKER
-    g.strokePath();
-    g.generateTexture("side_bullet", 30, 40);
-    g.clear();
 
     // --- BOOSTER ICONS ---
-
-    // 1. Fire Shield Icon
-    g.lineStyle(3, 0xff4444, 1); // THICKER
+    g.lineStyle(3, 0xff4444, 1);
     g.fillStyle(0x440000, 1);
     g.beginPath();
     g.moveTo(20, 35); g.lineTo(5, 20); g.lineTo(5, 5); g.lineTo(35, 5); g.lineTo(35, 20);
@@ -478,10 +378,9 @@ class GameTextures {
     g.generateTexture("icon_booster_fire", 40, 40);
     g.clear();
 
-    // 2. Speed Booster Icon
     g.fillStyle(0x000044, 1);
     g.fillCircle(20, 20, 18);
-    g.lineStyle(3, 0x00ffff, 1); // THICKER
+    g.lineStyle(3, 0x00ffff, 1);
     g.strokeCircle(20, 20, 18);
     g.fillStyle(0x00ffff, 1);
     g.beginPath(); g.moveTo(10, 20); g.lineTo(20, 10); g.lineTo(20, 30); g.fillPath();
@@ -489,10 +388,9 @@ class GameTextures {
     g.generateTexture("icon_booster_speed", 40, 40);
     g.clear();
 
-    // 3. Battery Efficiency Icon
     g.fillStyle(0x004400, 1);
     g.fillRoundedRect(5, 5, 30, 30, 8);
-    g.lineStyle(3, 0x00ff00, 1); // THICKER
+    g.lineStyle(3, 0x00ff00, 1);
     g.strokeRoundedRect(5, 5, 30, 30, 8);
     g.fillStyle(0x00ff00, 1);
     g.fillRect(18, 10, 4, 20); 
@@ -501,11 +399,9 @@ class GameTextures {
     g.clear();
 
     // --- SHOCKWAVE AURA TEXTURES ---
-
-    // 1. LIGHTNING
     g.fillStyle(0xffffcc, 0.05); 
     g.fillCircle(40, 40, 38);
-    g.lineStyle(3, 0xffaa00, 1); // THICKER
+    g.lineStyle(3, 0xffaa00, 1);
     g.beginPath();
     for (let i = 0; i <= 360; i += 5) { 
         const rad = Phaser.Math.DegToRad(i);
@@ -518,7 +414,7 @@ class GameTextures {
     }
     g.closePath();
     g.strokePath();
-    g.lineStyle(1.5, 0xffffff, 1); // THICKER
+    g.lineStyle(1.5, 0xffffff, 1);
     g.beginPath();
     for (let i = 0; i <= 360; i += 5) {
         const rad = Phaser.Math.DegToRad(i);
@@ -535,15 +431,14 @@ class GameTextures {
     for(let i=0; i<8; i++) {
         const angle = Phaser.Math.DegToRad(i * 45 + 10);
         const dist = 42; 
-        g.fillCircle(40 + Math.cos(angle) * dist, 40 + Math.sin(angle) * dist, 2); // Bigger sparks
+        g.fillCircle(40 + Math.cos(angle) * dist, 40 + Math.sin(angle) * dist, 2);
     }
     g.generateTexture("aura_lightning", 80, 80);
     g.clear();
 
-    // 2. ICE
     g.fillStyle(0x00ffff, 0.05); 
     g.fillCircle(50, 50, 48);
-    g.lineStyle(3, 0xaaddff, 0.8); // THICKER
+    g.lineStyle(3, 0xaaddff, 0.8);
     g.strokeCircle(50, 50, 48);
     g.fillStyle(0xffffff, 0.6); 
     for(let i=0; i<6; i++) {
@@ -556,15 +451,14 @@ class GameTextures {
         g.closePath();
         g.fillPath();
     }
-    g.lineStyle(2, 0x00ffff, 0.4); // THICKER
+    g.lineStyle(2, 0x00ffff, 0.4);
     g.strokeCircle(50, 50, 35);
     g.generateTexture("aura_ice", 100, 100);
     g.clear();
 
-    // 3. PLASMA
-    g.lineStyle(3, 0x00ff00, 0.8); // THICKER
+    g.lineStyle(3, 0x00ff00, 0.8);
     g.strokeCircle(60, 60, 58);
-    g.lineStyle(2, 0xccffcc, 0.3); // THICKER
+    g.lineStyle(2, 0xccffcc, 0.3);
     g.strokeCircle(60, 60, 48);
     g.strokeCircle(60, 60, 35);
     g.strokeCircle(60, 60, 20);
@@ -573,21 +467,18 @@ class GameTextures {
     g.generateTexture("aura_plasma", 120, 120);
     g.clear();
 
-    // 4. DRAMATIC TNT SHOCKWAVE
-    g.lineStyle(8, 0xffcc00, 1); // THICKER
+    g.lineStyle(8, 0xffcc00, 1);
     g.strokeCircle(64, 64, 60);
-    g.lineStyle(2, 0xffffff, 0.3); // THICKER
+    g.lineStyle(2, 0xffffff, 0.3);
     for(let i = 10; i < 120; i += 8) {
         g.lineBetween(20, i, 108, i); 
     }
-    g.lineStyle(3, 0xffffff, 0.5); // THICKER
+    g.lineStyle(3, 0xffffff, 0.5);
     g.strokeCircle(64, 64, 45);
     g.generateTexture("tex_shockwave_heavy", 128, 128);
     g.clear();
 
     // --- BATTERIES ---
-
-    // 1. Green Battery
     g.fillStyle(0x006e00, 1); 
     g.fillRoundedRect(4, 10, 28, 20, 4);
     g.fillStyle(0xffffff, 1);
@@ -602,12 +493,11 @@ class GameTextures {
     g.lineTo(20, 18); 
     g.closePath();
     g.fillPath();
-    g.lineStyle(4, 0x00ff00, .9); // THICKER
+    g.lineStyle(4, 0x00ff00, .9);
     g.strokeRoundedRect(4, 10, 28, 20, 4);
     g.generateTexture("battery_green", 40, 40);
     g.clear();
 
-    // 2. Yellow Battery
     g.fillStyle(0x677000, 1); 
     g.fillRoundedRect(4, 10, 28, 20, 4);
     g.fillStyle(0xffffff, 1);
@@ -622,12 +512,11 @@ class GameTextures {
     g.lineTo(20, 18);
     g.closePath();
     g.fillPath();
-    g.lineStyle(4, 0xffff00, .9); // THICKER
+    g.lineStyle(4, 0xffff00, .9);
     g.strokeRoundedRect(4, 10, 28, 20, 4);
     g.generateTexture("battery_yellow", 40, 40);
     g.clear();
 
-    // 3. Red Battery
     g.fillStyle(0xa20000, 1); 
     g.fillRoundedRect(4, 10, 28, 20, 4);
     g.fillStyle(0xffffff, 1);
@@ -642,14 +531,12 @@ class GameTextures {
     g.lineTo(20, 18);
     g.closePath();
     g.fillPath();
-    g.lineStyle(4, 0xffbf00, .9); // THICKER
+    g.lineStyle(4, 0xffbf00, .9);
     g.strokeRoundedRect(4, 10, 28, 20, 4);
     g.generateTexture("battery_red", 40, 40);
     g.clear();
 
     // --- OBSTACLES ---
-
-    // 1. Asteroid
     g.fillStyle(0x1a1a2e, .05);
     g.beginPath();
     g.moveTo(25, 5);   
@@ -665,7 +552,7 @@ class GameTextures {
     g.lineTo(5, 10);   
     g.closePath();
     g.fillPath();
-    g.lineStyle(3, 0xaa00ff, 1); // THICKER
+    g.lineStyle(3, 0xaa00ff, 1);
     g.strokePath();
     const craters = [
         {x: 18, y: 18, r: 5},
@@ -675,13 +562,12 @@ class GameTextures {
     craters.forEach(c => {
         g.fillStyle(0x0a0a1a, 1); 
         g.fillCircle(c.x, c.y, c.r);
-        g.lineStyle(2, 0x00ffff, 0.5); // THICKER
+        g.lineStyle(2, 0x00ffff, 0.5);
         g.strokeCircle(c.x, c.y, c.r);
     });
     g.generateTexture("obstacle_asteroid", 50, 50);
     g.clear();
 
-    // 2. Debris
     g.fillStyle(0x222233, .05);
     g.beginPath();
     g.moveTo(10, 5);
@@ -692,7 +578,7 @@ class GameTextures {
     g.lineTo(2, 25);  
     g.closePath();
     g.fillPath();
-    g.lineStyle(3, 0x00ffff, .9); // THICKER
+    g.lineStyle(3, 0x00ffff, .9);
     g.strokePath();
     const debrisHoles = [
         {x: 15, y: 15, r: 4},
@@ -702,13 +588,12 @@ class GameTextures {
     debrisHoles.forEach(h => {
         g.fillStyle(0x000000, 1); 
         g.fillCircle(h.x, h.y, h.r);
-        g.lineStyle(2, 0x00ffff, 0.4); // THICKER
+        g.lineStyle(2, 0x00ffff, 0.4);
         g.strokeCircle(h.x, h.y, h.r);
     });
     g.generateTexture("obstacle_debris", 50, 50);
     g.clear();
 
-    // 3. Mine
     g.fillStyle(0x1a1a1a, .05); 
     g.beginPath();
     g.moveTo(25, 4);    
@@ -722,7 +607,7 @@ class GameTextures {
     g.lineTo(3, 10);    
     g.closePath();
     g.fillPath();
-    g.lineStyle(3, 0xffaa00, .9); // THICKER
+    g.lineStyle(3, 0xffaa00, .9);
     g.strokePath();
     const mineFeatures = [
         {x: 25, y: 25, r: 7, glow: true},  
@@ -732,16 +617,14 @@ class GameTextures {
     mineFeatures.forEach(f => {
         g.fillStyle(0x000000, .5);
         g.fillCircle(f.x, f.y, f.r);
-        g.lineStyle(2, 0xffcc00, 0.7); // THICKER
+        g.lineStyle(2, 0xffcc00, 0.7);
         g.strokeCircle(f.x, f.y, f.r);
     });
     g.generateTexture("obstacle_mine", 50, 50);
     g.clear();
 
     // --- POWER-UPS ---
-
-    // 1. Shield
-    g.lineStyle(5, 0xffcc00, 1); // THICKER
+    g.lineStyle(5, 0xffcc00, 1);
     g.beginPath();
     g.moveTo(20, 38);   
     g.lineTo(4, 22);    
@@ -752,7 +635,7 @@ class GameTextures {
     g.strokePath();
     g.fillStyle(0xffaa00, 0.4);
     g.fillPath();
-    g.lineStyle(3, 0xffffff, 1); // THICKER
+    g.lineStyle(3, 0xffffff, 1);
     g.beginPath();
     g.moveTo(10, 12);
     g.lineTo(20, 22);
@@ -761,8 +644,7 @@ class GameTextures {
     g.generateTexture("powerup_shield", 40, 40);
     g.clear();
 
-    // 2. Magnet
-    g.lineStyle(10, 0xff0000, 1); // THICKER
+    g.lineStyle(10, 0xff0000, 1);
     g.beginPath();
     g.arc(20, 18, 10, Phaser.Math.DegToRad(180), Phaser.Math.DegToRad(0), false);
     g.strokePath();
@@ -771,12 +653,11 @@ class GameTextures {
     g.moveTo(30, 18); g.lineTo(30, 30);
     g.strokePath();
     g.fillStyle(0xffffff, 1);
-    g.fillRect(5, 26, 10, 10); // WIDER TIPS
-    g.fillRect(25, 26, 10, 10); // WIDER TIPS
+    g.fillRect(5, 26, 10, 10);
+    g.fillRect(25, 26, 10, 10);
     g.generateTexture("powerup_magnet", 40, 40);
     g.clear();
 
-    // 3. TNT
     g.fillStyle(0xff4400, 1);
     g.fillCircle(20, 25, 12);
     g.fillStyle(0x992200, 0.5);
@@ -785,15 +666,15 @@ class GameTextures {
     g.fillPath();
     g.fillStyle(0xffffff, 0.6);
     g.fillCircle(16, 20, 4);
-    g.lineStyle(3, 0xffffff, 1); // THICKER FUSE
+    g.lineStyle(3, 0xffffff, 1);
     g.beginPath();
     g.moveTo(20, 13);
     g.lineTo(20, 6);
     g.lineTo(28, 4);
     g.strokePath();
     g.fillStyle(0xffff00, 1);
-    g.fillCircle(28, 4, 4.5); // BIGGER EMBER
-    g.lineStyle(2, 0xffffff, 1); // THICKER SPARKS
+    g.fillCircle(28, 4, 4.5);
+    g.lineStyle(2, 0xffffff, 1);
     for(let i=0; i<4; i++){
         let a = i * (Math.PI/2);
         g.lineBetween(28,4, 28+Math.cos(a)*8, 4+Math.sin(a)*8);
@@ -801,7 +682,6 @@ class GameTextures {
     g.generateTexture("powerup_tnt", 40, 40);
     g.clear();
 
-    // 4. Heart
     g.fillStyle(0x00ff88, 1);
     g.fillCircle(14, 16, 8);
     g.fillCircle(26, 16, 8);
@@ -815,7 +695,7 @@ class GameTextures {
     g.generateTexture("powerup_heart", 40, 40);
     g.clear();
 
-    // --- BOSS 1: "The Prili Tank" ---
+    // --- BOSSES ---
     g.fillStyle(0x8B0000, 1); 
     g.fillRoundedRect(85, 40, 80, 80, 4);
     g.fillStyle(0xff3300, 1); 
@@ -836,12 +716,11 @@ class GameTextures {
     g.fillCircle(125, 95, 10);
     g.fillStyle(0xffff00, 0.8);
     g.fillCircle(125, 95, 4);
-    g.lineStyle(5, 0xffaa00, 1); // THICKER OUTLINE
+    g.lineStyle(5, 0xffaa00, 1);
     g.strokeRect(85, 40, 80, 80);
     g.generateTexture("boss_lv1", 250, 150);
     g.clear();
 
-    // --- BOSS 2: "The Monolith of Rage" ---
     g.fillStyle(0xAB0000, 1); 
     g.beginPath();
     g.moveTo(70, 40); g.lineTo(20, 60); g.lineTo(20, 110); g.lineTo(70, 130);
@@ -859,7 +738,7 @@ class GameTextures {
     g.lineTo(70, 45);    
     g.closePath();
     g.fillPath();
-    g.lineStyle(8, 0x690000, 1); // THICKER OUTLINE
+    g.lineStyle(8, 0x690000, 1);
     g.strokePath();
     g.fillStyle(0x9C0000, 1); 
     g.beginPath();
@@ -872,7 +751,6 @@ class GameTextures {
     g.generateTexture("boss_lv2", 250, 150);
     g.clear();
 
-    // --- BOSS 3: "Toxic Monolith" ---
     g.fillStyle(0x1D3B00, 1); 
     g.fillTriangle(125, 10, 15, 140, 235, 140); 
     g.fillStyle(0x003300, 1);
@@ -884,7 +762,7 @@ class GameTextures {
     g.fillTriangle(95, 62, 78, 55, 85, 75);
     g.fillTriangle(155, 62, 172, 55, 165, 75);
     g.fillStyle(0xff0000, 1); 
-    g.lineStyle(6, 0x39ff14, 1); // THICKER MOUTH
+    g.lineStyle(6, 0x39ff14, 1);
     g.beginPath();
     g.moveTo(80, 100); 
     g.lineTo(100, 120); 
@@ -908,12 +786,11 @@ class GameTextures {
     g.fillCircle(12, 12, 8);
     g.fillStyle(0xff9999, 0.5);
     g.fillCircle(12, 12, 5);
-    g.lineStyle(3, 0xff3333, 0.9); // THICKER
+    g.lineStyle(3, 0xff3333, 0.9);
     g.strokeCircle(12, 12, 10);
     g.generateTexture("bossBullet", 24, 24);
     g.clear();
 
-    // Tracking Bullet
     g.fillStyle(0xff00aa, 1);
     g.fillCircle(12, 12, 12);
     g.fillStyle(0xff66cc, 0.9);
@@ -922,7 +799,7 @@ class GameTextures {
     g.fillCircle(12, 12, 6);
     g.fillStyle(0xffffff, 0.9);
     g.fillCircle(12, 12, 3);
-    g.lineStyle(3, 0xffff00, 1); // THICKER RETICLE
+    g.lineStyle(3, 0xffff00, 1);
     g.strokeCircle(12, 12, 10);
     g.strokeRect(11, 4, 2, 4);
     g.strokeRect(11, 16, 2, 4);
@@ -931,28 +808,17 @@ class GameTextures {
     g.generateTexture("bossBullet_tracking", 24, 24);
     g.clear();
 
-// --- ENEMY BULLET (BALANCED SIZE) ---
     g.fillStyle(0xff3300, 1);
-    // Adjusted to 12x26 (within a 20x26 canvas)
     g.fillRoundedRect(4, 0, 12, 26, 5); 
-    
-    // Proportional internal glow
     g.fillStyle(0xff6633, 0.8);
     g.fillEllipse(10, 9, 8, 16); 
-    
-    // Bright core
     g.fillStyle(0xff9966, 0.6);
     g.fillEllipse(10, 6, 5, 8); 
-    
-    // Balanced 2.5px outline
     g.lineStyle(2.5, 0xff5522, 1); 
     g.strokeRoundedRect(4, 0, 12, 26, 5);
-    
-    // Final texture generated at 20x26 pixels
     g.generateTexture("enemyBullet", 20, 26);
     g.clear();
 
-    // Poison Bullet
     g.fillStyle(0xff6600, 0.8);
     g.beginPath();
     g.moveTo(16, 0);   
@@ -968,22 +834,22 @@ class GameTextures {
     g.generateTexture("poison_drop", 32, 32);
     g.clear();
 
-    // --- PARTICLES (Scaled natively for mobile) ---
+    // --- PARTICLES ---
     g.fillStyle(0xffaa00, 1);
-    g.fillCircle(7, 7, 7); // LARGER BASE
+    g.fillCircle(7, 7, 7);
     g.fillStyle(0xffdd00, 0.7);
-    g.fillCircle(7, 7, 4); // LARGER BASE
+    g.fillCircle(7, 7, 4);
     g.generateTexture("engine_flame", 14, 14);
     g.clear();
 
     g.fillStyle(0xffffff, 1);
-    g.fillCircle(6, 6, 6); // LARGER BASE
+    g.fillCircle(6, 6, 6);
     g.generateTexture("spark", 12, 12);
     g.clear();
 
     g.fillStyle(0xffffff, 0.3);
     g.beginPath();
-    g.moveTo(12, 0);  // SCALED UP POINTS
+    g.moveTo(12, 0); 
     g.lineTo(24, 12); 
     g.lineTo(12, 24); 
     g.lineTo(0, 12);  
@@ -1001,12 +867,10 @@ class GameTextures {
     g.clear();
 
     // --- UI ELEMENTS ---
-
-    // 1. Heart UI
     const heartX = 25;
     const heartY = 25;
     const size = 15;
-    g.lineStyle(4, 0xff0033, 1); // THICKER OUTLINE
+    g.lineStyle(4, 0xff0033, 1);
     g.strokeCircle(heartX - size/2, heartY - size/2, size/2);
     g.strokeCircle(heartX + size/2, heartY - size/2, size/2);
     g.beginPath();
@@ -1014,14 +878,13 @@ class GameTextures {
     g.lineTo(heartX, heartY + size);
     g.lineTo(heartX + size, heartY - size/3);
     g.strokePath();
-    g.lineStyle(2, 0x00ff88, 0.4); // THICKER INNER GLOW
+    g.lineStyle(2, 0x00ff88, 0.4);
     g.strokeCircle(heartX - size/2, heartY - size/2, size/2 - 2);
     g.strokeCircle(heartX + size/2, heartY - size/2, size/2 - 2);
     g.generateTexture("ui_heart", 50, 50);
     g.clear();
 
-    // 2. PAUSE ICON
-    g.lineStyle(5, 0xffffff, .5); // THICKER OUTLINE
+    g.lineStyle(5, 0xffffff, .5);
     g.strokeCircle(25, 25, 22);
     g.fillStyle(0xffffff, 1);
     g.fillRoundedRect(16, 15, 6, 20, 2);
@@ -1029,7 +892,6 @@ class GameTextures {
     g.generateTexture("ui_pause", 50, 50);
     g.clear();
 
-    // 3. LIGHTNING ICON (For Battery)
     g.fillStyle(0x00ffcc, 1);
     g.beginPath();
     g.moveTo(20, 0);
@@ -1043,8 +905,7 @@ class GameTextures {
     g.generateTexture("ui_bolt", 40, 50);
     g.clear();
     
-    // 4. UI KEY ICON
-    g.lineStyle(6, 0xffaa00, 1); // THICKER OUTLINE
+    g.lineStyle(6, 0xffaa00, 1);
     g.strokeCircle(20, 12, 9); 
     g.fillStyle(0xffaa00, 1);
     g.fillCircle(20, 12, 4);
@@ -1055,7 +916,6 @@ class GameTextures {
     g.generateTexture("ui_key", 40, 50);
     g.clear();
 
-    // 5. DEBRIS ICON
     g.fillStyle(0x888899, 1); 
     g.beginPath();
     g.moveTo(10, 5);
@@ -1065,9 +925,9 @@ class GameTextures {
     g.lineTo(5, 25);
     g.closePath();
     g.fillPath();
-    g.lineStyle(3, 0xaaccff, 1); // THICKER OUTLINE
+    g.lineStyle(3, 0xaaccff, 1);
     g.strokePath();
-    g.lineStyle(2, 0x000000, 0.5); // THICKER DETAIL LINES
+    g.lineStyle(2, 0x000000, 0.5);
     g.moveTo(15, 10); g.lineTo(25, 15);
     g.strokePath();
     g.generateTexture("ui_debris_icon", 40, 40);

@@ -8,6 +8,10 @@ class ReadingScene extends Phaser.Scene {
         this.itemsPerPage = 25; 
         this.listStartY = 390; 
         this.paginationHeight = 100; // Fixed height reserved for pagination at the bottom
+        
+        // Initialize Zoom Level from LocalStorage or default to 1.0
+        let savedZoom = parseFloat(localStorage.getItem('reading_zoom'));
+        this.zoomLevel = isNaN(savedZoom) ? 1.0 : savedZoom;
     }
 
     create() {
@@ -160,28 +164,29 @@ class ReadingScene extends Phaser.Scene {
             });
         }
 
+        // --- UPDATED SMOOTH SCROLLING PHYSICS ---
         if (this.scrollData && this.scrollState) {
             if (!this.scrollState.isDragging) {
                 let { contentContainer, listStartY, minScroll } = this.scrollData;
                 let vY = this.scrollState.velocityY;
                 let currentY = contentContainer.y;
 
-                if (Math.abs(vY) > 0.01) {
+                // Apply velocity with smooth friction
+                if (Math.abs(vY) > 0.05) {
                     currentY += vY * 16 * safeTimeScale;
-                    this.scrollState.velocityY *= Math.pow(0.9, safeTimeScale); 
+                    this.scrollState.velocityY *= Math.pow(0.93, safeTimeScale); 
+                } else {
+                    this.scrollState.velocityY = 0;
                 }
 
+                // Spring-back bounds detection
                 if (currentY > listStartY) {
                     currentY += (listStartY - currentY) * 0.2 * safeTimeScale;
-                    if (Math.abs(listStartY - currentY) < 0.5) currentY = listStartY;
                 } else if (currentY < listStartY + minScroll) {
                     currentY += ((listStartY + minScroll) - currentY) * 0.2 * safeTimeScale;
-                    if (Math.abs((listStartY + minScroll) - currentY) < 0.5) currentY = listStartY + minScroll;
                 }
 
                 contentContainer.y = currentY;
-            } else {
-                this.scrollState.velocityY *= 0.8; 
             }
         }
     }
@@ -224,10 +229,19 @@ class ReadingScene extends Phaser.Scene {
         const cx = this.cameras.main.centerX;
         const w = this.cameras.main.width;
         let currentY = 10;
+        
+        // Setup Dynamic Font Sizes based on zoomLevel
+        const z = this.zoomLevel;
+        const sStats = `${Math.round(22 * z)}px`;
+        const sQ = `${Math.round(26 * z)}px`;
+        const sOpt = `${Math.round(24 * z)}px`;
+        const sCheck = `${Math.round(20 * z)}px`;
+        const sTag = `${Math.round(16 * z)}px`;
+        const sNoData = `${Math.round(32 * z)}px`;
 
         if (finalQuestions.length === 0) {
             const noData = this.add.text(cx, this.listHeight / 2, "কোন প্রশ্ন পাওয়া যায়নি", { 
-                fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#666" 
+                fontSize: sNoData, fontFamily: "'Anek Bangla'", color: "#666" 
             }).setOrigin(0.5);
             this.contentContainer.add(noData);
             this.renderPagination(0);
@@ -242,27 +256,27 @@ class ReadingScene extends Phaser.Scene {
         const paginatedQs = finalQuestions.slice(this.currentPage * this.itemsPerPage, (this.currentPage + 1) * this.itemsPerPage);
 
         const statsText = this.add.text(cx, currentY, `মোট প্রশ্ন: ${finalQuestions.length} টি`, {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#00e1ff", fontStyle: "bold",
-            backgroundColor: "rgba(0, 225, 255, 0.1)", padding: { x: 15, y: 5 }
+            fontSize: sStats, fontFamily: "'Anek Bangla'", color: "#00e1ff", fontStyle: "bold",
+            backgroundColor: "rgba(0, 225, 255, 0.1)", padding: { x: 15*z, y: 5*z }
         }).setOrigin(0.5);
         this.contentContainer.add(statsText);
-        currentY += 45;
+        currentY += (45 * z);
 
         const cardW = w - 40;
         const startX = cx - cardW / 2;
 
         paginatedQs.forEach((item, index) => {
-            const p = 20; 
+            const p = 20 * z; 
             const textW = cardW - (p * 2);
             const qNum = (this.currentPage * this.itemsPerPage) + index + 1;
 
             const qText = this.add.text(startX + p, currentY + p, `${qNum}. ${item.question.replace(/।/g, '')}`, {
-                fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff",
-                wordWrap: { width: textW }, lineSpacing: 6 
+                fontSize: sQ, fontFamily: "'Anek Bangla'", color: "#ffffff",
+                wordWrap: { width: textW }, lineSpacing: 6 * z 
             }).setOrigin(0, 0);
 
             let elementsToAdd = [qText];
-            let ansY = currentY + p + qText.height + 15;
+            let ansY = currentY + p + qText.height + (15 * z);
             
             const labels = ["ক)", "খ)", "গ)", "ঘ)"];
             if (item.options && Array.isArray(item.options)) {
@@ -271,44 +285,45 @@ class ReadingScene extends Phaser.Scene {
                     const color = isCorrect ? "#00ff00" : "#aaaaaa";
                     const fontStyle = isCorrect ? "bold" : "normal";
                     const prefix = labels[idx] ? `${labels[idx]} ` : "";
+                    const correctOffset = isCorrect ? (10 * z) : 0;
 
-                    const optText = this.add.text(startX + p + (isCorrect ? 10 : 0), ansY, `${prefix}${opt}`, {
-                        fontSize: "24px", fontFamily: "'Anek Bangla'", color: color, fontStyle: fontStyle,
-                        wordWrap: { width: textW - (isCorrect ? 10 : 0) }, lineSpacing: 4
+                    const optText = this.add.text(startX + p + correctOffset, ansY, `${prefix}${opt}`, {
+                        fontSize: sOpt, fontFamily: "'Anek Bangla'", color: color, fontStyle: fontStyle,
+                        wordWrap: { width: textW - correctOffset }, lineSpacing: 4 * z
                     }).setOrigin(0, 0);
 
                     // Add robust glowing highlight for correct answer
                     if (isCorrect) {
                         const highlightBg = this.add.graphics();
                         highlightBg.fillStyle(0x00ff00, 0.15);
-                        highlightBg.fillRoundedRect(startX + p - 6, ansY - 4, textW + 12, optText.height + 8, 6);
+                        highlightBg.fillRoundedRect(startX + p - (6*z), ansY - (4*z), textW + (12*z), optText.height + (8*z), 6);
                         highlightBg.lineStyle(1, 0x00ff00, 0.5);
-                        highlightBg.strokeRoundedRect(startX + p - 6, ansY - 4, textW + 12, optText.height + 8, 6);
+                        highlightBg.strokeRoundedRect(startX + p - (6*z), ansY - (4*z), textW + (12*z), optText.height + (8*z), 6);
                         
-                        const checkMark = this.add.text(startX + cardW - p - 20, ansY + optText.height/2, "✔", {
-                            fontSize: "20px", color: "#00ff00"
+                        const checkMark = this.add.text(startX + cardW - p - (20*z), ansY + optText.height/2, "✔", {
+                            fontSize: sCheck, color: "#00ff00"
                         }).setOrigin(0.5);
 
                         elementsToAdd.push(highlightBg, checkMark);
                     }
 
                     elementsToAdd.push(optText);
-                    ansY += optText.height + 10;
+                    ansY += optText.height + (10 * z);
                 });
             }
 
-            const tagY = ansY + 5;
+            const tagY = ansY + (5 * z);
             const subTag = item.subject || item.category || "General";
             const bankTag = item.bank || "General";
             
             // Modern Tag Pill
             const tagText = this.add.text(startX + cardW - p, tagY, `${subTag} | ${bankTag}`, {
-                fontSize: "16px", fontFamily: "'Anek Bangla'", color: "#00aaff", fontStyle: "bold"
+                fontSize: sTag, fontFamily: "'Anek Bangla'", color: "#00aaff", fontStyle: "bold"
             }).setOrigin(1, 0);
             
             const tagBg = this.add.graphics();
             tagBg.fillStyle(0x003366, 0.5);
-            tagBg.fillRoundedRect(tagText.x - tagText.width - 10, tagY - 2, tagText.width + 20, tagText.height + 4, 8);
+            tagBg.fillRoundedRect(tagText.x - tagText.width - (10*z), tagY - (2*z), tagText.width + (20*z), tagText.height + (4*z), 8);
             
             elementsToAdd.push(tagBg, tagText);
 
@@ -323,7 +338,7 @@ class ReadingScene extends Phaser.Scene {
             this.contentContainer.add(bg);
             elementsToAdd.forEach(el => this.contentContainer.add(el));
             
-            currentY += totalHeight + 15; 
+            currentY += totalHeight + (15 * z); 
         });
 
         // Add bottom padding so the last item doesn't get hidden behind pagination
@@ -345,6 +360,11 @@ class ReadingScene extends Phaser.Scene {
             this.scrollState = { isDragging: false, velocityY: 0 };
             this.scrollData = { contentContainer: this.contentContainer, listStartY: this.listStartY, minScroll };
 
+            // Wheel Support for Desktop
+            this.scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
+                this.scrollState.velocityY -= (deltaY * 0.02);
+            });
+
             this.scrollZone.on('pointerdown', (pointer) => {
                 this.scrollState.isDragging = true;
                 this.scrollState.velocityY = 0;
@@ -359,6 +379,7 @@ class ReadingScene extends Phaser.Scene {
                     const diff = pointer.y - startY;
                     let newY = containerStartY + diff;
 
+                    // Rubber band effect while dragging out of bounds
                     if (newY > this.listStartY) {
                         newY = this.listStartY + (newY - this.listStartY) * 0.4;
                     } else if (newY < this.listStartY + minScroll) {
@@ -371,6 +392,7 @@ class ReadingScene extends Phaser.Scene {
                     const dt = now - lastTime;
                     if (dt > 0) {
                         const instantVelocity = (pointer.y - lastY) / dt;
+                        // Smooth Velocity Blending
                         this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (instantVelocity * 0.6);
                     }
                     
@@ -471,6 +493,9 @@ class ReadingScene extends Phaser.Scene {
     }
 
     createTopUI() {
+        const w = this.cameras.main.width;
+        
+        // --- Back Button ---
         const backContainer = this.add.container(100, 65);
 
         const backBg = this.add.graphics();
@@ -493,6 +518,42 @@ class ReadingScene extends Phaser.Scene {
                 targets: backContainer, scale: 0.9, duration: 50, yoyo: true,
                 onComplete: () => this.handleBack()
             });
+        });
+
+        // --- Zoom Out Button ---
+        const zoomOutContainer = this.add.container(w - 110, 65);
+        const zOutBg = this.add.graphics();
+        zOutBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 50, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 50, 60, 15);
+        const zOutTxt = this.add.text(0, 0, "A-", { fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
+        const zOutHit = this.add.rectangle(0, 0, 50, 60, 0, 0).setInteractive({ useHandCursor: true });
+        zoomOutContainer.add([zOutBg, zOutTxt, zOutHit]);
+
+        zOutHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: zoomOutContainer, scale: 0.9, duration: 50, yoyo: true });
+            if (this.zoomLevel > 0.6) {
+                this.zoomLevel -= 0.1;
+                localStorage.setItem('reading_zoom', this.zoomLevel.toFixed(1));
+                this.renderQuestionsList();
+            }
+        });
+
+        // --- Zoom In Button ---
+        const zoomInContainer = this.add.container(w - 50, 65);
+        const zInBg = this.add.graphics();
+        zInBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 50, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 50, 60, 15);
+        const zInTxt = this.add.text(0, 0, "A+", { fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
+        const zInHit = this.add.rectangle(0, 0, 50, 60, 0, 0).setInteractive({ useHandCursor: true });
+        zoomInContainer.add([zInBg, zInTxt, zInHit]);
+
+        zInHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: zoomInContainer, scale: 0.9, duration: 50, yoyo: true });
+            if (this.zoomLevel < 1.6) {
+                this.zoomLevel += 0.1;
+                localStorage.setItem('reading_zoom', this.zoomLevel.toFixed(1));
+                this.renderQuestionsList();
+            }
         });
     }
 

@@ -10,7 +10,6 @@ window.saveGame = function() {
         localStorage.setItem('game_ownedShips', JSON.stringify(GameState.ownedShips));
         localStorage.setItem('game_equippedShip', GameState.equippedShip);
         
-        // NEW: Save Theme Data
         localStorage.setItem('game_ownedThemes', JSON.stringify(GameState.ownedThemes));
         localStorage.setItem('game_equippedTheme', GameState.equippedTheme);
 
@@ -61,7 +60,6 @@ window.GameState = {
     ownedShips: JSON.parse(localStorage.getItem('game_ownedShips')) || ["default"],
     equippedShip: localStorage.getItem('game_equippedShip') || "default",
     
-    // NEW: Theme State
     ownedThemes: JSON.parse(localStorage.getItem('game_ownedThemes')) || ["theme_default"],
     equippedTheme: localStorage.getItem('game_equippedTheme') || "theme_default",
 
@@ -75,11 +73,10 @@ window.GameState = {
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
 };
 
-// FIX: Update level targets now factors in Beginner's Luck to lower the question threshold
 window.updateLevelTargets = function() {
     let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
     let luckFactor = Math.max(0, 5 - played) / 5;
-    let discount = Math.floor(3 * luckFactor); // Reduces required questions by up to 3
+    let discount = Math.floor(3 * luckFactor);
 
     if (GameState.bossStage === 0) {
         GameState.totalCorrectNeeded = Math.max(3, 10 - discount); 
@@ -105,23 +102,26 @@ window.resetGameState = function () {
     window.updateLevelTargets(); 
 };
 
+// ==========================================
+// BANGLADESHI FLYING ANIMALS (Bangla Updated)
+// ==========================================
 window.ShipData = [
-    { id: "ship_k1", name: "Crimson Arrow", costType: "keys", cost: 2, desc: "Fast and aerodynamic." },
-    { id: "ship_k2", name: "Golden Eagle",  costType: "keys", cost: 5, desc: "A symbol of wealth." },
-    { id: "ship_k3", name: "Neon Phantom",  costType: "keys", cost: 8, desc: "Glows with void energy." },
-    { id: "ship_k4", name: "Heavy Titan",   costType: "keys", cost: 12, desc: "Built like a tank." },
-    { id: "ship_k5", name: "Cosmic Lord",   costType: "keys", cost: 20, desc: "Forged in a star." },
-    { id: "ship_k6", name: "Void Leviathan", costType: "keys", cost: 150, desc: "Ultimate weapon of the Dark." },
-    { id: "ship_k7", name: "Solar Flare", costType: "keys", cost: 250, desc: "Power of a supernova." },
-    { id: "ship_k8", name: "Celestial Guardian", costType: "keys", cost: 500, desc: "Blessed by the creators." },
+    { id: "ship_k1", name: "মাছরাঙা (Kingfisher)", costType: "keys", cost: 2, desc: "Swift river hunter. High precision dives." },
+    { id: "ship_k2", name: "চিল (Kite)",  costType: "keys", cost: 5, desc: "Majestic brown predator of the Bengal sky." },
+    { id: "ship_k3", name: "কোকিল (Cuckoo)",  costType: "keys", cost: 8, desc: "Dark feathers, red eyes, and a striking aura." },
+    { id: "ship_k4", name: "শকুন (Vulture)",   costType: "keys", cost: 12, desc: "Broad wingspan. Built for incredible endurance." },
+    { id: "ship_k5", name: "সাদা বক (Egret)",   costType: "keys", cost: 20, desc: "Elegant, pure white, serene, and deadly." },
+    { id: "ship_k6", name: "কুটুম পেঁচা (Owl)", costType: "keys", cost: 150, desc: "Silent night hunter of the mystical dark." },
+    { id: "ship_k7", name: "টিয়া (Parrot)", costType: "keys", cost: 250, desc: "Vibrant plumage radiating solar energy." },
+    { id: "ship_k8", name: "সোনালী ঈগল (Golden Eagle)", costType: "keys", cost: 500, desc: "The supreme apex predator of the heavens." },
 
-    { id: "ship_d1", name: "Scrap Walker",  costType: "debris", cost: 50,  time: 2 * 60 * 60 * 1000, desc: "Welded together from junk." }, 
-    { id: "ship_d2", name: "Rust Bucket",   costType: "debris", cost: 100, time: 3 * 60 * 60 * 1000, desc: "It ain't pretty, but it flies." }, 
-    { id: "ship_d3", name: "Void Scavenger",costType: "debris", cost: 200, time: 4 * 60 * 60 * 1000, desc: "Adapted for deep space." }, 
-    { id: "ship_d4", name: "Iron Clad",     costType: "debris", cost: 350, time: 6 * 60 * 60 * 1000, desc: "Heavy plating." }, 
-    { id: "ship_d5", name: "Xeno-Hybrid",   costType: "debris", cost: 500, time: 7 * 60 * 60 * 1000, desc: "Half ship, half alien." }, 
-    { id: "ship_d6", name: "Junk Behemoth", costType: "debris", cost: 3000, time: 24 * 60 * 60 * 1000, desc: "A colossus of ancient scrap." },
-    { id: "ship_d7", name: "NIGHTMARE", costType: "debris", cost: 5000, time: 48 * 60 * 60 * 1000, desc: "A bio-cybernetic nightmare." }
+    { id: "ship_d1", name: "চড়ুই (Sparrow)",  costType: "debris", cost: 50,  time: 2 * 60 * 60 * 1000, desc: "Small, scrappy, and extremely agile." }, 
+    { id: "ship_d2", name: "শালিক (Myna)",   costType: "debris", cost: 100, time: 3 * 60 * 60 * 1000, desc: "A common but very reliable companion." }, 
+    { id: "ship_d3", name: "কাক (Crow)",costType: "debris", cost: 200, time: 4 * 60 * 60 * 1000, desc: "Highly intelligent and adaptable scavenger." }, 
+    { id: "ship_d4", name: "বাদুড় (Fruit Bat)",     costType: "debris", cost: 350, time: 6 * 60 * 60 * 1000, desc: "Leathery wings, nocturnal beast." }, 
+    { id: "ship_d5", name: "গাংচিল (Seagull)",   costType: "debris", cost: 500, time: 7 * 60 * 60 * 1000, desc: "Master rider of the coastal winds." }, 
+    { id: "ship_d6", name: "হাড়গিলা (Stork)", costType: "debris", cost: 3000, time: 24 * 60 * 60 * 1000, desc: "Massive, tough, and highly intimidating." },
+    { id: "ship_d7", name: "রাজহাঁস (Swan)", costType: "debris", cost: 5000, time: 48 * 60 * 60 * 1000, desc: "A territorial behemoth of the wetlands." }
 ];
 
 window.BoosterData = [
@@ -130,7 +130,6 @@ window.BoosterData = [
     { id: "batteryEff", name: "Battery Eff.", cost: 8, desc: "(2x) Battery Efficiency for 1 mins.", icon: "icon_booster_battery" }
 ];
 
-// --- NEW: THEME DATABASE & COLOR CONFIGURATIONS ---
 window.ThemeData = [
     {
         id: "theme_default", name: "Deep Space", costType: "free", cost: 0, desc: "The standard cosmic void.",
