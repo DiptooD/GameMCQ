@@ -106,7 +106,7 @@ window.resetGameState = function () {
 // BANGLADESHI FLYING ANIMALS (Bangla Updated)
 // ==========================================
 window.ShipData = [
-    { id: "ship_k1", name: "মাছরাঙা (Kingfisher)", costType: "keys", cost: 2, desc: "Swift river hunter. High precision dives." },
+    { id: "ship_k1", name: "দোয়েল (Magpie Robin)", costType: "keys", cost: 2, desc: "নির্ভরযোগ্য এবং পরিচিত। (Reliable and standard.)" },
     { id: "ship_k2", name: "চিল (Kite)",  costType: "keys", cost: 5, desc: "Majestic brown predator of the Bengal sky." },
     { id: "ship_k3", name: "কোকিল (Cuckoo)",  costType: "keys", cost: 8, desc: "Dark feathers, red eyes, and a striking aura." },
     { id: "ship_k4", name: "শকুন (Vulture)",   costType: "keys", cost: 12, desc: "Broad wingspan. Built for incredible endurance." },

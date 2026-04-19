@@ -391,8 +391,7 @@ class ShopScene extends Phaser.Scene {
 
     renderShipList() {
         const shipData = window.ShipData || [];
-        // CHANGED: The default bird now has a proper Bangla name in the shop UI
-        const allShips = [{ id: "default", name: "সাধারণ দোয়েল (Standard)", costType: "free", desc: "নির্ভরযোগ্য এবং শক্তপোক্ত।" }, ...shipData];
+        const allShips = [{ id: "default", name: "মাছরাঙা (Kingfisher)", costType: "free", desc: "নদীর দ্রুতগামী শিকারী। (River Hunter)" }, ...shipData];
 
         allShips.forEach((ship, i) => {
             const col = i % 2;

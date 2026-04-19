@@ -5,90 +5,105 @@ class GameTextures {
     let g = scene.make.graphics({ add: false });
     
     // ==========================================================
-    // --- DEFAULT PLAYER BIRD: DOEL (Magpie Robin) ---
+    // --- DEFAULT PLAYER BIRD: MACHRANGA (Kingfisher) ---
     // ==========================================================
-    const drawDoel = (level) => {
+    const drawKingfisher = (level) => {
         g.clear();
         
-        // Wing layers (White stripes on black) 
-        // WINGS EXPANDED: 15 to 165 for unified sizing!
-        g.fillStyle(0x1a1a1a, 1);
-        g.lineStyle(4, 0xffffff, 1); // Thick white outline
+        // Deep Navy Base for shadows
+        g.fillStyle(0x001133, 1); 
+        g.lineStyle(3, 0x00ffff, 0.6); // Glowing cyan outline
         
-        g.beginPath(); g.moveTo(90, 70); g.lineTo(15, 95); g.lineTo(65, 115); g.fillPath(); g.strokePath();
-        g.beginPath(); g.moveTo(90, 70); g.lineTo(165, 95); g.lineTo(115, 115); g.fillPath(); g.strokePath();
+        // Unified Wingspan: 15 to 165
+        g.beginPath(); g.moveTo(90, 70); g.lineTo(15, 90); g.lineTo(65, 115); g.fillPath(); g.strokePath();
+        g.beginPath(); g.moveTo(90, 70); g.lineTo(165, 90); g.lineTo(115, 115); g.fillPath(); g.strokePath();
         
-        g.fillStyle(0xffffff, 1);
-        g.fillRect(35, 90, 25, 6);
-        g.fillRect(120, 90, 25, 6);
+        // Vibrant Bright Cyan Highlights on Inner Wings
+        g.fillStyle(0x00aaff, 1); 
+        g.fillTriangle(90, 75, 35, 95, 60, 105);
+        g.fillTriangle(90, 75, 145, 95, 120, 105);
 
-        // Tail (Raised and stiff)
-        g.fillStyle(0x1a1a1a, 1);
-        g.beginPath(); g.moveTo(85, 100); g.lineTo(70, 145); g.lineTo(110, 145); g.lineTo(95, 100); g.fillPath(); g.strokePath();
-        g.fillStyle(0xffffff, 1);
-        g.fillRect(72, 115, 5, 30); g.fillRect(103, 115, 5, 30);
+        // Tail
+        g.fillStyle(0x002255, 1);
+        g.beginPath(); g.moveTo(80, 100); g.lineTo(90, 145); g.lineTo(100, 100); g.fillPath(); g.strokePath();
 
-        // Body & Belly
-        g.fillStyle(0x111111, 1); 
-        g.fillEllipse(90, 80, 40, 60); g.strokeEllipse(90, 80, 40, 60);
-        g.fillStyle(0xffffff, 1); 
-        g.fillEllipse(90, 88, 24, 40);
+        // Deep Orange Belly with Bright Highlight
+        g.fillStyle(0xaa3300, 1); // Deep orange
+        g.fillEllipse(90, 85, 32, 50); 
+        g.fillStyle(0xff8800, 1); // Bright orange center
+        g.fillEllipse(90, 88, 20, 35);
+        g.lineStyle(2, 0xffaa00, 0.7);
+        g.strokeEllipse(90, 85, 32, 50);
 
-        // Head & Beak
-        g.fillStyle(0x111111, 1);
-        g.fillCircle(90, 55, 16); g.strokeCircle(90, 55, 16);
-        g.fillStyle(0x00ffff, 1); // Bright cyan beak 
-        g.fillTriangle(86, 45, 94, 45, 90, 25); g.strokeTriangle(86, 45, 94, 45, 90, 25);
+        // Head
+        g.fillStyle(0x002255, 1);
+        g.fillCircle(90, 60, 16); 
+        g.fillStyle(0x00ffff, 1); 
+        g.fillCircle(90, 56, 10); // Bright forehead
+        g.lineStyle(2, 0x00ffff, 0.6);
+        g.strokeCircle(90, 60, 16);
 
-        // Enhancements based on Level
+        // Vibrant Red Beak
+        g.fillStyle(0x990000, 1);
+        g.fillTriangle(86, 50, 94, 50, 90, 10);
+        g.fillStyle(0xff3333, 1);
+        g.fillTriangle(88, 45, 92, 45, 90, 15);
+        g.lineStyle(2, 0xff5533, 0.7);
+        g.strokeTriangle(86, 50, 94, 50, 90, 10);
+
+        // Level Enhancements
         if (level >= 2) {
-            g.fillStyle(0x00ffff, 1); 
-            g.fillCircle(35, 100, 4); g.fillCircle(145, 100, 4);
+            g.fillStyle(0xffffff, 0.9); 
+            g.fillRect(40, 95, 10, 3); g.fillRect(130, 95, 10, 3); 
         }
         if (level >= 3) {
-            g.lineStyle(4, 0x00ffff, 1);
-            g.strokeEllipse(90, 80, 44, 64);
+            g.fillStyle(0x00ffff, 1); 
+            g.fillCircle(65, 110, 5); g.fillCircle(115, 110, 5);
         }
         if (level >= 4) {
-            g.fillStyle(0x00ffff, 0.9);
-            g.fillTriangle(75, 140, 105, 140, 90, 175); 
+            g.fillStyle(0x00aaff, 0.7);
+            g.fillTriangle(85, 135, 95, 135, 90, 170); 
             g.fillStyle(0xffffff, 1);
-            g.fillTriangle(82, 140, 98, 140, 90, 165);
+            g.fillTriangle(88, 135, 92, 135, 90, 160);
         }
     };
 
-    drawDoel(1); g.generateTexture("player_lv1", 180, 180);
-    drawDoel(2); g.generateTexture("player_lv2", 180, 180);
-    drawDoel(3); g.generateTexture("player_lv3", 180, 180);
-    drawDoel(4); g.generateTexture("player_lv4", 180, 180);
+    drawKingfisher(1); g.generateTexture("player_lv1", 180, 180);
+    drawKingfisher(2); g.generateTexture("player_lv2", 180, 180);
+    drawKingfisher(3); g.generateTexture("player_lv3", 180, 180);
+    drawKingfisher(4); g.generateTexture("player_lv4", 180, 180);
     g.clear();
 
-    // FIXED: Massive, super bright Default Bullets
-    g.fillStyle(0x00FFFF, 1); 
-    g.fillTriangle(12, 0, 2, 36, 22, 36); 
+    // ==========================================================
+    // --- GLOWING ENERGY BULLETS (Default) ---
+    // ==========================================================
+    g.fillStyle(0x00AAFF, 0.7); 
+    g.fillRoundedRect(6, 0, 12, 36, 6);
     g.fillStyle(0xFFFFFF, 1); 
-    g.fillTriangle(12, 4, 6, 32, 18, 32);
+    g.fillRoundedRect(9, 4, 6, 28, 3);
     g.generateTexture("bullet_default", 24, 36);
     g.clear();
 
-    g.fillStyle(0x00FFaa, 1); 
-    g.beginPath(); g.moveTo(12, 0); g.lineTo(2, 28); g.lineTo(12, 40); g.lineTo(22, 28); g.closePath(); g.fillPath();
-    g.fillStyle(0xffffff, 1);
-    g.beginPath(); g.moveTo(12, 8); g.lineTo(6, 28); g.lineTo(12, 32); g.lineTo(18, 28); g.closePath(); g.fillPath();
-    g.generateTexture("side_bullet_default", 24, 40);
+    g.fillStyle(0x00AAFF, 0.6); 
+    g.fillRoundedRect(6, 0, 12, 30, 6);
+    g.fillStyle(0xFFFFFF, 1);
+    g.fillRoundedRect(9, 4, 6, 22, 3);
+    g.generateTexture("side_bullet_default", 24, 30);
     g.clear();
 
-    // Fallback bullets (Orange/Yellow classic) made large
-    g.fillStyle(0xFF8800, 1); 
-    g.fillTriangle(12, 0, 2, 36, 22, 36); 
-    g.fillStyle(0xFFFF00, 1); 
-    g.fillTriangle(12, 4, 6, 32, 18, 32);
+    // Fallback classic bullets
+    g.fillStyle(0xFF8800, 0.7); 
+    g.fillRoundedRect(6, 0, 12, 36, 6);
+    g.fillStyle(0xFFFFFF, 1); 
+    g.fillRoundedRect(9, 4, 6, 28, 3);
     g.generateTexture("bullet", 24, 36);
     g.clear();
 
-    g.fillStyle(0xFF00FF, 1); 
-    g.beginPath(); g.moveTo(12, 0); g.lineTo(2, 28); g.lineTo(12, 40); g.lineTo(22, 28); g.closePath(); g.fillPath();
-    g.generateTexture("side_bullet", 24, 40);
+    g.fillStyle(0xFF00FF, 0.6); 
+    g.fillRoundedRect(6, 0, 12, 30, 6);
+    g.fillStyle(0xFFFFFF, 1); 
+    g.fillRoundedRect(9, 4, 6, 22, 3);
+    g.generateTexture("side_bullet", 24, 30);
     g.clear();
 
 
