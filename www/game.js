@@ -102,9 +102,6 @@ window.resetGameState = function () {
     window.updateLevelTargets(); 
 };
 
-// ==========================================
-// BANGLADESHI FLYING ANIMALS (Bangla Updated)
-// ==========================================
 window.ShipData = [
     { id: "ship_k1", name: "দোয়েল (Magpie Robin)", costType: "keys", cost: 2, desc: "নির্ভরযোগ্য এবং পরিচিত। (Reliable and standard.)" },
     { id: "ship_k2", name: "চিল (Kite)",  costType: "keys", cost: 5, desc: "Majestic brown predator of the Bengal sky." },
@@ -130,60 +127,61 @@ window.BoosterData = [
     { id: "batteryEff", name: "Battery Eff.", cost: 8, desc: "(2x) Battery Efficiency for 1 mins.", icon: "icon_booster_battery" }
 ];
 
+// POLISHED THEMES: Deep rich backgrounds with highly saturated bright accents.
 window.ThemeData = [
     {
         id: "theme_default", name: "Deep Space", costType: "free", cost: 0, desc: "The standard cosmic void.",
         colors: {
-            bgTop: 0x1a0033, bgBot: 0x002b36,
-            dynTopStart: 0x250049, dynTopEnd: 0x04002e,
-            dynBotStart: 0x004248, dynBotEnd: 0x001300,
-            nebulae: [0x242424, 0x373737, 0x161616],
-            dynNebStart: 0xd5d5d5, dynNebEnd: 0xcccccc,
-            starBase: 0x8888ff, starFast: 0xCFCFCF, starDistant: 0xffffff, debris: 0x444444
+            bgTop: 0x1A0545, bgBot: 0x003355,
+            dynTopStart: 0x330A7A, dynTopEnd: 0x110230,
+            dynBotStart: 0x005588, dynBotEnd: 0x001A33,
+            nebulae: [0x5E22A8, 0x006699, 0x441177],
+            dynNebStart: 0x77DDFF, dynNebEnd: 0x4488FF,
+            starBase: 0xAADDFF, starFast: 0xFFFFFF, starDistant: 0x6688CC, debris: 0x445577
         }
     },
     {
         id: "theme_crimson", name: "Crimson Void", costType: "keys", cost: 5, desc: "A blood-red galaxy filled with danger.",
         colors: {
-            bgTop: 0x2a0000, bgBot: 0x110000,
-            dynTopStart: 0x3a0000, dynTopEnd: 0x1a0000,
-            dynBotStart: 0x220000, dynBotEnd: 0x0a0000,
-            nebulae: [0x331111, 0x441111, 0x220000],
-            dynNebStart: 0xff8888, dynNebEnd: 0xcc4444,
-            starBase: 0xffddaa, starFast: 0xffaaaa, starDistant: 0xff8888, debris: 0x552222
+            bgTop: 0x4A0008, bgBot: 0x220000,
+            dynTopStart: 0x660011, dynTopEnd: 0x330005,
+            dynBotStart: 0x440000, dynBotEnd: 0x110000,
+            nebulae: [0x881122, 0xAA2211, 0x550000],
+            dynNebStart: 0xFF7777, dynNebEnd: 0xCC2233,
+            starBase: 0xFFDDAA, starFast: 0xFFEEEE, starDistant: 0xAA5555, debris: 0x772222
         }
     },
     {
         id: "theme_emerald", name: "Emerald Matrix", costType: "keys", cost: 10, desc: "Neon green data streams.",
         colors: {
-            bgTop: 0x001a00, bgBot: 0x000a0a,
-            dynTopStart: 0x002a00, dynTopEnd: 0x001100,
-            dynBotStart: 0x001515, dynBotEnd: 0x000505,
-            nebulae: [0x113311, 0x114411, 0x002200],
-            dynNebStart: 0xaaffaa, dynNebEnd: 0x66cc66,
-            starBase: 0xaaffaa, starFast: 0xccffcc, starDistant: 0x88ff88, debris: 0x225522
+            bgTop: 0x003311, bgBot: 0x001105,
+            dynTopStart: 0x005522, dynTopEnd: 0x00220A,
+            dynBotStart: 0x003311, dynBotEnd: 0x000A05,
+            nebulae: [0x117733, 0x22AA44, 0x004411],
+            dynNebStart: 0x88FF88, dynNebEnd: 0x22CC44,
+            starBase: 0xAAFFAA, starFast: 0xDDFFDD, starDistant: 0x44AA44, debris: 0x226633
         }
     },
     {
         id: "theme_cyber", name: "Cyberpunk", costType: "keys", cost: 20, desc: "Vibrant pinks and cyans.",
         colors: {
-            bgTop: 0x1a002b, bgBot: 0x000a1a,
-            dynTopStart: 0x2b0033, dynTopEnd: 0x11001a,
-            dynBotStart: 0x001122, dynBotEnd: 0x000511,
-            nebulae: [0x331133, 0x112244, 0x220022],
-            dynNebStart: 0xffaaff, dynNebEnd: 0xaa66ff,
-            starBase: 0x00ffff, starFast: 0xff00ff, starDistant: 0x00ccff, debris: 0x332244
+            bgTop: 0x2D004D, bgBot: 0x001A33,
+            dynTopStart: 0x550088, dynTopEnd: 0x1A0033,
+            dynBotStart: 0x003366, dynBotEnd: 0x000A1A,
+            nebulae: [0x881188, 0x114488, 0x550055],
+            dynNebStart: 0xFFAAFF, dynNebEnd: 0xAA44FF,
+            starBase: 0x00FFFF, starFast: 0xFF00FF, starDistant: 0x0088CC, debris: 0x442266
         }
     },
     {
         id: "theme_gold", name: "Golden Aura", costType: "keys", cost: 50, desc: "A majestic golden universe.",
         colors: {
-            bgTop: 0x2b1a00, bgBot: 0x110a00,
-            dynTopStart: 0x332200, dynTopEnd: 0x1a1100,
-            dynBotStart: 0x221100, dynBotEnd: 0x0a0500,
-            nebulae: [0x443311, 0x332211, 0x221100],
-            dynNebStart: 0xffffaa, dynNebEnd: 0xccaa66,
-            starBase: 0xffff00, starFast: 0xffdd00, starDistant: 0xffaa00, debris: 0x554422
+            bgTop: 0x4D2B00, bgBot: 0x220A00,
+            dynTopStart: 0x774400, dynTopEnd: 0x331A00,
+            dynBotStart: 0x441100, dynBotEnd: 0x110500,
+            nebulae: [0x996611, 0xAA5500, 0x552200],
+            dynNebStart: 0xFFFF88, dynNebEnd: 0xFFAA33,
+            starBase: 0xFFFF00, starFast: 0xFFFFAA, starDistant: 0xAA7700, debris: 0x775511
         }
     }
 ];
