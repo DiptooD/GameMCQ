@@ -64,9 +64,10 @@ class PlayerShipTextures {
             g.fillStyle(0x00ffff, 0.7); g.fillRoundedRect(6, 0, 12, 36, 6);
             g.fillStyle(0xffffff, 1); g.fillRoundedRect(9, 4, 6, 28, 3);
             g.generateTexture(`bullet_${id}`, 24, 36);
-            g.clear();
-            g.fillStyle(0x00ffff, 0.6); g.fillRoundedRect(6, 0, 12, 30, 6);
-            g.fillStyle(0xffffff, 1); g.fillRoundedRect(9, 4, 6, 22, 3);
+
+            g.clear(); // Crescent energy wave
+            g.fillStyle(0x00ffff, 0.8); g.beginPath(); g.arc(12, 15, 12, Math.PI, 0); g.lineTo(12, 25); g.closePath(); g.fillPath();
+            g.fillStyle(0xffffff, 1); g.beginPath(); g.arc(12, 15, 6, Math.PI, 0); g.lineTo(12, 20); g.closePath(); g.fillPath();
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -156,10 +157,10 @@ class PlayerShipTextures {
             g.fillStyle(0xffffff, 1); g.fillRect(10, 4, 4, 28);
             g.generateTexture(`bullet_${id}`, 24, 36);
 
-            g.clear(); // Side block
-            g.fillStyle(0xff0022, 0.8); g.fillCircle(12, 18, 10);
-            g.fillStyle(0xffffff, 1); g.fillCircle(12, 18, 4);
-            g.generateTexture(`side_bullet_${id}`, 24, 36);
+            g.clear(); // Spiked Double sphere
+            g.fillStyle(0xff0022, 0.8); g.fillTriangle(0, 15, 24, 15, 12, 30); g.fillCircle(12, 10, 8);
+            g.fillStyle(0xffffff, 1); g.fillCircle(12, 10, 4);
+            g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
         // 4. Shakun (Vulture)
@@ -248,8 +249,9 @@ class PlayerShipTextures {
             g.fillStyle(0x00ffff, 0.6); g.fillRect(6, 4, 12, 28);
             g.generateTexture(`bullet_${id}`, 24, 36);
 
-            g.clear();
-            g.fillStyle(0xffffff, 1); g.fillCircle(12, 15, 8);
+            g.clear(); // Teardrop
+            g.fillStyle(0xffffff, 1); g.beginPath(); g.arc(12, 20, 8, Math.PI, 0); g.lineTo(12, 0); g.closePath(); g.fillPath();
+            g.fillStyle(0x00ffff, 0.6); g.fillCircle(12, 20, 4);
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -346,8 +348,9 @@ class PlayerShipTextures {
             g.fillStyle(0xffffff, 0.8); g.fillRect(9, 4, 6, 28);
             g.generateTexture(`bullet_${id}`, 24, 36);
 
-            g.clear();
-            g.fillStyle(0xffff00, 1); g.fillCircle(12, 15, 10);
+            g.clear(); // Yellow spark
+            g.fillStyle(0xffff00, 1);
+            g.beginPath(); g.moveTo(12, 0); g.lineTo(18, 12); g.lineTo(24, 30); g.lineTo(12, 20); g.lineTo(0, 30); g.lineTo(6, 12); g.closePath(); g.fillPath();
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -392,7 +395,8 @@ class PlayerShipTextures {
             g.generateTexture(`bullet_${id}`, 24, 36);
 
             g.clear();
-            g.fillStyle(0xffcc00, 1); g.fillCircle(12, 15, 12); g.fillStyle(0xffffff, 1); g.fillCircle(12, 15, 6);
+            g.fillStyle(0xffcc00, 1); g.fillTriangle(12, 0, 6, 15, 18, 15); g.fillTriangle(12, 30, 6, 15, 18, 15);
+            g.fillStyle(0xffffff, 1); g.fillCircle(12, 15, 4);
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -436,7 +440,7 @@ class PlayerShipTextures {
             g.generateTexture(`bullet_${id}`, 24, 36);
             
             g.clear();
-            g.fillStyle(0xff6600, 1); g.fillCircle(12, 15, 10);
+            g.fillStyle(0xff6600, 1); g.beginPath(); g.moveTo(12,0); g.lineTo(20,15); g.lineTo(12,30); g.lineTo(4,15); g.fillPath();
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -477,7 +481,7 @@ class PlayerShipTextures {
             g.generateTexture(`bullet_${id}`, 24, 36);
 
             g.clear();
-            g.lineStyle(5, 0xffff00, 1); g.strokeCircle(12, 15, 10);
+            g.lineStyle(3, 0xffff00, 1); g.strokeCircle(12, 10, 8); g.strokeCircle(12, 20, 8);
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -561,7 +565,7 @@ class PlayerShipTextures {
             g.generateTexture(`bullet_${id}`, 24, 36);
             
             g.clear();
-            g.fillStyle(0xff0000, 1); g.fillCircle(12, 15, 10);
+            g.fillStyle(0xff0000, 1); g.beginPath(); g.moveTo(12,5); g.lineTo(24,15); g.lineTo(12,25); g.lineTo(0,15); g.fillPath();
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -608,7 +612,7 @@ class PlayerShipTextures {
             g.generateTexture(`bullet_${id}`, 24, 36);
 
             g.clear();
-            g.fillStyle(0x0088ff, 1); g.fillEllipse(12, 15, 10, 15);
+            g.fillStyle(0x0088ff, 1); g.fillTriangle(12, 0, 4, 20, 20, 20); g.fillTriangle(12, 30, 8, 15, 16, 15);
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 
@@ -651,7 +655,7 @@ class PlayerShipTextures {
             g.generateTexture(`bullet_${id}`, 24, 36);
 
             g.clear();
-            g.fillStyle(0xff4400, 1); g.fillCircle(12, 15, 10);
+            g.fillStyle(0xff4400, 1); g.fillRect(6, 0, 12, 24); g.fillStyle(0xffff00, 1); g.fillTriangle(6, 24, 18, 24, 12, 30);
             g.generateTexture(`side_bullet_${id}`, 24, 30);
         });
 

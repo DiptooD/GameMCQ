@@ -313,6 +313,300 @@ class GameScene extends GameBase {
         this.applyEnemyModifiers(e);
     }
 
+    spawnCentipede() {
+        const existing = this.enemies.getChildren().find(e => 
+            e.active && (e.tier === "centipede" || e.tier === "centipede_segment")
+        );
+        if (existing) return;
+
+        const progress = this.getGlobalProgress();
+        const luck = this.getLuckModifiers();
+        const segmentCount = 6 + Math.floor(progress / 5);
+        
+        const x = Phaser.Math.Between(100, 620);
+        const head = this.enemies.create(x, -100, "enemy_centipede");
+        
+        let speedY = (120 + (progress * 3)) * luck.speedMult;
+        let speedX = 150 * luck.speedMult;
+        
+        head.setVelocityY(speedY);
+        head.setVelocityX(speedX);
+        
+        head.hp = (100 + (progress * 3)) * luck.hpMult; 
+        head.maxHp = head.hp;
+        head.tier = "centipede";
+        head.enemyType = "centipede";
+        head.setScale(1.3);
+        head.setSize(45, 45);
+        head.segments = [];
+        head.setBounce(1, 0);
+        head.setCollideWorldBounds(true);
+        
+        for (let i = 0; i < segmentCount; i++) {
+          const segment = this.enemies.create(x - ((i + 1) * 45), -100, "enemy_centipede");
+          segment.hp = (50 + (progress * 2)) * luck.hpMult; 
+          segment.maxHp = segment.hp;
+          segment.tier = "centipede_segment";
+          segment.enemyType = "centipede";
+          segment.setScale(1.3);
+          segment.setSize(45, 45);
+          segment.parentHead = head;
+          head.segments.push(segment);
+        }
+    }
+
+    dropPowerUp(x, y, obstacleType) {
+        let powerUpType;
+        const roll = Math.random();
+        
+        if (obstacleType === "obstacle_mine") {
+          if (roll < 0.4) powerUpType = "powerup_tnt";
+          else if (roll < 0.7) powerUpType = "powerup_shield";
+          else if (roll < 0.9) powerUpType = "powerup_magnet";
+          else powerUpType = "powerup_heart";
+        } else if (obstacleType === "obstacle_debris") {
+          if (roll < 0.4) powerUpType = "powerup_magnet";
+          else if (roll < 0.7) powerUpType = "powerup_shield";
+          else if (roll < 0.85) powerUpType = "powerup_heart";
+          else powerUpType = "powerup_tnt";
+        } else {
+          if (roll < 0.4) powerUpType = "powerup_shield";
+          else if (roll < 0.7) powerUpType = "powerup_heart";
+          else if (roll < 0.9) powerUpType = "powerup_magnet";
+          else powerUpType = "powerup_tnt";
+        }
+        
+        const powerUp = this.powerUps.create(x, y, powerUpType);
+        powerUp.setVelocityY(150);
+        powerUp.powerUpType = powerUpType;
+        powerUp.setScale(1.3);
+        powerUp.setSize(45, 45);
+    }
+
+    activateShield() {
+        this.hasShield = true;
+        this.shieldArc.setVisible(true);
+    }
+
+    activateMagnet() {
+        if (this.magnetActive) {
+          this.magnetDuration += 20000;
+        } else {
+          this.magnetActive = true;
+          this.magnetDuration = 20000;
+          
+          const magnetField = this.add.circle(this.player.x, this.player.y, 80, 0xff0000, 0.3); 
+          this.tweens.add({
+            targets: magnetField,
+            scale: 3,
+            alpha: 0,
+            duration: 500,
+            onComplete: () => magnetField.destroy()
+          });
+          
+          this.magnetTimer = this.time.addEvent({
+            delay: 100,
+            loop: true,
+            callback: () => {
+              this.magnetDuration -= 100;
+              if (this.magnetDuration <= 0) {
+                this.deactivateMagnet();
+              }
+            }
+          });
+        }
+    }
+      
+    deactivateMagnet() {
+        this.magnetActive = false;
+        this.magnetDuration = 0;
+        if (this.magnetTimer) {
+          this.magnetTimer.remove();
+          this.magnetTimer = null;
+        }
+        this.batteries.children.each(battery => {
+          if (battery.active) {
+            battery.setVelocityY(220);
+            battery.setVelocityX(0);
+          }
+        });
+    }
+
+    activateTNT() {
+        this.triggerShockwave();
+        this.cameras.main.shake(600, 0.025);
+        this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
+    }
+
+    addExtraLife() {
+        let maxAllowed;
+        switch(GameState.bossStage) {
+          case 0:  maxAllowed = 6;  break;
+          case 1:  maxAllowed = 7;  break;
+          case 2:  maxAllowed = 8;  break;
+          default: maxAllowed = 10; break;
+        }
+    
+        if (GameState.lives < maxAllowed) {
+          GameState.lives++;
+          if (this.livesText) this.livesText.setText(`Lives: ${GameState.lives}`);
+          
+          for(let i = 0; i < 12; i++) {
+            const angle = (i / 12) * Math.PI * 2;
+            const heart = this.add.circle(
+              this.player.x + Math.cos(angle) * 40, 
+              this.player.y + Math.sin(angle) * 40,
+              6, 
+              0xff0033,
+              1
+            );
+            
+            this.tweens.add({
+              targets: heart,
+              y: heart.y - 60,
+              alpha: 0,
+              scale: 0,
+              duration: 800,
+              ease: 'Cubic.easeOut',
+              onComplete: () => heart.destroy()
+            });
+          }
+        }
+    }
+
+    triggerShockwave() {
+        this.cameras.main.shake(500, 0.03); 
+        this.cameras.main.flash(400, 255, 200, 50, 0.5); 
+    
+        const ringCount = 4; 
+        
+        for (let i = 0; i < ringCount; i++) {
+            const wave = this.add.image(this.player.x, this.player.y, "tex_shockwave_heavy");
+            
+            const color = (i % 2 === 0) ? 0xffaa00 : 0xffffff;
+            wave.setTint(color);
+            wave.setAlpha(0.7);
+            wave.setScale(0.15); 
+            
+            this.tweens.add({
+                targets: wave,
+                scale: 20,       
+                alpha: 0,
+                duration: 1000, 
+                delay: i * 150, 
+                ease: 'Quint.easeOut', 
+                onUpdate: () => {
+                    wave.x += Math.sin(this.time.now * 0.1) * 0.5;
+    
+                    const currentRadius = 80 * (wave.scale / 0.15);
+                    
+                    const targets = [
+                        ...(this.enemies ? this.enemies.getChildren() : []), 
+                        ...(this.obstacles ? this.obstacles.getChildren() : []), 
+                        ...(this.bossBullets ? this.bossBullets.getChildren() : [])
+                    ];
+                    
+                    targets.forEach(target => {
+                        if (target.active && !target.hitByWave) {
+                            const dist = Phaser.Math.Distance.Between(wave.x, wave.y, target.x, target.y);
+                            
+                            if (dist <= currentRadius) {
+                                target.hitByWave = true;
+                                this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
+                                    if (this.enemies && this.enemies.contains(target)) {
+                                         this.destroyEnemy(target);
+                                    } else {
+                                         this.createExplosion(target.x, target.y, 0xffff00, 20);
+                                         target.destroy();
+                                         GameState.score += 20;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+                onComplete: () => wave.destroy()
+            });
+        }
+    }
+  
+    updateDynamicBackground() {
+        const progress = this.getGlobalProgress();
+        const ratio = Math.min(progress / 25, 1);
+        
+        const themeColors = window.getThemeColors();
+    
+        const startTop = Phaser.Display.Color.ValueToColor(themeColors.dynTopStart); 
+        const endTop = Phaser.Display.Color.ValueToColor(themeColors.dynTopEnd);   
+        const startBot = Phaser.Display.Color.ValueToColor(themeColors.dynBotStart); 
+        const endBot = Phaser.Display.Color.ValueToColor(themeColors.dynBotEnd);   
+    
+        const top = Phaser.Display.Color.Interpolate.ColorWithColor(startTop, endTop, 100, ratio * 100);
+        const bot = Phaser.Display.Color.Interpolate.ColorWithColor(startBot, endBot, 100, ratio * 100);
+    
+        const topHex = Phaser.Display.Color.GetColor(top.r, top.g, top.b);
+        const botHex = Phaser.Display.Color.GetColor(bot.r, bot.g, bot.b);
+    
+        if (this.bgGradient) {
+          this.bgGradient.clear();
+          this.bgGradient.fillGradientStyle(topHex, topHex, botHex, botHex, 1);
+          this.bgGradient.fillRect(0, 0, 720, this.cameras.main.height);
+        }
+    
+        const startNebula = Phaser.Display.Color.ValueToColor(themeColors.dynNebStart); 
+        const endNebula = Phaser.Display.Color.ValueToColor(themeColors.dynNebEnd);   
+        
+        const nebColorObj = Phaser.Display.Color.Interpolate.ColorWithColor(startNebula, endNebula, 100, ratio * 100);
+        const currentNebColor = Phaser.Display.Color.GetColor(nebColorObj.r, nebColorObj.g, nebColorObj.b);
+    
+        if (this.nebulae) {
+          this.nebulae.children.each(n => {
+            n.fillColor = currentNebColor;
+            n.setAlpha(0.15 - (ratio * 0.05)); 
+          });
+        }
+    
+        const starColor = ratio > 0.6 ? 0xff4400 : themeColors.starBase;
+        [this.stars, this.distantStars, this.bgDebris].forEach(g => {
+          if(g) g.children.each(s => s.fillColor = starColor);
+        });
+    }
+
+    shutdown() {
+        if (this.visibilityHandler) {
+            document.removeEventListener("visibilitychange", this.visibilityHandler);
+        }
+        
+        const bgMusic = this.sound.get('bg_music');
+        if (bgMusic) bgMusic.stop();
+
+        if (this.bossAttackTimer) this.bossAttackTimer.remove();
+        if (this.weaponTimer) this.weaponTimer.remove();
+        if (this.spawnTimer) this.spawnTimer.remove();
+        if (this.enemyFireTimer) this.enemyFireTimer.remove();
+        if (this.obstacleTimer) this.obstacleTimer.remove();
+        if (this.magnetTimer) this.magnetTimer.remove();
+        if (this.bossTeleportTimer) this.bossTeleportTimer.remove();
+
+        if (this.reviveInterval) {
+            clearInterval(this.reviveInterval);
+        }
+
+        if (this.physics && this.physics.world) {
+            this.physics.world.timeScale = 1.0;
+        }
+        this.time.timeScale = 1.0;
+
+        if (this.shipAnimTween) this.shipAnimTween.stop();
+        this.tweens.killAll();
+        this.time.removeAllEvents();
+        
+        if (this.wakeLock) {
+            this.wakeLock.release().then(() => this.wakeLock = null);
+        }
+    }
+
+
     createBeginnersLuckUI() {
         const startX = 60;
         const buttonY = 1280;
@@ -349,40 +643,6 @@ class GameScene extends GameBase {
         }
 
         this.sound.play(key, config);
-    }
-
-    shutdown() {
-        if (this.visibilityHandler) {
-            document.removeEventListener("visibilitychange", this.visibilityHandler);
-        }
-        
-        const bgMusic = this.sound.get('bg_music');
-        if (bgMusic) bgMusic.stop();
-
-        if (this.bossAttackTimer) this.bossAttackTimer.remove();
-        if (this.weaponTimer) this.weaponTimer.remove();
-        if (this.spawnTimer) this.spawnTimer.remove();
-        if (this.enemyFireTimer) this.enemyFireTimer.remove();
-        if (this.obstacleTimer) this.obstacleTimer.remove();
-        if (this.magnetTimer) this.magnetTimer.remove();
-        if (this.bossTeleportTimer) this.bossTeleportTimer.remove();
-
-        if (this.reviveInterval) {
-            clearInterval(this.reviveInterval);
-        }
-
-        if (this.physics && this.physics.world) {
-            this.physics.world.timeScale = 1.0;
-        }
-        this.time.timeScale = 1.0;
-
-        if (this.shipAnimTween) this.shipAnimTween.stop();
-        this.tweens.killAll();
-        this.time.removeAllEvents();
-        
-        if (this.wakeLock) {
-            this.wakeLock.release().then(() => this.wakeLock = null);
-        }
     }
 
     update() {
@@ -435,8 +695,8 @@ class GameScene extends GameBase {
             this.magnetArc.clear();
             const pulse = Math.sin(this.time.now / 100);
             
-            this.magnetArc.lineStyle(4, 0xcc00ff, 0.8 + pulse * 0.2);
-            this.magnetArc.fillStyle(0xcc00ff, 0.15 + pulse * 0.1);
+            this.magnetArc.lineStyle(4, 0xff0000, 0.8 + pulse * 0.2);
+            this.magnetArc.fillStyle(0xff0000, 0.15 + pulse * 0.1);
 
             const arcY = this.player.y + 20;
             this.magnetArc.beginPath();
@@ -444,7 +704,7 @@ class GameScene extends GameBase {
             this.magnetArc.strokePath();
             this.magnetArc.fillPath();
 
-            this.magnetArc.lineStyle(2, 0xff00ff, 0.5);
+            this.magnetArc.lineStyle(2, 0xff3333, 0.5);
             this.magnetArc.beginPath();
             this.magnetArc.arc(this.player.x, arcY, 60 + pulse * 5, Phaser.Math.DegToRad(45), Phaser.Math.DegToRad(135));
             this.magnetArc.strokePath();
@@ -504,6 +764,17 @@ class GameScene extends GameBase {
                 this.enemyStatusGraphics.fillStyle(0xffcc00, 0.15 + pulse * 0.1);  
                 this.enemyStatusGraphics.beginPath();
                 this.enemyStatusGraphics.arc(e.x, e.y, e.shieldRadius, Phaser.Math.DegToRad(45), Phaser.Math.DegToRad(135));
+                this.enemyStatusGraphics.strokePath();
+                this.enemyStatusGraphics.fillPath();
+            }
+
+            if (e.isBodyBomb) {
+                const pulse = Math.sin(this.time.now / 150);
+                const radius = Math.max(e.width, e.height) * 0.6 * e.scale;
+                this.enemyStatusGraphics.lineStyle(3, 0xff0000, 0.6 + pulse * 0.4);
+                this.enemyStatusGraphics.fillStyle(0xff0000, 0.15 + pulse * 0.15);
+                this.enemyStatusGraphics.beginPath();
+                this.enemyStatusGraphics.arc(e.x, e.y, radius > 15 ? radius : 45, 0, Math.PI * 2);
                 this.enemyStatusGraphics.strokePath();
                 this.enemyStatusGraphics.fillPath();
             }
@@ -922,7 +1193,7 @@ class GameScene extends GameBase {
         }
 
         const names = { "powerup_shield": "SHIELD", "powerup_magnet": "MAGNET", "powerup_tnt": "SHOCKWAVE", "powerup_heart": "+1 LIFE" };
-        const colors = { "powerup_shield": "#ffcc00", "powerup_magnet": "#cc00ff", "powerup_tnt": "#ff3300", "powerup_heart": "#00ff00" };
+        const colors = { "powerup_shield": "#ffcc00", "powerup_magnet": "#ff0000", "powerup_tnt": "#ff3300", "powerup_heart": "#ff0033" };
         const text = this.add.text(powerUp.x, powerUp.y, names[type], { fontSize: "40px", color: colors[type], fontStyle: "bold", stroke: "#000000", strokeThickness: 3 }).setOrigin(0.5);
         this.tweens.add({ targets: text, y: powerUp.y - 80, alpha: 0, duration: 1200, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
     }
@@ -948,8 +1219,9 @@ class GameScene extends GameBase {
             }
             this.enemies.children.each(other => {
                 if (other !== enemy && other.active && Phaser.Math.Distance.Between(enemy.x, enemy.y, other.x, other.y) < 150) {
-                    other.hp -= 30;
-                    if (other.hp <= 0 && !other.isBodyBomb) { 
+                    other.hp = 0;
+                    if (!other.isDying) { 
+                        other.isDying = true;
                         this.destroyEnemy(other);
                     }
                 }
@@ -973,9 +1245,16 @@ class GameScene extends GameBase {
         let dropChance = enemy.tier === "ultra" ? 0.7 : enemy.tier === "rare" ? 0.6 : enemy.tier === "dragon" ? 0.6 : enemy.tier === "spinner" ? 0.9 : enemy.tier === "centipede" ? 0.2 : 0.8;
         dropChance += this.luckMods.batteryDropChance; 
 
+        if (enemy.isBodyBomb) dropChance = 1.0; 
+
         if (!GameState.bossActive && Math.random() < dropChance) {
             let batteryTexture = "battery_green", batteryValue = 35;
-            if (enemy.tier === "ultra" || enemy.tier === "centipede" || enemy.tier === "mini_boss") { batteryTexture = "battery_red"; batteryValue = 80; }
+            
+            if (enemy.isBodyBomb) { 
+                batteryTexture = "battery_red"; 
+                batteryValue = 80; 
+            }
+            else if (enemy.tier === "ultra" || enemy.tier === "centipede" || enemy.tier === "mini_boss") { batteryTexture = "battery_red"; batteryValue = 80; }
             else if (enemy.tier === "rare" || enemy.tier === "spinner" || enemy.tier === "dragon") { batteryTexture = "battery_yellow"; batteryValue = 50; }
 
             batteryValue = Math.ceil(batteryValue * this.luckMods.batteryDropMult);

@@ -77,6 +77,7 @@ class GameTextures {
     // ==========================================================
     // --- GLOWING ENERGY BULLETS (Default) ---
     // ==========================================================
+    // Main Bullet (Long glowing rectangle)
     g.fillStyle(0x00AAFF, 0.7); 
     g.fillRoundedRect(6, 0, 12, 36, 6);
     g.fillStyle(0xFFFFFF, 1); 
@@ -84,10 +85,11 @@ class GameTextures {
     g.generateTexture("bullet_default", 24, 36);
     g.clear();
 
-    g.fillStyle(0x00AAFF, 0.6); 
-    g.fillRoundedRect(6, 0, 12, 30, 6);
+    // Side Bullet (Sharp glowing dart/diamond)
+    g.fillStyle(0x00AAFF, 0.8);
+    g.beginPath(); g.moveTo(12, 0); g.lineTo(24, 15); g.lineTo(12, 30); g.lineTo(0, 15); g.fillPath();
     g.fillStyle(0xFFFFFF, 1);
-    g.fillRoundedRect(9, 4, 6, 22, 3);
+    g.beginPath(); g.moveTo(12, 6); g.lineTo(18, 15); g.lineTo(12, 24); g.lineTo(6, 15); g.fillPath();
     g.generateTexture("side_bullet_default", 24, 30);
     g.clear();
 
@@ -697,7 +699,7 @@ class GameTextures {
     g.generateTexture("powerup_tnt", 40, 40);
     g.clear();
 
-    g.fillStyle(0x00ff88, 1);
+    g.fillStyle(0xff0033, 1);
     g.fillCircle(14, 16, 8);
     g.fillCircle(26, 16, 8);
     g.beginPath();

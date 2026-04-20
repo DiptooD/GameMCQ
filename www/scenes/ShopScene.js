@@ -221,6 +221,12 @@ class ShopScene extends Phaser.Scene {
         }
     }
 
+    // A helper method to strip English names and descriptions (enclosed in parentheses) that might come from an external JS Array
+    sanitizeBanglaText(text) {
+        if (!text) return "";
+        return text.replace(/\s*\([A-Za-z0-9\s-]+\)/g, '').trim();
+    }
+
     createTopUI() {
         const backContainer = this.add.container(100, 65);
 
@@ -233,7 +239,7 @@ class ShopScene extends Phaser.Scene {
         const hitArea = this.add.rectangle(0, 0, 140, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         const backArrow = this.add.text(-35, 0, "◄", { fontSize: "28px", color: "#00ffff" }).setOrigin(0.5);
-        const backText = this.add.text(15, 0, "BACK", {
+        const backText = this.add.text(15, 0, "BACK", { 
             fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#ffffff"
         }).setOrigin(0.5);
 
@@ -327,7 +333,7 @@ class ShopScene extends Phaser.Scene {
         this.tabHighlight.x = -btnWidth; 
         container.add(this.tabHighlight);
 
-        this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 প্রাণী", {
+        this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 পাখি", {
             fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
         }).setOrigin(0.5);
 
@@ -391,7 +397,7 @@ class ShopScene extends Phaser.Scene {
 
     renderShipList() {
         const shipData = window.ShipData || [];
-        const allShips = [{ id: "default", name: "মাছরাঙা (Kingfisher)", costType: "free", desc: "নদীর দ্রুতগামী শিকারী। (River Hunter)" }, ...shipData];
+        const allShips = [{ id: "default", name: "মাছরাঙা", costType: "free", desc: "নদীর দ্রুতগামী শিকারী।" }, ...shipData];
 
         allShips.forEach((ship, i) => {
             const col = i % 2;
@@ -446,12 +452,12 @@ class ShopScene extends Phaser.Scene {
         const finalKey = this.textures.exists(previewKey) ? previewKey : "player_lv1";
         const preview = this.add.image(0, -95, finalKey).setScale(0.75);
 
-        const name = this.add.text(0, 10, ship.name, {
+        const name = this.add.text(0, 10, this.sanitizeBanglaText(ship.name), {
             fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
-        const desc = this.add.text(0, 65, ship.desc, {
+        const desc = this.add.text(0, 65, this.sanitizeBanglaText(ship.desc), {
             fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
         }).setOrigin(0.5);
@@ -467,9 +473,9 @@ class ShopScene extends Phaser.Scene {
         let onClick = null;
 
         if (isEquipped) {
-            btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "EQUIPPED";
+            btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "ব্যবহৃত";
         } else if (isOwned) {
-            btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "EQUIP";
+            btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "ব্যবহার করুন";
             onClick = () => {
                 this.playSound('sfx_powerup');
                 GameState.equippedShip = ship.id;
@@ -479,7 +485,7 @@ class ShopScene extends Phaser.Scene {
         } else if (craftingEnd) {
             const now = Date.now();
             if (now >= craftingEnd) {
-                btnColor1 = 0x008800; btnColor2 = 0x004400; btnStroke = 0x00ff00; btnTextStr = "CLAIM";
+                btnColor1 = 0x008800; btnColor2 = 0x004400; btnStroke = 0x00ff00; btnTextStr = "সংগ্রহ করুন";
                 onClick = () => {
                     this.playSound('sfx_jackpot');
                     GameState.ownedShips.push(ship.id);
@@ -500,7 +506,7 @@ class ShopScene extends Phaser.Scene {
                 const canAfford = GameState.keys >= ship.cost;
                 btnColor1 = canAfford ? 0xaa6600 : 0x442200; btnColor2 = canAfford ? 0x663300 : 0x221100;
                 btnStroke = canAfford ? 0xffaa00 : 0x664400;
-                btnTextStr = `${ship.cost} KEYS`;
+                btnTextStr = `${ship.cost} চাবি`;
                 onClick = () => {
                     if (canAfford) {
                         this.playSound('sfx_coin');
@@ -517,7 +523,7 @@ class ShopScene extends Phaser.Scene {
                 const canAfford = GameState.debris >= ship.cost;
                 btnColor1 = canAfford ? 0x006688 : 0x002233; btnColor2 = canAfford ? 0x003344 : 0x001122;
                 btnStroke = canAfford ? 0x00ffff : 0x004466;
-                btnTextStr = `CRAFT (${ship.cost})`;
+                btnTextStr = `তৈরি করুন (${ship.cost})`;
                 onClick = () => {
                     if (canAfford) {
                         this.playSound('sfx_coin');
@@ -531,7 +537,7 @@ class ShopScene extends Phaser.Scene {
                     }
                 };
             } else {
-                btnTextStr = "FREE";
+                btnTextStr = "ফ্রি";
             }
         }
 
@@ -545,7 +551,7 @@ class ShopScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
         const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
+            fontSize: "20px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnLabel.shipId = ship.id;
@@ -585,18 +591,18 @@ class ShopScene extends Phaser.Scene {
         const iconKey = this.textures.exists(item.icon) ? item.icon : "ui_debris_icon";
         const icon = this.add.image(0, -90, iconKey).setScale(1.5);
 
-        const name = this.add.text(0, 5, item.name, {
+        const name = this.add.text(0, 5, this.sanitizeBanglaText(item.name), {
             fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
-        const desc = this.add.text(0, 60, item.desc, {
+        const desc = this.add.text(0, 60, this.sanitizeBanglaText(item.desc), {
             fontSize: "17px", fontFamily: "'Anek Bangla'", color: "#ddaaff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 3
         }).setOrigin(0.5);
 
         const count = GameState.boosters[item.id] || 0;
-        const countText = this.add.text(0, 110, `মজুদ (Owned): ${count}`, {
+        const countText = this.add.text(0, 110, `মজুদ: ${count}`, {
             fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00"
         }).setOrigin(0.5);
 
@@ -615,8 +621,8 @@ class ShopScene extends Phaser.Scene {
         btnBg.strokeRoundedRect(-110, -25, 220, 50, 25);
 
         const hitArea = this.add.rectangle(0, 0, 220, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const btnTxt = this.add.text(0, 0, `${item.cost} Debris`, {
-            fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
+        const btnTxt = this.add.text(0, 0, `${item.cost} ডেব্রি`, {
+            fontSize: "20px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnContainer.add([btnBg, btnTxt, hitArea]);
@@ -679,12 +685,12 @@ class ShopScene extends Phaser.Scene {
         previewBg.fillCircle(-50, -80, 2);
         previewBg.fillCircle(70, -60, 2);
 
-        const name = this.add.text(0, -10, theme.name, {
+        const name = this.add.text(0, -10, this.sanitizeBanglaText(theme.name), {
             fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
-        const desc = this.add.text(0, 50, theme.desc, {
+        const desc = this.add.text(0, 50, this.sanitizeBanglaText(theme.desc), {
             fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
         }).setOrigin(0.5);
@@ -699,9 +705,9 @@ class ShopScene extends Phaser.Scene {
         let onClick = null;
 
         if (isEquipped) {
-            btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "EQUIPPED";
+            btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "ব্যবহৃত";
         } else if (isOwned) {
-            btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "EQUIP";
+            btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "ব্যবহার করুন";
             onClick = () => {
                 this.playSound('sfx_powerup');
                 GameState.equippedTheme = theme.id;
@@ -716,7 +722,7 @@ class ShopScene extends Phaser.Scene {
                 const canAfford = GameState.keys >= theme.cost;
                 btnColor1 = canAfford ? 0xaa6600 : 0x442200; btnColor2 = canAfford ? 0x663300 : 0x221100;
                 btnStroke = canAfford ? 0xffaa00 : 0x664400;
-                btnTextStr = `${theme.cost} KEYS`;
+                btnTextStr = `${theme.cost} চাবি`;
                 onClick = () => {
                     if (canAfford) {
                         this.playSound('sfx_coin');
@@ -730,7 +736,7 @@ class ShopScene extends Phaser.Scene {
                     }
                 };
             } else {
-                btnTextStr = "FREE";
+                btnTextStr = "ফ্রি";
             }
         }
 
@@ -744,7 +750,7 @@ class ShopScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
         const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff"
+            fontSize: "20px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnContainer.add([btnBg2, btnLabel, hitArea]);
