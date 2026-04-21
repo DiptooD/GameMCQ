@@ -16,14 +16,14 @@ const config = {
     arcade: { 
         debug: false,
         fps: 60,                
-        fixedStep: true,        
+        fixedStep: false, // Changed to false for smoother dynamic frame rendering
         gravity: { y: 0 } 
     }
   },
   render: {
     antialias: true,
     pixelArt: false,
-    roundPixels: true,
+    roundPixels: false, // Ensures smoother lerping for sprites
     clearBeforeRender: false
   },
   audio: {
@@ -32,7 +32,6 @@ const config = {
   input: {
     activePointers: 2, 
   },
-  // ADDED SettingsScene TO THE SCENE ARRAY
   scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, GameScene, QuestionScene, PauseScene, DeathScene]
 };
 
@@ -49,16 +48,13 @@ Promise.all([
 });
 
 document.addEventListener("deviceready", () => {
-    
     if (navigator.splashscreen) {
         navigator.splashscreen.hide();
     }    
     
     const handleAppPause = () => {
         if (!window.game) return;
-        if (window.game.sound) {
-            window.game.sound.pauseAll(); 
-        }
+        if (window.game.sound) window.game.sound.pauseAll(); 
     };
 
     const handleAppResume = () => {

@@ -372,9 +372,14 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
-    update() {
+    update(time, delta) {
         if (this.isResuming) return;
-        const dt = this.time.timeScale;
+        
+        // FIXED: Extract delta-time normalization for smooth lerping
+        const timeScale = this.time.timeScale || 1;
+        const dtScale = delta / 16.666; 
+        const dt = timeScale * dtScale;
+
         const hView = this.cameras.main.height;
         const wView = this.cameras.main.width;
         const bottomEdge = hView + 150;
@@ -397,7 +402,7 @@ class GameScene extends GameBase {
 
         this.checkBossSpawn();
 
-        // FIXED: Smoother Player Lerp
+        // FIXED: Smoother Player Lerp with dt
         const lerpSpeed = 0.25 * dt;
         this.player.x = Phaser.Math.Linear(this.player.x, this.targetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
@@ -408,8 +413,8 @@ class GameScene extends GameBase {
                 const targetX = this.player.x + offset;
                 const targetY = this.player.y + 30;
                 
-                wingman.x = Phaser.Math.Linear(wingman.x, targetX, 0.1);
-                wingman.y = Phaser.Math.Linear(wingman.y, targetY, 0.1);
+                wingman.x = Phaser.Math.Linear(wingman.x, targetX, 0.1 * dt);
+                wingman.y = Phaser.Math.Linear(wingman.y, targetY, 0.1 * dt);
 
                 if (this.time.now > (wingman.lastShot || 0) + 400) {
                     wingman.lastShot = this.time.now;
@@ -487,16 +492,16 @@ class GameScene extends GameBase {
             this.applyShipAnimation(equipped);
         }
 
-        this.distantStars.children.each(s => { s.y += 0.3 * this.backgroundSpeed; if (s.y > hView) s.y = -10; });
+        this.distantStars.children.each(s => { s.y += 0.3 * this.backgroundSpeed * dtScale; if (s.y > hView) s.y = -10; });
         this.stars.children.each(s => { 
             s.y += 2 * this.backgroundSpeed * dt; 
             if (s.y > hView) { s.y = -10; s.x = Phaser.Math.Between(0, 720); }
         });
         this.fastStars.children.each(s => {
-            s.y += (.15 + (this.backgroundSpeed * 4));
+            s.y += (.15 + (this.backgroundSpeed * 4)) * dtScale;
             if (s.y > hView) { s.y = -10; s.x = Phaser.Math.Between(0, 720); }
         });
-        this.nebulae.children.each(n => { n.y += 0.2 * this.backgroundSpeed; if (n.y > hView + 200) n.y = -200; });
+        this.nebulae.children.each(n => { n.y += 0.2 * this.backgroundSpeed * dtScale; if (n.y > hView + 200) n.y = -200; });
 
         this.engineEmitter.emitParticleAt(this.player.x, this.player.y + 55, 2);
 
@@ -505,13 +510,13 @@ class GameScene extends GameBase {
         this.enemies.children.each(e => {
             if (!e.active) return;
 
-            // FIXED: Thief Smooth Tracking Logic
+            // FIXED: Thief Smooth Tracking Logic with dt normalization
             if (e.enemyType === "thief") {
                 const angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
                 const currentAngle = Math.atan2(e.body.velocity.y, e.body.velocity.x) || (Math.PI/2);
                 const angleDiff = Phaser.Math.Angle.Wrap(angle - currentAngle);
                 
-                const turnSpeed = 0.08; 
+                const turnSpeed = 0.08 * dtScale; 
                 const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -turnSpeed, turnSpeed);
 
                 const speed = 400 * this.luckMods.speedMult;
@@ -558,7 +563,7 @@ class GameScene extends GameBase {
             }
 
             if (e.canDash && !e.isDashing && e.y > 50 && e.y < hView - 300) {
-                e.dashTimer--;
+                e.dashTimer -= dtScale;
                 if (e.dashTimer <= 0) {
                     e.isDashing = true;
                     this.playSFX('sfx_enemy_dash', 0.4);
@@ -587,8 +592,8 @@ class GameScene extends GameBase {
                         const targetDist = 45;
 
                         if (dist > targetDist) {
-                            seg.x += Math.cos(angle) * (dist - targetDist) * 0.3;
-                            seg.y += Math.sin(angle) * (dist - targetDist) * 0.3;
+                            seg.x += Math.cos(angle) * (dist - targetDist) * 0.3 * dtScale;
+                            seg.y += Math.sin(angle) * (dist - targetDist) * 0.3 * dtScale;
                         }
                     }
                 });
@@ -606,15 +611,15 @@ class GameScene extends GameBase {
             }
 
             if (!e.isDashing && e.enemyType !== "thief") {
-                if (e.texture.key === "enemy_common") e.angle += (e.rotSpeed || 1);
+                if (e.texture.key === "enemy_common") e.angle += (e.rotSpeed || 1) * dtScale;
                 if (e.movePattern === "wiggle") {
-                    e.wiggleTimer = (e.wiggleTimer || 0) + 0.1;
+                    e.wiggleTimer = (e.wiggleTimer || 0) + 0.1 * dtScale;
                     e.x += Math.sin(e.wiggleTimer) * 2;
                     e.rotation = Math.sin(e.wiggleTimer) * 0.2;
                 }
-                if (e.enemyType === "spinner") e.rotation += 0.08;
+                if (e.enemyType === "spinner") e.rotation += 0.08 * dtScale;
                 if (e.movePattern === "jet_pulse") {
-                    e.pulseTimer = (e.pulseTimer || 0) + 1;
+                    e.pulseTimer = (e.pulseTimer || 0) + 1 * dtScale;
                     if (e.pulseTimer % 120 < 20) e.setVelocityY(450);
                     else e.setVelocityY(Phaser.Math.Linear(e.body.velocity.y, 80, 0.05));
                 }
@@ -624,7 +629,7 @@ class GameScene extends GameBase {
                     if (e.x < 50) { e.x = 50; e.setVelocityX(Math.abs(e.body.velocity.x)); }
                     if (e.x > 670) { e.x = 670; e.setVelocityX(-Math.abs(e.body.velocity.x)); }
                     
-                    if (Math.random() < 0.05) {
+                    if (Math.random() < 0.05 * dtScale) {
                         let angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
                         e.body.velocity.x += Math.cos(angle) * 10;
                         e.body.velocity.y += Math.sin(angle) * 10;
@@ -634,7 +639,7 @@ class GameScene extends GameBase {
 
             if (e.enemyType === "dragon") {
                 if (!e.fireTimer) e.fireTimer = 0;
-                e.fireTimer++;
+                e.fireTimer += dtScale;
                 if (e.fireTimer >= this.dragonFireThreshold) {
                     e.fireTimer = 0;
                     const flame = this.bossBullets.create(e.x, e.y + 30, "enemyBullet");
@@ -685,7 +690,7 @@ class GameScene extends GameBase {
                 const angle = Phaser.Math.Angle.Between(missile.x, missile.y, closestEnemy.x, closestEnemy.y);
                 const currentAngle = Math.atan2(missile.body.velocity.y, missile.body.velocity.x);
                 const angleDiff = Phaser.Math.Angle.Wrap(angle - currentAngle);
-                const turnSpeed = 0.03;
+                const turnSpeed = 0.03 * dtScale;
                 const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -turnSpeed, turnSpeed);
                 const speed = 700;
                 missile.setVelocity(Math.cos(newAngle) * speed, Math.sin(newAngle) * speed);
@@ -694,7 +699,6 @@ class GameScene extends GameBase {
             }
         });
 
-        // FIXED: Destroy obstacles fully out of bounds + destroy trail instance
         this.obstacles.children.each(obs => { 
             if (obs.active && (obs.y > bottomEdge || obs.x < -200 || obs.x > wView + 200)) {
                 if (obs.trail) obs.trail.destroy();
@@ -2177,6 +2181,42 @@ class GameScene extends GameBase {
                 }
             },
             callbackScope: this
+        });
+    }
+
+    spawnMeteors() {
+        this.playSFX('sfx_warning', 0.8, false);
+        
+        // FIXED: Replaced textual warning with an immersive full-screen flash
+        this.cameras.main.flash(600, 255, 0, 0, 0.6);
+
+        this.time.delayedCall(600, () => {
+            // FIXED: Heavy meteor density
+            for(let i = 0; i < 20; i++) {
+                this.time.delayedCall(i * 300, () => {
+                    if(!GameState.bossActive && this.scene.isActive()) {
+                        let m = this.obstacles.create(Phaser.Math.Between(50, 670), -100, "hazard_meteor");
+                        m.obstacleType = "meteor";
+                        m.hp = 9999; 
+                        m.setScale(Phaser.Math.FloatBetween(1.2, 2.0));
+                        m.setCircle(22, 8, 8); 
+                        
+                        m.setVelocity(Phaser.Math.Between(-200, 200), Phaser.Math.Between(750, 1200));
+                        m.setRotation(Phaser.Math.FloatBetween(0, Math.PI * 2));
+                        m.setAngularVelocity(Phaser.Math.Between(-300, 300));
+                        
+                        const trail = this.add.particles(0, 0, 'engine_flame', {
+                            speed: 50,
+                            scale: { start: m.scale * 0.8, end: 0 },
+                            alpha: { start: 0.6, end: 0 },
+                            blendMode: 'ADD',
+                            lifespan: 300
+                        });
+                        trail.startFollow(m);
+                        m.trail = trail; 
+                    }
+                });
+            }
         });
     }
 }

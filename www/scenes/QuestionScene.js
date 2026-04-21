@@ -20,6 +20,9 @@ class QuestionScene extends Phaser.Scene {
         }
         this.qIdx = 0;
 
+        // --- METEOR SHOWER VIGNETTE (Visual Warning) ---
+        this.meteorVignette = this.add.graphics().setDepth(-10);
+
         // --- 1. MAIN UI CONTAINER ---
         this.qContainer = this.add.container(0, 0);
 
@@ -415,6 +418,25 @@ class QuestionScene extends Phaser.Scene {
         if (this.heartsContainer && this.heartsContainer.list.length !== GameState.lives) {
             this.refreshHearts();
         }
+
+        // METEOR SHOWER VIGNETTE LOGIC
+        if (this.meteorTimer && !GameState.bossActive && GameState.battery >= 100) {
+            const p = this.meteorTimer.getProgress(); // 0 to 1
+            this.meteorVignette.clear();
+            
+            if (p > 0.05) {
+                // Exponential thickness buildup looks more threatening
+                const maxThickness = 120;
+                const currentThickness = maxThickness * Math.pow(p, 2);
+                const alpha = p * 0.75; // Slowly fades in
+
+                this.meteorVignette.lineStyle(currentThickness, 0xff0000, alpha);
+                const inset = currentThickness / 2;
+                this.meteorVignette.strokeRect(inset, inset, 720 - (inset * 2), this.cameras.main.height - (inset * 2));
+            }
+        } else {
+            this.meteorVignette.clear();
+        }
         
         this.keyText.setText(GameState.keys || 0);
         this.debrisText.setText(GameState.debris || 0);
@@ -445,17 +467,16 @@ class QuestionScene extends Phaser.Scene {
             
             this.setButtonsState(isNowReady);
             this.updateReadyState(isNowReady);
-            this.manageMeteorTimer(isNowReady); // Controls Meteor Hazard Timer based on ready state
+            this.manageMeteorTimer(isNowReady);
             this.wasReady = isNowReady;
         }
     }
 
-    // Handles the inactivity meteor drop logic
     manageMeteorTimer(isReady) {
         if (isReady && !GameState.bossActive) {
             if (!this.meteorTimer) {
                 this.meteorTimer = this.time.addEvent({
-                    delay: 20000, // FIXED: Increased timer to 20s
+                    delay: 25000, // FIXED: Increased to 25 seconds
                     callback: () => {
                         const gameScene = this.scene.get('GameScene');
                         if (gameScene && !GameState.bossActive) gameScene.spawnMeteors();
@@ -468,6 +489,7 @@ class QuestionScene extends Phaser.Scene {
                 this.meteorTimer.remove();
                 this.meteorTimer = null;
             }
+            this.meteorVignette.clear();
         }
     }
 
@@ -738,7 +760,7 @@ class QuestionScene extends Phaser.Scene {
         
         this.wasReady = false; 
         this.updateReadyState(false);
-        this.manageMeteorTimer(false); // Reset meteor hazard
+        this.manageMeteorTimer(false);
 
         this.optionBtns.forEach(btn => {
             if (btn.pulseTween) {
@@ -776,7 +798,6 @@ class QuestionScene extends Phaser.Scene {
             window.updateMissionProgress("answer_correct", 1); 
 
             if (GameState.currentCombo >= 3) {
-                // Fever Mode Trigger
                 gameScene.comboText.setText(`COMBO x${GameState.currentCombo}!`);
                 gameScene.comboText.setAlpha(1);
                 gameScene.comboText.setScale(0.5);
@@ -784,7 +805,6 @@ class QuestionScene extends Phaser.Scene {
                     gameScene.tweens.add({ targets: gameScene.comboText, alpha: 0, duration: 500, delay: 1000 });
                 }});
                 
-                // Wingman dynamic logic
                 let duration = Math.max(4, Math.min(15, 4 + (GameState.currentCombo - 3) * 2)); 
 
                 if (gameScene.wingmen.countActive() === 0) {
@@ -863,7 +883,7 @@ class QuestionScene extends Phaser.Scene {
 
     applyFiftyFifty() {
         if (!GameState.hasFiftyFifty || this.isProcessing) return;
-        if (GameState.fiftyFiftyOptionsToHide && GameState.fiftyFiftyOptionsToHide.length > 0) return; // Prevent 50/50 from stacking and hiding everything
+        if (GameState.fiftyFiftyOptionsToHide && GameState.fiftyFiftyOptionsToHide.length > 0) return;
         
         const q = this.questions[this.qIdx % this.questions.length];
         const correctIdx = q.answer;
@@ -980,6 +1000,7 @@ class QuestionScene extends Phaser.Scene {
             this.instructionText.setAlpha(0);
             if (this.warningTween) this.warningTween.stop();
             if (this.readyTween) this.readyTween.stop();
+            this.meteorVignette.clear();
         } else {
             this.wasReady = null; 
             this.qPanel.setAlpha(1);
