@@ -85,6 +85,7 @@ class GameScene extends GameBase {
             .setCollideWorldBounds(true)
             .setScale(0.9);
         this.player.setSize(90, 90);
+        this.wingmen = this.physics.add.group();
         
         // Initial setup for ship animation
         this.applyShipAnimation(GameState.equippedShip || "default");
@@ -175,6 +176,11 @@ class GameScene extends GameBase {
             bgMusic.setVolume(globalMusicVol); 
             if (!bgMusic.isPlaying) bgMusic.play();
         }
+
+        // FIXED: Placed at the bottom left
+        this.comboText = this.add.text(30, h - 220, "", { 
+            fontSize: '46px', fontFamily: "'Anek Bangla'", color: '#ffaa00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6
+        }).setOrigin(0, 0.5).setDepth(100).setAlpha(0);
     }
 
     applyShipAnimation(shipId) {
@@ -182,20 +188,18 @@ class GameScene extends GameBase {
             this.shipAnimTween.stop();
         }
 
-        // UNIFIED SIZE! No more tiny or giant birds based on tier. 
         let baseScale = 0.9;
         let scaleTarget = 0.75;
         let duration = 200;
         
-        // Keep the varied flap animation speeds so they feel different
         if (["ship_d1", "ship_d2", "ship_k1"].includes(shipId)) {
-            duration = 100; // very fast flutter
+            duration = 100;
         } else if (["ship_k3", "ship_k7", "ship_d5"].includes(shipId)) {
             duration = 180;
         } else if (["ship_k4", "ship_k8", "ship_d6", "ship_d7"].includes(shipId)) {
-            duration = 450; // slow majestic soar
+            duration = 450; 
         } else if (shipId === "ship_d4") {
-            duration = 150; // bat snap
+            duration = 150; 
         } else {
             duration = 250;
         }
@@ -203,7 +207,6 @@ class GameScene extends GameBase {
         this.player.setScale(baseScale);
         this.player.setAngle(0);
 
-        // Realistic bird flap
         this.shipAnimTween = this.tweens.add({
             targets: this.player,
             scaleX: scaleTarget,
@@ -240,147 +243,6 @@ class GameScene extends GameBase {
             e.shieldRadius = Math.max(e.width, e.height) * 0.55 * e.scale;
             if(isNaN(e.shieldRadius) || e.shieldRadius < 15) e.shieldRadius = 45;
         }
-    }
-
-    spawnEnemy() {
-        if (GameState.bossActive) return;
-        
-        const stage = GameState.bossStage;
-        const progress = this.getGlobalProgress();
-        const luck = this.getLuckModifiers();
-        const roll = Phaser.Math.Between(1, 100);
-        let type, hp, tier, enemyType;
-        
-        if (stage === 0) {
-          if (roll > 95) { type = "enemy_dragon"; tier = "dragon"; enemyType = "dragon"; } 
-          else if (roll > 90) { type = "enemy_spinner"; tier = "spinner"; enemyType = "spinner"; } 
-          else if (roll > 80) { type = "enemy_rare"; tier = "rare"; enemyType = "rare"; } 
-          else if (roll > 70) { type = "enemy_octopus"; tier = "octopus"; enemyType = "octopus"; } 
-          else { type = "enemy_common"; tier = "common"; enemyType = "common"; }
-        } 
-        else if (stage === 1) {
-           if (roll > 90) { type = "enemy_ultra"; tier = "ultra"; enemyType = "ultra"; } 
-           else if (roll > 40) { type = "enemy_dragon"; tier = "dragon"; enemyType = "dragon"; } 
-           else if (roll > 20) { type = "enemy_rare"; tier = "rare"; enemyType = "rare"; } 
-           else { type = "enemy_octopus"; tier = "octopus"; enemyType = "octopus"; }
-        } 
-        else {
-          if (roll > 96) { this.spawnCentipede(); return; } 
-          else if (roll > 60) { type = "enemy_ultra"; tier = "ultra"; enemyType = "ultra"; } 
-          else if (roll > 30) { type = "enemy_dragon"; tier = "dragon"; enemyType = "dragon"; } 
-          else { type = "enemy_octopus"; tier = "octopus"; enemyType = "octopus"; }
-        }
-        
-        const hpMultiplier = (1 + (progress * 0.2)) * luck.hpMult; 
-    
-        if (type === "enemy_common") hp = 5 * hpMultiplier;
-        else if (type === "enemy_rare" || type === "enemy_octopus") hp = 10 * hpMultiplier; 
-        else if (type === "enemy_spinner") hp = 15 * hpMultiplier;
-        else if (type === "enemy_dragon") hp = 20 * hpMultiplier;
-        else if (type === "enemy_ultra") hp = 35 * hpMultiplier;
-        
-        const e = this.enemies.create(Phaser.Math.Between(60, 660), -100, type);
-        
-        let speedY = (160 + (progress * 8)) * luck.speedMult;
-        e.setVelocityY(speedY);
-        
-        e.hp = hp;
-        e.maxHp = hp;
-        e.tier = tier;
-        e.enemyType = enemyType;
-        
-        if (tier === "ultra") {
-          e.setSize(55, 65); e.setScale(1.2); e.movePattern = "wave"; e.moveTimer = 0;
-        } else if (tier === "rare") {
-          e.setSize(70, 90); e.setScale(1.15); e.movePattern = "wiggle"; e.wiggleTimer = Phaser.Math.FloatBetween(0, 100); 
-        } else if (tier === "octopus") {
-          e.setSize(55, 75); e.setScale(1.15); e.movePattern = "jet_pulse"; e.pulseTimer = 0;
-        } else if (tier === "dragon") {
-          e.setSize(80, 65); e.setScale(1.2); e.movePattern = "zigzag"; 
-          let vx = Phaser.Math.Between(-100, 100) * luck.speedMult;
-          e.setVelocityX(vx);
-        } else if (tier === "spinner") {
-          e.setSize(40, 40); e.setScale(1.1); e.movePattern = "spiral"; e.moveTimer = 0;
-        } else {
-          e.body.setCircle(28); 
-          e.setOffset(3, 3);
-          e.setScale(1.5); 
-          e.movePattern = "straight";
-          const baseSpeed = Phaser.Math.Between(1, 2);
-          e.rotSpeed = baseSpeed + (progress * 0.5);
-        }
-
-        this.applyEnemyModifiers(e);
-    }
-
-    spawnCentipede() {
-        const existing = this.enemies.getChildren().find(e => 
-            e.active && (e.tier === "centipede" || e.tier === "centipede_segment")
-        );
-        if (existing) return;
-
-        const progress = this.getGlobalProgress();
-        const luck = this.getLuckModifiers();
-        const segmentCount = 6 + Math.floor(progress / 5);
-        
-        const x = Phaser.Math.Between(100, 620);
-        const head = this.enemies.create(x, -100, "enemy_centipede");
-        
-        let speedY = (120 + (progress * 3)) * luck.speedMult;
-        let speedX = 150 * luck.speedMult;
-        
-        head.setVelocityY(speedY);
-        head.setVelocityX(speedX);
-        
-        head.hp = (100 + (progress * 3)) * luck.hpMult; 
-        head.maxHp = head.hp;
-        head.tier = "centipede";
-        head.enemyType = "centipede";
-        head.setScale(1.3);
-        head.setSize(45, 45);
-        head.segments = [];
-        head.setBounce(1, 0);
-        head.setCollideWorldBounds(true);
-        
-        for (let i = 0; i < segmentCount; i++) {
-          const segment = this.enemies.create(x - ((i + 1) * 45), -100, "enemy_centipede");
-          segment.hp = (50 + (progress * 2)) * luck.hpMult; 
-          segment.maxHp = segment.hp;
-          segment.tier = "centipede_segment";
-          segment.enemyType = "centipede";
-          segment.setScale(1.3);
-          segment.setSize(45, 45);
-          segment.parentHead = head;
-          head.segments.push(segment);
-        }
-    }
-
-    dropPowerUp(x, y, obstacleType) {
-        let powerUpType;
-        const roll = Math.random();
-        
-        if (obstacleType === "obstacle_mine") {
-          if (roll < 0.4) powerUpType = "powerup_tnt";
-          else if (roll < 0.7) powerUpType = "powerup_shield";
-          else if (roll < 0.9) powerUpType = "powerup_magnet";
-          else powerUpType = "powerup_heart";
-        } else if (obstacleType === "obstacle_debris") {
-          if (roll < 0.4) powerUpType = "powerup_magnet";
-          else if (roll < 0.7) powerUpType = "powerup_shield";
-          else if (roll < 0.85) powerUpType = "powerup_heart";
-          else powerUpType = "powerup_tnt";
-        } else {
-          if (roll < 0.4) powerUpType = "powerup_shield";
-          else if (roll < 0.7) powerUpType = "powerup_heart";
-          else if (roll < 0.9) powerUpType = "powerup_magnet";
-          else powerUpType = "powerup_tnt";
-        }
-        
-        const powerUp = this.powerUps.create(x, y, powerUpType);
-        powerUp.setVelocityY(150);
-        powerUp.powerUpType = powerUpType;
-        powerUp.setScale(1.3);
-        powerUp.setSize(45, 45);
     }
 
     activateShield() {
@@ -438,140 +300,6 @@ class GameScene extends GameBase {
         this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
     }
 
-    addExtraLife() {
-        let maxAllowed;
-        switch(GameState.bossStage) {
-          case 0:  maxAllowed = 6;  break;
-          case 1:  maxAllowed = 7;  break;
-          case 2:  maxAllowed = 8;  break;
-          default: maxAllowed = 10; break;
-        }
-    
-        if (GameState.lives < maxAllowed) {
-          GameState.lives++;
-          if (this.livesText) this.livesText.setText(`Lives: ${GameState.lives}`);
-          
-          for(let i = 0; i < 12; i++) {
-            const angle = (i / 12) * Math.PI * 2;
-            const heart = this.add.circle(
-              this.player.x + Math.cos(angle) * 40, 
-              this.player.y + Math.sin(angle) * 40,
-              6, 
-              0xff0033,
-              1
-            );
-            
-            this.tweens.add({
-              targets: heart,
-              y: heart.y - 60,
-              alpha: 0,
-              scale: 0,
-              duration: 800,
-              ease: 'Cubic.easeOut',
-              onComplete: () => heart.destroy()
-            });
-          }
-        }
-    }
-
-    triggerShockwave() {
-        this.cameras.main.shake(500, 0.03); 
-        this.cameras.main.flash(400, 255, 200, 50, 0.5); 
-    
-        const ringCount = 4; 
-        
-        for (let i = 0; i < ringCount; i++) {
-            const wave = this.add.image(this.player.x, this.player.y, "tex_shockwave_heavy");
-            
-            const color = (i % 2 === 0) ? 0xffaa00 : 0xffffff;
-            wave.setTint(color);
-            wave.setAlpha(0.7);
-            wave.setScale(0.15); 
-            
-            this.tweens.add({
-                targets: wave,
-                scale: 20,       
-                alpha: 0,
-                duration: 1000, 
-                delay: i * 150, 
-                ease: 'Quint.easeOut', 
-                onUpdate: () => {
-                    wave.x += Math.sin(this.time.now * 0.1) * 0.5;
-    
-                    const currentRadius = 80 * (wave.scale / 0.15);
-                    
-                    const targets = [
-                        ...(this.enemies ? this.enemies.getChildren() : []), 
-                        ...(this.obstacles ? this.obstacles.getChildren() : []), 
-                        ...(this.bossBullets ? this.bossBullets.getChildren() : [])
-                    ];
-                    
-                    targets.forEach(target => {
-                        if (target.active && !target.hitByWave) {
-                            const dist = Phaser.Math.Distance.Between(wave.x, wave.y, target.x, target.y);
-                            
-                            if (dist <= currentRadius) {
-                                target.hitByWave = true;
-                                this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
-                                    if (this.enemies && this.enemies.contains(target)) {
-                                         this.destroyEnemy(target);
-                                    } else {
-                                         this.createExplosion(target.x, target.y, 0xffff00, 20);
-                                         target.destroy();
-                                         GameState.score += 20;
-                                    }
-                                });
-                            }
-                        }
-                    });
-                },
-                onComplete: () => wave.destroy()
-            });
-        }
-    }
-  
-    updateDynamicBackground() {
-        const progress = this.getGlobalProgress();
-        const ratio = Math.min(progress / 25, 1);
-        
-        const themeColors = window.getThemeColors();
-    
-        const startTop = Phaser.Display.Color.ValueToColor(themeColors.dynTopStart); 
-        const endTop = Phaser.Display.Color.ValueToColor(themeColors.dynTopEnd);   
-        const startBot = Phaser.Display.Color.ValueToColor(themeColors.dynBotStart); 
-        const endBot = Phaser.Display.Color.ValueToColor(themeColors.dynBotEnd);   
-    
-        const top = Phaser.Display.Color.Interpolate.ColorWithColor(startTop, endTop, 100, ratio * 100);
-        const bot = Phaser.Display.Color.Interpolate.ColorWithColor(startBot, endBot, 100, ratio * 100);
-    
-        const topHex = Phaser.Display.Color.GetColor(top.r, top.g, top.b);
-        const botHex = Phaser.Display.Color.GetColor(bot.r, bot.g, bot.b);
-    
-        if (this.bgGradient) {
-          this.bgGradient.clear();
-          this.bgGradient.fillGradientStyle(topHex, topHex, botHex, botHex, 1);
-          this.bgGradient.fillRect(0, 0, 720, this.cameras.main.height);
-        }
-    
-        const startNebula = Phaser.Display.Color.ValueToColor(themeColors.dynNebStart); 
-        const endNebula = Phaser.Display.Color.ValueToColor(themeColors.dynNebEnd);   
-        
-        const nebColorObj = Phaser.Display.Color.Interpolate.ColorWithColor(startNebula, endNebula, 100, ratio * 100);
-        const currentNebColor = Phaser.Display.Color.GetColor(nebColorObj.r, nebColorObj.g, nebColorObj.b);
-    
-        if (this.nebulae) {
-          this.nebulae.children.each(n => {
-            n.fillColor = currentNebColor;
-            n.setAlpha(0.15 - (ratio * 0.05)); 
-          });
-        }
-    
-        const starColor = ratio > 0.6 ? 0xff4400 : themeColors.starBase;
-        [this.stars, this.distantStars, this.bgDebris].forEach(g => {
-          if(g) g.children.each(s => s.fillColor = starColor);
-        });
-    }
-
     shutdown() {
         if (this.visibilityHandler) {
             document.removeEventListener("visibilitychange", this.visibilityHandler);
@@ -586,6 +314,7 @@ class GameScene extends GameBase {
         if (this.enemyFireTimer) this.enemyFireTimer.remove();
         if (this.obstacleTimer) this.obstacleTimer.remove();
         if (this.magnetTimer) this.magnetTimer.remove();
+        if (this.hazardTimer) this.hazardTimer.remove();
         if (this.bossTeleportTimer) this.bossTeleportTimer.remove();
 
         if (this.reviveInterval) {
@@ -645,7 +374,7 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
-    update() {
+update() {
         if (this.isResuming) return;
         const dt = this.time.timeScale;
         const hView = this.cameras.main.height;
@@ -672,6 +401,24 @@ class GameScene extends GameBase {
         const lerpSpeed = 0.2 * dt;
         this.player.x = Phaser.Math.Linear(this.player.x, this.targetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
+
+        this.wingmen.children.each((wingman, index) => {
+            if (wingman.active) {
+                const offset = index === 0 ? -70 : 70;
+                const targetX = this.player.x + offset;
+                const targetY = this.player.y + 30;
+                
+                wingman.x = Phaser.Math.Linear(wingman.x, targetX, 0.1);
+                wingman.y = Phaser.Math.Linear(wingman.y, targetY, 0.1);
+
+                if (this.time.now > (wingman.lastShot || 0) + 400) {
+                    wingman.lastShot = this.time.now;
+                    const b = this.sideBullets.create(wingman.x, wingman.y - 20, "side_bullet_default");
+                    b.setVelocityY(-800);
+                    b.setScale(0.8);
+                }
+            }
+        });
 
         if (this.hasShield) {
             this.shieldArc.clear();
@@ -758,6 +505,26 @@ class GameScene extends GameBase {
         this.enemies.children.each(e => {
             if (!e.active) return;
 
+            if (e.enemyType === "thief") {
+                // Tracking Logic: Aggressively target the player
+                const angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
+                const speed = 350 * this.luckMods.speedMult;
+                e.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+
+                this.batteries.children.each(b => {
+                    if (b.active && Phaser.Math.Distance.Between(e.x, e.y, b.x, b.y) < 60) {
+                        this.createExplosion(b.x, b.y, 0x00ffcc, 5);
+                        b.destroy(); 
+                    }
+                });
+                this.powerUps.children.each(pu => {
+                    if (pu.active && Phaser.Math.Distance.Between(e.x, e.y, pu.x, pu.y) < 60) {
+                        this.createExplosion(pu.x, pu.y, 0x00ffcc, 5);
+                        pu.destroy(); 
+                    }
+                });
+            }
+
             if (e.hasEnemyShield) {
                 const pulse = Math.sin(this.time.now / 100);
                 this.enemyStatusGraphics.lineStyle(4, 0xffcc00, 0.8 + pulse * 0.2); 
@@ -827,7 +594,7 @@ class GameScene extends GameBase {
                 return; 
             }
 
-            if (!e.isDashing) {
+            if (!e.isDashing && e.enemyType !== "thief") {
                 if (e.texture.key === "enemy_common") e.angle += (e.rotSpeed || 1);
                 if (e.movePattern === "wiggle") {
                     e.wiggleTimer = (e.wiggleTimer || 0) + 0.1;
@@ -1142,6 +909,8 @@ class GameScene extends GameBase {
         else if (weaponType === "plasma_wave") damage = 3;
 
         const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
+        if (obstacle.obstacleType === "meteor") return; 
+
         obstacle.hp -= finalDamage;
         
         this.playSFX('sfx_rock_hit', 0.3); 
@@ -1160,6 +929,7 @@ class GameScene extends GameBase {
 
             if (GameState.gameMode !== "revision" && Math.random() < 0.5) {
                 GameState.debris = (GameState.debris || 0) + 1;
+                window.updateMissionProgress("collect_debris", 1); 
                 window.saveCurrency();
                 
                 const txt = this.add.text(obstacle.x, obstacle.y, `+1 Debris`, { fontSize: '28px', fontFamily: 'Arial', color: '#aaccff', stroke: '#000000', strokeThickness: 3 }).setOrigin(0.5);
@@ -1190,10 +960,27 @@ class GameScene extends GameBase {
                 this.activateTNT(); 
                 break;
             case "powerup_heart": this.addExtraLife(); break;
+            case "powerup_fiftyfifty": 
+                GameState.hasFiftyFifty = true;
+                const qScene = this.scene.get('QuestionScene');
+                if(qScene) qScene.applyFiftyFifty(); 
+                break;
         }
 
-        const names = { "powerup_shield": "SHIELD", "powerup_magnet": "MAGNET", "powerup_tnt": "SHOCKWAVE", "powerup_heart": "+1 LIFE" };
-        const colors = { "powerup_shield": "#ffcc00", "powerup_magnet": "#ff0000", "powerup_tnt": "#ff3300", "powerup_heart": "#ff0033" };
+        const names = { 
+            "powerup_shield": "SHIELD", 
+            "powerup_magnet": "MAGNET", 
+            "powerup_tnt": "SHOCKWAVE", 
+            "powerup_heart": "+1 LIFE",
+            "powerup_fiftyfifty": "50/50 CHIP!"
+        };
+        const colors = { 
+            "powerup_shield": "#ffcc00", 
+            "powerup_magnet": "#ff0000", 
+            "powerup_tnt": "#ff3300", 
+            "powerup_heart": "#ff0033",
+            "powerup_fiftyfifty": "#00ffcc"
+        };
         const text = this.add.text(powerUp.x, powerUp.y, names[type], { fontSize: "40px", color: colors[type], fontStyle: "bold", stroke: "#000000", strokeThickness: 3 }).setOrigin(0.5);
         this.tweens.add({ targets: text, y: powerUp.y - 80, alpha: 0, duration: 1200, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
     }
@@ -1204,6 +991,8 @@ class GameScene extends GameBase {
 
         this.playSFX('sfx_explode', 1);
         
+        window.updateMissionProgress("kill_enemies", 1);
+
         if (enemy.isBodyBomb) {
             this.playSFX('sfx_enemy_bomb', 0.2);
             this.cameras.main.shake(300, 0.015);
@@ -1246,6 +1035,12 @@ class GameScene extends GameBase {
         dropChance += this.luckMods.batteryDropChance; 
 
         if (enemy.isBodyBomb) dropChance = 1.0; 
+
+        if (enemy.tier === "thief") {
+            this.dropPowerUp(enemy.x, enemy.y, "thief");
+            const battery = this.batteries.create(enemy.x+20, enemy.y, "battery_red");
+            battery.setVelocityY(220); battery.batteryValue = 80;
+        }
 
         if (!GameState.bossActive && Math.random() < dropChance) {
             let batteryTexture = "battery_green", batteryValue = 35;

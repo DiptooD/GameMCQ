@@ -949,6 +949,49 @@ class GameTextures {
     g.strokePath();
     g.generateTexture("ui_debris_icon", 40, 40);
     g.clear();
+    
+
+    // --- NEW: THE THIEF (A fast, sneaky alien ship) ---
+    g.fillStyle(0x00ffcc, 1); 
+    g.beginPath(); g.moveTo(25, 5); g.lineTo(5, 30); g.lineTo(25, 45); g.lineTo(45, 30); g.closePath(); g.fillPath();
+    g.lineStyle(3, 0x005588, 1); g.strokePath();
+    g.fillStyle(0xffffff, 1); g.fillCircle(25, 25, 8);
+    g.fillStyle(0xff0000, 1); g.fillCircle(25, 25, 4); // Red glowing eye
+    g.generateTexture("enemy_thief", 50, 50);
+    g.clear();
+
+    // --- NEW: METEOR (For Meteor Shower Hazard) ---
+    g.fillStyle(0x331100, 1); // Dark burning rock
+    g.beginPath();
+    g.moveTo(30, 5); g.lineTo(10, 20); g.lineTo(5, 45); g.lineTo(25, 55); g.lineTo(50, 45); g.lineTo(55, 20);
+    g.closePath(); g.fillPath();
+    g.lineStyle(4, 0xff3300, 0.8); // Burning edges
+    g.strokePath();
+    g.fillStyle(0xffaa00, 0.5); g.fillCircle(20, 20, 5); g.fillCircle(40, 35, 6);
+    g.generateTexture("hazard_meteor", 60, 60);
+    g.clear();
+
+    // --- NEW: 50/50 DATA CHIP POWER-UP ---
+    g.fillStyle(0x00ffaa, 1); // Neon green-cyan chip
+    g.fillRoundedRect(5, 5, 30, 40, 4);
+    g.lineStyle(3, 0xffffff, 1); g.strokeRoundedRect(5, 5, 30, 40, 4);
+    g.fillStyle(0x004422, 1); g.fillRect(10, 10, 20, 15);
+    g.fillStyle(0xffffff, 1); g.fillRect(12, 13, 16, 3); g.fillRect(12, 19, 16, 3);
+    g.fillStyle(0xffffff, 1); g.fillCircle(20, 35, 4);
+    g.generateTexture("powerup_fiftyfifty", 40, 50);
+    g.clear();
+
+    // --- NEW: WINGMAN BIRD (Companion) ---
+    g.fillStyle(0x0088ff, 1); // Blue tech bird
+    g.beginPath(); g.moveTo(25, 10); g.lineTo(5, 35); g.lineTo(25, 45); g.lineTo(45, 35); g.closePath(); g.fillPath();
+    g.lineStyle(2, 0xffffff, 1); g.strokePath();
+    g.fillStyle(0xffaa00, 1); g.fillCircle(25, 25, 6); // Core
+    g.generateTexture("wingman_bird", 50, 50);
+    g.clear();
+
+
+
+
 
     g.destroy();
   }

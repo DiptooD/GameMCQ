@@ -32,7 +32,7 @@ class PauseScene extends Phaser.Scene {
     this.add.rectangle(0, 0, w, h, 0x000000, 0.75).setOrigin(0, 0).setInteractive();
 
     const panelW = 560; 
-    const panelH = 480; 
+    const panelH = 720; // Increased height to accommodate Daily Missions
     const panelX = cx - panelW / 2;
     const panelY = cy - panelH / 2;
 
@@ -43,8 +43,8 @@ class PauseScene extends Phaser.Scene {
     glass.lineStyle(3, 0x0066aa, 0.8); 
     glass.strokeRoundedRect(panelX, panelY, panelW, panelH, 24);
 
-    this.add.text(cx, panelY + 90, "বিরতি", {
-      fontSize: "72px", 
+    this.add.text(cx, panelY + 80, "বিরতি", {
+      fontSize: "64px", 
       fontFamily: "'Anek Bangla'", 
       color: "#00e1ff", 
       fontStyle: "bold", 
@@ -53,11 +53,43 @@ class PauseScene extends Phaser.Scene {
       shadow: { offsetX: 4, offsetY: 4, color: "#0044aa", blur: 12, stroke: true, fill: true }
     }).setOrigin(0.5);
 
-    this.createModernButton(cx, panelY + 230, "খেলায় ফিরুন", true, () => {
+    // --- DAILY MISSIONS UI ---
+    this.add.text(cx, panelY + 160, "--- ডেইলি মিশন ---", {
+        fontSize: "24px", color: "#ffff00", fontFamily: "'Anek Bangla'", fontStyle: "bold"
+    }).setOrigin(0.5);
+
+    let startY = panelY + 220;
+    if (GameState.dailyMissions) {
+        GameState.dailyMissions.forEach((m, i) => {
+            const isDone = m.progress >= m.target;
+            const yPos = startY + (i * 80);
+
+            const descText = m.desc || m.type;
+            this.add.text(cx - 230, yPos, descText, {
+                fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff"
+            });
+            
+            this.add.text(cx + 230, yPos, `${m.progress} / ${m.target}`, {
+                fontSize: "22px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#ffaa00", fontStyle: "bold"
+            }).setOrigin(1, 0);
+            
+            if (isDone) {
+                this.add.text(cx + 230, yPos + 30, "✔️", {fontSize: "20px", color: "#00ff00"}).setOrigin(1, 0);
+            } else {
+                const rewIcon = m.rewardType === "keys" ? "🔑" : "⚙️";
+                this.add.text(cx - 230, yPos + 30, `Reward: ${m.rewardAmt} ${rewIcon}`, {
+                    fontSize: "18px", color: "#aaaaaa"
+                });
+            }
+        });
+    }
+
+    // --- MAIN BUTTONS ---
+    this.createModernButton(cx, panelY + 520, "খেলায় ফিরুন", true, () => {
         this.resumeGame();
     });
 
-    this.createModernButton(cx, panelY + 360, "খেলা শেষ করুন", false, () => {
+    this.createModernButton(cx, panelY + 630, "খেলা শেষ করুন", false, () => {
         this.scene.stop("GameScene");
         this.scene.stop("QuestionScene");
         this.scene.start("DeathScene"); 
@@ -72,7 +104,6 @@ class PauseScene extends Phaser.Scene {
         this.playSound('sfx_click', 0.8);
         this.tweens.add({ targets: [settingsBg, settingsIcon], scale: 0.9, duration: 50, yoyo: true });
         
-        // Launch SettingsScene and force it to the front
         this.scene.launch("SettingsScene", { returnScene: "PauseScene" });
         this.scene.bringToTop("SettingsScene");
     });

@@ -20,7 +20,7 @@ class QuestionScene extends Phaser.Scene {
         }
         this.qIdx = 0;
 
-        // --- 1. MAIN UI CONTAINER (For user-adjusted UI scaling) ---
+        // --- 1. MAIN UI CONTAINER ---
         this.qContainer = this.add.container(0, 0);
 
         // --- 2. GLASS PANEL SETUP ---
@@ -294,7 +294,6 @@ class QuestionScene extends Phaser.Scene {
 
         this.qContainer.add([this.instructionText, this.readyText]);
         
-        // --- Apply UI Scale Overrides based on -5 to 5 Range ---
         let uiScaleLevel = parseInt(localStorage.getItem('settings_uiScaleLevel'));
         if (isNaN(uiScaleLevel)) uiScaleLevel = 0;
         
@@ -431,7 +430,6 @@ class QuestionScene extends Phaser.Scene {
         }
 
         const safeStage = (GameState.bossStage || 0) + 1;
-        // CHANGED: Automatically renames Level 4+ to "মহাশূন্য"
         const stageText = safeStage >= 4 ? "Void" : safeStage;
         const safeCount = GameState.correctCount || 0;
         const safeTotal = GameState.totalCorrectNeeded || 10;
@@ -447,7 +445,29 @@ class QuestionScene extends Phaser.Scene {
             
             this.setButtonsState(isNowReady);
             this.updateReadyState(isNowReady);
+            this.manageMeteorTimer(isNowReady); // Controls Meteor Hazard Timer based on ready state
             this.wasReady = isNowReady;
+        }
+    }
+
+    // Handles the inactivity meteor drop logic
+    manageMeteorTimer(isReady) {
+        if (isReady && !GameState.bossActive) {
+            if (!this.meteorTimer) {
+                this.meteorTimer = this.time.addEvent({
+                    delay: 12000, // Waits 12s after battery is full to drop meteors
+                    callback: () => {
+                        const gameScene = this.scene.get('GameScene');
+                        if (gameScene && !GameState.bossActive) gameScene.spawnMeteors();
+                    },
+                    loop: true // Re-trigger periodically if still not answering
+                });
+            }
+        } else {
+            if (this.meteorTimer) {
+                this.meteorTimer.remove();
+                this.meteorTimer = null;
+            }
         }
     }
 
@@ -581,6 +601,17 @@ class QuestionScene extends Phaser.Scene {
         const cleanStr = (str) => typeof str === 'string' ? str.replace(/।/g, '') : str;
         const cleanQuestion = cleanStr(q.question);
 
+        this.optionBtns.forEach((btn, i) => {
+            btn.container.setAlpha(1);
+            btn.container.setScale(1);
+        });
+        if (this.quickBtns) {
+            this.quickBtns.forEach(btn => {
+                btn.bg.setAlpha(1);
+                btn.txt.setAlpha(1);
+            });
+        }
+
         if (this.qText.text === "") {
             if (cleanQuestion.length > 80) {
                 this.qText.setFontSize("26px");
@@ -604,10 +635,10 @@ class QuestionScene extends Phaser.Scene {
             this.markQuestionAsSeen(q.question);
             this.tweens.add({ targets: elements, alpha: { from: 0, to: 1 }, duration: 400 });
 
-            // CHANGED: Fixed bug where options remain disabled after Boss Fight UI restores
             const isReady = (GameState.battery >= 100);
             this.setButtonsState(isReady);
             this.updateReadyState(isReady);
+            this.manageMeteorTimer(isReady);
             this.wasReady = isReady;
 
             return;
@@ -658,7 +689,6 @@ class QuestionScene extends Phaser.Scene {
                     btn.txt.setColor("#d3d3d3");
                 });
 
-                // CHANGED: Ensure tween sequence does not proceed if Boss Phase intercepts it
                 const gameScene = this.scene.get('GameScene');
                 if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
                     this.isProcessing = false; 
@@ -675,12 +705,12 @@ class QuestionScene extends Phaser.Scene {
                     ease: 'Cubic.easeOut',
                     onComplete: () => {
                         this.isProcessing = false;
-                        
                         this.playSFX('sfx_tick', 0.2);
                         
                         const isReady = (GameState.battery >= 100);
                         this.setButtonsState(isReady);
                         this.updateReadyState(isReady);
+                        this.manageMeteorTimer(isReady);
                         this.wasReady = isReady;
 
                         if (isReady && !GameState.bossActive) {
@@ -694,6 +724,12 @@ class QuestionScene extends Phaser.Scene {
                 });
             }
         });
+
+        if (GameState.hasFiftyFifty) {
+            this.time.delayedCall(500, () => {
+                this.applyFiftyFifty();
+            });
+        }
     }
 
     handleAnswer(i) {
@@ -702,6 +738,7 @@ class QuestionScene extends Phaser.Scene {
         
         this.wasReady = false; 
         this.updateReadyState(false);
+        this.manageMeteorTimer(false); // Reset meteor hazard
 
         this.optionBtns.forEach(btn => {
             if (btn.pulseTween) {
@@ -727,19 +764,52 @@ class QuestionScene extends Phaser.Scene {
         const quickSelBtn = this.quickBtns[i];
         const quickCorBtn = this.quickBtns[q.answer];
         
+        const gameScene = this.scene.get('GameScene');
+
         if (i === q.answer) {
             this.playSFX('sfx_q_correct', 0.5, false);
             
             GameState.correctCount++;
             if (GameState.weaponLevel < 4) GameState.weaponLevel++;
             
+            GameState.currentCombo++;
+            window.updateMissionProgress("answer_correct", 1); 
+
+            if (GameState.currentCombo >= 3) {
+                // Fever Mode Trigger
+                gameScene.comboText.setText(`COMBO x${GameState.currentCombo}!`);
+                gameScene.comboText.setAlpha(1);
+                gameScene.comboText.setScale(0.5);
+                gameScene.tweens.add({ targets: gameScene.comboText, scale: 1.0, duration: 400, yoyo: true, onComplete:() => {
+                    gameScene.tweens.add({ targets: gameScene.comboText, alpha: 0, duration: 500, delay: 1000 });
+                }});
+                
+                // Wingman dynamic logic
+                let duration = Math.max(4, Math.min(15, 4 + (GameState.currentCombo - 3) * 2)); 
+
+                if (gameScene.wingmen.countActive() === 0) {
+                    const w1 = gameScene.wingmen.create(gameScene.player.x - 50, gameScene.player.y + 20, "wingman_bird");
+                    const w2 = gameScene.wingmen.create(gameScene.player.x + 50, gameScene.player.y + 20, "wingman_bird");
+                    gameScene.tweens.add({ targets: [w1, w2], scale: {from: 0, to: 1}, duration: 500});
+                }
+                
+                if (gameScene.wingmanTimer) {
+                    gameScene.wingmanTimer.remove();
+                }
+                
+                gameScene.wingmanTimer = gameScene.time.delayedCall(duration * 1000, () => {
+                    gameScene.wingmen.children.each(w => {
+                        gameScene.createExplosion(w.x, w.y, 0x0088ff, 10);
+                        w.destroy();
+                    });
+                });
+            }
+
             selectedBtn.bg.setFillStyle(0x00ff00, 0.4); 
             if (quickSelBtn) quickSelBtn.bg.setFillStyle(0x00ff00, 0.4); 
             
-            const gameScene = this.scene.get('GameScene');
             if (gameScene) {
                 const originalPlaySFX = gameScene.playSFX;
-                
                 try {
                     gameScene.playSFX = function(key, vol, allowJitter) {
                         if (key !== 'sfx_shockwave') {
@@ -756,12 +826,23 @@ class QuestionScene extends Phaser.Scene {
             
             if (GameState.weaponLevel > 3) GameState.weaponLevel--; 
             
+            GameState.currentCombo = 0;
+            if (gameScene && gameScene.wingmen) {
+                gameScene.wingmen.children.each(w => {
+                    gameScene.createExplosion(w.x, w.y, 0x0088ff, 10);
+                    w.destroy();
+                });
+            }
+
             selectedBtn.bg.setFillStyle(0xff0000, 0.4); 
             correctBtn.bg.setFillStyle(0x00ff00, 0.4); 
 
             if (quickSelBtn) quickSelBtn.bg.setFillStyle(0xff0000, 0.4); 
             if (quickCorBtn) quickCorBtn.bg.setFillStyle(0x00ff00, 0.4); 
         }
+
+        GameState.hasFiftyFifty = false;
+        GameState.fiftyFiftyOptionsToHide = [];
 
         GameState.battery = 0;
         this.lastBattery = -1;
@@ -770,7 +851,6 @@ class QuestionScene extends Phaser.Scene {
             this.isProcessing = false;  
             this.qIdx++;
 
-            // CHANGED: Prevent refreshing question if the Game Scene is actively transitioning to Boss
             const gameScene = this.scene.get('GameScene');
             if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
                 this.toggleBattleMode(true);
@@ -778,6 +858,39 @@ class QuestionScene extends Phaser.Scene {
             }
 
             this.refreshQuestion();
+        });
+    }
+
+    applyFiftyFifty() {
+        if (!GameState.hasFiftyFifty || this.isProcessing) return;
+        if (GameState.fiftyFiftyOptionsToHide && GameState.fiftyFiftyOptionsToHide.length > 0) return; // Prevent 50/50 from stacking and hiding everything
+        
+        const q = this.questions[this.qIdx % this.questions.length];
+        const correctIdx = q.answer;
+        const wrongIndexes = [0, 1, 2, 3].filter(i => i !== correctIdx);
+        
+        Phaser.Utils.Array.Shuffle(wrongIndexes);
+        GameState.fiftyFiftyOptionsToHide = [wrongIndexes[0], wrongIndexes[1]];
+
+        this.playSFX('sfx_powerup', 0.8);
+
+        GameState.fiftyFiftyOptionsToHide.forEach(idx => {
+            const btn = this.optionBtns[idx];
+            if (btn) {
+                this.tweens.add({
+                    targets: btn.container,
+                    alpha: 0.2,
+                    scale: 0.9,
+                    duration: 300
+                });
+                btn.bg.disableInteractive();
+            }
+
+            const qBtn = this.quickBtns[idx];
+            if (qBtn) {
+                this.tweens.add({ targets: [qBtn.bg, qBtn.txt], alpha: 0.2, duration: 300 });
+                qBtn.bg.disableInteractive();
+            }
         });
     }
 
@@ -796,6 +909,8 @@ class QuestionScene extends Phaser.Scene {
                 correctAnswer: q.options[q.answer],
                 status: 'skipped'
             });
+            
+            this.manageMeteorTimer(false); // Reset on skip
             GameState.skipsLeft--;
             this.qIdx++;
             this.refreshQuestion();
@@ -837,7 +952,6 @@ class QuestionScene extends Phaser.Scene {
     toggleBattleMode(isBossFight) {
         const alpha = isBossFight ? 0 : 1;
         
-        // CHANGED: Force kill all active tweens to prevent ghost components appearing
         const elementsToKill = [this.qPanel, this.qText, this.qBankTag, this.skipBtn, this.quickAnsContainer];
         this.optionBtns.forEach(btn => elementsToKill.push(btn.container, btn.bg, btn.txt));
         this.quickBtns.forEach(btn => elementsToKill.push(btn.bg, btn.txt));

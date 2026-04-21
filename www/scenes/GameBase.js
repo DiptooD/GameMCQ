@@ -10,20 +10,18 @@ class GameBase extends Phaser.Scene {
     }
   }
 
-  // FIX: Slower enemies, slower bullets, no more insane debris multiplier
   getLuckModifiers() {
     let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
     let luckFactor = Math.max(0, 5 - played) / 5; 
 
     return {
         factor: luckFactor,                  
-        speedMult: 1.0 - (0.6 * luckFactor), // UPGRADED: Up to 60% slower enemies, bullets, and background
-        delayMult: 1.0 + (0.8 * luckFactor), // UPGRADED: Up to 80% slower enemy spawns and fire rates
+        speedMult: 1.0 - (0.6 * luckFactor), 
+        delayMult: 1.0 + (0.8 * luckFactor), 
         batteryDropMult: 1.0 + (2.0 * luckFactor), 
         batteryDropChance: 0.5 * luckFactor, 
         hpMult: 1.0 - (0.5 * luckFactor), 
         playerDamageMult: 1.0 + (1.0 * luckFactor) 
-        // Removed debrisDropMult entirely
     };
   }
   
@@ -236,6 +234,13 @@ class GameBase extends Phaser.Scene {
 
   spawnObstacle() {
     if (GameState.bossActive) return;
+    
+    // FIXED: Thief spawn chance increased from 5% to 15% and drops at lower global progress points
+    if (this.getGlobalProgress() > 5 && Math.random() < 0.15) {
+        this.spawnThief();
+        return;
+    }
+
     const types = ["obstacle_asteroid", "obstacle_debris", "obstacle_mine"];
     const type = Phaser.Math.RND.pick(types);
     const obs = this.obstacles.create(Phaser.Math.Between(60, 660), -100, type);
@@ -265,6 +270,49 @@ class GameBase extends Phaser.Scene {
         repeat: -1
       });
     }
+  }
+
+spawnThief() {
+    const t = this.enemies.create(Phaser.Math.Between(100, 620), -50, "enemy_thief");
+    t.hp = 15;
+    t.maxHp = 15;
+    t.tier = "thief";
+    t.enemyType = "thief";
+    t.setTint(0x00ffcc);
+    
+    this.tweens.add({
+        targets: t,
+        x: t.x + Phaser.Math.Between(-200, 200),
+        duration: 1000,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+    });
+  }
+
+  spawnMeteors() {
+    this.playSFX('sfx_warning', 0.8, false);
+    
+    const warnRect = this.add.rectangle(360, 640, 720, 1280, 0xff0000, 0.3).setDepth(200);
+    this.tweens.add({ targets: warnRect, alpha: 0, duration: 400, yoyo: true, repeat: 3, onComplete: () => warnRect.destroy() });
+
+    this.time.delayedCall(1500, () => {
+        for(let i=0; i<15; i++) {
+            this.time.delayedCall(i * 300, () => {
+                if(!GameState.bossActive && this.scene.isActive()) {
+                    let m = this.obstacles.create(Phaser.Math.Between(50, 670), -100, "hazard_meteor");
+                    m.obstacleType = "meteor";
+                    m.hp = 999; // Indestructible
+                    m.setScale(1.5);
+                    m.setCircle(20, 10, 10);
+                    m.setVelocity(Phaser.Math.Between(-100, 100), Phaser.Math.Between(600, 900));
+                    m.setRotation(Phaser.Math.FloatBetween(0, Math.PI * 2));
+                    
+                    this.tweens.add({ targets: m, rotation: m.rotation + 10, duration: 2000 });
+                }
+            });
+        }
+    });
   }
 
   spawnEnemy() {
@@ -382,20 +430,23 @@ class GameBase extends Phaser.Scene {
     let powerUpType;
     const roll = Math.random();
     
-    if (obstacleType === "obstacle_mine") {
-      if (roll < 0.4) powerUpType = "powerup_tnt";
-      else if (roll < 0.7) powerUpType = "powerup_shield";
-      else if (roll < 0.9) powerUpType = "powerup_magnet";
+    // FIXED: 50/50 Chip chance globally increased (happens ~15% of the time a powerup drops)
+    if (roll > 0.85) {
+        powerUpType = "powerup_fiftyfifty";
+    } else if (obstacleType === "obstacle_mine") {
+      if (roll < 0.3) powerUpType = "powerup_tnt";
+      else if (roll < 0.6) powerUpType = "powerup_shield";
+      else if (roll < 0.8) powerUpType = "powerup_magnet";
       else powerUpType = "powerup_heart";
     } else if (obstacleType === "obstacle_debris") {
-      if (roll < 0.4) powerUpType = "powerup_magnet";
-      else if (roll < 0.7) powerUpType = "powerup_shield";
-      else if (roll < 0.85) powerUpType = "powerup_heart";
+      if (roll < 0.3) powerUpType = "powerup_magnet";
+      else if (roll < 0.6) powerUpType = "powerup_shield";
+      else if (roll < 0.75) powerUpType = "powerup_heart";
       else powerUpType = "powerup_tnt";
     } else {
-      if (roll < 0.4) powerUpType = "powerup_shield";
-      else if (roll < 0.7) powerUpType = "powerup_heart";
-      else if (roll < 0.9) powerUpType = "powerup_magnet";
+      if (roll < 0.3) powerUpType = "powerup_shield";
+      else if (roll < 0.6) powerUpType = "powerup_heart";
+      else if (roll < 0.8) powerUpType = "powerup_magnet";
       else powerUpType = "powerup_tnt";
     }
     

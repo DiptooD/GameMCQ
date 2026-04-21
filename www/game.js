@@ -16,6 +16,10 @@ window.saveGame = function() {
         localStorage.setItem('game_crafting', JSON.stringify(GameState.craftingQueue));
         localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
         localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
+        
+        // NEW: Save Daily Missions
+        localStorage.setItem('game_dailyMissions', JSON.stringify(GameState.dailyMissions));
+        localStorage.setItem('game_lastMissionDate', GameState.lastMissionDate || "");
 
         if (GameState.matchHistory && GameState.matchHistory.length > 20) {
             GameState.matchHistory = GameState.matchHistory.slice(-20);
@@ -39,6 +43,42 @@ window.saveSettings = function() {
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
 
+// NEW: Mission Generators
+const generateDailyMissions = () => {
+    const types = ["kill_enemies", "collect_debris", "answer_correct"];
+    const missions = [];
+    
+    // Mission 1: Kills
+    missions.push({ 
+        id: "m1", type: "kill_enemies", target: Phaser.Math.Between(30, 60), 
+        progress: 0, rewardType: "debris", rewardAmt: 20, 
+        desc: "Defeat enemies" 
+    });
+    // Mission 2: Debris
+    missions.push({ 
+        id: "m2", type: "collect_debris", target: Phaser.Math.Between(15, 30), 
+        progress: 0, rewardType: "keys", rewardAmt: 2, 
+        desc: "Collect Debris" 
+    });
+    // Mission 3: Answers
+    missions.push({ 
+        id: "m3", type: "answer_correct", target: Phaser.Math.Between(10, 20), 
+        progress: 0, rewardType: "keys", rewardAmt: 3, 
+        desc: "Answer Correctly" 
+    });
+    
+    return missions;
+};
+
+const todayStr = new Date().toDateString();
+let storedMissions = JSON.parse(localStorage.getItem('game_dailyMissions'));
+let storedDate = localStorage.getItem('game_lastMissionDate');
+
+if (storedDate !== todayStr || !storedMissions) {
+    storedMissions = generateDailyMissions();
+    storedDate = todayStr;
+}
+
 window.GameState = {
     score: 0,
     battery: 0,
@@ -51,6 +91,15 @@ window.GameState = {
     skipsLeft: 10,
     sessionHistory: [],
     gameMode: "normal", 
+    
+    // NEW: Combo System Data
+    currentCombo: 0,
+    hasFiftyFifty: false,
+    fiftyFiftyOptionsToHide: [],
+    
+    // NEW: Daily Missions
+    dailyMissions: storedMissions,
+    lastMissionDate: storedDate,
     
     musicVolume: storedMusicVol !== null ? parseFloat(storedMusicVol) : 0.5,
     sfxVolume: storedSfxVol !== null ? parseFloat(storedSfxVol) : 1.0,
@@ -71,6 +120,19 @@ window.GameState = {
     },
     matchHistory: JSON.parse(localStorage.getItem('game_matchHistory')) || [],
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
+};
+
+// NEW: Global function to update mission progress
+window.updateMissionProgress = function(type, amount = 1) {
+    let updated = false;
+    GameState.dailyMissions.forEach(m => {
+        if (m.type === type && m.progress < m.target) {
+            m.progress += amount;
+            if (m.progress >= m.target) m.progress = m.target; // Cap it
+            updated = true;
+        }
+    });
+    if (updated) window.saveCurrency(); // Save quietly in background
 };
 
 window.updateLevelTargets = function() {
@@ -95,6 +157,9 @@ window.resetGameState = function () {
     GameState.lives = 3;
     GameState.weaponLevel = 1;
     GameState.correctCount = 0; 
+    GameState.currentCombo = 0; // Reset combo
+    GameState.hasFiftyFifty = false;
+    GameState.fiftyFiftyOptionsToHide = [];
     GameState.bossStage = 0;
     GameState.bossActive = false;
     GameState.skipsLeft = 10; 
@@ -127,7 +192,6 @@ window.BoosterData = [
     { id: "batteryEff", name: "Battery Eff.", cost: 8, desc: "(2x) Battery Efficiency for 1 mins.", icon: "icon_booster_battery" }
 ];
 
-// POLISHED THEMES: Deep rich backgrounds with highly saturated bright accents.
 window.ThemeData = [
     {
         id: "theme_default", name: "Deep Space", costType: "free", cost: 0, desc: "The standard cosmic void.",
