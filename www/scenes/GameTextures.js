@@ -641,6 +641,7 @@ class GameTextures {
     g.clear();
 
     // --- POWER-UPS ---
+    // Shield
     g.lineStyle(5, 0xffcc00, 1);
     g.beginPath();
     g.moveTo(20, 38);   
@@ -661,6 +662,7 @@ class GameTextures {
     g.generateTexture("powerup_shield", 40, 40);
     g.clear();
 
+    // Magnet
     g.lineStyle(10, 0xff0000, 1);
     g.beginPath();
     g.arc(20, 18, 10, Phaser.Math.DegToRad(180), Phaser.Math.DegToRad(0), false);
@@ -675,6 +677,7 @@ class GameTextures {
     g.generateTexture("powerup_magnet", 40, 40);
     g.clear();
 
+    // TNT / Shockwave
     g.fillStyle(0xff4400, 1);
     g.fillCircle(20, 25, 12);
     g.fillStyle(0x992200, 0.5);
@@ -699,6 +702,7 @@ class GameTextures {
     g.generateTexture("powerup_tnt", 40, 40);
     g.clear();
 
+    // Heart / 1-Up
     g.fillStyle(0xff0033, 1);
     g.fillCircle(14, 16, 8);
     g.fillCircle(26, 16, 8);
@@ -713,6 +717,7 @@ class GameTextures {
     g.clear();
 
     // --- BOSSES ---
+    // Boss 1
     g.fillStyle(0x8B0000, 1); 
     g.fillRoundedRect(85, 40, 80, 80, 4);
     g.fillStyle(0xff3300, 1); 
@@ -738,6 +743,7 @@ class GameTextures {
     g.generateTexture("boss_lv1", 250, 150);
     g.clear();
 
+    // Boss 2
     g.fillStyle(0xAB0000, 1); 
     g.beginPath();
     g.moveTo(70, 40); g.lineTo(20, 60); g.lineTo(20, 110); g.lineTo(70, 130);
@@ -768,6 +774,7 @@ class GameTextures {
     g.generateTexture("boss_lv2", 250, 150);
     g.clear();
 
+    // Boss 3
     g.fillStyle(0x1D3B00, 1); 
     g.fillTriangle(125, 10, 15, 140, 235, 140); 
     g.fillStyle(0x003300, 1);
@@ -950,48 +957,107 @@ class GameTextures {
     g.generateTexture("ui_debris_icon", 40, 40);
     g.clear();
     
+    // ==========================================================
+    // --- PROFESSIONAL UPDATED TEXTURES ---
+    // ==========================================================
 
-    // --- NEW: THE THIEF (A fast, sneaky alien ship) ---
-    g.fillStyle(0x00ffcc, 1); 
-    g.beginPath(); g.moveTo(25, 5); g.lineTo(5, 30); g.lineTo(25, 45); g.lineTo(45, 30); g.closePath(); g.fillPath();
-    g.lineStyle(3, 0x005588, 1); g.strokePath();
-    g.fillStyle(0xffffff, 1); g.fillCircle(25, 25, 8);
-    g.fillStyle(0xff0000, 1); g.fillCircle(25, 25, 4); // Red glowing eye
+    // --- THE THIEF (A fast, sleek, professional alien ship) ---
+    // Deep dark chassis
+    g.fillStyle(0x0A0D14, 1); 
+    g.beginPath(); 
+    g.moveTo(25, 2); 
+    g.lineTo(2, 35); 
+    g.lineTo(25, 48); 
+    g.lineTo(48, 35); 
+    g.closePath(); 
+    g.fillPath();
+    
+    // Cyan inner wing lines and glowing accents
+    g.lineStyle(3, 0x00FFCC, 0.9); 
+    g.strokePath();
+    g.fillStyle(0x00FFCC, 0.7);
+    g.fillTriangle(25, 12, 10, 32, 20, 38);
+    g.fillTriangle(25, 12, 40, 32, 30, 38);
+
+    // Glowing red scanner/eye in the center
+    g.fillStyle(0xFF0000, 1); 
+    g.fillEllipse(25, 26, 12, 6);
+    g.fillStyle(0xFFFFFF, 0.9); 
+    g.fillEllipse(25, 26, 4, 2);
     g.generateTexture("enemy_thief", 50, 50);
     g.clear();
 
-    // --- NEW: METEOR (For Meteor Shower Hazard) ---
-    g.fillStyle(0x331100, 1); // Dark burning rock
+    // --- METEOR (For Meteor Shower Hazard - Detailed and fiery) ---
+    // Outer fiery glow
+    g.fillStyle(0xFF2200, 0.3);
+    g.fillCircle(30, 30, 28);
+    g.fillStyle(0xFF5500, 0.5);
+    g.fillCircle(30, 30, 24);
+    
+    // Core rock
+    g.fillStyle(0x2B1A10, 1); 
     g.beginPath();
-    g.moveTo(30, 5); g.lineTo(10, 20); g.lineTo(5, 45); g.lineTo(25, 55); g.lineTo(50, 45); g.lineTo(55, 20);
+    g.moveTo(30, 8); g.lineTo(12, 18); g.lineTo(8, 40); g.lineTo(25, 52); g.lineTo(48, 42); g.lineTo(52, 22);
     g.closePath(); g.fillPath();
-    g.lineStyle(4, 0xff3300, 0.8); // Burning edges
+    
+    // Burning cracks and leading edges
+    g.lineStyle(3, 0xFF6600, 1); 
     g.strokePath();
-    g.fillStyle(0xffaa00, 0.5); g.fillCircle(20, 20, 5); g.fillCircle(40, 35, 6);
+    g.beginPath(); g.moveTo(15, 25); g.lineTo(25, 35); g.lineTo(20, 45); g.strokePath();
+    g.beginPath(); g.moveTo(45, 25); g.lineTo(35, 30); g.lineTo(40, 40); g.strokePath();
+    
+    // Bright yellow-hot craters
+    g.fillStyle(0xFFCC00, 0.9); 
+    g.fillCircle(20, 20, 3); 
+    g.fillCircle(40, 32, 4);
+    g.fillCircle(30, 45, 2);
     g.generateTexture("hazard_meteor", 60, 60);
     g.clear();
 
-    // --- NEW: 50/50 DATA CHIP POWER-UP ---
-    g.fillStyle(0x00ffaa, 1); // Neon green-cyan chip
+    // --- 50/50 DATA CHIP POWER-UP (High-tech premium chip) ---
+    // Chip base
+    g.fillStyle(0x051A15, 1); 
     g.fillRoundedRect(5, 5, 30, 40, 4);
-    g.lineStyle(3, 0xffffff, 1); g.strokeRoundedRect(5, 5, 30, 40, 4);
-    g.fillStyle(0x004422, 1); g.fillRect(10, 10, 20, 15);
-    g.fillStyle(0xffffff, 1); g.fillRect(12, 13, 16, 3); g.fillRect(12, 19, 16, 3);
-    g.fillStyle(0xffffff, 1); g.fillCircle(20, 35, 4);
+    g.lineStyle(3, 0x00FFCC, 1); 
+    g.strokeRoundedRect(5, 5, 30, 40, 4);
+    
+    // Circuit traces
+    g.lineStyle(1, 0x00AA88, 1);
+    g.beginPath(); g.moveTo(5, 15); g.lineTo(12, 15); g.lineTo(12, 35); g.strokePath();
+    g.beginPath(); g.moveTo(35, 25); g.lineTo(28, 25); g.lineTo(28, 10); g.strokePath();
+
+    // Inner glowing core
+    g.fillStyle(0x00FFCC, 0.2); 
+    g.fillRect(10, 12, 20, 26);
+    
+    // The "50/50" visual abstraction (two distinct halves)
+    g.fillStyle(0xFFFFFF, 1); 
+    g.fillRect(12, 16, 16, 4); // Top block
+    g.fillStyle(0x00FFCC, 1); 
+    g.fillRect(12, 26, 16, 4); // Bottom block
+    
+    // Center glowing node
+    g.fillStyle(0xFFFFFF, 1); 
+    g.fillCircle(20, 35, 3);
     g.generateTexture("powerup_fiftyfifty", 40, 50);
     g.clear();
 
-    // --- NEW: WINGMAN BIRD (Companion) ---
-    g.fillStyle(0x0088ff, 1); // Blue tech bird
-    g.beginPath(); g.moveTo(25, 10); g.lineTo(5, 35); g.lineTo(25, 45); g.lineTo(45, 35); g.closePath(); g.fillPath();
-    g.lineStyle(2, 0xffffff, 1); g.strokePath();
-    g.fillStyle(0xffaa00, 1); g.fillCircle(25, 25, 6); // Core
+    // --- WINGMAN BIRD (Companion) ---
+    g.fillStyle(0x0055AA, 1); // Sleek tech blue
+    g.beginPath(); g.moveTo(25, 5); g.lineTo(5, 35); g.lineTo(25, 45); g.lineTo(45, 35); g.closePath(); g.fillPath();
+    g.lineStyle(2, 0x00FFFF, 1); // Cyan trim
+    g.strokePath();
+    
+    g.fillStyle(0x00FFFF, 0.4);
+    g.fillTriangle(25, 15, 12, 35, 20, 38);
+    g.fillTriangle(25, 15, 38, 35, 30, 38);
+
+    g.fillStyle(0xFFDD00, 1); // Core
+    g.fillCircle(25, 25, 6); 
+    g.fillStyle(0xFFFFFF, 1);
+    g.fillCircle(25, 25, 2);
     g.generateTexture("wingman_bird", 50, 50);
     g.clear();
-
-
-
-
 
     g.destroy();
   }

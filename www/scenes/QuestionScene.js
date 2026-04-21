@@ -455,12 +455,12 @@ class QuestionScene extends Phaser.Scene {
         if (isReady && !GameState.bossActive) {
             if (!this.meteorTimer) {
                 this.meteorTimer = this.time.addEvent({
-                    delay: 12000, // Waits 12s after battery is full to drop meteors
+                    delay: 20000, // FIXED: Increased timer to 20s
                     callback: () => {
                         const gameScene = this.scene.get('GameScene');
                         if (gameScene && !GameState.bossActive) gameScene.spawnMeteors();
                     },
-                    loop: true // Re-trigger periodically if still not answering
+                    loop: true 
                 });
             }
         } else {

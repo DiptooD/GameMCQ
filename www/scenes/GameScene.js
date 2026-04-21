@@ -177,7 +177,6 @@ class GameScene extends GameBase {
             if (!bgMusic.isPlaying) bgMusic.play();
         }
 
-        // FIXED: Placed at the bottom left
         this.comboText = this.add.text(30, h - 220, "", { 
             fontSize: '46px', fontFamily: "'Anek Bangla'", color: '#ffaa00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6
         }).setOrigin(0, 0.5).setDepth(100).setAlpha(0);
@@ -335,7 +334,6 @@ class GameScene extends GameBase {
         }
     }
 
-
     createBeginnersLuckUI() {
         const startX = 60;
         const buttonY = 1280;
@@ -374,12 +372,13 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
-update() {
+    update() {
         if (this.isResuming) return;
         const dt = this.time.timeScale;
         const hView = this.cameras.main.height;
-        const bottomEdge = hView + 100;
-        const topEdge = -100;
+        const wView = this.cameras.main.width;
+        const bottomEdge = hView + 150;
+        const topEdge = -150;
 
         this.updateDynamicBackground();
         const layers = [
@@ -398,7 +397,8 @@ update() {
 
         this.checkBossSpawn();
 
-        const lerpSpeed = 0.2 * dt;
+        // FIXED: Smoother Player Lerp
+        const lerpSpeed = 0.25 * dt;
         this.player.x = Phaser.Math.Linear(this.player.x, this.targetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
 
@@ -505,11 +505,22 @@ update() {
         this.enemies.children.each(e => {
             if (!e.active) return;
 
+            // FIXED: Thief Smooth Tracking Logic
             if (e.enemyType === "thief") {
-                // Tracking Logic: Aggressively target the player
                 const angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
-                const speed = 350 * this.luckMods.speedMult;
-                e.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+                const currentAngle = Math.atan2(e.body.velocity.y, e.body.velocity.x) || (Math.PI/2);
+                const angleDiff = Phaser.Math.Angle.Wrap(angle - currentAngle);
+                
+                const turnSpeed = 0.08; 
+                const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -turnSpeed, turnSpeed);
+
+                const speed = 400 * this.luckMods.speedMult;
+                e.setVelocity(Math.cos(newAngle) * speed, Math.sin(newAngle) * speed);
+                e.setRotation(newAngle + Math.PI / 2);
+
+                if (this.time.now % 4 === 0) {
+                    this.hitEmitter.emitParticle(1, e.x - Math.cos(newAngle)*20, e.y - Math.sin(newAngle)*20);
+                }
 
                 this.batteries.children.each(b => {
                     if (b.active && Phaser.Math.Distance.Between(e.x, e.y, b.x, b.y) < 60) {
@@ -583,7 +594,7 @@ update() {
                 });
             }
 
-            if (e.y > 1500) { 
+            if (e.y > bottomEdge + 500) { 
                 if (e.isBossRemnant) {
                     this.bossRemnantsActive--;
                     if (this.bossRemnantsActive <= 0 && GameState.bossActive && !this.boss) {
@@ -683,15 +694,22 @@ update() {
             }
         });
 
-        this.obstacles.children.each(obs => { if (obs.active && obs.y > bottomEdge) obs.destroy(); });
+        // FIXED: Destroy obstacles fully out of bounds + destroy trail instance
+        this.obstacles.children.each(obs => { 
+            if (obs.active && (obs.y > bottomEdge || obs.x < -200 || obs.x > wView + 200)) {
+                if (obs.trail) obs.trail.destroy();
+                obs.destroy(); 
+            }
+        });
+
         this.powerUps.children.each(pu => { if (pu.active && pu.y > bottomEdge) pu.destroy(); });
         [this.bullets, this.sideBullets, this.specialWeapons].forEach(group => {
-            group.children.each(p => { if (p.y < topEdge || p.x < -100 || p.x > 820) p.destroy(); });
+            group.children.each(p => { if (p.y < topEdge || p.x < -100 || p.x > wView + 100) p.destroy(); });
         });
         
         if (this.bossBullets) {
             this.bossBullets.children.each(bullet => {
-                if (bullet.y > bottomEdge || bullet.y < topEdge || bullet.x < -50 || bullet.x > 770) bullet.destroy();
+                if (bullet.y > bottomEdge || bullet.y < topEdge || bullet.x < -100 || bullet.x > wView + 100) bullet.destroy();
             });
         }
 
@@ -938,6 +956,8 @@ update() {
 
             const dropChance = obstacle.obstacleType === "obstacle_mine" ? 0.75 : obstacle.obstacleType === "obstacle_debris" ? 0.6 : 0.4;
             if (Math.random() < dropChance) this.dropPowerUp(obstacle.x, obstacle.y, obstacle.obstacleType);
+            
+            if (obstacle.trail) obstacle.trail.destroy();
             obstacle.destroy();
         }
     }
@@ -1687,6 +1707,7 @@ update() {
         this.physics.overlap(safeZone, this.obstacles, (zone, obs) => {
             this.createExplosion(obs.x, obs.y, 0x888888, 100);
             if (Math.random() > 0.8) this.dropPowerUp(obs.x, obs.y, obs.obstacleType);
+            if (obs.trail) obs.trail.destroy(); 
             obs.destroy();
         });
         safeZone.destroy();
