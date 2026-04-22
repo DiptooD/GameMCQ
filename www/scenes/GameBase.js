@@ -235,7 +235,6 @@ class GameBase extends Phaser.Scene {
   spawnObstacle() {
     if (GameState.bossActive) return;
     
-    // FIXED: Thief spawn rate heavily increased (25%), drops earlier
     if (this.getGlobalProgress() > 2 && Math.random() < 0.25) {
         this.spawnThief();
         return;
@@ -274,62 +273,15 @@ class GameBase extends Phaser.Scene {
 
   spawnThief() {
     const t = this.enemies.create(Phaser.Math.Between(100, 620), -50, "enemy_thief");
-    t.hp = 25; // FIXED: slightly tougher
+    t.hp = 25; 
     t.maxHp = 25;
     t.tier = "thief";
     t.enemyType = "thief";
-    t.setTint(0xffffff); // Use pure colors
-    // FIXED: Removed the conflicting horizontal tween that broke its movement
+    t.setTint(0xffffff); 
   }
 
   spawnMeteors() {
-    this.playSFX('sfx_warning', 0.8, false);
-    
-    // FIXED: Better visual overlay for Meteor Storm
-    const warnRect = this.add.rectangle(360, 640, 720, 1280, 0xff2200, 0.4).setDepth(200);
-    const warnText = this.add.text(360, 640, "METEOR SHOWER\nINCOMING!", {
-        fontSize: '56px', color: '#ffffff', fontStyle: 'bold', fontFamily: "'Anek Bangla'", stroke: '#000000', strokeThickness: 10, align: 'center'
-    }).setOrigin(0.5).setDepth(201);
-
-    this.tweens.add({ 
-        targets: [warnRect, warnText], 
-        alpha: 0, 
-        duration: 500, 
-        yoyo: true, 
-        repeat: 3, 
-        onComplete: () => { warnRect.destroy(); warnText.destroy(); } 
-    });
-
-    this.time.delayedCall(2000, () => {
-        // FIXED: Increased meteor count to 20 for a denser shower
-        for(let i=0; i < 20; i++) {
-            this.time.delayedCall(i * 350, () => {
-                if(!GameState.bossActive && this.scene.isActive()) {
-                    let m = this.obstacles.create(Phaser.Math.Between(50, 670), -100, "hazard_meteor");
-                    m.obstacleType = "meteor";
-                    m.hp = 9999; // Indestructible
-                    m.setScale(Phaser.Math.FloatBetween(1.2, 2.0));
-                    m.setCircle(22, 8, 8); // Tighter hitbox
-                    
-                    // FIXED: Faster and more dynamic angles
-                    m.setVelocity(Phaser.Math.Between(-200, 200), Phaser.Math.Between(750, 1200));
-                    m.setRotation(Phaser.Math.FloatBetween(0, Math.PI * 2));
-                    m.setAngularVelocity(Phaser.Math.Between(-300, 300));
-                    
-                    // FIXED: Added Fire Trails
-                    const trail = this.add.particles(0, 0, 'engine_flame', {
-                        speed: 50,
-                        scale: { start: m.scale * 0.8, end: 0 },
-                        alpha: { start: 0.6, end: 0 },
-                        blendMode: 'ADD',
-                        lifespan: 300
-                    });
-                    trail.startFollow(m);
-                    m.trail = trail; // Reference to destroy later
-                }
-            });
-        }
-    });
+    // Moved to GameScene explicitly. Base keeps empty method to satisfy potential calls.
   }
 
   spawnEnemy() {
@@ -447,7 +399,6 @@ class GameBase extends Phaser.Scene {
     let powerUpType;
     const roll = Math.random();
     
-    // FIXED: 50/50 Chip spawn rate slightly decreased back to 10%
     if (roll > 0.90) {
         powerUpType = "powerup_fiftyfifty";
     } else if (obstacleType === "obstacle_mine") {
@@ -591,9 +542,11 @@ class GameBase extends Phaser.Scene {
 
                 const currentRadius = 80 * (wave.scale / 0.15);
                 
+                // FIXED: Included meteors in the shockwave target array
                 const targets = [
                     ...(this.enemies ? this.enemies.getChildren() : []), 
                     ...(this.obstacles ? this.obstacles.getChildren() : []), 
+                    ...(this.meteors ? this.meteors.getChildren() : []),
                     ...(this.bossBullets ? this.bossBullets.getChildren() : [])
                 ];
                 
@@ -608,7 +561,7 @@ class GameBase extends Phaser.Scene {
                                      this.destroyEnemy(target);
                                 } else {
                                      this.createExplosion(target.x, target.y, 0xffff00, 20);
-                                     if (target.trail) target.trail.destroy(); // Fix memory leak
+                                     if (target.trail) target.trail.destroy(); // Properly clean up trails
                                      target.destroy();
                                      GameState.score += 20;
                                 }

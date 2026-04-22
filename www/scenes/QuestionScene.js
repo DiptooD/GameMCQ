@@ -7,6 +7,10 @@ class QuestionScene extends Phaser.Scene {
         this.isProcessing = false;
         this.wasReady = false;
         this.lastBattery = -1;
+        
+        // NEW: For smooth Meteor Shower transitions
+        this.currentGlowAlpha = 0;
+        this.showerGlowAlpha = 0;
     }
 
     create() {
@@ -419,23 +423,40 @@ class QuestionScene extends Phaser.Scene {
             this.refreshHearts();
         }
 
-        // METEOR SHOWER VIGNETTE LOGIC
+        // FIXED: Smooth transition for Meteor red glow to Meteor Shower and Reset
+        let targetAlpha = 0;
         if (this.meteorTimer && !GameState.bossActive && GameState.battery >= 100) {
             const p = this.meteorTimer.getProgress(); // 0 to 1
-            this.meteorVignette.clear();
-            
             if (p > 0.05) {
-                // Exponential thickness buildup looks more threatening
-                const maxThickness = 120;
-                const currentThickness = maxThickness * Math.pow(p, 2);
-                const alpha = p * 0.75; // Slowly fades in
-
-                this.meteorVignette.lineStyle(currentThickness, 0xff0000, alpha);
-                const inset = currentThickness / 2;
-                this.meteorVignette.strokeRect(inset, inset, 720 - (inset * 2), this.cameras.main.height - (inset * 2));
+                targetAlpha = 0.7 * p;
             }
+        }
+
+        // The shower overrides the timer if its glow value is higher
+        targetAlpha = Math.max(targetAlpha, this.showerGlowAlpha || 0);
+
+        if (this.currentGlowAlpha === undefined) this.currentGlowAlpha = 0;
+
+        // Smooth Lerp transitions instead of sudden jumps
+        if (targetAlpha > this.currentGlowAlpha) {
+            this.currentGlowAlpha += 0.01; // Fade-in slightly slower for smoother buildup
+            if (this.currentGlowAlpha > targetAlpha) this.currentGlowAlpha = targetAlpha;
         } else {
-            this.meteorVignette.clear();
+            this.currentGlowAlpha -= 0.005; // Very slow, smooth fade-out (prevents sudden disappearance when answering questions)
+            if (this.currentGlowAlpha < targetAlpha) this.currentGlowAlpha = targetAlpha;
+        }
+
+        this.meteorVignette.clear();
+        if (this.currentGlowAlpha > 0.01) {
+            const h = this.cameras.main.height;
+            const glowHeight = 700; // Covers bottom third of the screen seamlessly
+            const yPos = h - glowHeight;
+
+            this.meteorVignette.fillGradientStyle(
+                0xff0000, 0xff0000, 0x990000, 0x990000, // Top colors, Bottom colors
+                0, 0, this.currentGlowAlpha, this.currentGlowAlpha // Top alphas, Bottom alphas
+            );
+            this.meteorVignette.fillRect(0, yPos, 720, glowHeight);
         }
         
         this.keyText.setText(GameState.keys || 0);
@@ -472,14 +493,28 @@ class QuestionScene extends Phaser.Scene {
         }
     }
 
+    // NEW: Handles smooth visual override when meteor shower strikes
+    triggerMeteorShowerGlow() {
+        this.showerGlowAlpha = 1.0;
+        this.cameras.main.flash(300, 255, 50, 0, 0.2); // Subtle visual flash when shower starts
+        if (this.showerGlowTween) this.showerGlowTween.stop();
+        this.showerGlowTween = this.tweens.add({
+            targets: this,
+            showerGlowAlpha: 0,
+            duration: 6000, // Fades out slowly identically to meteor fall timespan
+            ease: 'Sine.easeOut'
+        });
+    }
+
     manageMeteorTimer(isReady) {
         if (isReady && !GameState.bossActive) {
             if (!this.meteorTimer) {
                 this.meteorTimer = this.time.addEvent({
-                    delay: 25000, // FIXED: Increased to 25 seconds
+                    delay: 45000,
                     callback: () => {
                         const gameScene = this.scene.get('GameScene');
                         if (gameScene && !GameState.bossActive) gameScene.spawnMeteors();
+                        this.triggerMeteorShowerGlow();
                     },
                     loop: true 
                 });
@@ -489,7 +524,7 @@ class QuestionScene extends Phaser.Scene {
                 this.meteorTimer.remove();
                 this.meteorTimer = null;
             }
-            this.meteorVignette.clear();
+            // Intentionally not clearing meteorVignette here. Allowed to fade out via lerp.
         }
     }
 
@@ -800,8 +835,8 @@ class QuestionScene extends Phaser.Scene {
             if (GameState.currentCombo >= 3) {
                 gameScene.comboText.setText(`COMBO x${GameState.currentCombo}!`);
                 gameScene.comboText.setAlpha(1);
-                gameScene.comboText.setScale(0.5);
-                gameScene.tweens.add({ targets: gameScene.comboText, scale: 1.0, duration: 400, yoyo: true, onComplete:() => {
+                gameScene.comboText.setScale(0.8);
+                gameScene.tweens.add({ targets: gameScene.comboText, scale: 1.0, duration: 700, yoyo: true, onComplete:() => {
                     gameScene.tweens.add({ targets: gameScene.comboText, alpha: 0, duration: 500, delay: 1000 });
                 }});
                 
@@ -930,7 +965,7 @@ class QuestionScene extends Phaser.Scene {
                 status: 'skipped'
             });
             
-            this.manageMeteorTimer(false); // Reset on skip
+            this.manageMeteorTimer(false); 
             GameState.skipsLeft--;
             this.qIdx++;
             this.refreshQuestion();
@@ -1000,7 +1035,10 @@ class QuestionScene extends Phaser.Scene {
             this.instructionText.setAlpha(0);
             if (this.warningTween) this.warningTween.stop();
             if (this.readyTween) this.readyTween.stop();
-            this.meteorVignette.clear();
+            
+            // REMOVED the abrupt clearing of the meteor vignette and alpha states.
+            // By letting it naturally fade via the update loop, the sudden visual cutoff is prevented.
+            
         } else {
             this.wasReady = null; 
             this.qPanel.setAlpha(1);

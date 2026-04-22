@@ -87,7 +87,6 @@ class GameScene extends GameBase {
         this.player.setSize(90, 90);
         this.wingmen = this.physics.add.group();
         
-        // Initial setup for ship animation
         this.applyShipAnimation(GameState.equippedShip || "default");
 
         this.bullets = this.physics.add.group();
@@ -99,6 +98,9 @@ class GameScene extends GameBase {
         this.bossBullets = this.physics.add.group();
         this.batteries = this.physics.add.group();
         this.obstacles = this.physics.add.group();
+        
+        // FIXED: Isolated Physics group for meteors
+        this.meteors = this.physics.add.group();
         this.powerUps = this.physics.add.group();
 
         this.shieldArc = this.add.graphics().setDepth(10).setVisible(false);
@@ -133,6 +135,10 @@ class GameScene extends GameBase {
 
         this.physics.add.overlap(this.player, [this.enemies, this.bossBullets], this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.obstacles, this.hitPlayer, null, this);
+        
+        // FIXED: Only the player overlaps with the meteors.
+        this.physics.add.overlap(this.player, this.meteors, this.hitPlayer, null, this);
+        
         this.physics.add.overlap(this.player, this.batteries, this.collectBattery, null, this);
         this.physics.add.overlap(this.player, this.powerUps, this.collectPowerUp, null, this);
 
@@ -375,7 +381,6 @@ class GameScene extends GameBase {
     update(time, delta) {
         if (this.isResuming) return;
         
-        // FIXED: Extract delta-time normalization for smooth lerping
         const timeScale = this.time.timeScale || 1;
         const dtScale = delta / 16.666; 
         const dt = timeScale * dtScale;
@@ -402,7 +407,6 @@ class GameScene extends GameBase {
 
         this.checkBossSpawn();
 
-        // FIXED: Smoother Player Lerp with dt
         const lerpSpeed = 0.25 * dt;
         this.player.x = Phaser.Math.Linear(this.player.x, this.targetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
@@ -510,7 +514,6 @@ class GameScene extends GameBase {
         this.enemies.children.each(e => {
             if (!e.active) return;
 
-            // FIXED: Thief Smooth Tracking Logic with dt normalization
             if (e.enemyType === "thief") {
                 const angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
                 const currentAngle = Math.atan2(e.body.velocity.y, e.body.velocity.x) || (Math.PI/2);
@@ -703,6 +706,14 @@ class GameScene extends GameBase {
             if (obs.active && (obs.y > bottomEdge || obs.x < -200 || obs.x > wView + 200)) {
                 if (obs.trail) obs.trail.destroy();
                 obs.destroy(); 
+            }
+        });
+
+        // FIXED: Meteor Cleanup
+        this.meteors.children.each(m => {
+            if (m.active && (m.y > bottomEdge || m.y < topEdge - 500 || m.x < -200 || m.x > wView + 200)) {
+                if (m.trail) m.trail.destroy();
+                m.destroy();
             }
         });
 
@@ -1635,7 +1646,10 @@ class GameScene extends GameBase {
             this.createExplosion(source.x, source.y, 0xffaa00, 10);
             if (!isBoss && source.active) {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
-                else if (source.destroy) source.destroy();
+                else {
+                    if (source.trail) source.trail.destroy(); // FIXED: Destroy trail explicitly to remove white dots
+                    if (source.destroy) source.destroy();
+                }
             }
             return;
         }
@@ -1645,7 +1659,10 @@ class GameScene extends GameBase {
             this.shieldArc.setVisible(false);
             if (!isBoss && source.active) {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
-                else if (source.destroy) source.destroy();
+                else {
+                    if (source.trail) source.trail.destroy(); // FIXED: Trail cleanup
+                    if (source.destroy) source.destroy();
+                }
             }
             return;
         }
@@ -1655,7 +1672,10 @@ class GameScene extends GameBase {
         
         if (!isBoss && source.active) {
             if (this.enemies.contains(source)) this.destroyEnemy(source);
-            else if (source.destroy) source.destroy();
+            else {
+                if (source.trail) source.trail.destroy(); // FIXED: Trail cleanup
+                if (source.destroy) source.destroy();
+            }
         }
         
         GameState.lives--;
@@ -1714,6 +1734,14 @@ class GameScene extends GameBase {
             if (obs.trail) obs.trail.destroy(); 
             obs.destroy();
         });
+        
+        // FIXED: Shockwave clearing meteors inside safe zone
+        this.physics.overlap(safeZone, this.meteors, (zone, m) => {
+            this.createExplosion(m.x, m.y, 0xff2200, 20);
+            if (m.trail) m.trail.destroy();
+            m.destroy();
+        });
+        
         safeZone.destroy();
     }
 
@@ -2186,16 +2214,12 @@ class GameScene extends GameBase {
 
     spawnMeteors() {
         this.playSFX('sfx_warning', 0.8, false);
-        
-        // FIXED: Replaced textual warning with an immersive full-screen flash
-        this.cameras.main.flash(600, 255, 0, 0, 0.6);
 
         this.time.delayedCall(600, () => {
-            // FIXED: Heavy meteor density
             for(let i = 0; i < 20; i++) {
                 this.time.delayedCall(i * 300, () => {
                     if(!GameState.bossActive && this.scene.isActive()) {
-                        let m = this.obstacles.create(Phaser.Math.Between(50, 670), -100, "hazard_meteor");
+                        let m = this.meteors.create(Phaser.Math.Between(50, 670), -100, "hazard_meteor"); 
                         m.obstacleType = "meteor";
                         m.hp = 9999; 
                         m.setScale(Phaser.Math.FloatBetween(1.2, 2.0));
