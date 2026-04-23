@@ -917,6 +917,10 @@ class QuestionScene extends Phaser.Scene {
     }
 
     applyFiftyFifty() {
+        const gameScene = this.scene.get('GameScene');
+        // Do not activate fifty-fifty if boss is active or spawning
+        if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) return;
+        
         if (!GameState.hasFiftyFifty || this.isProcessing) return;
         if (GameState.fiftyFiftyOptionsToHide && GameState.fiftyFiftyOptionsToHide.length > 0) return;
         
@@ -967,6 +971,7 @@ class QuestionScene extends Phaser.Scene {
             
             this.manageMeteorTimer(false); 
             GameState.skipsLeft--;
+            GameState.fiftyFiftyOptionsToHide = []; // Refresh 50/50 block
             this.qIdx++;
             this.refreshQuestion();
             
@@ -1035,9 +1040,6 @@ class QuestionScene extends Phaser.Scene {
             this.instructionText.setAlpha(0);
             if (this.warningTween) this.warningTween.stop();
             if (this.readyTween) this.readyTween.stop();
-            
-            // REMOVED the abrupt clearing of the meteor vignette and alpha states.
-            // By letting it naturally fade via the update loop, the sudden visual cutoff is prevented.
             
         } else {
             this.wasReady = null; 

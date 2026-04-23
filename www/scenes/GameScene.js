@@ -99,7 +99,7 @@ class GameScene extends GameBase {
         this.batteries = this.physics.add.group();
         this.obstacles = this.physics.add.group();
         
-        // FIXED: Isolated Physics group for meteors
+        // Isolated Physics group for meteors
         this.meteors = this.physics.add.group();
         this.powerUps = this.physics.add.group();
 
@@ -135,8 +135,6 @@ class GameScene extends GameBase {
 
         this.physics.add.overlap(this.player, [this.enemies, this.bossBullets], this.hitPlayer, null, this);
         this.physics.add.overlap(this.player, this.obstacles, this.hitPlayer, null, this);
-        
-        // FIXED: Only the player overlaps with the meteors.
         this.physics.add.overlap(this.player, this.meteors, this.hitPlayer, null, this);
         
         this.physics.add.overlap(this.player, this.batteries, this.collectBattery, null, this);
@@ -420,11 +418,39 @@ class GameScene extends GameBase {
                 wingman.x = Phaser.Math.Linear(wingman.x, targetX, 0.1 * dt);
                 wingman.y = Phaser.Math.Linear(wingman.y, targetY, 0.1 * dt);
 
-                if (this.time.now > (wingman.lastShot || 0) + 400) {
+                const combo = GameState.currentCombo || 0;
+                let delay = 400;
+                if (combo >= 10) delay = 600;
+                else if (combo >= 5) delay = 350;
+
+                if (this.time.now > (wingman.lastShot || 0) + delay) {
                     wingman.lastShot = this.time.now;
-                    const b = this.sideBullets.create(wingman.x, wingman.y - 20, "side_bullet_default");
-                    b.setVelocityY(-800);
-                    b.setScale(0.8);
+                    
+                    const equip = GameState.equippedShip || "default";
+                    let mainTex = this.textures.exists(`bullet_${equip}`) ? `bullet_${equip}` : "bullet_default";
+                    let sideTex = this.textures.exists(`side_bullet_${equip}`) ? `side_bullet_${equip}` : "side_bullet_default";
+                    
+                    let projTex = sideTex;
+                    let speedY = -800;
+                    let scale = 0.8;
+                    let damageTag = "side_bullet"; 
+
+                    if (combo >= 10) {
+                        projTex = "missile";
+                        speedY = -1000;
+                        scale = 0.7;
+                        damageTag = "missile";
+                    } else if (combo >= 5) {
+                        projTex = mainTex;
+                        speedY = -900;
+                        scale = 1.0;
+                        damageTag = "bullet";
+                    }
+
+                    const b = this.sideBullets.create(wingman.x, wingman.y - 20, projTex);
+                    b.weaponType = damageTag;
+                    b.setVelocityY(speedY);
+                    b.setScale(scale);
                 }
             }
         });
@@ -709,7 +735,6 @@ class GameScene extends GameBase {
             }
         });
 
-        // FIXED: Meteor Cleanup
         this.meteors.children.each(m => {
             if (m.active && (m.y > bottomEdge || m.y < topEdge - 500 || m.x < -200 || m.x > wView + 200)) {
                 if (m.trail) m.trail.destroy();
@@ -929,17 +954,17 @@ class GameScene extends GameBase {
 
     damageObstacle(projectile, obstacle) {
         let damage = 1;
-        const weaponType = projectile.texture.key;
+        const weaponType = projectile.weaponType || projectile.texture.key;
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.1);
 
         if (weaponType === "missile") damage = 4;
         else if (weaponType.includes("side_bullet")) damage = 2;
-        else if (weaponType === "lightning_bolt") {
+        else if (weaponType === "lightning") {
             damage = 3;
             projectile.pierceCount = (projectile.pierceCount || 0) + 1;
             if (projectile.pierceCount >= 3) projectile.destroy();
-        } else if (weaponType === "ice_shard") damage = 2;
-        else if (weaponType === "plasma_wave") damage = 3;
+        } else if (weaponType === "ice") damage = 2;
+        else if (weaponType === "plasma") damage = 3;
 
         const finalDamage = damage * damageMultiplier * this.luckMods.playerDamageMult;
         if (obstacle.obstacleType === "meteor") return; 
@@ -953,7 +978,7 @@ class GameScene extends GameBase {
         this.time.delayedCall(60, () => { if (obstacle && obstacle.active) obstacle.setAlpha(1); });
 
         this.hitEmitter.emitParticle(5, projectile.x, projectile.y);
-        if (weaponType !== "lightning_bolt") projectile.destroy();
+        if (weaponType !== "lightning" && weaponType !== "plasma" && weaponType !== "ice") projectile.destroy();
 
         if (obstacle.hp <= 0) {
             this.playSFX('sfx_explode', 0.35);
@@ -1647,7 +1672,7 @@ class GameScene extends GameBase {
             if (!isBoss && source.active) {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
                 else {
-                    if (source.trail) source.trail.destroy(); // FIXED: Destroy trail explicitly to remove white dots
+                    if (source.trail) source.trail.destroy(); 
                     if (source.destroy) source.destroy();
                 }
             }
@@ -1660,7 +1685,7 @@ class GameScene extends GameBase {
             if (!isBoss && source.active) {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
                 else {
-                    if (source.trail) source.trail.destroy(); // FIXED: Trail cleanup
+                    if (source.trail) source.trail.destroy(); 
                     if (source.destroy) source.destroy();
                 }
             }
@@ -1673,7 +1698,7 @@ class GameScene extends GameBase {
         if (!isBoss && source.active) {
             if (this.enemies.contains(source)) this.destroyEnemy(source);
             else {
-                if (source.trail) source.trail.destroy(); // FIXED: Trail cleanup
+                if (source.trail) source.trail.destroy(); 
                 if (source.destroy) source.destroy();
             }
         }
@@ -1735,7 +1760,6 @@ class GameScene extends GameBase {
             obs.destroy();
         });
         
-        // FIXED: Shockwave clearing meteors inside safe zone
         this.physics.overlap(safeZone, this.meteors, (zone, m) => {
             this.createExplosion(m.x, m.y, 0xff2200, 20);
             if (m.trail) m.trail.destroy();
@@ -1759,21 +1783,21 @@ class GameScene extends GameBase {
     }
 
     handleBossHit(boss, shot) {
-        const weaponType = shot.texture.key;
+        const weaponType = shot.weaponType || shot.texture.key;
         let damage = 1;
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.15);
 
         if (weaponType === "missile") damage = 8;
         else if (weaponType.includes("side_bullet")) damage = 3;
         else if (weaponType.includes("bullet")) damage = 2;
-        else if (weaponType === "lightning_bolt") { 
+        else if (weaponType === "lightning") { 
             damage = 6; 
             shot.pierceCount = (shot.pierceCount || 0) + 1; 
             if (shot.pierceCount >= 3) shot.destroy(); 
         }
-        else if (weaponType === "plasma_wave") damage = 8;
+        else if (weaponType === "plasma") damage = 8;
 
-        if (weaponType !== "lightning_bolt" && weaponType !== "plasma_wave" && weaponType !== "ice_shard") {
+        if (weaponType !== "lightning" && weaponType !== "plasma" && weaponType !== "ice") {
             shot.destroy();
         }
 
