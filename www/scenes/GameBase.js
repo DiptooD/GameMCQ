@@ -235,7 +235,7 @@ class GameBase extends Phaser.Scene {
   spawnObstacle() {
     if (GameState.bossActive) return;
     
-    if (this.getGlobalProgress() > 2 && Math.random() < 0.25) {
+    if (this.getGlobalProgress() > 2 && Math.random() < 0.07) {
         this.spawnThief();
         return;
     }
@@ -273,8 +273,8 @@ class GameBase extends Phaser.Scene {
 
   spawnThief() {
     const t = this.enemies.create(Phaser.Math.Between(100, 620), -50, "enemy_thief");
-    t.hp = 25; 
-    t.maxHp = 25;
+    t.hp = 60; 
+    t.maxHp = 100;
     t.tier = "thief";
     t.enemyType = "thief";
     t.setTint(0xffffff); 
@@ -350,6 +350,11 @@ class GameBase extends Phaser.Scene {
       e.movePattern = "straight";
       const baseSpeed = Phaser.Math.Between(1, 2);
       e.rotSpeed = baseSpeed + (progress * 0.5);
+    }
+
+    // Apply modifiers from GameScene (Shields, Bombs, Dashes)
+    if (this.applyEnemyModifiers) {
+        this.applyEnemyModifiers(e);
     }
   }
 

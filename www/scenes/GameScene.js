@@ -221,17 +221,22 @@ class GameScene extends GameBase {
         });
     }
 
-    applyEnemyModifiers(e) {
+applyEnemyModifiers(e) {
         let stage = GameState.bossStage || 0;
         let progress = this.getGlobalProgress();
 
+        // Dash scaling
         let dashChance = Math.min(0.5, 0.05 + (progress * 0.01) + (stage * 0.1));
         if (Math.random() < dashChance) {
             e.canDash = true;
             e.dashTimer = Phaser.Math.Between(100, 250);
         }
 
-        if (Math.random() < 0.08) { 
+        // Bomb and Shield scaling
+        let bombChance = Math.min(0.20, 0.05 + (progress * 0.005) + (stage * 0.02));
+        let shieldChance = Math.min(0.50, 0.10 + (progress * 0.015) + (stage * 0.10));
+
+        if (Math.random() < bombChance) { 
             e.isBodyBomb = true;
             e.hp *= 4.0; 
             e.maxHp = e.hp;
@@ -240,9 +245,9 @@ class GameScene extends GameBase {
                 targets: e, scale: e.scale * 1.15, duration: 300, yoyo: true, repeat: -1
             });
         } 
-        else if (Math.random() < 0.15) { 
+        else if (Math.random() < shieldChance) { 
             e.hasEnemyShield = true;
-            e.enemyShieldHp = 10;
+            e.enemyShieldHp = 10 + (progress * 0.2); // Optionally scale shield health with progress too
             e.shieldRadius = Math.max(e.width, e.height) * 0.55 * e.scale;
             if(isNaN(e.shieldRadius) || e.shieldRadius < 15) e.shieldRadius = 45;
         }
@@ -1097,12 +1102,12 @@ class GameScene extends GameBase {
         if (enemy.isBodyBomb) dropChance = 1.0; 
 
         if (enemy.tier === "thief") {
-            this.dropPowerUp(enemy.x, enemy.y, "thief");
-            const battery = this.batteries.create(enemy.x+20, enemy.y, "battery_red");
-            battery.setVelocityY(220); battery.batteryValue = 80;
+            if (!GameState.bossActive) {
+                this.dropPowerUp(enemy.x, enemy.y, "thief");
+            }
         }
 
-        if (!GameState.bossActive && Math.random() < dropChance) {
+        if (!GameState.bossActive && enemy.tier !== "thief" && Math.random() < dropChance) {
             let batteryTexture = "battery_green", batteryValue = 35;
             
             if (enemy.isBodyBomb) { 
@@ -1308,6 +1313,8 @@ class GameScene extends GameBase {
         GameState.bossActive = true;
         this.enemies.clear(true, true);
         this.obstacles.clear(true, true);
+        this.batteries.clear(true, true);
+        this.powerUps.clear(true, true);
 
         this.playSFX('sfx_warning', 0.8, false);
 
@@ -1606,12 +1613,15 @@ class GameScene extends GameBase {
         if (battery.texture.key === "battery_red") textColor = "#ffee00";
 
         battery.destroy();
-        GameState.battery = Math.min(100, GameState.battery + finalValue);
 
-        let displayTxt = `+${finalValue}%`;
-        if (this.batteryMultiplier > 1.0) displayTxt += " (BST)";
-        const text = this.add.text(battery.x, battery.y, displayTxt, { fontSize: "36px", color: textColor, fontStyle: "bold", stroke: "#000000", strokeThickness: 3 }).setOrigin(0.5);
-        this.tweens.add({ targets: text, y: battery.y - 80, alpha: 0, duration: 1200, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
+        if (!GameState.bossActive) {
+            GameState.battery = Math.min(100, GameState.battery + finalValue);
+
+            let displayTxt = `+${finalValue}%`;
+            if (this.batteryMultiplier > 1.0) displayTxt += " (BST)";
+            const text = this.add.text(battery.x, battery.y, displayTxt, { fontSize: "36px", color: textColor, fontStyle: "bold", stroke: "#000000", strokeThickness: 3 }).setOrigin(0.5);
+            this.tweens.add({ targets: text, y: battery.y - 80, alpha: 0, duration: 1200, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
+        }
     }
 
     regenerateLife() {

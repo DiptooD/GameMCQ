@@ -327,9 +327,9 @@ class QuestionScene extends Phaser.Scene {
         botBar.fillGradientStyle(0x000000, 0x000000, 0x000510, 0x000510, 0, 0, 0.9, 0.9);
         botBar.fillRect(0, h - 120, w, 120);
 
-        this.add.image(60, uiY, "ui_bolt").setScale(1.1).setTint(0x00ffcc);
+        this.boltIcon = this.add.image(60, uiY, "ui_bolt").setScale(1.1).setTint(0x00ffcc);
         
-        this.add.rectangle(230, uiY, 260, 30, 0x000000, 0.4).setStrokeStyle(3, 0x555555, 0.6);
+        this.batteryBg = this.add.rectangle(230, uiY, 260, 30, 0x000000, 0.4).setStrokeStyle(3, 0x555555, 0.6);
         this.batteryFill = this.add.graphics();
 
         this.correctLabel = this.add.text(w - 30, uiY, "", {
@@ -1040,11 +1040,21 @@ class QuestionScene extends Phaser.Scene {
             this.instructionText.setAlpha(0);
             if (this.warningTween) this.warningTween.stop();
             if (this.readyTween) this.readyTween.stop();
+
+            // Hide the battery UI during Boss fight
+            if (this.boltIcon) this.boltIcon.setVisible(false);
+            if (this.batteryBg) this.batteryBg.setVisible(false);
+            if (this.batteryFill) this.batteryFill.setVisible(false);
             
         } else {
             this.wasReady = null; 
             this.qPanel.setAlpha(1);
             this.skipBtn.setAlpha(1);
+
+            // Re-show the battery UI after Boss fight
+            if (this.boltIcon) this.boltIcon.setVisible(true);
+            if (this.batteryBg) this.batteryBg.setVisible(true);
+            if (this.batteryFill) this.batteryFill.setVisible(true);
         }
     }
 }

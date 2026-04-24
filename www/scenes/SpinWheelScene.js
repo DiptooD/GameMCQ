@@ -75,13 +75,14 @@ class SpinWheelScene extends Phaser.Scene {
         // --- 4. CONFIGURATION ---
         this.spinCost = 20; 
         
-        // Segments Data
+        // Segments Data (Rebalanced for 6 segments)
         this.segments = [
             { id: 'jackpot', type: 'keys', amount: 10, color: 0xff0055, icon: 'ui_key', prob: 0.05, label: "10 KEYS" },
-            { id: 'rare', type: 'keys', amount: 5, color: 0xffaa00, icon: 'ui_key', prob: 0.10, label: "5 KEYS" },
-            { id: 'fire', type: 'booster', key: 'fireShield', amount: 2, color: 0x6600ff, icon: 'icon_booster_fire', prob: 0.28, label: "2x SHIELD" },
-            { id: 'speed', type: 'booster', key: 'speedBoost', amount: 2, color: 0x0088ff, icon: 'icon_booster_speed', prob: 0.28, label: "2x SPEED" },
-            { id: 'battery', type: 'booster', key: 'batteryEff', amount: 2, color: 0x00cc44, icon: 'icon_booster_battery', prob: 0.29, label: "2x BATTERY" }
+            { id: 'debris_stash', type: 'debris', amount: 100, color: 0x00ffff, icon: 'ui_debris_icon', prob: 0.15, label: "100 DEBRIS" },
+            { id: 'extra_skips', type: 'skips', amount: 5, color: 0x00ff00, icon: 'ui_bolt', prob: 0.20, label: "5 SKIPS" },
+            { id: 'fire', type: 'booster', key: 'fireShield', amount: 2, color: 0x6600ff, icon: 'icon_booster_fire', prob: 0.20, label: "2x SHIELD" },
+            { id: 'speed', type: 'booster', key: 'speedBoost', amount: 2, color: 0x0088ff, icon: 'icon_booster_speed', prob: 0.20, label: "2x SPEED" },
+            { id: 'battery', type: 'booster', key: 'batteryEff', amount: 2, color: 0x00cc44, icon: 'icon_booster_battery', prob: 0.20, label: "2x BATTERY" }
         ];
 
         // --- 5. THE WHEEL ---
@@ -492,10 +493,15 @@ class SpinWheelScene extends Phaser.Scene {
 
         if (winner.type === 'keys') {
             GameState.keys += winner.amount;
-        } else {
+        } else if (winner.type === 'debris') {
+            GameState.debris += winner.amount;
+        } else if (winner.type === 'skips') {
+            GameState.skipsLeft = (GameState.skipsLeft || 0) + winner.amount;
+        } else if (winner.type === 'booster') {
             if (!GameState.boosters) GameState.boosters = {};
             GameState.boosters[winner.key] = (GameState.boosters[winner.key] || 0) + winner.amount;
         }
+
         window.saveCurrency();
         this.updateCurrencyDisplay();
 

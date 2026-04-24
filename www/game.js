@@ -17,6 +17,9 @@ window.saveGame = function() {
         localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
         localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
         
+        // NEW: Save Skips to local storage
+        localStorage.setItem('game_skips', GameState.skipsLeft || 10);
+        
         // NEW: Save Daily Missions
         localStorage.setItem('game_dailyMissions', JSON.stringify(GameState.dailyMissions));
         localStorage.setItem('game_lastMissionDate', GameState.lastMissionDate || "");
@@ -42,6 +45,7 @@ window.saveSettings = function() {
 
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
+const storedSkips = localStorage.getItem('game_skips'); // Fetch Skips
 
 // NEW: Mission Generators
 const generateDailyMissions = () => {
@@ -88,7 +92,10 @@ window.GameState = {
     totalCorrectNeeded: 10, 
     bossStage: 0, 
     bossActive: false,
-    skipsLeft: 10,
+    
+    // Initialize Skips from local storage if available
+    skipsLeft: storedSkips !== null ? parseInt(storedSkips) : 10,
+    
     sessionHistory: [],
     gameMode: "normal", 
     
@@ -162,8 +169,13 @@ window.resetGameState = function () {
     GameState.fiftyFiftyOptionsToHide = [];
     GameState.bossStage = 0;
     GameState.bossActive = false;
-    GameState.skipsLeft = 10; 
     GameState.sessionHistory = [];
+    
+    // Recharge skips to at least 10, but DO NOT wipe out extra skips won from wheel!
+    if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10) {
+        GameState.skipsLeft = 10;
+    }
+    
     window.updateLevelTargets(); 
 };
 
