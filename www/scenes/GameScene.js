@@ -99,7 +99,6 @@ class GameScene extends GameBase {
         this.batteries = this.physics.add.group();
         this.obstacles = this.physics.add.group();
         
-        // Isolated Physics group for meteors
         this.meteors = this.physics.add.group();
         this.powerUps = this.physics.add.group();
 
@@ -221,18 +220,16 @@ class GameScene extends GameBase {
         });
     }
 
-applyEnemyModifiers(e) {
+    applyEnemyModifiers(e) {
         let stage = GameState.bossStage || 0;
         let progress = this.getGlobalProgress();
 
-        // Dash scaling
         let dashChance = Math.min(0.5, 0.05 + (progress * 0.01) + (stage * 0.1));
         if (Math.random() < dashChance) {
             e.canDash = true;
             e.dashTimer = Phaser.Math.Between(100, 250);
         }
 
-        // Bomb and Shield scaling
         let bombChance = Math.min(0.20, 0.05 + (progress * 0.005) + (stage * 0.02));
         let shieldChance = Math.min(0.50, 0.10 + (progress * 0.015) + (stage * 0.10));
 
@@ -247,7 +244,7 @@ applyEnemyModifiers(e) {
         } 
         else if (Math.random() < shieldChance) { 
             e.hasEnemyShield = true;
-            e.enemyShieldHp = 10 + (progress * 0.2); // Optionally scale shield health with progress too
+            e.enemyShieldHp = 10 + (progress * 0.2); 
             e.shieldRadius = Math.max(e.width, e.height) * 0.55 * e.scale;
             if(isNaN(e.shieldRadius) || e.shieldRadius < 15) e.shieldRadius = 45;
         }
@@ -341,6 +338,21 @@ applyEnemyModifiers(e) {
         if (this.wakeLock) {
             this.wakeLock.release().then(() => this.wakeLock = null);
         }
+    }
+
+    showMissionToast(msg) {
+        const toast = this.add.text(360, 200, msg, {
+            fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#00ff00', 
+            backgroundColor: 'rgba(0, 50, 0, 0.9)', padding: {x: 20, y: 15},
+            align: 'center', stroke: '#000000', strokeThickness: 4
+        }).setOrigin(0.5).setDepth(5000).setAlpha(0);
+        
+        this.tweens.add({ 
+            targets: toast, y: 150, alpha: 1, duration: 400, ease: 'Cubic.easeOut',
+            onComplete: () => {
+                this.tweens.add({ targets: toast, alpha: 0, delay: 2500, duration: 500, onComplete: () => toast.destroy() });
+            }
+        });
     }
 
     createBeginnersLuckUI() {
@@ -990,7 +1002,9 @@ applyEnemyModifiers(e) {
             this.createExplosion(obstacle.x, obstacle.y, 0x888888, 10);
             GameState.score += 15;
 
-            if (GameState.gameMode !== "revision" && Math.random() < 0.5) {
+            // Restrict debris drop and mission progress using isValidSubject
+            const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
+            if (GameState.gameMode !== "revision" && isValidSubject && Math.random() < 0.5) {
                 GameState.debris = (GameState.debris || 0) + 1;
                 window.updateMissionProgress("collect_debris", 1); 
                 window.saveCurrency();
@@ -1441,25 +1455,30 @@ applyEnemyModifiers(e) {
         }
     }
 
-    winBossFight() {
+winBossFight() {
         if (!GameState.bossActive) return; 
         
         this.playSFX('sfx_boss_win', 0.8, false);
 
         if (GameState.gameMode !== "revision") {
-            const keysWon = GameState.bossStage + 1;
-            GameState.keys = (GameState.keys || 0) + keysWon;
-            window.saveCurrency();
-
+            // Apply subject validation block to prevent keys farming
+            const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
             const rewardContainer = this.add.container(360, 700);
-            
-            const keyIcon = this.add.image(0, -30, "ui_key").setScale(1.0);
-            const keyTxt = this.add.text(35, -30, `+${keysWon} চাবি পাওয়া গেছে`, { fontSize: '50px', fontFamily: "'Anek Bangla'", color: '#ffd700', stroke: '#000000', strokeThickness: 7 }).setOrigin(0, 0.5);
-            const totalWidth = keyIcon.displayWidth + keyTxt.width + 10;
-            keyIcon.x = -totalWidth / 2 + (keyIcon.displayWidth / 2);
-            keyTxt.x = keyIcon.x + (keyIcon.displayWidth / 2) + 15;
-            
-            const skipTxt = this.add.text(0, 35, "+5 Skips পাওয়া গেছে", { 
+            let rewardElements = [];
+
+            if (isValidSubject) {
+                const keysWon = GameState.bossStage + 1;
+                GameState.keys = (GameState.keys || 0) + keysWon;
+                
+                const keyIcon = this.add.image(0, -30, "ui_key").setScale(1.0);
+                const keyTxt = this.add.text(35, -30, `+${keysWon} চাবি পাওয়া গেছে`, { fontSize: '50px', fontFamily: "'Anek Bangla'", color: '#ffd700', stroke: '#000000', strokeThickness: 7 }).setOrigin(0, 0.5);
+                const totalWidth = keyIcon.displayWidth + keyTxt.width + 10;
+                keyIcon.x = -totalWidth / 2 + (keyIcon.displayWidth / 2);
+                keyTxt.x = keyIcon.x + (keyIcon.displayWidth / 2) + 15;
+                rewardElements.push(keyIcon, keyTxt);
+            }
+
+            const skipTxt = this.add.text(0, isValidSubject ? 35 : 0, "+5 Skips পাওয়া গেছে", { 
                 fontSize: '40px', 
                 fontFamily: "'Anek Bangla'", 
                 color: '#00ffcc', 
@@ -1467,7 +1486,8 @@ applyEnemyModifiers(e) {
                 strokeThickness: 6 
             }).setOrigin(0.5, 0.5);
 
-            rewardContainer.add([keyIcon, keyTxt, skipTxt]);
+            rewardElements.push(skipTxt);
+            rewardContainer.add(rewardElements);
 
             this.tweens.add({ targets: rewardContainer, y: 800, alpha: 0.05, duration: 1500, delay: 2800, onComplete: () => rewardContainer.destroy() });
         }
@@ -1475,7 +1495,12 @@ applyEnemyModifiers(e) {
         GameState.bossActive = false;
         GameState.bossStage++;
         GameState.correctCount = 0;
+        
+        // Track the extra skips and total skips securely 
+        GameState.extraSkips = (GameState.extraSkips || 0) + 5;
         GameState.skipsLeft += 5;
+        window.saveCurrency();
+
         window.updateLevelTargets();
         this.triggerShockwave();
         this.time.delayedCall(2000, () => { this.triggerSmallShockwave(); });

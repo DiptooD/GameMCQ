@@ -239,7 +239,6 @@ class MenuScene extends Phaser.Scene {
         const settingsIcon = this.add.text(135, iconY, "⚙️", { fontSize: '30px' }).setOrigin(0.5);
         const settingsHitArea = this.add.circle(135, iconY, 35).setInteractive({ useHandCursor: true });
 
-        // OPEN SETTINGS SCENE
         settingsHitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.tweens.add({ targets: [settingsBg, settingsIcon], scale: 0.9, duration: 50, yoyo: true });
@@ -1179,6 +1178,11 @@ class MenuScene extends Phaser.Scene {
         Phaser.Utils.Array.Shuffle(finalQuestions);
 
         window.resetGameState();
+        
+        // Anti-cheat verification lock
+        GameState.currentSubject = this.selectedSubject;
+        localStorage.setItem('game_currentSubject', GameState.currentSubject);
+
         GameState.currentQuestions = finalQuestions;
         GameState.gameMode = this.selectedMode;
 

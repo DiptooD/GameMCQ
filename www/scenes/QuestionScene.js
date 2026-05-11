@@ -46,7 +46,7 @@ class QuestionScene extends Phaser.Scene {
 
         const leftAnchor = boxX + edgePadding;
         
-        const keyIcon = this.add.image(leftAnchor, headerY, "ui_key")
+        this.keyIcon = this.add.image(leftAnchor, headerY, "ui_key")
             .setScale(0.70).setOrigin(0.7, 0.5); 
         this.keyText = this.add.text(leftAnchor + 15, headerY, GameState.keys || "0", {
             fontSize: "26px", fontFamily: "Arial", color: "#ffd700", stroke: "#000000", strokeThickness: 4
@@ -59,13 +59,24 @@ class QuestionScene extends Phaser.Scene {
             fontSize: "26px", fontFamily: "Arial", color: "#aaccff", stroke: "#000000", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        if (GameState.gameMode === "revision") {
-            this.debrisIcon.setVisible(false);
-            this.debrisText.setVisible(false);
+        // Visual disable logic: dim and strictly block out keys/debris if unobtainable
+        const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
+        const canEarnRewards = (GameState.gameMode !== "revision" && isValidSubject);
+
+        if (!canEarnRewards) {
+            this.keyIcon.setAlpha(0.25).setTint(0x888888);
+            this.keyText.setAlpha(0.25);
+            this.debrisIcon.setAlpha(0.25).setTint(0x888888);
+            this.debrisText.setAlpha(0.25);
+            
+            // Add visual strikethrough to make it obvious they are disabled
+            const kLine = this.add.line(0, 0, this.keyIcon.x - 12, this.keyIcon.y - 12, this.keyIcon.x + 12, this.keyIcon.y + 12, 0xff0000).setOrigin(0).setLineWidth(3);
+            const dLine = this.add.line(0, 0, this.debrisIcon.x - 12, this.debrisIcon.y - 12, this.debrisIcon.x + 12, this.debrisIcon.y + 12, 0xff0000).setOrigin(0).setLineWidth(3);
+            this.qContainer.add([kLine, dLine]);
         }
         
         this.heartsContainer = this.add.container(0, 0);
-        this.qContainer.add([keyIcon, this.keyText, this.debrisIcon, this.debrisText, this.heartsContainer]);
+        this.qContainer.add([this.keyIcon, this.keyText, this.debrisIcon, this.debrisText, this.heartsContainer]);
 
         const rightAnchor = (boxX + boxW - edgePadding) - 2;
 
@@ -970,7 +981,14 @@ class QuestionScene extends Phaser.Scene {
             });
             
             this.manageMeteorTimer(false); 
+            
             GameState.skipsLeft--;
+            // Securely deduct from extra if base is empty
+            if (GameState.skipsLeft < (GameState.extraSkips || 0)) {
+                GameState.extraSkips = GameState.skipsLeft;
+            }
+            window.saveCurrency();
+
             GameState.fiftyFiftyOptionsToHide = []; // Refresh 50/50 block
             this.qIdx++;
             this.refreshQuestion();

@@ -32,7 +32,7 @@ class PauseScene extends Phaser.Scene {
     this.add.rectangle(0, 0, w, h, 0x000000, 0.75).setOrigin(0, 0).setInteractive();
 
     const panelW = 560; 
-    const panelH = 720; // Increased height to accommodate Daily Missions
+    const panelH = 760; // Extra height to perfectly fit cards
     const panelX = cx - panelW / 2;
     const panelY = cy - panelH / 2;
 
@@ -54,42 +54,70 @@ class PauseScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // --- DAILY MISSIONS UI ---
-    this.add.text(cx, panelY + 160, "--- ডেইলি মিশন ---", {
-        fontSize: "24px", color: "#ffff00", fontFamily: "'Anek Bangla'", fontStyle: "bold"
+    const missionBg = this.add.graphics();
+    missionBg.fillStyle(0x000c22, 0.9);
+    missionBg.fillRoundedRect(cx - 250, panelY + 130, 500, 340, 16);
+    missionBg.lineStyle(2, 0x005588, 1);
+    missionBg.strokeRoundedRect(cx - 250, panelY + 130, 500, 340, 16);
+
+    this.add.text(cx, panelY + 165, "ডেইলি মিশন (Daily Missions)", {
+        fontSize: "26px", color: "#00ffff", fontFamily: "'Anek Bangla'", fontStyle: "bold"
     }).setOrigin(0.5);
 
-    let startY = panelY + 220;
+    let startY = panelY + 230;
     if (GameState.dailyMissions) {
         GameState.dailyMissions.forEach((m, i) => {
             const isDone = m.progress >= m.target;
-            const yPos = startY + (i * 80);
+            const yPos = startY + (i * 75);
 
+            // Mission card BG
+            const cardBg = this.add.graphics();
+            cardBg.fillStyle(isDone ? 0x003311 : 0x001122, 0.8);
+            cardBg.fillRoundedRect(cx - 230, yPos - 30, 460, 60, 10);
+            cardBg.lineStyle(isDone ? 2 : 1, isDone ? 0x00ff00 : 0x004488, 0.8);
+            cardBg.strokeRoundedRect(cx - 230, yPos - 30, 460, 60, 10);
+
+            // Checkbox / Status Icon
+            const iconStr = isDone ? "✅" : "⏳";
+            this.add.text(cx - 200, yPos, iconStr, { fontSize: "20px" }).setOrigin(0.5);
+
+            // Mission Description
             const descText = m.desc || m.type;
-            this.add.text(cx - 230, yPos, descText, {
-                fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff"
-            });
-            
-            this.add.text(cx + 230, yPos, `${m.progress} / ${m.target}`, {
-                fontSize: "22px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#ffaa00", fontStyle: "bold"
-            }).setOrigin(1, 0);
-            
-            if (isDone) {
-                this.add.text(cx + 230, yPos + 30, "✔️", {fontSize: "20px", color: "#00ff00"}).setOrigin(1, 0);
+            this.add.text(cx - 170, yPos - 12, descText, {
+                fontSize: "20px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold'
+            }).setOrigin(0, 0.5);
+
+            // Progress Text
+            const progTxt = `${m.progress} / ${m.target}`;
+            this.add.text(cx - 170, yPos + 14, progTxt, {
+                fontSize: "16px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#ffaa00"
+            }).setOrigin(0, 0.5);
+
+            // Reward Info
+            if (!isDone) {
+                let rewStr = "";
+                let rewColor = "#ffffff";
+                if (m.rewardType === "debris") { rewStr = `+${m.rewardAmt} ⚙️`; rewColor = "#aaccff"; }
+                else if (m.rewardType === "skips") { rewStr = `+${m.rewardAmt} ⚡`; rewColor = "#00ffcc"; }
+                else { rewStr = `+${m.rewardAmt} 🚀`; rewColor = "#ff00ff"; }
+
+                this.add.text(cx + 210, yPos, rewStr, {
+                    fontSize: "20px", fontFamily: "'Anek Bangla'", color: rewColor, fontStyle: "bold"
+                }).setOrigin(1, 0.5);
             } else {
-                const rewIcon = m.rewardType === "keys" ? "🔑" : "⚙️";
-                this.add.text(cx - 230, yPos + 30, `Reward: ${m.rewardAmt} ${rewIcon}`, {
-                    fontSize: "18px", color: "#aaaaaa"
-                });
+                this.add.text(cx + 210, yPos, "সম্পন্ন", {
+                    fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold"
+                }).setOrigin(1, 0.5);
             }
         });
     }
 
     // --- MAIN BUTTONS ---
-    this.createModernButton(cx, panelY + 520, "খেলায় ফিরুন", true, () => {
+    this.createModernButton(cx, panelY + 540, "খেলায় ফিরুন", true, () => {
         this.resumeGame();
     });
 
-    this.createModernButton(cx, panelY + 630, "খেলা শেষ করুন", false, () => {
+    this.createModernButton(cx, panelY + 650, "খেলা শেষ করুন", false, () => {
         this.scene.stop("GameScene");
         this.scene.stop("QuestionScene");
         this.scene.start("DeathScene"); 

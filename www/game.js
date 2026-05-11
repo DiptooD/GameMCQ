@@ -17,15 +17,18 @@ window.saveGame = function() {
         localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
         localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
         
-        // NEW: Save Skips to local storage
+        localStorage.setItem('game_extraSkips', GameState.extraSkips || 0);
         localStorage.setItem('game_skips', GameState.skipsLeft || 10);
         
-        // NEW: Save Daily Missions
         localStorage.setItem('game_dailyMissions', JSON.stringify(GameState.dailyMissions));
         localStorage.setItem('game_lastMissionDate', GameState.lastMissionDate || "");
+        localStorage.setItem('game_dailyMissionsCompleted', GameState.dailyMissionsCompleted ? "true" : "false");
+        
+        localStorage.setItem('game_currentSubject', GameState.currentSubject || "all");
 
-        if (GameState.matchHistory && GameState.matchHistory.length > 20) {
-            GameState.matchHistory = GameState.matchHistory.slice(-20);
+        // Keep match history to a strict maximum of 15 items
+        if (GameState.matchHistory && GameState.matchHistory.length > 15) {
+            GameState.matchHistory = GameState.matchHistory.slice(-15);
         }
         localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
 
@@ -45,30 +48,41 @@ window.saveSettings = function() {
 
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
-const storedSkips = localStorage.getItem('game_skips'); // Fetch Skips
 
-// NEW: Mission Generators
+// Skips initialization & legacy migration
+let extraSkips = parseInt(localStorage.getItem('game_extraSkips')) || 0;
+const storedSkips = localStorage.getItem('game_skips');
+
+if (storedSkips !== null) {
+    const parsedSkips = parseInt(storedSkips);
+    if (parsedSkips > 10 && extraSkips === 0) {
+        extraSkips = parsedSkips - 10; // Migrate old merged skips to extraSkips
+    }
+}
+
+// Generate daily missions with non-key rewards
 const generateDailyMissions = () => {
-    const types = ["kill_enemies", "collect_debris", "answer_correct"];
     const missions = [];
     
-    // Mission 1: Kills
+    // Mission 1: Kills -> Reward Debris
     missions.push({ 
         id: "m1", type: "kill_enemies", target: Phaser.Math.Between(30, 60), 
-        progress: 0, rewardType: "debris", rewardAmt: 20, 
-        desc: "Defeat enemies" 
+        progress: 0, rewardType: "debris", rewardAmt: Phaser.Math.Between(20, 40), 
+        desc: "Defeat enemies", completed: false 
     });
-    // Mission 2: Debris
+    // Mission 2: Debris -> Reward Skips
     missions.push({ 
         id: "m2", type: "collect_debris", target: Phaser.Math.Between(15, 30), 
-        progress: 0, rewardType: "keys", rewardAmt: 2, 
-        desc: "Collect Debris" 
+        progress: 0, rewardType: "skips", rewardAmt: Phaser.Math.Between(3, 5), 
+        desc: "Collect Debris", completed: false 
     });
-    // Mission 3: Answers
+    // Mission 3: Answers -> Reward Booster
+    const boosters = ["fireShield", "speedBoost", "batteryEff"];
+    const randBooster = Phaser.Utils.Array.GetRandom(boosters);
     missions.push({ 
         id: "m3", type: "answer_correct", target: Phaser.Math.Between(10, 20), 
-        progress: 0, rewardType: "keys", rewardAmt: 3, 
-        desc: "Answer Correctly" 
+        progress: 0, rewardType: "booster_" + randBooster, rewardAmt: 1, 
+        desc: "Answer Correctly", completed: false 
     });
     
     return missions;
@@ -77,10 +91,12 @@ const generateDailyMissions = () => {
 const todayStr = new Date().toDateString();
 let storedMissions = JSON.parse(localStorage.getItem('game_dailyMissions'));
 let storedDate = localStorage.getItem('game_lastMissionDate');
+let storedMissionsCompleted = localStorage.getItem('game_dailyMissionsCompleted') === "true";
 
 if (storedDate !== todayStr || !storedMissions) {
     storedMissions = generateDailyMissions();
     storedDate = todayStr;
+    storedMissionsCompleted = false;
 }
 
 window.GameState = {
@@ -93,20 +109,20 @@ window.GameState = {
     bossStage: 0, 
     bossActive: false,
     
-    // Initialize Skips from local storage if available
-    skipsLeft: storedSkips !== null ? parseInt(storedSkips) : 10,
+    extraSkips: extraSkips,
+    skipsLeft: storedSkips !== null ? parseInt(storedSkips) : 10 + extraSkips,
     
     sessionHistory: [],
     gameMode: "normal", 
     
-    // NEW: Combo System Data
     currentCombo: 0,
     hasFiftyFifty: false,
     fiftyFiftyOptionsToHide: [],
     
-    // NEW: Daily Missions
     dailyMissions: storedMissions,
     lastMissionDate: storedDate,
+    dailyMissionsCompleted: storedMissionsCompleted,
+    currentSubject: localStorage.getItem('game_currentSubject') || "all",
     
     musicVolume: storedMusicVol !== null ? parseFloat(storedMusicVol) : 0.5,
     sfxVolume: storedSfxVol !== null ? parseFloat(storedSfxVol) : 1.0,
@@ -129,17 +145,74 @@ window.GameState = {
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
 };
 
-// NEW: Global function to update mission progress
 window.updateMissionProgress = function(type, amount = 1) {
+    // Anti-cheat: prevent mission progress farming in specific sub-categories
+    if (GameState.currentSubject && GameState.currentSubject !== "all" && GameState.currentSubject !== "all_no_math") {
+        return;
+    }
+
     let updated = false;
+    let newlyCompleted = [];
+
     GameState.dailyMissions.forEach(m => {
-        if (m.type === type && m.progress < m.target) {
+        if (m.type === type && m.progress < m.target && !m.completed) {
             m.progress += amount;
-            if (m.progress >= m.target) m.progress = m.target; // Cap it
+            if (m.progress >= m.target) {
+                m.progress = m.target;
+                m.completed = true;
+                newlyCompleted.push(m);
+                
+                // Disburse exact reward per newly completed mission
+                if (m.rewardType === "debris") {
+                    GameState.debris += m.rewardAmt;
+                } else if (m.rewardType === "skips") {
+                    GameState.extraSkips = (GameState.extraSkips || 0) + m.rewardAmt;
+                    GameState.skipsLeft += m.rewardAmt;
+                } else if (m.rewardType.startsWith("booster_")) {
+                    const bType = m.rewardType.replace("booster_", "");
+                    if (GameState.boosters[bType] !== undefined) {
+                        GameState.boosters[bType] += m.rewardAmt;
+                    }
+                }
+            }
             updated = true;
         }
     });
-    if (updated) window.saveCurrency(); // Save quietly in background
+
+    if (updated) {
+        // Verify grand completion condition
+        const allDone = GameState.dailyMissions.every(m => m.completed);
+        let allDoneReward = 0;
+        if (allDone && !GameState.dailyMissionsCompleted) {
+            GameState.dailyMissionsCompleted = true;
+            allDoneReward = Phaser.Math.Between(3, 7);
+            GameState.keys += allDoneReward;
+        }
+
+        window.saveCurrency();
+
+        // Push visual updates to the running GameScene instance
+        if (window.game && window.game.scene) {
+            const gameScene = window.game.scene.getScene("GameScene");
+            if (gameScene && gameScene.scene.isActive()) {
+                newlyCompleted.forEach(m => {
+                    let rText = "";
+                    if (m.rewardType === "debris") rText = `${m.rewardAmt} Debris`;
+                    else if (m.rewardType === "skips") rText = `${m.rewardAmt} Skips`;
+                    else rText = "1 Booster";
+                    gameScene.showMissionToast(`মিশন কমপ্লিট!\nপুরস্কার: ${rText}`);
+                });
+
+                if (allDoneReward > 0) {
+                    setTimeout(() => {
+                        if (gameScene && gameScene.scene.isActive()) {
+                            gameScene.showMissionToast(`সবগুলো মিশন শেষ!\nপুরস্কার: ${allDoneReward} Keys!`);
+                        }
+                    }, 2000);
+                }
+            }
+        }
+    }
 };
 
 window.updateLevelTargets = function() {
@@ -164,16 +237,17 @@ window.resetGameState = function () {
     GameState.lives = 3;
     GameState.weaponLevel = 1;
     GameState.correctCount = 0; 
-    GameState.currentCombo = 0; // Reset combo
+    GameState.currentCombo = 0; 
     GameState.hasFiftyFifty = false;
     GameState.fiftyFiftyOptionsToHide = [];
     GameState.bossStage = 0;
     GameState.bossActive = false;
     GameState.sessionHistory = [];
     
-    // Recharge skips to at least 10, but DO NOT wipe out extra skips won from wheel!
-    if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10) {
-        GameState.skipsLeft = 10;
+    // Always top up base skips to 10. Persist extra skips above it safely.
+    const extra = GameState.extraSkips || 0;
+    if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10 + extra) {
+        GameState.skipsLeft = 10 + extra;
     }
     
     window.updateLevelTargets(); 
