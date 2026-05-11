@@ -32,7 +32,7 @@ class PauseScene extends Phaser.Scene {
     this.add.rectangle(0, 0, w, h, 0x000000, 0.75).setOrigin(0, 0).setInteractive();
 
     const panelW = 560; 
-    const panelH = 760; // Extra height to perfectly fit cards
+    const panelH = 760; 
     const panelX = cx - panelW / 2;
     const panelY = cy - panelH / 2;
 
@@ -95,15 +95,34 @@ class PauseScene extends Phaser.Scene {
 
             // Reward Info
             if (!isDone) {
-                let rewStr = "";
+                let rewStr = `+${m.rewardAmt}`;
                 let rewColor = "#ffffff";
-                if (m.rewardType === "debris") { rewStr = `+${m.rewardAmt} ⚙️`; rewColor = "#aaccff"; }
-                else if (m.rewardType === "skips") { rewStr = `+${m.rewardAmt} ⚡`; rewColor = "#00ffcc"; }
-                else { rewStr = `+${m.rewardAmt} 🚀`; rewColor = "#ff00ff"; }
+                let tex = "";
+                let texScale = 1.0;
 
-                this.add.text(cx + 210, yPos, rewStr, {
-                    fontSize: "20px", fontFamily: "'Anek Bangla'", color: rewColor, fontStyle: "bold"
+                if (m.rewardType === "debris") { 
+                    rewColor = "#aaccff"; 
+                    tex = "ui_debris_icon";
+                    texScale = 0.65;
+                } else if (m.rewardType === "skips") { 
+                    rewColor = "#00ffcc"; 
+                    tex = "ui_bolt";
+                    texScale = 0.65;
+                } else { 
+                    rewColor = "#ff00ff"; 
+                    if (m.rewardType.includes("fire")) tex = "icon_booster_fire";
+                    else if (m.rewardType.includes("speed")) tex = "icon_booster_speed";
+                    else tex = "icon_booster_battery";
+                    texScale = 0.65;
+                }
+
+                const rewText = this.add.text(cx + 210, yPos, rewStr, {
+                    fontSize: "22px", fontFamily: "'Anek Bangla'", color: rewColor, fontStyle: "bold"
                 }).setOrigin(1, 0.5);
+
+                if (tex) {
+                    this.add.image(cx + 210 - rewText.width - 10, yPos, tex).setScale(texScale).setOrigin(1, 0.5);
+                }
             } else {
                 this.add.text(cx + 210, yPos, "সম্পন্ন", {
                     fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold"

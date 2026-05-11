@@ -14,14 +14,18 @@ class GameBase extends Phaser.Scene {
     let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
     let luckFactor = Math.max(0, 5 - played) / 5; 
 
+    // Balanced modifiers - no longer overly OP, just a slight edge for new players
     return {
         factor: luckFactor,                  
-        speedMult: 1.0 - (0.6 * luckFactor), 
-        delayMult: 1.0 + (0.8 * luckFactor), 
-        batteryDropMult: 1.0 + (2.0 * luckFactor), 
-        batteryDropChance: 0.5 * luckFactor, 
-        hpMult: 1.0 - (0.5 * luckFactor), 
-        playerDamageMult: 1.0 + (1.0 * luckFactor) 
+        speedMult: 1.0 - (0.25 * luckFactor), // 25% slower at max luck (was 60%)
+        delayMult: 1.0 + (0.80 * luckFactor), // 80% slower spawns at max luck (was 80%)
+        batteryDropMult: 1.0 + (0.70 * luckFactor), // 70% more battery value (was 200%)
+        batteryDropChance: 0.15 * luckFactor, // 15% extra drop chance (was 50%)
+        hpMult: 1.0 - (0.25 * luckFactor), // 25% less HP (was 50%)
+        playerDamageMult: 1.0 + (0.30 * luckFactor), // 30% more player damage (was 100%)
+        
+        // Debris: Starts off 60% lower than normal at max luck, scales up to normal as luck fades.
+        debrisDropChance: 0.5 * (1.0 - (0.6 * luckFactor)) 
     };
   }
   

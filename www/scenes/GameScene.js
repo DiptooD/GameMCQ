@@ -362,7 +362,7 @@ class GameScene extends GameBase {
         const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '38px',padding: { y: 10 } }).setOrigin(0.5);
         const percent = Math.round(this.luckMods.factor * 100);
         
-        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nSlower & Weaker Enemies!`, { 
+        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nEasier start, but fewer debris drops!`, { 
             fontSize: '18px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
             stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
@@ -1004,7 +1004,11 @@ class GameScene extends GameBase {
 
             // Restrict debris drop and mission progress using isValidSubject
             const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
-            if (GameState.gameMode !== "revision" && isValidSubject && Math.random() < 0.5) {
+            
+            // Adjust Debris Drop rate dynamically according to Beginner's Luck
+            const currentDebrisChance = this.luckMods.debrisDropChance !== undefined ? this.luckMods.debrisDropChance : 0.5;
+
+            if (GameState.gameMode !== "revision" && isValidSubject && Math.random() < currentDebrisChance) {
                 GameState.debris = (GameState.debris || 0) + 1;
                 window.updateMissionProgress("collect_debris", 1); 
                 window.saveCurrency();

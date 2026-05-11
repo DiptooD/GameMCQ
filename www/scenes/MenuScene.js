@@ -796,7 +796,7 @@ class MenuScene extends Phaser.Scene {
 
         this.revisionTips = [
             "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে। পুরনো পড়া ঝালাই করার দারুণ সুযোগ!",
-            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবেবিধা, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
         ];
 
         const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
@@ -864,75 +864,73 @@ class MenuScene extends Phaser.Scene {
 
         const btnWidth = totalWidth / 4;
 
-        const shopCx = -totalWidth/2 + btnWidth/2;
-        const shopHitArea = this.add.rectangle(shopCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const bagIcon = this.add.text(shopCx - 22, -4, "🛒", { fontSize: "26px" }).setOrigin(0.5);
-        const shopText = this.add.text(shopCx + 18, 0, "শপ", { 
-            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
-        }).setOrigin(0.5);
+        const createNavBtn = (cxOffset, emoji, label, emojiSize) => {
+            const hitArea = this.add.rectangle(cxOffset, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+            
+            const tText = this.add.text(0, 0, label, { 
+                fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+            }).setOrigin(0.5, 0.5);
+            
+            const tIcon = this.add.text(0, 0, emoji, { fontSize: emojiSize }).setOrigin(0.5, 0.5);
+            
+            tText.updateText(); 
+            tIcon.updateText();
+            const gap = 10;
+            const totalW = tIcon.width + gap + tText.width;
+            
+            tIcon.x = cxOffset - totalW / 2 + tIcon.width / 2;
+            tText.x = tIcon.x + tIcon.width / 2 + gap + tText.width / 2;
+            
+            tIcon.y = 0;
+            tText.y = 0;
 
-        shopHitArea.on('pointerdown', () => {
+            return { hitArea, tIcon, tText };
+        };
+
+        const shop = createNavBtn(-totalWidth/2 + btnWidth/2, "🛒", "শপ", "26px");
+        shop.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.scene.start("ShopScene");
         });
-        shopHitArea.on('pointerover', () => shopText.setColor("#ffffff"));
-        shopHitArea.on('pointerout', () => shopText.setColor("#b3d4ff"));
+        shop.hitArea.on('pointerover', () => shop.tText.setColor("#ffffff"));
+        shop.hitArea.on('pointerout', () => shop.tText.setColor("#b3d4ff"));
 
         const div1 = this.add.rectangle(-totalWidth/2 + btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const studyCx = -totalWidth/2 + btnWidth*1.5;
-        const studyHitArea = this.add.rectangle(studyCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const studyIcon = this.add.text(studyCx - 22, -4, "📖", { fontSize: "26px" }).setOrigin(0.5);
-        const studyText = this.add.text(studyCx + 18, 0, "স্টাডি", { 
-            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
-        }).setOrigin(0.5);
-
-        studyHitArea.on('pointerdown', () => {
+        const study = createNavBtn(-totalWidth/2 + btnWidth*1.5, "📖", "স্টাডি", "26px");
+        study.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.scene.start("ReadingScene");
         });
-        studyHitArea.on('pointerover', () => studyText.setColor("#ffffff"));
-        studyHitArea.on('pointerout', () => studyText.setColor("#b3d4ff"));
+        study.hitArea.on('pointerover', () => study.tText.setColor("#ffffff"));
+        study.hitArea.on('pointerout', () => study.tText.setColor("#b3d4ff"));
 
         const div2 = this.add.rectangle(0, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const histCx = totalWidth/2 - btnWidth*1.5;
-        const histHitArea = this.add.rectangle(histCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const histIcon = this.add.text(histCx - 22, -4, "📜", { fontSize: "26px" }).setOrigin(0.5);
-        const histText = this.add.text(histCx + 18, 0, "হিস্ট্রি", { 
-            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
-        }).setOrigin(0.5);
-
-        histHitArea.on('pointerdown', () => {
+        const hist = createNavBtn(totalWidth/2 - btnWidth*1.5, "📜", "হিস্ট্রি", "26px");
+        hist.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.showMatchHistoryPopup();
         });
-        histHitArea.on('pointerover', () => histText.setColor("#ffffff"));
-        histHitArea.on('pointerout', () => histText.setColor("#b3d4ff"));
+        hist.hitArea.on('pointerover', () => hist.tText.setColor("#ffffff"));
+        hist.hitArea.on('pointerout', () => hist.tText.setColor("#b3d4ff"));
 
         const div3 = this.add.rectangle(totalWidth/2 - btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const wheelCx = totalWidth/2 - btnWidth/2;
-        const wheelHitArea = this.add.rectangle(wheelCx, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const wheelIcon = this.add.text(wheelCx - 22, -4, "🌀", { fontSize: "28px" }).setOrigin(0.5);
-        const wheelText = this.add.text(wheelCx + 18, 0, "স্পিন", { 
-            fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
-        }).setOrigin(0.5);
-
-        this.tweens.add({ targets: wheelIcon, angle: 360, duration: 50000, repeat: -1, ease: "Linear" });
-
-        wheelHitArea.on('pointerdown', () => {
+        const wheel = createNavBtn(totalWidth/2 - btnWidth/2, "🌀", "স্পিন", "26px");
+        this.tweens.add({ targets: wheel.tIcon, angle: 360, duration: 50000, repeat: -1, ease: "Linear" });
+        wheel.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.scene.start("SpinWheelScene");
         });
-        wheelHitArea.on('pointerover', () => wheelText.setColor("#ffffff"));
-        wheelHitArea.on('pointerout', () => wheelText.setColor("#b3d4ff"));
+        wheel.hitArea.on('pointerover', () => wheel.tText.setColor("#ffffff"));
+        wheel.hitArea.on('pointerout', () => wheel.tText.setColor("#b3d4ff"));
 
         container.add([
-            shopHitArea, bagIcon, shopText, div1, 
-            studyHitArea, studyIcon, studyText, div2,
-            histHitArea, histIcon, histText, div3, 
-            wheelHitArea, wheelIcon, wheelText
+            shop.hitArea, shop.tIcon, shop.tText, div1, 
+            study.hitArea, study.tIcon, study.tText, div2,
+            hist.hitArea, hist.tIcon, hist.tText, div3, 
+            wheel.hitArea, wheel.tIcon, wheel.tText
         ]);
     }
 
@@ -1097,10 +1095,12 @@ class MenuScene extends Phaser.Scene {
         this.backgroundLayers = []; 
         
         if (!this.textures.exists('animated_bg_grad')) {
+            const themeColors = (window.getThemeColors) ? window.getThemeColors() : { bgTop: 0x1A0545, bgBot: 0x003355 };
+            
             const gradBg = this.make.graphics({x: 0, y: 0});
-            gradBg.fillGradientStyle(0x020510, 0x020510, 0x0a1535, 0x0a1535, 1);
+            gradBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
             gradBg.fillRect(0, 0, 720, 1280);
-            gradBg.fillGradientStyle(0x0a1535, 0x0a1535, 0x020510, 0x020510, 1);
+            gradBg.fillGradientStyle(themeColors.bgBot, themeColors.bgBot, themeColors.bgTop, themeColors.bgTop, 1);
             gradBg.fillRect(0, 1280, 720, 1280);
             
             gradBg.generateTexture('animated_bg_grad', 720, 2560);
