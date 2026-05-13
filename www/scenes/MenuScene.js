@@ -95,6 +95,9 @@ class MenuScene extends Phaser.Scene {
             }
         });
         
+        // --- ADD THE KINGFISHER ANIMATION ---
+        this.createTitleBird(cx, cy - 420);
+        
         this.createHangarButton(cx, cy - 220);
 
         const panelY = cy + 40;
@@ -167,6 +170,86 @@ class MenuScene extends Phaser.Scene {
                 this.historyScrollState.velocityY *= 0.8; 
             }
         }
+    }
+
+    createTitleBird(titleX, titleY) {
+        // "player_lv1" is the default ship (মাছরাঙা / Kingfisher)
+        this.titleBird = this.add.image(-100, -100, "player_lv1").setScale(0.65).setDepth(50);
+        
+        const animateBird = () => {
+            if (!this.scene.isActive()) return; // Stop if scene changed
+            const w = this.cameras.main.width;
+            
+            // Randomize starting side
+            const fromLeft = Math.random() > 0.5;
+            const startX = fromLeft ? -100 : w + 100;
+            const startY = titleY - Phaser.Math.Between(100, 300);
+            
+            // Target perch position (top edge of the title text)
+            const landX = titleX + Phaser.Math.Between(-100, 100);
+            const landY = titleY - 65; 
+            
+            const endX = fromLeft ? w + 100 : -100;
+            const endY = titleY - Phaser.Math.Between(200, 400);
+
+            this.titleBird.setPosition(startX, startY);
+            
+            // Rotate to face movement direction
+            const angleToLand = Phaser.Math.Angle.Between(startX, startY, landX, landY);
+            this.titleBird.setRotation(angleToLand + Math.PI / 2);
+
+            this.tweens.add({
+                targets: this.titleBird,
+                x: landX,
+                y: landY,
+                duration: 1500,
+                ease: 'Sine.easeOut',
+                onComplete: () => {
+                    // Perch angle 
+                    this.tweens.add({
+                        targets: this.titleBird,
+                        rotation: (fromLeft ? 0.2 : -0.2), 
+                        duration: 200,
+                        onComplete: () => {
+                            // Peck/Hop animation
+                            this.tweens.add({
+                                targets: this.titleBird,
+                                y: landY - 20,
+                                duration: 250,
+                                yoyo: true,
+                                repeat: 3,
+                                ease: 'Quad.easeOut',
+                                onComplete: () => {
+                                    // Take off calculation
+                                    const angleToExit = Phaser.Math.Angle.Between(landX, landY, endX, endY);
+                                    this.tweens.add({
+                                        targets: this.titleBird,
+                                        rotation: angleToExit + Math.PI / 2,
+                                        duration: 200,
+                                        onComplete: () => {
+                                            this.tweens.add({
+                                                targets: this.titleBird,
+                                                x: endX,
+                                                y: endY,
+                                                duration: 1500,
+                                                ease: 'Sine.easeIn',
+                                                onComplete: () => {
+                                                    // Loop after a randomized delay
+                                                    this.time.delayedCall(Phaser.Math.Between(4000, 8000), animateBird);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        };
+
+        // Start the first loop after a short delay
+        this.time.delayedCall(2000, animateBird);
     }
 
     playSound(key, baseVolume = 1.0) {

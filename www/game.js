@@ -17,7 +17,6 @@ window.saveGame = function() {
         localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
         localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
         
-        localStorage.setItem('game_extraSkips', GameState.extraSkips || 0);
         localStorage.setItem('game_skips', GameState.skipsLeft || 10);
         
         localStorage.setItem('game_dailyMissions', JSON.stringify(GameState.dailyMissions));
@@ -49,15 +48,10 @@ window.saveSettings = function() {
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
 
-// Skips initialization & legacy migration
-let extraSkips = parseInt(localStorage.getItem('game_extraSkips')) || 0;
-const storedSkips = localStorage.getItem('game_skips');
-
-if (storedSkips !== null) {
-    const parsedSkips = parseInt(storedSkips);
-    if (parsedSkips > 10 && extraSkips === 0) {
-        extraSkips = parsedSkips - 10; // Migrate old merged skips to extraSkips
-    }
+// Skips initialization
+let storedSkips = parseInt(localStorage.getItem('game_skips'));
+if (isNaN(storedSkips) || storedSkips < 10) {
+    storedSkips = 10;
 }
 
 // Generate daily missions with non-key rewards
@@ -109,8 +103,7 @@ window.GameState = {
     bossStage: 0, 
     bossActive: false,
     
-    extraSkips: extraSkips,
-    skipsLeft: storedSkips !== null ? parseInt(storedSkips) : 10 + extraSkips,
+    skipsLeft: storedSkips,
     
     sessionHistory: [],
     gameMode: "normal", 
@@ -166,7 +159,6 @@ window.updateMissionProgress = function(type, amount = 1) {
                 if (m.rewardType === "debris") {
                     GameState.debris += m.rewardAmt;
                 } else if (m.rewardType === "skips") {
-                    GameState.extraSkips = (GameState.extraSkips || 0) + m.rewardAmt;
                     GameState.skipsLeft += m.rewardAmt;
                 } else if (m.rewardType.startsWith("booster_")) {
                     const bType = m.rewardType.replace("booster_", "");
@@ -244,10 +236,9 @@ window.resetGameState = function () {
     GameState.bossActive = false;
     GameState.sessionHistory = [];
     
-    // Always top up base skips to 10. Persist extra skips above it safely.
-    const extra = GameState.extraSkips || 0;
-    if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10 + extra) {
-        GameState.skipsLeft = 10 + extra;
+    // Always top up base skips to 10 if it falls below. 
+    if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10) {
+        GameState.skipsLeft = 10;
     }
     
     window.updateLevelTargets(); 

@@ -1500,8 +1500,7 @@ winBossFight() {
         GameState.bossStage++;
         GameState.correctCount = 0;
         
-        // Track the extra skips and total skips securely 
-        GameState.extraSkips = (GameState.extraSkips || 0) + 5;
+        // Track skips securely 
         GameState.skipsLeft += 5;
         window.saveCurrency();
 

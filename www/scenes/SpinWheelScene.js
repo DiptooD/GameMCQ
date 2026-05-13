@@ -496,8 +496,7 @@ showReward(winner) {
         } else if (winner.type === 'debris') {
             GameState.debris += winner.amount;
         } else if (winner.type === 'skips') {
-            // Track the extra skips and total skips securely 
-            GameState.extraSkips = (GameState.extraSkips || 0) + winner.amount;
+            // Track the skips securely 
             GameState.skipsLeft = (GameState.skipsLeft || 0) + winner.amount;
         } else if (winner.type === 'booster') {
             if (!GameState.boosters) GameState.boosters = {};

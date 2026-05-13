@@ -983,10 +983,6 @@ class QuestionScene extends Phaser.Scene {
             this.manageMeteorTimer(false); 
             
             GameState.skipsLeft--;
-            // Securely deduct from extra if base is empty
-            if (GameState.skipsLeft < (GameState.extraSkips || 0)) {
-                GameState.extraSkips = GameState.skipsLeft;
-            }
             window.saveCurrency();
 
             GameState.fiftyFiftyOptionsToHide = []; // Refresh 50/50 block
