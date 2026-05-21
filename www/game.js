@@ -25,7 +25,7 @@ window.saveGame = function() {
         
         localStorage.setItem('game_currentSubject', GameState.currentSubject || "all");
         
-        // NEW: Save Player Profile (Highly compressed object structure)
+        // Save Player Profile (Highly compressed object structure)
         localStorage.setItem('game_profile', JSON.stringify(GameState.profile));
 
         // Keep match history to a strict maximum of 15 items
@@ -48,7 +48,19 @@ window.saveSettings = function() {
     localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
 };
 
-// Avatar & Level System API
+// --- NEW TAG & AVATAR RANKING SYSTEM ---
+window.getRankData = function(level) {
+    if (level <= 5) return { tag: "শিক্ষানবিশ (Space Cadet)", avatar: "🛸" };
+    if (level <= 10) return { tag: "নভোচারী (Astronaut)", avatar: "👨‍🚀" };
+    if (level <= 15) return { tag: "তারাশিকারী (Star Hunter)", avatar: "🚀" };
+    if (level <= 20) return { tag: "গ্যালাক্সি যোদ্ধা (Warrior)", avatar: "👾" };
+    if (level <= 30) return { tag: "নেবুলা লর্ড (Nebula Lord)", avatar: "👽" };
+    if (level <= 40) return { tag: "সুপারনোভা (Supernova)", avatar: "☄️" };
+    if (level <= 50) return { tag: "কসমিক মাস্টার (Master)", avatar: "🌌" };
+    return { tag: "লিজেন্ড (Galactic Legend)", avatar: "👑" };
+};
+
+// Keep for fallback/legacy logic if anything strictly looks for this array
 window.getAvatars = function() {
     return ["👨‍🚀", "👽", "🤖", "👾", "🦸‍♂️", "🥷", "🧙‍♂️", "🧛‍♂️", "🧟‍♂️", "🧝‍♂️"];
 };
@@ -105,7 +117,6 @@ if (storedDate !== todayStr || !storedMissions) {
     storedMissionsCompleted = false;
 }
 
-// Minimal structure: n=name, a=avatar index, xp=XP, k=kills, bk=boss kills, qr=questions right, qw=questions wrong, s=subject stats
 let defaultProfile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
 let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
 let mergedProfile = { ...defaultProfile, ...storedProfile };
@@ -127,7 +138,7 @@ window.GameState = {
     hasFiftyFifty: false,
     fiftyFiftyOptionsToHide: [],
     
-    profile: mergedProfile, // Integrated Profile Here
+    profile: mergedProfile,
     
     dailyMissions: storedMissions,
     lastMissionDate: storedDate,

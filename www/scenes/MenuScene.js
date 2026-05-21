@@ -96,7 +96,6 @@ class MenuScene extends Phaser.Scene {
         });
         
         this.createTitleBird(cx, cy - 420);
-        
         this.createHangarButton(cx, cy - 220);
 
         const panelY = cy + 40;
@@ -293,53 +292,69 @@ class MenuScene extends Phaser.Scene {
     }
 
     createProfileAndSettings() {
-        const iconY = 65;
-        const boxX = 15;
+        const boxX = 30;
         const boxY = 35;
-        const boxW = 230;
-        const boxH = 60;
+        const boxW = 370;
+        const boxH = 60; // Sleek pill height to match ShopScene
 
-        // --- Holographic Profile ID Badge ---
+        // Base Box
         const profBg = this.add.graphics();
-        profBg.fillStyle(0x000c22, 0.85);
-        profBg.fillRoundedRect(boxX, boxY, boxW, boxH, 15);
-        profBg.lineStyle(2, 0x00aaff, 0.8);
-        profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 15);
-        
-        // Inner tech details
-        profBg.fillStyle(0x00aaff, 0.15);
-        profBg.fillRoundedRect(boxX + 5, boxY + 5, boxH - 10, boxH - 10, 10);
-        
-        const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
-        
-        const avatars = window.getAvatars();
-        const avatarIdx = (GameState.profile && GameState.profile.a) ? GameState.profile.a : 0;
-        
-        // Avatar Emoji
-        const avatarTxt = this.add.text(boxX + 35, boxY + 30, avatars[avatarIdx], {fontSize: '32px'}).setOrigin(0.5);
-        
-        // Player Name
-        const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
-        const nameTxt = this.add.text(boxX + 75, boxY + 16, playerName, {
-            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold'
-        }).setOrigin(0, 0.5);
-        
-        // Level Text
-        const lvlData = window.getLevelData();
-        const lvlTxt = this.add.text(boxX + 75, boxY + 40, "লেভেল " + lvlData.level, {
-            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff'
-        }).setOrigin(0, 0.5);
-        
-        // Dynamic XP Bar Line
-        const barW = 90;
-        const barX = boxX + 115;
-        const barY = boxY + 41;
-        this.add.rectangle(barX + barW/2, barY, barW, 4, 0x000000).setOrigin(0.5);
-        this.add.rectangle(barX + (barW * lvlData.percent)/2, barY, barW * lvlData.percent, 4, 0x00ff00).setOrigin(0.5);
+        profBg.fillStyle(0x001122, 0.8);
+        profBg.fillRoundedRect(boxX, boxY, boxW, boxH, 30);
+        profBg.lineStyle(3, 0x0066aa, 0.9);
+        profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 30);
 
-        // Hover Effect
-        hitArea.on('pointerover', () => { profBg.lineStyle(2, 0xffffff, 1); profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 15); });
-        hitArea.on('pointerout', () => { profBg.lineStyle(2, 0x00aaff, 0.8); profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 15); });
+        const lvlData = window.getLevelData();
+        const rankData = window.getRankData(lvlData.level);
+
+        // Fluid Fill Progress
+        const maskShape = this.make.graphics();
+        maskShape.fillStyle(0xffffff);
+        maskShape.fillRoundedRect(boxX, boxY, boxW, boxH, 30);
+        const fluidMask = maskShape.createGeometryMask();
+
+        // Ensure minimum width to not break rendering
+        const fillW = Math.max(15, boxW * lvlData.percent);
+        const fluidFill = this.add.graphics();
+        fluidFill.fillGradientStyle(0x0044aa, 0x0088ff, 0x002288, 0x0066cc, 0.45);
+        fluidFill.fillRect(boxX, boxY, fillW, boxH);
+        fluidFill.setMask(fluidMask);
+
+        // Gentle breathing animation to the fluid
+        this.tweens.add({
+            targets: fluidFill,
+            alpha: 0.7,
+            duration: 1200,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+        const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
+
+        // Content Inside Pill Box
+        const avatarTxt = this.add.text(boxX + 35, boxY + boxH/2, rankData.avatar, {fontSize: '38px'}).setOrigin(0.5);
+
+        const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
+        const nameTxt = this.add.text(boxX + 75, boxY + boxH/2 - 12, playerName, {
+            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',
+            shadow: { offsetX: 1, offsetY: 1, color: "#000", blur: 2, fill: true }
+        }).setOrigin(0, 0.5);
+
+        const tagShort = rankData.tag.split(" (")[0];
+        const lvlTxt = this.add.text(boxX + 75, boxY + boxH/2 + 12, `Lv.${lvlData.level} • ${tagShort}`, {
+            fontSize: '16px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold'
+        }).setOrigin(0, 0.5);
+
+        // Interactions
+        hitArea.on('pointerover', () => { 
+            profBg.lineStyle(3, 0xffffff, 1); 
+            profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 30); 
+        });
+        hitArea.on('pointerout', () => { 
+            profBg.lineStyle(3, 0x0066aa, 0.9); 
+            profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 30); 
+        });
 
         hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
@@ -347,33 +362,34 @@ class MenuScene extends Phaser.Scene {
             this.scene.launch("PlayerProfileScene");
         });
 
-        // --- Sleek Settings Icon ---
-        const settingsBg = this.add.circle(285, iconY, 26, 0x001122, 0.8).setStrokeStyle(2, 0x0066aa);
-        const settingsIcon = this.add.text(285, iconY, "⚙️", { fontSize: '24px' }).setOrigin(0.5);
-        const settingsHitArea = this.add.circle(285, iconY, 32).setInteractive({ useHandCursor: true });
+        // === Settings Button (Minimal, Left Side) ===
+        const setY = 105;
+        const setW = 110;
+        const setH = 30;
+        const setRadius = 6; 
 
-        settingsHitArea.on('pointerover', () => settingsBg.setStrokeStyle(2, 0xffffff));
-        settingsHitArea.on('pointerout', () => settingsBg.setStrokeStyle(2, 0x0066aa));
-        settingsHitArea.on('pointerdown', () => {
+        const setBg = this.add.graphics();
+        const drawSettings = (hover) => {
+            setBg.clear();
+            setBg.fillStyle(0x000000, hover ? 0.4 : 0.2); 
+            setBg.fillRoundedRect(boxX, setY, setW, setH, setRadius);
+            setBg.lineStyle(1, 0x004488, hover ? 0.7 : 0.3); 
+            setBg.strokeRoundedRect(boxX, setY, setW, setH, setRadius);
+        };
+        drawSettings(false);
+
+        const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ Settings", {
+            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#88bbdd', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const setHitArea = this.add.rectangle(boxX + setW/2, setY + setH/2, setW, setH, 0x000000, 0).setInteractive({useHandCursor: true});
+        setHitArea.on('pointerover', () => { drawSettings(true); setText.setColor('#00ffff'); });
+        setHitArea.on('pointerout', () => { drawSettings(false); setText.setColor('#88bbdd'); });
+        setHitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
-            this.tweens.add({ targets: [settingsBg, settingsIcon], scale: 0.9, duration: 50, yoyo: true });
+            this.tweens.add({ targets: [setText], scale: 0.9, duration: 50, yoyo: true });
             this.scene.pause("MenuScene");
             this.scene.launch("SettingsScene");
-        });
-        
-        // --- Sleek Exit Icon ---
-        const exitBg = this.add.circle(355, iconY, 26, 0x001122, 0.8).setStrokeStyle(2, 0xaa0000);
-        const exitIcon = this.add.text(355, iconY, "✖", { fontSize: '24px', color: '#ff4444' }).setOrigin(0.5);
-        const exitHitArea = this.add.circle(355, iconY, 32).setInteractive({ useHandCursor: true });
-
-        exitHitArea.on('pointerover', () => exitBg.setStrokeStyle(2, 0xff0000));
-        exitHitArea.on('pointerout', () => exitBg.setStrokeStyle(2, 0xaa0000));
-        exitHitArea.on('pointerdown', () => {
-            this.playSound('sfx_back');
-            this.tweens.add({ targets: [exitBg, exitIcon], scale: 0.9, duration: 50, yoyo: true });
-            if (navigator.app && navigator.app.exitApp) {
-                navigator.app.exitApp();
-            }
         });
     }
 
@@ -381,23 +397,62 @@ class MenuScene extends Phaser.Scene {
         const keys = (window.GameState && window.GameState.keys) || 0;
         const debris = (window.GameState && window.GameState.debris) || 0;
 
+        const startX = 420; 
+        const startY = 35;  
+        const boxW = 270;
+        const boxH = 60; 
+
+        // === 1. TOP CURRENCY PILL UI ===
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 0.8);
-        bg.fillRoundedRect(420, 35, 270, 60, 30); 
+        bg.fillRoundedRect(startX, startY, boxW, boxH, 30); 
         bg.lineStyle(3, 0x0066aa, 0.9);
-        bg.strokeRoundedRect(420, 35, 270, 60, 30);
+        bg.strokeRoundedRect(startX, startY, boxW, boxH, 30);
         
-        this.add.image(465, 65, "ui_key").setScale(0.65);
-        this.kText = this.add.text(495, 63, keys.toString(), { 
+        this.add.image(startX + 45, startY + boxH/2, "ui_key").setScale(0.65);
+        this.kText = this.add.text(startX + 75, startY + boxH/2 - 2, keys.toString(), { 
             fontSize: "26px", color: "#ffd700", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        this.add.rectangle(555, 65, 3, 35, 0x0066aa, 0.8);
+        // Divider
+        this.add.rectangle(startX + 135, startY + boxH/2, 3, 35, 0x0066aa, 0.8);
 
-        this.add.image(600, 67, "ui_debris_icon").setScale(0.70);
-        this.dText = this.add.text(630, 63, debris.toString(), { 
+        this.add.image(startX + 180, startY + boxH/2 + 2, "ui_debris_icon").setScale(0.70);
+        this.dText = this.add.text(startX + 210, startY + boxH/2 - 2, debris.toString(), { 
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
+
+        // === 2. Exit Button (Minimal, Right Side) ===
+        const exitW = 90;
+        const exitH = 30;
+        const exitX = startX + boxW - exitW; 
+        const exitY = 105;
+        const exitRadius = 6;
+
+        const exitBg = this.add.graphics();
+        const drawExit = (hover) => {
+            exitBg.clear();
+            exitBg.fillStyle(0x000000, hover ? 0.4 : 0.2); 
+            exitBg.fillRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
+            exitBg.lineStyle(1, 0x004488, hover ? 0.7 : 0.3); 
+            exitBg.strokeRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
+        };
+        drawExit(false);
+
+        const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ Exit", {
+            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#cc7777', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});
+        exitHit.on('pointerover', () => { drawExit(true); exitText.setColor('#ff5555'); });
+        exitHit.on('pointerout', () => { drawExit(false); exitText.setColor('#cc7777'); });
+        exitHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            this.tweens.add({ targets: [exitText], scale: 0.9, duration: 50, yoyo: true });
+            if (navigator.app && navigator.app.exitApp) {
+                navigator.app.exitApp();
+            }
+        });
     }
 
     createHangarButton(x, y) {
