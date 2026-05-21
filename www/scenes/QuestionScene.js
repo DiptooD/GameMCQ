@@ -8,7 +8,6 @@ class QuestionScene extends Phaser.Scene {
         this.wasReady = false;
         this.lastBattery = -1;
         
-        // NEW: For smooth Meteor Shower transitions
         this.currentGlowAlpha = 0;
         this.showerGlowAlpha = 0;
     }
@@ -59,7 +58,6 @@ class QuestionScene extends Phaser.Scene {
             fontSize: "26px", fontFamily: "Arial", color: "#aaccff", stroke: "#000000", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        // Visual disable logic: dim and strictly block out keys/debris if unobtainable
         const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
         const canEarnRewards = (GameState.gameMode !== "revision" && isValidSubject);
 
@@ -69,7 +67,6 @@ class QuestionScene extends Phaser.Scene {
             this.debrisIcon.setAlpha(0.25).setTint(0x888888);
             this.debrisText.setAlpha(0.25);
             
-            // Add visual strikethrough to make it obvious they are disabled
             const kLine = this.add.line(0, 0, this.keyIcon.x - 12, this.keyIcon.y - 12, this.keyIcon.x + 12, this.keyIcon.y + 12, 0xff0000).setOrigin(0).setLineWidth(3);
             const dLine = this.add.line(0, 0, this.debrisIcon.x - 12, this.debrisIcon.y - 12, this.debrisIcon.x + 12, this.debrisIcon.y + 12, 0xff0000).setOrigin(0).setLineWidth(3);
             this.qContainer.add([kLine, dLine]);
@@ -434,38 +431,34 @@ class QuestionScene extends Phaser.Scene {
             this.refreshHearts();
         }
 
-        // FIXED: Smooth transition for Meteor red glow to Meteor Shower and Reset
         let targetAlpha = 0;
         if (this.meteorTimer && !GameState.bossActive && GameState.battery >= 100) {
-            const p = this.meteorTimer.getProgress(); // 0 to 1
+            const p = this.meteorTimer.getProgress();
             if (p > 0.05) {
                 targetAlpha = 0.7 * p;
             }
         }
 
-        // The shower overrides the timer if its glow value is higher
         targetAlpha = Math.max(targetAlpha, this.showerGlowAlpha || 0);
-
         if (this.currentGlowAlpha === undefined) this.currentGlowAlpha = 0;
 
-        // Smooth Lerp transitions instead of sudden jumps
         if (targetAlpha > this.currentGlowAlpha) {
-            this.currentGlowAlpha += 0.01; // Fade-in slightly slower for smoother buildup
+            this.currentGlowAlpha += 0.01; 
             if (this.currentGlowAlpha > targetAlpha) this.currentGlowAlpha = targetAlpha;
         } else {
-            this.currentGlowAlpha -= 0.005; // Very slow, smooth fade-out (prevents sudden disappearance when answering questions)
+            this.currentGlowAlpha -= 0.005; 
             if (this.currentGlowAlpha < targetAlpha) this.currentGlowAlpha = targetAlpha;
         }
 
         this.meteorVignette.clear();
         if (this.currentGlowAlpha > 0.01) {
             const h = this.cameras.main.height;
-            const glowHeight = 700; // Covers bottom third of the screen seamlessly
+            const glowHeight = 700;
             const yPos = h - glowHeight;
 
             this.meteorVignette.fillGradientStyle(
-                0xff0000, 0xff0000, 0x990000, 0x990000, // Top colors, Bottom colors
-                0, 0, this.currentGlowAlpha, this.currentGlowAlpha // Top alphas, Bottom alphas
+                0xff0000, 0xff0000, 0x990000, 0x990000, 
+                0, 0, this.currentGlowAlpha, this.currentGlowAlpha 
             );
             this.meteorVignette.fillRect(0, yPos, 720, glowHeight);
         }
@@ -504,15 +497,14 @@ class QuestionScene extends Phaser.Scene {
         }
     }
 
-    // NEW: Handles smooth visual override when meteor shower strikes
     triggerMeteorShowerGlow() {
         this.showerGlowAlpha = 1.0;
-        this.cameras.main.flash(300, 255, 50, 0, 0.2); // Subtle visual flash when shower starts
+        this.cameras.main.flash(300, 255, 50, 0, 0.2);
         if (this.showerGlowTween) this.showerGlowTween.stop();
         this.showerGlowTween = this.tweens.add({
             targets: this,
             showerGlowAlpha: 0,
-            duration: 6000, // Fades out slowly identically to meteor fall timespan
+            duration: 6000,
             ease: 'Sine.easeOut'
         });
     }
@@ -535,7 +527,6 @@ class QuestionScene extends Phaser.Scene {
                 this.meteorTimer.remove();
                 this.meteorTimer = null;
             }
-            // Intentionally not clearing meteorVignette here. Allowed to fade out via lerp.
         }
     }
 
@@ -800,6 +791,7 @@ class QuestionScene extends Phaser.Scene {
         }
     }
 
+    // UPDATED: Connected to Player Profile Stats and XP
     handleAnswer(i) {
         if (this.isProcessing) return;
         this.isProcessing = true;
@@ -817,9 +809,11 @@ class QuestionScene extends Phaser.Scene {
         });
 
         const q = this.questions[this.qIdx % this.questions.length];
+        const category = q.subject || q.category || "General";
+        
         const record = {
             question: q.question,
-            category: q.subject || q.category || "Unknown",
+            category: category,
             userAnswer: q.options[i],
             correctAnswer: q.options[q.answer],
             isCorrect: (i === q.answer)
@@ -837,6 +831,14 @@ class QuestionScene extends Phaser.Scene {
         if (i === q.answer) {
             this.playSFX('sfx_q_correct', 0.5, false);
             
+            // PROFILE STATS TRACKING
+            if (GameState.profile) {
+                GameState.profile.qr = (GameState.profile.qr || 0) + 1;
+                GameState.profile.xp = (GameState.profile.xp || 0) + 10;
+                if (!GameState.profile.s[category]) GameState.profile.s[category] = { r: 0, w: 0 };
+                GameState.profile.s[category].r++;
+            }
+
             GameState.correctCount++;
             if (GameState.weaponLevel < 4) GameState.weaponLevel++;
             
@@ -890,6 +892,13 @@ class QuestionScene extends Phaser.Scene {
         } else {
             this.playSFX('sfx_q_wrong', 0.6, false);
             
+            // PROFILE STATS TRACKING
+            if (GameState.profile) {
+                GameState.profile.qw = (GameState.profile.qw || 0) + 1;
+                if (!GameState.profile.s[category]) GameState.profile.s[category] = { r: 0, w: 0 };
+                GameState.profile.s[category].w++;
+            }
+
             if (GameState.weaponLevel > 3) GameState.weaponLevel--; 
             
             GameState.currentCombo = 0;
@@ -906,6 +915,8 @@ class QuestionScene extends Phaser.Scene {
             if (quickSelBtn) quickSelBtn.bg.setFillStyle(0xff0000, 0.4); 
             if (quickCorBtn) quickCorBtn.bg.setFillStyle(0x00ff00, 0.4); 
         }
+
+        window.saveGame(); // Save stats silently here
 
         GameState.hasFiftyFifty = false;
         GameState.fiftyFiftyOptionsToHide = [];
@@ -929,7 +940,6 @@ class QuestionScene extends Phaser.Scene {
 
     applyFiftyFifty() {
         const gameScene = this.scene.get('GameScene');
-        // Do not activate fifty-fifty if boss is active or spawning
         if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) return;
         
         if (!GameState.hasFiftyFifty || this.isProcessing) return;
@@ -985,7 +995,7 @@ class QuestionScene extends Phaser.Scene {
             GameState.skipsLeft--;
             window.saveCurrency();
 
-            GameState.fiftyFiftyOptionsToHide = []; // Refresh 50/50 block
+            GameState.fiftyFiftyOptionsToHide = []; 
             this.qIdx++;
             this.refreshQuestion();
             
@@ -1055,7 +1065,6 @@ class QuestionScene extends Phaser.Scene {
             if (this.warningTween) this.warningTween.stop();
             if (this.readyTween) this.readyTween.stop();
 
-            // Hide the battery UI during Boss fight
             if (this.boltIcon) this.boltIcon.setVisible(false);
             if (this.batteryBg) this.batteryBg.setVisible(false);
             if (this.batteryFill) this.batteryFill.setVisible(false);
@@ -1065,7 +1074,6 @@ class QuestionScene extends Phaser.Scene {
             this.qPanel.setAlpha(1);
             this.skipBtn.setAlpha(1);
 
-            // Re-show the battery UI after Boss fight
             if (this.boltIcon) this.boltIcon.setVisible(true);
             if (this.batteryBg) this.batteryBg.setVisible(true);
             if (this.batteryFill) this.batteryFill.setVisible(true);

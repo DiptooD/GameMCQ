@@ -62,7 +62,7 @@ class MenuScene extends Phaser.Scene {
         const UI_WIDTH = 520;      
         
         this.createCurrencyUI();
-        this.createTopLeftIcons();
+        this.createProfileAndSettings(); 
 
         const titleContainer = this.add.container(cx, cy - 420);
         const titleText = this.add.text(0, 0, "গেইম MCQ", { 
@@ -95,7 +95,6 @@ class MenuScene extends Phaser.Scene {
             }
         });
         
-        // --- ADD THE KINGFISHER ANIMATION ---
         this.createTitleBird(cx, cy - 420);
         
         this.createHangarButton(cx, cy - 220);
@@ -173,19 +172,16 @@ class MenuScene extends Phaser.Scene {
     }
 
     createTitleBird(titleX, titleY) {
-        // "player_lv1" is the default ship (মাছরাঙা / Kingfisher)
         this.titleBird = this.add.image(-100, -100, "player_lv1").setScale(0.65).setDepth(50);
         
         const animateBird = () => {
-            if (!this.scene.isActive()) return; // Stop if scene changed
+            if (!this.scene.isActive()) return;
             const w = this.cameras.main.width;
             
-            // Randomize starting side
             const fromLeft = Math.random() > 0.5;
             const startX = fromLeft ? -100 : w + 100;
             const startY = titleY - Phaser.Math.Between(100, 300);
             
-            // Target perch position (top edge of the title text)
             const landX = titleX + Phaser.Math.Between(-100, 100);
             const landY = titleY - 65; 
             
@@ -194,7 +190,6 @@ class MenuScene extends Phaser.Scene {
 
             this.titleBird.setPosition(startX, startY);
             
-            // Rotate to face movement direction
             const angleToLand = Phaser.Math.Angle.Between(startX, startY, landX, landY);
             this.titleBird.setRotation(angleToLand + Math.PI / 2);
 
@@ -205,13 +200,11 @@ class MenuScene extends Phaser.Scene {
                 duration: 1500,
                 ease: 'Sine.easeOut',
                 onComplete: () => {
-                    // Perch angle 
                     this.tweens.add({
                         targets: this.titleBird,
                         rotation: (fromLeft ? 0.2 : -0.2), 
                         duration: 200,
                         onComplete: () => {
-                            // Peck/Hop animation
                             this.tweens.add({
                                 targets: this.titleBird,
                                 y: landY - 20,
@@ -220,7 +213,6 @@ class MenuScene extends Phaser.Scene {
                                 repeat: 3,
                                 ease: 'Quad.easeOut',
                                 onComplete: () => {
-                                    // Take off calculation
                                     const angleToExit = Phaser.Math.Angle.Between(landX, landY, endX, endY);
                                     this.tweens.add({
                                         targets: this.titleBird,
@@ -234,7 +226,6 @@ class MenuScene extends Phaser.Scene {
                                                 duration: 1500,
                                                 ease: 'Sine.easeIn',
                                                 onComplete: () => {
-                                                    // Loop after a randomized delay
                                                     this.time.delayedCall(Phaser.Math.Between(4000, 8000), animateBird);
                                                 }
                                             });
@@ -247,8 +238,6 @@ class MenuScene extends Phaser.Scene {
                 }
             });
         };
-
-        // Start the first loop after a short delay
         this.time.delayedCall(2000, animateBird);
     }
 
@@ -303,30 +292,88 @@ class MenuScene extends Phaser.Scene {
         return finalQuestions.length;
     }
 
-    createTopLeftIcons() {
+    createProfileAndSettings() {
         const iconY = 65;
+        const boxX = 15;
+        const boxY = 35;
+        const boxW = 230;
+        const boxH = 60;
 
-        const exitBg = this.add.circle(60, iconY, 28, 0x001122, 0.8).setStrokeStyle(3, 0xaa0000);
-        const exitIcon = this.add.text(60, iconY, "❌", { fontSize: '24px' }).setOrigin(0.5);
-        const exitHitArea = this.add.circle(60, iconY, 35).setInteractive({ useHandCursor: true });
+        // --- Holographic Profile ID Badge ---
+        const profBg = this.add.graphics();
+        profBg.fillStyle(0x000c22, 0.85);
+        profBg.fillRoundedRect(boxX, boxY, boxW, boxH, 15);
+        profBg.lineStyle(2, 0x00aaff, 0.8);
+        profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 15);
+        
+        // Inner tech details
+        profBg.fillStyle(0x00aaff, 0.15);
+        profBg.fillRoundedRect(boxX + 5, boxY + 5, boxH - 10, boxH - 10, 10);
+        
+        const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
+        
+        const avatars = window.getAvatars();
+        const avatarIdx = (GameState.profile && GameState.profile.a) ? GameState.profile.a : 0;
+        
+        // Avatar Emoji
+        const avatarTxt = this.add.text(boxX + 35, boxY + 30, avatars[avatarIdx], {fontSize: '32px'}).setOrigin(0.5);
+        
+        // Player Name
+        const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
+        const nameTxt = this.add.text(boxX + 75, boxY + 16, playerName, {
+            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold'
+        }).setOrigin(0, 0.5);
+        
+        // Level Text
+        const lvlData = window.getLevelData();
+        const lvlTxt = this.add.text(boxX + 75, boxY + 40, "লেভেল " + lvlData.level, {
+            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff'
+        }).setOrigin(0, 0.5);
+        
+        // Dynamic XP Bar Line
+        const barW = 90;
+        const barX = boxX + 115;
+        const barY = boxY + 41;
+        this.add.rectangle(barX + barW/2, barY, barW, 4, 0x000000).setOrigin(0.5);
+        this.add.rectangle(barX + (barW * lvlData.percent)/2, barY, barW * lvlData.percent, 4, 0x00ff00).setOrigin(0.5);
 
+        // Hover Effect
+        hitArea.on('pointerover', () => { profBg.lineStyle(2, 0xffffff, 1); profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 15); });
+        hitArea.on('pointerout', () => { profBg.lineStyle(2, 0x00aaff, 0.8); profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 15); });
+
+        hitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.scene.pause("MenuScene");
+            this.scene.launch("PlayerProfileScene");
+        });
+
+        // --- Sleek Settings Icon ---
+        const settingsBg = this.add.circle(285, iconY, 26, 0x001122, 0.8).setStrokeStyle(2, 0x0066aa);
+        const settingsIcon = this.add.text(285, iconY, "⚙️", { fontSize: '24px' }).setOrigin(0.5);
+        const settingsHitArea = this.add.circle(285, iconY, 32).setInteractive({ useHandCursor: true });
+
+        settingsHitArea.on('pointerover', () => settingsBg.setStrokeStyle(2, 0xffffff));
+        settingsHitArea.on('pointerout', () => settingsBg.setStrokeStyle(2, 0x0066aa));
+        settingsHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: [settingsBg, settingsIcon], scale: 0.9, duration: 50, yoyo: true });
+            this.scene.pause("MenuScene");
+            this.scene.launch("SettingsScene");
+        });
+        
+        // --- Sleek Exit Icon ---
+        const exitBg = this.add.circle(355, iconY, 26, 0x001122, 0.8).setStrokeStyle(2, 0xaa0000);
+        const exitIcon = this.add.text(355, iconY, "✖", { fontSize: '24px', color: '#ff4444' }).setOrigin(0.5);
+        const exitHitArea = this.add.circle(355, iconY, 32).setInteractive({ useHandCursor: true });
+
+        exitHitArea.on('pointerover', () => exitBg.setStrokeStyle(2, 0xff0000));
+        exitHitArea.on('pointerout', () => exitBg.setStrokeStyle(2, 0xaa0000));
         exitHitArea.on('pointerdown', () => {
             this.playSound('sfx_back');
             this.tweens.add({ targets: [exitBg, exitIcon], scale: 0.9, duration: 50, yoyo: true });
             if (navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
             }
-        });
-
-        const settingsBg = this.add.circle(135, iconY, 28, 0x001122, 0.8).setStrokeStyle(3, 0x0066aa);
-        const settingsIcon = this.add.text(135, iconY, "⚙️", { fontSize: '30px' }).setOrigin(0.5);
-        const settingsHitArea = this.add.circle(135, iconY, 35).setInteractive({ useHandCursor: true });
-
-        settingsHitArea.on('pointerdown', () => {
-            this.playSound('sfx_click');
-            this.tweens.add({ targets: [settingsBg, settingsIcon], scale: 0.9, duration: 50, yoyo: true });
-            this.scene.pause("MenuScene");
-            this.scene.launch("SettingsScene");
         });
     }
 
@@ -1262,7 +1309,6 @@ class MenuScene extends Phaser.Scene {
 
         window.resetGameState();
         
-        // Anti-cheat verification lock
         GameState.currentSubject = this.selectedSubject;
         localStorage.setItem('game_currentSubject', GameState.currentSubject);
 

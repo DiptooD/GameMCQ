@@ -1002,10 +1002,7 @@ class GameScene extends GameBase {
             this.createExplosion(obstacle.x, obstacle.y, 0x888888, 10);
             GameState.score += 15;
 
-            // Restrict debris drop and mission progress using isValidSubject
             const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
-            
-            // Adjust Debris Drop rate dynamically according to Beginner's Luck
             const currentDebrisChance = this.luckMods.debrisDropChance !== undefined ? this.luckMods.debrisDropChance : 0.5;
 
             if (GameState.gameMode !== "revision" && isValidSubject && Math.random() < currentDebrisChance) {
@@ -1072,8 +1069,13 @@ class GameScene extends GameBase {
         if (enemy.isDestroyed) return;
         enemy.isDestroyed = true;
 
+        // NEW: Stats Tracking Kills
+        if (GameState.profile) {
+            GameState.profile.k = (GameState.profile.k || 0) + 1;
+            GameState.profile.xp = (GameState.profile.xp || 0) + 1; // 1 XP per kill
+        }
+
         this.playSFX('sfx_explode', 1);
-        
         window.updateMissionProgress("kill_enemies", 1);
 
         if (enemy.isBodyBomb) {
@@ -1459,13 +1461,18 @@ class GameScene extends GameBase {
         }
     }
 
-winBossFight() {
+    winBossFight() {
         if (!GameState.bossActive) return; 
         
+        // NEW: Profile XP and Boss Kill Stat update
+        if (GameState.profile) {
+            GameState.profile.bk = (GameState.profile.bk || 0) + 1;
+            GameState.profile.xp = (GameState.profile.xp || 0) + 100;
+        }
+
         this.playSFX('sfx_boss_win', 0.8, false);
 
         if (GameState.gameMode !== "revision") {
-            // Apply subject validation block to prevent keys farming
             const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
             const rewardContainer = this.add.container(360, 700);
             let rewardElements = [];
@@ -1500,9 +1507,8 @@ winBossFight() {
         GameState.bossStage++;
         GameState.correctCount = 0;
         
-        // Track skips securely 
         GameState.skipsLeft += 5;
-        window.saveCurrency();
+        window.saveCurrency(); // Also saves profile now!
 
         window.updateLevelTargets();
         this.triggerShockwave();

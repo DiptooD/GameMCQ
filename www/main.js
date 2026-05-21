@@ -16,14 +16,14 @@ const config = {
     arcade: { 
         debug: false,
         fps: 60,                
-        fixedStep: false, // Changed to false for smoother dynamic frame rendering
+        fixedStep: false, 
         gravity: { y: 0 } 
     }
   },
   render: {
     antialias: true,
     pixelArt: false,
-    roundPixels: false, // Ensures smoother lerping for sprites
+    roundPixels: false, 
     clearBeforeRender: false
   },
   audio: {
@@ -32,7 +32,8 @@ const config = {
   input: {
     activePointers: 2, 
   },
-  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, GameScene, QuestionScene, PauseScene, DeathScene]
+  // Added PlayerProfileScene here
+  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, GameScene, QuestionScene, PauseScene, DeathScene, PlayerProfileScene]
 };
 
 Promise.all([
@@ -88,14 +89,16 @@ document.addEventListener("deviceready", () => {
         const isDeathOpen = sceneManager.isActive("DeathScene");
         const isReadingOpen = sceneManager.isActive("ReadingScene"); 
         const isSettingsOpen = sceneManager.isActive("SettingsScene"); 
+        const isProfileOpen = sceneManager.isActive("PlayerProfileScene");
 
         if (!isMenuOpen) {
             if (now - lastBackTime < 300) return; 
             lastBackTime = now;
         }
 
-        if (isSettingsOpen) {
-            sceneManager.stop("SettingsScene");
+        if (isSettingsOpen || isProfileOpen) {
+            if(isSettingsOpen) sceneManager.stop("SettingsScene");
+            if(isProfileOpen) sceneManager.stop("PlayerProfileScene");
             sceneManager.resume("MenuScene");
             return;
         }

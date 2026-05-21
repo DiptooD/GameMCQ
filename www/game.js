@@ -24,6 +24,9 @@ window.saveGame = function() {
         localStorage.setItem('game_dailyMissionsCompleted', GameState.dailyMissionsCompleted ? "true" : "false");
         
         localStorage.setItem('game_currentSubject', GameState.currentSubject || "all");
+        
+        // NEW: Save Player Profile (Highly compressed object structure)
+        localStorage.setItem('game_profile', JSON.stringify(GameState.profile));
 
         // Keep match history to a strict maximum of 15 items
         if (GameState.matchHistory && GameState.matchHistory.length > 15) {
@@ -45,32 +48,42 @@ window.saveSettings = function() {
     localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
 };
 
+// Avatar & Level System API
+window.getAvatars = function() {
+    return ["👨‍🚀", "👽", "🤖", "👾", "🦸‍♂️", "🥷", "🧙‍♂️", "🧛‍♂️", "🧟‍♂️", "🧝‍♂️"];
+};
+
+window.getLevelData = function() {
+    let xp = (window.GameState && window.GameState.profile && window.GameState.profile.xp) ? window.GameState.profile.xp : 0;
+    let level = Math.floor(Math.sqrt(xp / 50)) + 1; 
+    let currentLevelBaseXP = Math.pow(level - 1, 2) * 50;
+    let nextLevelBaseXP = Math.pow(level, 2) * 50;
+    let progress = xp - currentLevelBaseXP;
+    let required = nextLevelBaseXP - currentLevelBaseXP;
+    let percent = progress / required;
+    return { level, progress, required, percent, xp };
+};
+
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
 
-// Skips initialization
 let storedSkips = parseInt(localStorage.getItem('game_skips'));
 if (isNaN(storedSkips) || storedSkips < 10) {
     storedSkips = 10;
 }
 
-// Generate daily missions with non-key rewards
 const generateDailyMissions = () => {
     const missions = [];
-    
-    // Mission 1: Kills -> Reward Debris
     missions.push({ 
         id: "m1", type: "kill_enemies", target: Phaser.Math.Between(30, 60), 
         progress: 0, rewardType: "debris", rewardAmt: Phaser.Math.Between(20, 40), 
         desc: "Defeat enemies", completed: false 
     });
-    // Mission 2: Debris -> Reward Skips
     missions.push({ 
         id: "m2", type: "collect_debris", target: Phaser.Math.Between(15, 30), 
         progress: 0, rewardType: "skips", rewardAmt: Phaser.Math.Between(3, 5), 
         desc: "Collect Debris", completed: false 
     });
-    // Mission 3: Answers -> Reward Booster
     const boosters = ["fireShield", "speedBoost", "batteryEff"];
     const randBooster = Phaser.Utils.Array.GetRandom(boosters);
     missions.push({ 
@@ -78,7 +91,6 @@ const generateDailyMissions = () => {
         progress: 0, rewardType: "booster_" + randBooster, rewardAmt: 1, 
         desc: "Answer Correctly", completed: false 
     });
-    
     return missions;
 };
 
@@ -93,6 +105,11 @@ if (storedDate !== todayStr || !storedMissions) {
     storedMissionsCompleted = false;
 }
 
+// Minimal structure: n=name, a=avatar index, xp=XP, k=kills, bk=boss kills, qr=questions right, qw=questions wrong, s=subject stats
+let defaultProfile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
+let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
+let mergedProfile = { ...defaultProfile, ...storedProfile };
+
 window.GameState = {
     score: 0,
     battery: 0,
@@ -104,13 +121,13 @@ window.GameState = {
     bossActive: false,
     
     skipsLeft: storedSkips,
-    
     sessionHistory: [],
     gameMode: "normal", 
-    
     currentCombo: 0,
     hasFiftyFifty: false,
     fiftyFiftyOptionsToHide: [],
+    
+    profile: mergedProfile, // Integrated Profile Here
     
     dailyMissions: storedMissions,
     lastMissionDate: storedDate,
@@ -124,26 +141,21 @@ window.GameState = {
     debris: parseInt(localStorage.getItem('game_debris')) || 0,
     ownedShips: JSON.parse(localStorage.getItem('game_ownedShips')) || ["default"],
     equippedShip: localStorage.getItem('game_equippedShip') || "default",
-    
     ownedThemes: JSON.parse(localStorage.getItem('game_ownedThemes')) || ["theme_default"],
     equippedTheme: localStorage.getItem('game_equippedTheme') || "theme_default",
 
     craftingQueue: JSON.parse(localStorage.getItem('game_crafting')) || {},
     boosters: JSON.parse(localStorage.getItem('game_boosters')) || { 
-        fireShield: 0, 
-        speedBoost: 0, 
-        batteryEff: 0 
+        fireShield: 0, speedBoost: 0, batteryEff: 0 
     },
     matchHistory: JSON.parse(localStorage.getItem('game_matchHistory')) || [],
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
 };
 
 window.updateMissionProgress = function(type, amount = 1) {
-    // Anti-cheat: prevent mission progress farming in specific sub-categories
     if (GameState.currentSubject && GameState.currentSubject !== "all" && GameState.currentSubject !== "all_no_math") {
         return;
     }
-
     let updated = false;
     let newlyCompleted = [];
 
@@ -155,16 +167,11 @@ window.updateMissionProgress = function(type, amount = 1) {
                 m.completed = true;
                 newlyCompleted.push(m);
                 
-                // Disburse exact reward per newly completed mission
-                if (m.rewardType === "debris") {
-                    GameState.debris += m.rewardAmt;
-                } else if (m.rewardType === "skips") {
-                    GameState.skipsLeft += m.rewardAmt;
-                } else if (m.rewardType.startsWith("booster_")) {
+                if (m.rewardType === "debris") GameState.debris += m.rewardAmt;
+                else if (m.rewardType === "skips") GameState.skipsLeft += m.rewardAmt;
+                else if (m.rewardType.startsWith("booster_")) {
                     const bType = m.rewardType.replace("booster_", "");
-                    if (GameState.boosters[bType] !== undefined) {
-                        GameState.boosters[bType] += m.rewardAmt;
-                    }
+                    if (GameState.boosters[bType] !== undefined) GameState.boosters[bType] += m.rewardAmt;
                 }
             }
             updated = true;
@@ -172,7 +179,6 @@ window.updateMissionProgress = function(type, amount = 1) {
     });
 
     if (updated) {
-        // Verify grand completion condition
         const allDone = GameState.dailyMissions.every(m => m.completed);
         let allDoneReward = 0;
         if (allDone && !GameState.dailyMissionsCompleted) {
@@ -180,10 +186,8 @@ window.updateMissionProgress = function(type, amount = 1) {
             allDoneReward = Phaser.Math.Between(3, 7);
             GameState.keys += allDoneReward;
         }
-
         window.saveCurrency();
 
-        // Push visual updates to the running GameScene instance
         if (window.game && window.game.scene) {
             const gameScene = window.game.scene.getScene("GameScene");
             if (gameScene && gameScene.scene.isActive()) {
@@ -212,15 +216,10 @@ window.updateLevelTargets = function() {
     let luckFactor = Math.max(0, 5 - played) / 5;
     let discount = Math.floor(3 * luckFactor);
 
-    if (GameState.bossStage === 0) {
-        GameState.totalCorrectNeeded = Math.max(3, 10 - discount); 
-    } else if (GameState.bossStage === 1) {
-        GameState.totalCorrectNeeded = Math.max(3, 7 - discount);  
-    } else if (GameState.bossStage === 2) {
-        GameState.totalCorrectNeeded = Math.max(2, 5 - discount);  
-    } else {
-        GameState.totalCorrectNeeded = 9999; 
-    }
+    if (GameState.bossStage === 0) GameState.totalCorrectNeeded = Math.max(3, 10 - discount); 
+    else if (GameState.bossStage === 1) GameState.totalCorrectNeeded = Math.max(3, 7 - discount);  
+    else if (GameState.bossStage === 2) GameState.totalCorrectNeeded = Math.max(2, 5 - discount);  
+    else GameState.totalCorrectNeeded = 9999; 
 };
 
 window.resetGameState = function () {
@@ -236,7 +235,6 @@ window.resetGameState = function () {
     GameState.bossActive = false;
     GameState.sessionHistory = [];
     
-    // Always top up base skips to 10 if it falls below. 
     if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10) {
         GameState.skipsLeft = 10;
     }
@@ -253,7 +251,6 @@ window.ShipData = [
     { id: "ship_k6", name: "কুটুম পেঁচা (Owl)", costType: "keys", cost: 150, desc: "Silent night hunter of the mystical dark." },
     { id: "ship_k7", name: "টিয়া (Parrot)", costType: "keys", cost: 250, desc: "Vibrant plumage radiating solar energy." },
     { id: "ship_k8", name: "সোনালী ঈগল (Golden Eagle)", costType: "keys", cost: 500, desc: "The supreme apex predator of the heavens." },
-
     { id: "ship_d1", name: "চড়ুই (Sparrow)",  costType: "debris", cost: 50,  time: 2 * 60 * 60 * 1000, desc: "Small, scrappy, and extremely agile." }, 
     { id: "ship_d2", name: "শালিক (Myna)",   costType: "debris", cost: 100, time: 3 * 60 * 60 * 1000, desc: "A common but very reliable companion." }, 
     { id: "ship_d3", name: "কাক (Crow)",costType: "debris", cost: 200, time: 4 * 60 * 60 * 1000, desc: "Highly intelligent and adaptable scavenger." }, 
