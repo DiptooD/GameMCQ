@@ -97,37 +97,52 @@ class PlayerProfileScene extends Phaser.Scene {
         if (!this.textures.exists("profile_ring_clean")) this.generateTechRingClean();
         
         const avatarX = -w / 2 + 130; 
-        const avatarY = -15; 
-        const baseRingScale = 0.50; // Scaled to tightly fit the larger avatar
+        const avatarY = 0; // Vertically centered
+        const baseRingScale = 0.55; // Slightly scaled up
         
+        // Avatar Background Base
+        const avatarBg = this.add.graphics();
+        avatarBg.fillStyle(0x020815, 0.95);
+        avatarBg.fillCircle(avatarX, avatarY, 70);
+        avatarBg.lineStyle(3, 0x0055aa, 0.8);
+        avatarBg.strokeCircle(avatarX, avatarY, 70);
+
         // Primary clean ring
         const techRing = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.8).setScale(baseRingScale);
         techRing.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRing, rotation: Math.PI * 2, duration: 35000, repeat: -1, ease: 'Linear' });
 
         // Counter-rotating inner ring
-        const techRingInner = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.4).setScale(baseRingScale * 0.82).setTint(0x00ffcc);
+        const techRingInner = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.5).setScale(baseRingScale * 0.82).setTint(0x00ffcc);
         techRingInner.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRingInner, rotation: -Math.PI * 2, duration: 25000, repeat: -1, ease: 'Linear' });
 
-        // Avatar Text
-        const avatarTxt = this.add.text(avatarX, avatarY, this.rankData.avatar, { fontSize: '75px' }).setOrigin(0.5);
+        // Avatar Text with drop shadow
+        const avatarTxt = this.add.text(avatarX, avatarY, this.rankData.avatar, { 
+            fontSize: '70px',
+            shadow: { offsetX: 0, offsetY: 4, color: 'rgba(0,0,0,0.6)', blur: 8 }
+        }).setOrigin(0.5);
         this.tweens.add({ targets: avatarTxt, y: avatarY - 4, duration: 2000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         // === VERTICAL DIVIDER ===
         const dividerX = avatarX + 120;
-        const vertDivider = this.add.rectangle(dividerX, -10, 2, 160, 0x0066aa, 0.5);
+        const vertDivider = this.add.rectangle(dividerX, 0, 2, 180, 0x0066aa, 0.5);
 
-        // 2. Name Display & Dynamic Edit Button
-        const textStartX = dividerX + 30; // Starts right after the vertical divider
-        const nameTxt = this.add.text(textStartX, avatarY - 35, GameState.profile.n, {
+        // 2. Y-Coordinates for perfectly balanced right-side text
+        const textStartX = dividerX + 30; 
+        const nameY = -72;
+        const rankY = -30;
+        const dateY = 12;
+        const barY = 78;
+
+        const nameTxt = this.add.text(textStartX, nameY, GameState.profile.n, {
             fontSize: '40px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',
             stroke: "#002266", strokeThickness: 5,
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
         // Styled Edit Button 
-        const editBtnContainer = this.add.container(textStartX + nameTxt.width + 25, avatarY - 35);
+        const editBtnContainer = this.add.container(textStartX + nameTxt.width + 25, nameY);
         const editBg = this.add.graphics();
         editBg.fillStyle(0x004488, 0.8);
         editBg.fillRoundedRect(0, -14, 70, 28, 14);
@@ -163,19 +178,24 @@ class PlayerProfileScene extends Phaser.Scene {
         });
 
         // 3. Rank Tag
-        const rankTxt = this.add.text(textStartX, avatarY + 10, this.rankData.tag, {
+        const rankTxt = this.add.text(textStartX, rankY, this.rankData.tag, {
             fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',
             stroke: "#001133", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        // 4. Account Creation Date (Bland & Unobtrusive)
+        // 4. Account Creation Date (Neat background pill styling)
         const joinedDate = GameState.profile.joined || "Unknown Date";
-        const joinedTxt = this.add.text(textStartX, avatarY + 35, `একাউন্ট তৈরি: ${joinedDate}`, {
-            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#556677', fontStyle: 'italic'
+        const joinedTxt = this.add.text(textStartX, dateY, ` 📅 যুক্ত হয়েছেন: ${joinedDate} `, {
+            fontSize: '15px', 
+            fontFamily: "'Anek Bangla', sans-serif", 
+            color: '#aaccff', 
+            backgroundColor: 'rgba(0, 40, 80, 0.6)', // Subtle pill background
+            padding: { x: 5, y: 3 },
+            stroke: "#001122",
+            strokeThickness: 2
         }).setOrigin(0, 0.5);
 
         // 5. Experience Progression System
-        const barY = 75; // Locked visually below the text content
         const barRightPadding = 30;
         const barW = (w / 2) - textStartX - barRightPadding; 
         
@@ -201,7 +221,7 @@ class PlayerProfileScene extends Phaser.Scene {
         xpFill.fillGradientStyle(0x0055ff, 0x00ffff, 0x001188, 0x0088cc, 1);
         xpFill.fillRoundedRect(textStartX, barY, fillW, 16, 8);
 
-        container.add([techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
+        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 100 });
     }
 
