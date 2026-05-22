@@ -295,7 +295,7 @@ class MenuScene extends Phaser.Scene {
         const boxX = 30;
         const boxY = 35;
         const boxW = 370;
-        const boxH = 60; // Sleek pill height to match ShopScene
+        const boxH = 60; 
 
         // Base Box
         const profBg = this.add.graphics();
@@ -362,32 +362,32 @@ class MenuScene extends Phaser.Scene {
             this.scene.launch("PlayerProfileScene");
         });
 
-        // === Settings Button (Minimal, Left Side) ===
-        const setY = 105;
-        const setW = 110;
-        const setH = 30;
-        const setRadius = 6; 
+        // === Settings Button (Transparent, Styled to match) ===
+        const setY = 110;
+        const setW = 140;
+        const setH = 45;
+        const setRadius = 22.5; 
 
         const setBg = this.add.graphics();
         const drawSettings = (hover) => {
             setBg.clear();
-            setBg.fillStyle(0x000000, hover ? 0.4 : 0.2); 
+            setBg.fillStyle(0x0a101a, hover ? 0.5 : 0.2); 
             setBg.fillRoundedRect(boxX, setY, setW, setH, setRadius);
-            setBg.lineStyle(1, 0x004488, hover ? 0.7 : 0.3); 
+            setBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
             setBg.strokeRoundedRect(boxX, setY, setW, setH, setRadius);
         };
         drawSettings(false);
 
         const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ Settings", {
-            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#88bbdd', fontStyle: 'bold' 
+            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const setHitArea = this.add.rectangle(boxX + setW/2, setY + setH/2, setW, setH, 0x000000, 0).setInteractive({useHandCursor: true});
-        setHitArea.on('pointerover', () => { drawSettings(true); setText.setColor('#00ffff'); });
-        setHitArea.on('pointerout', () => { drawSettings(false); setText.setColor('#88bbdd'); });
+        setHitArea.on('pointerover', () => { drawSettings(true); setText.setColor('#ffffff'); });
+        setHitArea.on('pointerout', () => { drawSettings(false); setText.setColor('#b3d4ff'); });
         setHitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
-            this.tweens.add({ targets: [setText], scale: 0.9, duration: 50, yoyo: true });
+            this.tweens.add({ targets: [setText], scale: 0.95, duration: 50, yoyo: true });
             this.scene.pause("MenuScene");
             this.scene.launch("SettingsScene");
         });
@@ -422,33 +422,33 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // === 2. Exit Button (Minimal, Right Side) ===
-        const exitW = 90;
-        const exitH = 30;
+        // === 2. Exit Button (Transparent, Styled to match) ===
+        const exitW = 140;
+        const exitH = 45;
         const exitX = startX + boxW - exitW; 
-        const exitY = 105;
-        const exitRadius = 6;
+        const exitY = 110;
+        const exitRadius = 22.5;
 
         const exitBg = this.add.graphics();
         const drawExit = (hover) => {
             exitBg.clear();
-            exitBg.fillStyle(0x000000, hover ? 0.4 : 0.2); 
+            exitBg.fillStyle(0x0a101a, hover ? 0.5 : 0.2); 
             exitBg.fillRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
-            exitBg.lineStyle(1, 0x004488, hover ? 0.7 : 0.3); 
+            exitBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
             exitBg.strokeRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
         };
         drawExit(false);
 
         const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ Exit", {
-            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#cc7777', fontStyle: 'bold' 
+            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ff4444', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});
-        exitHit.on('pointerover', () => { drawExit(true); exitText.setColor('#ff5555'); });
-        exitHit.on('pointerout', () => { drawExit(false); exitText.setColor('#cc7777'); });
+        exitHit.on('pointerover', () => { drawExit(true); exitText.setColor('#ffaaaa'); });
+        exitHit.on('pointerout', () => { drawExit(false); exitText.setColor('#ff4444'); });
         exitHit.on('pointerdown', () => {
             this.playSound('sfx_back');
-            this.tweens.add({ targets: [exitText], scale: 0.9, duration: 50, yoyo: true });
+            this.tweens.add({ targets: [exitText], scale: 0.95, duration: 50, yoyo: true });
             if (navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
             }
