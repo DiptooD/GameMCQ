@@ -14,10 +14,10 @@ class GameScene extends GameBase {
         this.hasRevived = false;
         this.bossRemnantsActive = 0; 
         this.isTransitioningToBoss = false;
-
-        // Thief Debuff States
-        this.isWeaponJammed = false;
-        this.isControlInverted = false;
+        
+        // --- NEW: Thief Debuff States ---
+        this.isJammed = false;
+        this.isHijacked = false;
 
         if ('wakeLock' in navigator) {
             try {
@@ -110,22 +110,17 @@ class GameScene extends GameBase {
         this.magnetArc = this.add.graphics().setDepth(9).setVisible(false);
         this.fireShieldArc = this.add.graphics().setDepth(11).setVisible(false);
         
+        // Aura for Thief Jammer/Hijacker
+        this.debuffAura = this.add.graphics().setDepth(11);
+        
         this.enemyStatusGraphics = this.add.graphics().setDepth(15); 
-        this.debuffAura = this.add.graphics().setDepth(12);
 
         this.input.on("pointermove", p => {
             let minY = 480;
             let maxY = h - 100;
             if (GameState.bossActive) minY = 300; 
 
-            // Thief Control Hijacker Logic
-            let intendedX = p.x;
-            if (this.isControlInverted) {
-                // Invert around the center of the screen
-                intendedX = 720 - p.x; 
-            }
-
-            this.targetX = Phaser.Math.Clamp(intendedX, 50, 670);
+            this.targetX = Phaser.Math.Clamp(p.x, 50, 670);
             this.targetY = Phaser.Math.Clamp(p.y, minY, maxY);
         });
 
@@ -317,53 +312,6 @@ class GameScene extends GameBase {
         this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
     }
 
-    applyThiefDebuff() {
-        this.playSFX('sfx_error', 0.8, false); 
-        this.isWeaponJammed = true;
-        this.isControlInverted = true;
-        
-        const duration = Phaser.Math.Between(4000, 6000);
-
-        this.cameras.main.shake(300, 0.02);
-        this.player.setTint(0xff00ff); 
-
-        // Instantly invert target immediately
-        if (this.input.activePointer) {
-            this.targetX = 720 - this.input.activePointer.x;
-        }
-
-        const jamTxt = this.add.text(this.player.x, this.player.y - 80, "WEAPONS JAMMED!", {
-            fontSize: '32px', color: '#ff0000', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0.5).setDepth(200);
-        
-        const invTxt = this.add.text(this.player.x, this.player.y - 40, "CONTROLS INVERTED!", {
-            fontSize: '32px', color: '#ff00ff', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0.5).setDepth(200);
-
-        this.tweens.add({ targets: [jamTxt, invTxt], y: '-=60', alpha: 0, duration: 2500, ease: 'Power2', onComplete: () => {
-            jamTxt.destroy();
-            invTxt.destroy();
-        }});
-
-        if (this.debuffTimer) this.debuffTimer.remove();
-        
-        this.debuffTimer = this.time.delayedCall(duration, () => {
-            this.isWeaponJammed = false;
-            this.isControlInverted = false;
-            this.player.clearTint();
-            
-            // Instantly restore target correctly
-            if (this.input.activePointer) {
-                this.targetX = Phaser.Math.Clamp(this.input.activePointer.x, 50, 670);
-            }
-            
-            const recTxt = this.add.text(this.player.x, this.player.y - 60, "SYSTEMS RESTORED", {
-                fontSize: '28px', color: '#00ff00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 4
-            }).setOrigin(0.5).setDepth(200);
-            this.tweens.add({ targets: recTxt, y: '-=40', alpha: 0, duration: 1500, onComplete: () => recTxt.destroy() });
-        });
-    }
-
     shutdown() {
         if (this.visibilityHandler) {
             document.removeEventListener("visibilitychange", this.visibilityHandler);
@@ -453,6 +401,54 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
+    applyThiefDebuff() {
+        const duration = Phaser.Math.Between(4000, 6000);
+        
+        this.isJammed = true;
+        this.isHijacked = true;
+        
+        this.cameras.main.shake(300, 0.02);
+        this.cameras.main.flash(200, 255, 0, 255); // Purple EMP flash
+        
+        const jamText = this.add.text(this.player.x, this.player.y - 70, "WEAPONS JAMMED!\nCONTROLS INVERTED!", {
+            fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#ff00ff', align: 'center',
+            stroke: '#000000', strokeThickness: 5, fontStyle: 'bold'
+        }).setOrigin(0.5).setDepth(200);
+        
+        this.tweens.add({
+            targets: jamText,
+            y: this.player.y - 120,
+            alpha: 0,
+            duration: 2500,
+            ease: 'Cubic.easeOut',
+            onComplete: () => jamText.destroy()
+        });
+
+        if (this.debuffTimer) this.debuffTimer.remove();
+        
+        this.debuffTimer = this.time.addEvent({
+            delay: duration,
+            callback: () => {
+                this.isJammed = false;
+                this.isHijacked = false;
+                if (this.debuffAura) this.debuffAura.clear();
+                
+                const restoreText = this.add.text(this.player.x, this.player.y - 50, "SYSTEMS RESTORED", {
+                    fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#00ff00', align: 'center',
+                    stroke: '#000000', strokeThickness: 4, fontStyle: 'bold'
+                }).setOrigin(0.5).setDepth(200);
+                
+                this.tweens.add({
+                    targets: restoreText,
+                    y: this.player.y - 100,
+                    alpha: 0,
+                    duration: 1500,
+                    onComplete: () => restoreText.destroy()
+                });
+            }
+        });
+    }
+
     update(time, delta) {
         if (this.isResuming) return;
         
@@ -483,8 +479,29 @@ class GameScene extends GameBase {
         this.checkBossSpawn();
 
         const lerpSpeed = 0.25 * dt;
-        this.player.x = Phaser.Math.Linear(this.player.x, this.targetX, lerpSpeed);
+        
+        // --- NEW: Control Hijacker Logic ---
+        let actualTargetX = this.targetX;
+        if (this.isHijacked) {
+            actualTargetX = 720 - this.targetX;
+        }
+
+        this.player.x = Phaser.Math.Linear(this.player.x, actualTargetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
+
+        // --- NEW: Visualizer for Debuffs ---
+        if (this.isJammed || this.isHijacked) {
+            this.debuffAura.clear();
+            const pulse = Math.sin(this.time.now / 100);
+            this.debuffAura.lineStyle(4, 0xff00ff, 0.7 + pulse * 0.3);
+            this.debuffAura.strokeCircle(this.player.x, this.player.y, 60 + pulse * 5);
+            
+            if (Math.random() > 0.7) {
+                this.hitEmitter.emitParticle(1, this.player.x + Phaser.Math.Between(-30, 30), this.player.y + Phaser.Math.Between(-30, 30));
+            }
+        } else if (this.debuffAura) {
+            this.debuffAura.clear();
+        }
 
         this.wingmen.children.each((wingman, index) => {
             if (wingman.active) {
@@ -500,7 +517,7 @@ class GameScene extends GameBase {
                 if (combo >= 10) delay = 600;
                 else if (combo >= 5) delay = 350;
 
-                if (this.time.now > (wingman.lastShot || 0) + delay && !this.isWeaponJammed) {
+                if (this.time.now > (wingman.lastShot || 0) + delay) {
                     wingman.lastShot = this.time.now;
                     
                     const equip = GameState.equippedShip || "default";
@@ -588,21 +605,6 @@ class GameScene extends GameBase {
             this.fireShieldArc.strokePath();
         }
 
-        if (this.isWeaponJammed || this.isControlInverted) {
-            this.debuffAura.clear();
-            const jitterX = Phaser.Math.FloatBetween(-3, 3);
-            const jitterY = Phaser.Math.FloatBetween(-3, 3);
-            this.player.x += jitterX;
-            this.player.y += jitterY;
-            
-            this.debuffAura.lineStyle(2, 0xff00ff, Phaser.Math.FloatBetween(0.3, 0.8));
-            this.debuffAura.strokeCircle(this.player.x, this.player.y, 60 + Phaser.Math.FloatBetween(0, 15));
-            this.debuffAura.lineStyle(1, 0x00ffff, Phaser.Math.FloatBetween(0.2, 0.5));
-            this.debuffAura.strokeCircle(this.player.x, this.player.y, 50 + Phaser.Math.FloatBetween(0, 10));
-        } else {
-            this.debuffAura.clear();
-        }
-
         const equipped = GameState.equippedShip || "default";
         const level = GameState.weaponLevel || 1;
         let shipTexture = (equipped === "default") ? `player_lv${level}` : `${equipped}_lv${level}`;
@@ -640,7 +642,7 @@ class GameScene extends GameBase {
                 const turnSpeed = 0.08 * dtScale; 
                 const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -turnSpeed, turnSpeed);
 
-                const speed = 450 * this.luckMods.speedMult; // Slightly faster to be menacing
+                const speed = 400 * this.luckMods.speedMult;
                 e.setVelocity(Math.cos(newAngle) * speed, Math.sin(newAngle) * speed);
                 e.setRotation(newAngle + Math.PI / 2);
 
@@ -957,7 +959,10 @@ class GameScene extends GameBase {
     }
 
     fireWeapon() {
-        if (this.isWeaponJammed) return;
+        // --- NEW: Weapon Jammer Prevention ---
+        if (this.isJammed) {
+            return;
+        }
 
         const x = this.player.x;
         const y = this.player.y - 60;
@@ -1135,7 +1140,7 @@ class GameScene extends GameBase {
 
         if (GameState.profile) {
             GameState.profile.k = (GameState.profile.k || 0) + 1;
-            GameState.profile.xp = (GameState.profile.xp || 0) + 1; 
+            GameState.profile.xp = (GameState.profile.xp || 0) + 1;
         }
 
         this.playSFX('sfx_explode', 1);
@@ -1183,6 +1188,12 @@ class GameScene extends GameBase {
         dropChance += this.luckMods.batteryDropChance; 
 
         if (enemy.isBodyBomb) dropChance = 1.0; 
+
+        if (enemy.tier === "thief") {
+            if (!GameState.bossActive) {
+                this.dropPowerUp(enemy.x, enemy.y, "thief");
+            }
+        }
 
         if (!GameState.bossActive && enemy.tier !== "thief" && Math.random() < dropChance) {
             let batteryTexture = "battery_green", batteryValue = 35;
@@ -1725,12 +1736,6 @@ class GameScene extends GameBase {
         this.player.body.enable = false;
         this.isInvulnerable = true;
 
-        if (this.debuffTimer) {
-            this.debuffTimer.remove();
-            this.isWeaponJammed = false;
-            this.isControlInverted = false;
-        }
-
         this.createExplosion(this.player.x, this.player.y, 0xff4400, 50);
         this.time.delayedCall(100, () => this.createExplosion(this.player.x + 20, this.player.y - 10, 0xffaa00, 30));
         this.time.delayedCall(200, () => this.createExplosion(this.player.x - 20, this.player.y + 20, 0xffffff, 30));
@@ -1773,37 +1778,35 @@ class GameScene extends GameBase {
 
         const isBoss = (source === this.boss);
 
+        // --- NEW: Thief Debuff Instead of Damage ---
+        if (!isBoss && source.active && source.enemyType === "thief") {
+            this.playSFX('sfx_shield_break', 0.6, false); 
+            this.applyThiefDebuff();
+            this.createExplosion(source.x, source.y, 0xff00ff, 30);
+            
+            if (source.trail) source.trail.destroy();
+            source.destroy(); 
+            return; // No damage taken
+        }
+
         if (this.fireShieldActive) {
             this.createExplosion(source.x, source.y, 0xffaa00, 10);
             if (!isBoss && source.active) {
-                if (this.enemies.contains(source)) {
-                    if (source.enemyType === "thief") {
-                        this.createExplosion(source.x, source.y, 0xff00ff, 20);
-                        source.destroy();
-                    } else {
-                        this.destroyEnemy(source);
-                    }
-                } else {
+                if (this.enemies.contains(source)) this.destroyEnemy(source);
+                else {
                     if (source.trail) source.trail.destroy(); 
                     if (source.destroy) source.destroy();
                 }
             }
             return;
         }
-
         if (this.hasShield) {
             this.playSFX('sfx_shield_break', 0.3, false);
             this.hasShield = false;
             this.shieldArc.setVisible(false);
             if (!isBoss && source.active) {
-                if (this.enemies.contains(source)) {
-                    if (source.enemyType === "thief") {
-                        this.createExplosion(source.x, source.y, 0xff00ff, 20);
-                        source.destroy();
-                    } else {
-                        this.destroyEnemy(source);
-                    }
-                } else {
+                if (this.enemies.contains(source)) this.destroyEnemy(source);
+                else {
                     if (source.trail) source.trail.destroy(); 
                     if (source.destroy) source.destroy();
                 }
@@ -1815,16 +1818,8 @@ class GameScene extends GameBase {
         this.isInvulnerable = true;
         
         if (!isBoss && source.active) {
-            if (this.enemies.contains(source)) {
-                if (source.enemyType === "thief") {
-                    this.applyThiefDebuff();
-                    this.createExplosion(source.x, source.y, 0xff00ff, 30);
-                    source.destroy();
-                    return; // Return immediately to skip life-loss
-                } else {
-                    this.destroyEnemy(source);
-                }
-            } else {
+            if (this.enemies.contains(source)) this.destroyEnemy(source);
+            else {
                 if (source.trail) source.trail.destroy(); 
                 if (source.destroy) source.destroy();
             }

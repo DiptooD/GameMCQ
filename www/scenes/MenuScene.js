@@ -10,9 +10,12 @@ class MenuScene extends Phaser.Scene {
 
         this.dropdowns = []; 
         this.backgroundLayers = [];
+        this.isStartingGame = false; // Prevent multiple clicks freezing the engine
     }
 
     create() {
+        this.isStartingGame = false;
+
         if (window.GameState && window.GameState.viewingHistoryMatch) {
             window.GameState.viewingHistoryMatch = null;
         }
@@ -938,7 +941,10 @@ class MenuScene extends Phaser.Scene {
             btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
         });
 
+        // BUG FIX: Added isStartingGame block to prevent duplicate execution freezes.
         hitArea.on("pointerdown", () => {
+            if (this.isStartingGame) return;
+            this.isStartingGame = true;
             this.playSound('sfx_powerup');
             this.tweens.add({ targets: container, scale: 0.92, duration: 100, yoyo: true, onComplete: () => this.startGame() });
         });
@@ -1345,18 +1351,21 @@ class MenuScene extends Phaser.Scene {
             finalQuestions = finalQuestions.filter(q => seenQuestions.includes(q.question));
             if (finalQuestions.length === 0) {
                 this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
+                this.isStartingGame = false;
                 return;
             }
         } else if (this.selectedMode === "new") {
             finalQuestions = finalQuestions.filter(q => !seenQuestions.includes(q.question));
             if (finalQuestions.length === 0) {
                 this.showToast("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!");
+                this.isStartingGame = false;
                 return;
             }
         }
 
         if (finalQuestions.length === 0) {
             this.showToast("এই বিভাগে কোনো প্রশ্ন নেই!");
+            this.isStartingGame = false;
             return;
         }
 
