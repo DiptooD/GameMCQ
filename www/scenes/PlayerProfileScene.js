@@ -13,6 +13,14 @@ class PlayerProfileScene extends Phaser.Scene {
         if (!GameState.profile) {
             GameState.profile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
         }
+        
+        // Ensure account creation date exists
+        if (!GameState.profile.joined) {
+            const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+            GameState.profile.joined = new Date().toLocaleDateString('bn-BD', dateOptions);
+            if (window.saveGame) window.saveGame();
+        }
+
         if (typeof GameState.gamesPlayed === 'undefined') {
             GameState.gamesPlayed = 0;
         }
@@ -32,7 +40,7 @@ class PlayerProfileScene extends Phaser.Scene {
         this.createTopUI(w);
 
         // --- SCENE TITLE ---
-        const title = this.add.text(cx, 120, "কমান্ডার প্রোফাইল", {
+        const title = this.add.text(cx, 140, "প্লেয়ার প্রোফাইল", {
             fontSize: "56px", 
             fontFamily: "'Anek Bangla', sans-serif", 
             color: "#00e1ff", 
@@ -42,19 +50,19 @@ class PlayerProfileScene extends Phaser.Scene {
             shadow: { offsetX: 0, offsetY: 4, color: "#0044aa", blur: 12, fill: true, stroke: true }
         }).setOrigin(0.5).setAlpha(0);
 
-        this.tweens.add({ targets: title, alpha: 1, y: 130, duration: 600, ease: 'Cubic.easeOut' });
+        this.tweens.add({ targets: title, alpha: 1, y: 150, duration: 600, ease: 'Cubic.easeOut' });
 
         // --- PANEL LAYOUT CONFIGURATION ---
         const panelW = 680;
         
-        // 1. Identity Card (Avatar, Name, Rank, XP Progress)
-        this.createIdentitySection(cx, 310, panelW, 260);
+        // 1. Identity Card (Avatar, Name, Rank, Date, XP Progress)
+        this.createIdentitySection(cx, 340, panelW, 260);
 
         // 2. Combat Records Grid (Detailed Game Metrics)
-        this.createStatsSection(cx, 650, panelW, 360);
+        this.createStatsSection(cx, 710, panelW, 400);
 
-        // 3. Subject Specialization Panel (Educational Mastery Tracks)
-        this.createMasterySection(cx, 1010, panelW, 300);
+        // 3. Subject Specialization Panel (Top 3 Most Answered)
+        this.createMasterySection(cx, 1125, panelW, 350);
     }
 
     update() {
@@ -85,30 +93,25 @@ class PlayerProfileScene extends Phaser.Scene {
         const container = this.add.container(x, y + 40).setAlpha(0);
         this.drawGlassPanel(container, 0, 0, w, h);
 
-        // 1. Interactive Tech Ring & Profile Avatar (Properly Scaled & Centered)
+        // 1. Interactive Tech Ring & Profile Avatar
         if (!this.textures.exists("profile_ring_clean")) this.generateTechRingClean();
         
         const avatarX = -w / 2 + 130; 
-        const avatarY = -15; // Shifted down to prevent clipping at the top
-        const baseRingScale = 0.55; // Scaled down to perfectly fit inside the 260px high box
+        const avatarY = -15; 
+        const baseRingScale = 0.50; // Scaled to tightly fit the larger avatar
         
-        // Outer glowing aura
-        const glowAura = this.add.circle(avatarX, avatarY, 45, 0x00aaff, 0.2);
-        glowAura.setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: glowAura, scale: 1.15, alpha: 0.05, duration: 2500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-
         // Primary clean ring
         const techRing = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.8).setScale(baseRingScale);
         techRing.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRing, rotation: Math.PI * 2, duration: 35000, repeat: -1, ease: 'Linear' });
 
         // Counter-rotating inner ring
-        const techRingInner = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.4).setScale(baseRingScale * 0.8).setTint(0x00ffcc);
+        const techRingInner = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.4).setScale(baseRingScale * 0.82).setTint(0x00ffcc);
         techRingInner.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRingInner, rotation: -Math.PI * 2, duration: 25000, repeat: -1, ease: 'Linear' });
 
-        // Avatar Text (scaled down to fit new ring size)
-        const avatarTxt = this.add.text(avatarX, avatarY, this.rankData.avatar, { fontSize: '55px' }).setOrigin(0.5);
+        // Avatar Text
+        const avatarTxt = this.add.text(avatarX, avatarY, this.rankData.avatar, { fontSize: '75px' }).setOrigin(0.5);
         this.tweens.add({ targets: avatarTxt, y: avatarY - 4, duration: 2000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         // === VERTICAL DIVIDER ===
@@ -165,10 +168,16 @@ class PlayerProfileScene extends Phaser.Scene {
             stroke: "#001133", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        // 4. Experience Progression System
-        const barY = 60; // Locked visually below the text content
+        // 4. Account Creation Date (Bland & Unobtrusive)
+        const joinedDate = GameState.profile.joined || "Unknown Date";
+        const joinedTxt = this.add.text(textStartX, avatarY + 35, `একাউন্ট তৈরি: ${joinedDate}`, {
+            fontSize: '14px', fontFamily: "'Anek Bangla', sans-serif", color: '#556677', fontStyle: 'italic'
+        }).setOrigin(0, 0.5);
+
+        // 5. Experience Progression System
+        const barY = 75; // Locked visually below the text content
         const barRightPadding = 30;
-        const barW = (w / 2) - textStartX - barRightPadding; // Dynamic width based on the divider
+        const barW = (w / 2) - textStartX - barRightPadding; 
         
         const lvlHeader = this.add.text(textStartX, barY - 22, `লেভেল ${this.lvlData.level}`, {
             fontSize: '20px', fontFamily: "'Anek Bangla', sans-serif", color: '#00e1ff', fontStyle: 'bold'
@@ -192,7 +201,7 @@ class PlayerProfileScene extends Phaser.Scene {
         xpFill.fillGradientStyle(0x0055ff, 0x00ffff, 0x001188, 0x0088cc, 1);
         xpFill.fillRoundedRect(textStartX, barY, fillW, 16, 8);
 
-        container.add([glowAura, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, rankTxt, lvlHeader, xpText, barBg, xpFill]);
+        container.add([techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 100 });
     }
 
@@ -200,8 +209,8 @@ class PlayerProfileScene extends Phaser.Scene {
         const container = this.add.container(x, y + 40).setAlpha(0);
         this.drawGlassPanel(container, 0, 0, w, h);
 
-        const title = this.add.text(0, -h / 2 + 35, "যুদ্ধ পরিসংখ্যান (COMBAT METRICS)", {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#00e1ff', fontStyle: 'bold',
+        const title = this.add.text(0, -h / 2 + 35, "পরিসংখ্যান", {
+            fontSize: '29px', fontFamily: "'Anek Bangla', sans-serif", color: '#00e1ff', fontStyle: 'bold',
             stroke: "#000000", strokeThickness: 4
         }).setOrigin(0.5);
 
@@ -209,7 +218,7 @@ class PlayerProfileScene extends Phaser.Scene {
 
         // Process Statistical Logs
         const profile = GameState.profile;
-        const totalQs = profile.qr + profile.qw;
+        const totalQs = (profile.qr || 0) + (profile.qw || 0);
         const accuracy = totalQs > 0 ? ((profile.qr / totalQs) * 100).toFixed(1) : "0.0";
         const gamesPlayed = GameState.gamesPlayed || 0;
         const avgKills = gamesPlayed > 0 ? (profile.k / gamesPlayed).toFixed(1) : "0.0";
@@ -227,10 +236,10 @@ class PlayerProfileScene extends Phaser.Scene {
         const statData = [
             { label: "সঠিকতার হার (Accuracy)", val: `${accuracy}%`, color: 0x00ffcc },
             { label: "মোট ম্যাচ (Total Matches)", val: gamesPlayed, color: 0xdd88ff },
-            { label: "সঠিক উত্তর (Correct Answers)", val: `${profile.qr} / ${totalQs}`, color: 0x00ff88 },
+            { label: "সঠিক উত্তর (Correct Answers)", val: `${profile.qr || 0} / ${totalQs}`, color: 0x00ff88 },
             { label: "গড় নিধন (Kills / Match)", val: avgKills, color: 0xffaa00 },
-            { label: "শত্রু ধ্বংস (Total Kills)", val: profile.k, color: 0xff4444 },
-            { label: "বস শিকার (Boss Takedowns)", val: profile.bk, color: 0xff33aa }
+            { label: "শত্রু ধ্বংস (Total Kills)", val: profile.k || 0, color: 0xff4444 },
+            { label: "বস শিকার (Boss Takedowns)", val: profile.bk || 0, color: 0xff33aa }
         ];
 
         container.add([title, divider]);
@@ -252,20 +261,22 @@ class PlayerProfileScene extends Phaser.Scene {
         const container = this.add.container(x, y + 40).setAlpha(0);
         this.drawGlassPanel(container, 0, 0, w, h);
 
-        const title = this.add.text(0, -h / 2 + 35, "জ্ঞান সূচক (SUBJECT MASTERY)", {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#00e1ff', fontStyle: 'bold',
+        const title = this.add.text(0, -h / 2 + 35, "বিষয়ভিত্তিক তথ্য (Top 3)", {
+            fontSize: '29px', fontFamily: "'Anek Bangla', sans-serif", color: '#00e1ff', fontStyle: 'bold',
             stroke: "#000000", strokeThickness: 4
         }).setOrigin(0.5);
 
         const divider = this.add.rectangle(0, -h / 2 + 70, w - 60, 2, 0x0066aa, 0.6);
         container.add([title, divider]);
 
-        // Filter and compile subject array sorted by engagement volume
+        // Filter and compile subject array sorted by total questions answered (right + wrong)
         const subStats = GameState.profile.s || {};
         const sortedSubs = Object.entries(subStats).map(([name, data]) => {
-            const total = data.r + data.w;
-            const acc = total > 0 ? (data.r / total) : 0;
-            return { name, r: data.r, total, acc };
+            const r = data.r || 0;
+            const w = data.w || 0;
+            const total = r + w;
+            const acc = total > 0 ? (r / total) : 0;
+            return { name, r, total, acc };
         }).sort((a, b) => b.total - a.total).slice(0, 3);
 
         if (sortedSubs.length === 0) {
