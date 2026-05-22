@@ -15,7 +15,6 @@ class GameScene extends GameBase {
         this.bossRemnantsActive = 0; 
         this.isTransitioningToBoss = false;
         
-        // --- NEW: Thief Debuff States ---
         this.isJammed = false;
         this.isHijacked = false;
 
@@ -110,7 +109,6 @@ class GameScene extends GameBase {
         this.magnetArc = this.add.graphics().setDepth(9).setVisible(false);
         this.fireShieldArc = this.add.graphics().setDepth(11).setVisible(false);
         
-        // Aura for Thief Jammer/Hijacker
         this.debuffAura = this.add.graphics().setDepth(11);
         
         this.enemyStatusGraphics = this.add.graphics().setDepth(15); 
@@ -349,16 +347,49 @@ class GameScene extends GameBase {
     }
 
     showMissionToast(msg) {
-        const toast = this.add.text(360, 200, msg, {
-            fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#00ff00', 
-            backgroundColor: 'rgba(0, 50, 0, 0.9)', padding: {x: 20, y: 15},
-            align: 'center', stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0.5).setDepth(5000).setAlpha(0);
+        const cx = this.cameras.main.width / 2;
+        const container = this.add.container(cx, -100).setDepth(5000);
+
+        const bg = this.add.graphics();
+        bg.fillGradientStyle(0x004422, 0x002211, 0x002211, 0x001105, 0.95);
+        bg.fillRoundedRect(-220, -45, 440, 90, 20);
+        bg.lineStyle(3, 0x00ff88, 1);
+        bg.strokeRoundedRect(-220, -45, 440, 90, 20);
+
+        const glow = this.add.graphics();
+        glow.fillStyle(0x00ff88, 0.2);
+        glow.fillRoundedRect(-225, -50, 450, 100, 25);
+        
+        const icon = this.add.text(-170, 0, "🏆", { fontSize: '45px' }).setOrigin(0.5);
+
+        const text = this.add.text(0, 0, msg, {
+            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+            align: 'left', fontStyle: 'bold', lineSpacing: 5
+        }).setOrigin(0.5, 0.5);
+        text.x = 20;
+
+        container.add([glow, bg, icon, text]);
+
+        if (this.cache.audio.exists('sfx_victory')) {
+            this.playSFX('sfx_victory', 0.4, false); 
+        }
         
         this.tweens.add({ 
-            targets: toast, y: 150, alpha: 1, duration: 400, ease: 'Cubic.easeOut',
+            targets: container, 
+            y: 120, 
+            alpha: 1, 
+            duration: 600, 
+            ease: 'Back.easeOut',
             onComplete: () => {
-                this.tweens.add({ targets: toast, alpha: 0, delay: 2500, duration: 500, onComplete: () => toast.destroy() });
+                this.tweens.add({ 
+                    targets: container, 
+                    y: -100, 
+                    alpha: 0, 
+                    delay: 3500, 
+                    duration: 500, 
+                    ease: 'Cubic.easeIn',
+                    onComplete: () => container.destroy() 
+                });
             }
         });
     }
@@ -408,7 +439,7 @@ class GameScene extends GameBase {
         this.isHijacked = true;
         
         this.cameras.main.shake(300, 0.02);
-        this.cameras.main.flash(200, 255, 0, 255); // Purple EMP flash
+        this.cameras.main.flash(200, 255, 0, 255); 
         
         const jamText = this.add.text(this.player.x, this.player.y - 70, "WEAPONS JAMMED!\nCONTROLS INVERTED!", {
             fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#ff00ff', align: 'center',
@@ -432,6 +463,7 @@ class GameScene extends GameBase {
                 this.isJammed = false;
                 this.isHijacked = false;
                 if (this.debuffAura) this.debuffAura.clear();
+                if (this.player && this.player.active && !this.isInvulnerable) this.player.clearTint();
                 
                 const restoreText = this.add.text(this.player.x, this.player.y - 50, "SYSTEMS RESTORED", {
                     fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#00ff00', align: 'center',
@@ -453,7 +485,8 @@ class GameScene extends GameBase {
         if (this.isResuming) return;
         
         const timeScale = this.time.timeScale || 1;
-        const dtScale = delta / 16.666; 
+        // BUG FIX: Clamped delta scale heavily to prevent physics engine jumping and freeze on tab change.
+        const dtScale = Phaser.Math.Clamp(delta / 16.666, 0.1, 2.5); 
         const dt = timeScale * dtScale;
 
         const hView = this.cameras.main.height;
@@ -480,7 +513,6 @@ class GameScene extends GameBase {
 
         const lerpSpeed = 0.25 * dt;
         
-        // --- NEW: Control Hijacker Logic ---
         let actualTargetX = this.targetX;
         if (this.isHijacked) {
             actualTargetX = 720 - this.targetX;
@@ -489,15 +521,38 @@ class GameScene extends GameBase {
         this.player.x = Phaser.Math.Linear(this.player.x, actualTargetX, lerpSpeed);
         this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
 
-        // --- NEW: Visualizer for Debuffs ---
         if (this.isJammed || this.isHijacked) {
             this.debuffAura.clear();
-            const pulse = Math.sin(this.time.now / 100);
-            this.debuffAura.lineStyle(4, 0xff00ff, 0.7 + pulse * 0.3);
-            this.debuffAura.strokeCircle(this.player.x, this.player.y, 60 + pulse * 5);
             
-            if (Math.random() > 0.7) {
-                this.hitEmitter.emitParticle(1, this.player.x + Phaser.Math.Between(-30, 30), this.player.y + Phaser.Math.Between(-30, 30));
+            // Glitchy erratic aura
+            for (let i = 0; i < 6; i++) {
+                const offsetX = Phaser.Math.Between(-45, 45);
+                const offsetY = Phaser.Math.Between(-45, 45);
+                const width = Phaser.Math.Between(10, 60);
+                const height = Phaser.Math.Between(2, 8);
+                
+                this.debuffAura.fillStyle(0xff00ff, Phaser.Math.FloatBetween(0.3, 0.8));
+                this.debuffAura.fillRect(this.player.x + offsetX, this.player.y + offsetY, width, height);
+            }
+            
+            // Random electric jagged lines
+            this.debuffAura.lineStyle(3, 0x00ffff, 0.9);
+            this.debuffAura.beginPath();
+            let startX = this.player.x + Phaser.Math.Between(-30, 30);
+            let startY = this.player.y + Phaser.Math.Between(-30, 30);
+            this.debuffAura.moveTo(startX, startY);
+            for(let j=0; j<4; j++){
+                startX += Phaser.Math.Between(-35, 35);
+                startY += Phaser.Math.Between(-35, 35);
+                this.debuffAura.lineTo(startX, startY);
+            }
+            this.debuffAura.strokePath();
+
+            // Glitch tint
+            if (this.time.now % 150 < 75) {
+                this.player.setTintFill(0xff00ff);
+            } else {
+                this.player.setTintFill(0x00ffff);
             }
         } else if (this.debuffAura) {
             this.debuffAura.clear();
@@ -959,7 +1014,6 @@ class GameScene extends GameBase {
     }
 
     fireWeapon() {
-        // --- NEW: Weapon Jammer Prevention ---
         if (this.isJammed) {
             return;
         }
@@ -1778,7 +1832,6 @@ class GameScene extends GameBase {
 
         const isBoss = (source === this.boss);
 
-        // --- NEW: Thief Debuff Instead of Damage ---
         if (!isBoss && source.active && source.enemyType === "thief") {
             this.playSFX('sfx_shield_break', 0.6, false); 
             this.applyThiefDebuff();
@@ -1786,7 +1839,7 @@ class GameScene extends GameBase {
             
             if (source.trail) source.trail.destroy();
             source.destroy(); 
-            return; // No damage taken
+            return; 
         }
 
         if (this.fireShieldActive) {
@@ -2054,6 +2107,9 @@ class GameScene extends GameBase {
 
         if (GameState.keys > 0) {
             btnHitArea.on('pointerdown', () => {
+                if (btnHitArea.getData('clicked')) return;
+                btnHitArea.setData('clicked', true);
+                
                 this.playSFX('sfx_click', 0.6);
                 this.tweens.add({ targets: btnContainer, scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.useReviveKey() });
             });
@@ -2067,6 +2123,9 @@ class GameScene extends GameBase {
         }
 
         quitHitArea.on('pointerdown', () => {
+            if (quitHitArea.getData('clicked')) return;
+            quitHitArea.setData('clicked', true);
+
             this.playSFX('sfx_back', 0.6);
             this.tweens.add({ targets: quitContainer, scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.handleGiveUp() });
         });
@@ -2139,7 +2198,7 @@ class GameScene extends GameBase {
                         this.boss.setVelocityX((200) * luckMult * (Math.random() > 0.5 ? 1 : -1)); 
                         this.bossAttackTimer.delay = 1400; 
                     } else if (stage === 1) {
-                        this.boss.setVelocityX((350) * luckMult * (Math.random() > 0.5 ? 1 : -1));
+                        this.boss.setVelocityX((350) * luckMult * (Math.random> 0.5 ? 1 : -1));
                         this.bossAttackTimer.delay = 900;
                     } else if (stage >= 2) {
                         this.bossAttackTimer.delay = 600;
@@ -2345,12 +2404,24 @@ class GameScene extends GameBase {
                     countText.setColor("#04d604");
                     countText.setFontSize('80px');
                     this.isResuming = false;
+                    
+                    // BUG FIX: Unpause properly based on current boss/transition states
                     this.physics.resume();
                     if (this.weaponTimer) this.weaponTimer.paused = false;
-                    if (this.spawnTimer) this.spawnTimer.paused = false;
+                    
+                    // Only resume regular spawns if boss is NOT active AND NOT currently transitioning
+                    if (!GameState.bossActive && !this.isTransitioningToBoss) {
+                        if (this.spawnTimer) this.spawnTimer.paused = false;
+                        if (this.obstacleTimer) this.obstacleTimer.paused = false;
+                    }
+                    
                     if (this.enemyFireTimer) this.enemyFireTimer.paused = false;
-                    if (this.obstacleTimer) this.obstacleTimer.paused = false;
-                    if (this.bossAttackTimer) this.bossAttackTimer.paused = false;
+                    
+                    // Only resume boss attack if boss IS active
+                    if (GameState.bossActive && this.bossAttackTimer) {
+                        this.bossAttackTimer.paused = false;
+                    }
+                    
                     this.tweens.add({ targets: countText, alpha: 0, scale: 1.5, duration: 500, onComplete: () => countText.destroy() });
                 }
             },
