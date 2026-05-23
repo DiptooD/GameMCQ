@@ -213,8 +213,16 @@ class DeathScene extends Phaser.Scene {
             if (i < sortedSubs.length) {
                 const [name, data] = sortedSubs[i];
                 const subAcc = Math.round((data.correct / data.total) * 100);
+                
+                // Dynamic Color based on Percentage
+                let accColor = "#ff4444"; 
+                if (subAcc === 100) accColor = "#ffffff";
+                else if (subAcc >= 80) accColor = "#00ff00";
+                else if (subAcc >= 50) accColor = "#00aaff";
+                else if (subAcc >= 26) accColor = "#ffff00";
+
                 this.add.text(cx, subY - 18, `${subAcc}%`, { 
-                    fontSize: "26px", color: "#00aaff", fontStyle: "bold", fontFamily: "'Anek Bangla'" 
+                    fontSize: "26px", color: accColor, fontStyle: "bold", fontFamily: "'Anek Bangla'" 
                 }).setOrigin(0.5);
                 this.add.text(cx, subY + 18, name, { 
                     fontSize: "18px", color: "#cccccc", fontFamily: "'Anek Bangla'",
@@ -334,7 +342,7 @@ class DeathScene extends Phaser.Scene {
     }
   }
 
-    restartGameWithLogic() {
+  restartGameWithLogic() {
       const savedBank = localStorage.getItem('saved_bankKey') || "all";
       const savedSubject = localStorage.getItem('saved_subject') || "all_no_math";
       const savedMode = localStorage.getItem('saved_mode') || "normal";
@@ -393,7 +401,6 @@ class DeathScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    // Delta clamping prevents massive lag spikes from causing NaN positioning
     const safeTimeScale = Phaser.Math.Clamp(delta / 16.66, 0.1, 2.5);
 
     if (this.scrollingBg) {

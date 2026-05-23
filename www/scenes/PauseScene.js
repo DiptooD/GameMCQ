@@ -43,7 +43,7 @@ class PauseScene extends Phaser.Scene {
     glass.lineStyle(3, 0x0066aa, 0.8); 
     glass.strokeRoundedRect(panelX, panelY, panelW, panelH, 24);
 
-    this.add.text(cx, panelY + 80, "বিরতি", {
+    this.add.text(cx, panelY + 70, "বিরতি", {
       fontSize: "64px", 
       fontFamily: "'Anek Bangla'", 
       color: "#00e1ff", 
@@ -55,88 +55,126 @@ class PauseScene extends Phaser.Scene {
 
     // --- DAILY MISSIONS UI ---
     const missionBg = this.add.graphics();
-    missionBg.fillStyle(0x000c22, 0.9);
-    missionBg.fillRoundedRect(cx - 250, panelY + 130, 500, 340, 16);
-    missionBg.lineStyle(2, 0x005588, 1);
-    missionBg.strokeRoundedRect(cx - 250, panelY + 130, 500, 340, 16);
+    missionBg.fillStyle(0x000c22, 0.95);
+    missionBg.fillRoundedRect(cx - 260, panelY + 120, 520, 370, 20);
+    missionBg.lineStyle(3, 0x0088ff, 0.8);
+    missionBg.strokeRoundedRect(cx - 260, panelY + 120, 520, 370, 20);
 
-    this.add.text(cx, panelY + 165, "ডেইলি মিশন (Daily Missions)", {
-        fontSize: "26px", color: "#00ffff", fontFamily: "'Anek Bangla'", fontStyle: "bold"
+    this.add.text(cx, panelY + 160, "ডেইলি মিশন (Daily Missions)", {
+        fontSize: "28px", color: "#00e1ff", fontFamily: "'Anek Bangla'", fontStyle: "bold",
+        shadow: { offsetX: 2, offsetY: 2, color: "#0044aa", blur: 4, stroke: true, fill: true }
     }).setOrigin(0.5);
 
-    let startY = panelY + 230;
+    this.add.rectangle(cx, panelY + 183, 400, 2, 0x0088ff, 0.4);
+
+    let startY = panelY + 240;
     if (GameState.dailyMissions) {
         GameState.dailyMissions.forEach((m, i) => {
             const isDone = m.progress >= m.target;
-            const yPos = startY + (i * 75);
+            const yPos = startY + (i * 90);
 
-            // Mission card BG
+            // Card Background
             const cardBg = this.add.graphics();
-            cardBg.fillStyle(isDone ? 0x003311 : 0x001122, 0.8);
-            cardBg.fillRoundedRect(cx - 230, yPos - 30, 460, 60, 10);
-            cardBg.lineStyle(isDone ? 2 : 1, isDone ? 0x00ff00 : 0x004488, 0.8);
-            cardBg.strokeRoundedRect(cx - 230, yPos - 30, 460, 60, 10);
+            cardBg.fillStyle(isDone ? 0x002211 : 0x001122, 0.9);
+            cardBg.fillRoundedRect(cx - 240, yPos - 40, 480, 80, 12);
+            cardBg.lineStyle(isDone ? 2 : 1, isDone ? 0x00ff00 : 0x004488, 1);
+            cardBg.strokeRoundedRect(cx - 240, yPos - 40, 480, 80, 12);
+
+            if (isDone) {
+                const glow = this.add.graphics();
+                glow.fillStyle(0x00ff00, 0.1);
+                glow.fillRoundedRect(cx - 240, yPos - 40, 480, 80, 12);
+            }
 
             // Checkbox / Status Icon
-            const iconStr = isDone ? "✅" : "⏳";
-            this.add.text(cx - 200, yPos, iconStr, { fontSize: "20px" }).setOrigin(0.5);
+            const iconBg = this.add.circle(cx - 200, yPos, 20, isDone ? 0x004411 : 0x001133).setStrokeStyle(2, isDone ? 0x00ff00 : 0x0055aa);
+            const iconStr = isDone ? "✔" : "⏳";
+            this.add.text(cx - 200, yPos, iconStr, { fontSize: isDone ? "22px" : "18px", color: isDone ? "#00ff00" : "#00aaff" }).setOrigin(0.5);
 
-            // Mission Description
-            const descText = m.desc || m.type;
-            this.add.text(cx - 170, yPos - 12, descText, {
-                fontSize: "20px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold'
+            // Description
+            let descText = m.desc || m.type;
+            if (m.type === "kill_enemies") descText = "শত্রু ধ্বংস করুন";
+            else if (m.type === "collect_debris") descText = "ভাঙ্গারী সংগ্রহ করুন";
+            else if (m.type === "answer_correct") descText = "সঠিক উত্তর দিন";
+
+            this.add.text(cx - 165, yPos - 18, descText, {
+                fontSize: "22px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold'
             }).setOrigin(0, 0.5);
 
+            // Progress Bar
+            const barWidth = 200;
+            const barHeight = 8;
+            const barX = cx - 165;
+            const barY = yPos + 12;
+
+            this.add.rectangle(barX + barWidth/2, barY, barWidth, barHeight, 0x000000, 0.5).setStrokeStyle(1, 0x555555);
+            const pct = Math.min(m.progress / m.target, 1);
+            if (pct > 0) {
+                this.add.rectangle(barX + (barWidth * pct)/2, barY, barWidth * pct, barHeight, isDone ? 0x00ff00 : 0x00aaff);
+            }
+
             // Progress Text
-            const progTxt = `${m.progress} / ${m.target}`;
-            this.add.text(cx - 170, yPos + 14, progTxt, {
-                fontSize: "16px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#ffaa00"
+            this.add.text(barX + barWidth + 10, barY, `${m.progress}/${m.target}`, {
+                fontSize: "16px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#aaaaaa", fontStyle: "bold"
             }).setOrigin(0, 0.5);
 
             // Reward Info
-            if (!isDone) {
-                let rewStr = `+${m.rewardAmt}`;
-                let rewColor = "#ffffff";
-                let tex = "";
-                let texScale = 1.0;
+            let rewStr = `+${m.rewardAmt}`;
+            let rewColor = "#ffffff";
+            let tex = "";
+            let texScale = 1.0;
 
-                if (m.rewardType === "debris") { 
-                    rewColor = "#aaccff"; 
-                    tex = "ui_debris_icon";
-                    texScale = 0.65;
-                } else if (m.rewardType === "skips") { 
-                    rewColor = "#00ffcc"; 
-                    tex = "ui_bolt";
-                    texScale = 0.65;
-                } else { 
-                    rewColor = "#ff00ff"; 
-                    if (m.rewardType.includes("fire")) tex = "icon_booster_fire";
-                    else if (m.rewardType.includes("speed")) tex = "icon_booster_speed";
-                    else tex = "icon_booster_battery";
-                    texScale = 0.65;
-                }
+            if (m.rewardType === "debris") { 
+                rewColor = "#aaccff"; 
+                tex = "ui_debris_icon";
+                texScale = 0.6;
+            } else if (m.rewardType === "keys") {
+                rewColor = "#ffd700";
+                tex = "ui_key";
+                texScale = 0.6;
+            } else if (m.rewardType === "xp") {
+                rewColor = "#ffbb00";
+                tex = ""; 
+                rewStr = `+${m.rewardAmt} XP`;
+            } else if (m.rewardType === "skips") { 
+                rewColor = "#00ffcc"; 
+                tex = "ui_bolt";
+                texScale = 0.6;
+            } else { 
+                rewColor = "#ff00ff"; 
+                if (m.rewardType.includes("fire")) tex = "icon_booster_fire";
+                else if (m.rewardType.includes("speed")) tex = "icon_booster_speed";
+                else tex = "icon_booster_battery";
+                texScale = 0.6;
+            }
 
-                const rewText = this.add.text(cx + 210, yPos, rewStr, {
-                    fontSize: "22px", fontFamily: "'Anek Bangla'", color: rewColor, fontStyle: "bold"
+            const rewText = this.add.text(cx + 220, yPos - 10, rewStr, {
+                fontSize: "22px", fontFamily: "'Anek Bangla'", color: rewColor, fontStyle: "bold",
+                shadow: { offsetX: 1, offsetY: 1, color: "#000", blur: 2, stroke: true, fill: true }
+            }).setOrigin(1, 0.5);
+
+            if (tex) {
+                this.add.image(cx + 220 - rewText.width - 8, yPos - 10, tex).setScale(texScale).setOrigin(1, 0.5);
+            }
+
+            if (isDone) {
+                this.add.text(cx + 220, yPos + 16, "সম্পন্ন!", {
+                    fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold"
                 }).setOrigin(1, 0.5);
-
-                if (tex) {
-                    this.add.image(cx + 210 - rewText.width - 10, yPos, tex).setScale(texScale).setOrigin(1, 0.5);
-                }
             } else {
-                this.add.text(cx + 210, yPos, "সম্পন্ন", {
-                    fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold"
+                this.add.text(cx + 220, yPos + 16, "পুরস্কার", {
+                    fontSize: "16px", fontFamily: "'Anek Bangla'", color: "#888888"
                 }).setOrigin(1, 0.5);
             }
         });
     }
 
     // --- MAIN BUTTONS ---
-    this.createModernButton(cx, panelY + 540, "খেলায় ফিরুন", true, () => {
+    this.createModernButton(cx, panelY + 563, "খেলায় ফিরুন", true, () => {
         this.resumeGame();
     });
 
-    this.createModernButton(cx, panelY + 650, "খেলা শেষ করুন", false, () => {
+    this.createModernButton(cx, panelY + 675, "খেলা শেষ করুন", false, () => {
         this.scene.stop("GameScene");
         this.scene.stop("QuestionScene");
         this.scene.start("DeathScene"); 

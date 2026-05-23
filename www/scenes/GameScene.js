@@ -280,6 +280,7 @@ class GameScene extends GameBase {
             delay: 100,
             loop: true,
             callback: () => {
+              if (this.isResuming) return;
               this.magnetDuration -= 100;
               if (this.magnetDuration <= 0) {
                 this.deactivateMagnet();
@@ -1020,9 +1021,8 @@ class GameScene extends GameBase {
     }
 
     fireWeapon() {
-        if (this.isJammed) {
-            return;
-        }
+        if (this.isJammed) return;
+        if (this.isResuming) return;
 
         const x = this.player.x;
         const y = this.player.y - 60;
@@ -1364,6 +1364,7 @@ class GameScene extends GameBase {
     }
 
     enemiesFireBack() {
+        if (this.isResuming) return;
         let fireCount = 0;
         let bulletSpeedMultiplier = (1 + (this.getGlobalProgress() * 0.03)) * this.luckMods.speedMult;
 
@@ -1452,7 +1453,6 @@ class GameScene extends GameBase {
             this.time.delayedCall(2000, () => {
                 this.triggerBossFight();
                 this.isTransitioningToBoss = false;
-                if (this.spawnTimer) this.spawnTimer.paused = false;
             });
         }
     }
@@ -1513,6 +1513,7 @@ class GameScene extends GameBase {
                         this.bossTeleportTimer = this.time.addEvent({
                             delay: 3500, loop: true,
                             callback: () => {
+                                if (this.isResuming) return;
                                 if (!this.boss || !this.boss.active) return;
                                 this.tweens.add({
                                     targets: this.boss, alpha: 0, scale: 0.5, duration: 300,
@@ -2191,6 +2192,7 @@ class GameScene extends GameBase {
             delay: baseDelay,
             loop: true,
             callback: () => {
+                if (this.isResuming) return;
                 if (!this.boss || !this.boss.active) return;
                 
                 if (this.boss.phase === 1 && this.boss.hp < this.boss.maxHp * 0.5) {
@@ -2204,7 +2206,7 @@ class GameScene extends GameBase {
                         this.boss.setVelocityX((200) * luckMult * (Math.random() > 0.5 ? 1 : -1)); 
                         this.bossAttackTimer.delay = 1400; 
                     } else if (stage === 1) {
-                        this.boss.setVelocityX((350) * luckMult * (Math.random> 0.5 ? 1 : -1));
+                        this.boss.setVelocityX((350) * luckMult * (Math.random() > 0.5 ? 1 : -1));
                         this.bossAttackTimer.delay = 900;
                     } else if (stage >= 2) {
                         this.bossAttackTimer.delay = 600;
@@ -2377,13 +2379,9 @@ class GameScene extends GameBase {
     }
 
     startCountdown() {
+        if (this.isResuming) return;
         this.isResuming = true;
         this.physics.pause();
-        if (this.weaponTimer) this.weaponTimer.paused = true;
-        if (this.spawnTimer) this.spawnTimer.paused = true;
-        if (this.enemyFireTimer) this.enemyFireTimer.paused = true;
-        if (this.obstacleTimer) this.obstacleTimer.paused = true;
-        if (this.bossAttackTimer) this.bossAttackTimer.paused = true;
 
         let count = 3;
         const cx = this.cameras.main.width / 2;
@@ -2411,22 +2409,7 @@ class GameScene extends GameBase {
                     countText.setFontSize('80px');
                     this.isResuming = false;
                     
-                    // BUG FIX: Unpause properly based on current boss/transition states
                     this.physics.resume();
-                    if (this.weaponTimer) this.weaponTimer.paused = false;
-                    
-                    // Only resume regular spawns if boss is NOT active AND NOT currently transitioning
-                    if (!GameState.bossActive && !this.isTransitioningToBoss) {
-                        if (this.spawnTimer) this.spawnTimer.paused = false;
-                        if (this.obstacleTimer) this.obstacleTimer.paused = false;
-                    }
-                    
-                    if (this.enemyFireTimer) this.enemyFireTimer.paused = false;
-                    
-                    // Only resume boss attack if boss IS active
-                    if (GameState.bossActive && this.bossAttackTimer) {
-                        this.bossAttackTimer.paused = false;
-                    }
                     
                     this.tweens.add({ targets: countText, alpha: 0, scale: 1.5, duration: 500, onComplete: () => countText.destroy() });
                 }

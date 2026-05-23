@@ -89,19 +89,20 @@ const generateDailyMissions = () => {
     missions.push({ 
         id: "m1", type: "kill_enemies", target: Phaser.Math.Between(30, 60), 
         progress: 0, rewardType: "debris", rewardAmt: Phaser.Math.Between(20, 40), 
-        desc: "Defeat enemies", completed: false 
+        desc: "শত্রু ধ্বংস করুন", completed: false 
     });
+    // Changed reward from 'keys' to 'xp'
     missions.push({ 
         id: "m2", type: "collect_debris", target: Phaser.Math.Between(15, 30), 
-        progress: 0, rewardType: "skips", rewardAmt: Phaser.Math.Between(3, 5), 
-        desc: "Collect Debris", completed: false 
+        progress: 0, rewardType: "xp", rewardAmt: Phaser.Math.Between(50, 100), 
+        desc: "ভাঙ্গারী সংগ্রহ করুন", completed: false 
     });
     const boosters = ["fireShield", "speedBoost", "batteryEff"];
     const randBooster = Phaser.Utils.Array.GetRandom(boosters);
     missions.push({ 
         id: "m3", type: "answer_correct", target: Phaser.Math.Between(10, 20), 
         progress: 0, rewardType: "booster_" + randBooster, rewardAmt: 1, 
-        desc: "Answer Correctly", completed: false 
+        desc: "সঠিক উত্তর দিন", completed: false 
     });
     return missions;
 };
@@ -180,6 +181,10 @@ window.updateMissionProgress = function(type, amount = 1) {
                 
                 if (m.rewardType === "debris") GameState.debris += m.rewardAmt;
                 else if (m.rewardType === "skips") GameState.skipsLeft += m.rewardAmt;
+                else if (m.rewardType === "keys") GameState.keys += m.rewardAmt; // Support for legacy keys
+                else if (m.rewardType === "xp") {
+                    if (GameState.profile) GameState.profile.xp = (GameState.profile.xp || 0) + m.rewardAmt;
+                }
                 else if (m.rewardType.startsWith("booster_")) {
                     const bType = m.rewardType.replace("booster_", "");
                     if (GameState.boosters[bType] !== undefined) GameState.boosters[bType] += m.rewardAmt;
@@ -194,8 +199,10 @@ window.updateMissionProgress = function(type, amount = 1) {
         let allDoneReward = 0;
         if (allDone && !GameState.dailyMissionsCompleted) {
             GameState.dailyMissionsCompleted = true;
-            allDoneReward = Phaser.Math.Between(3, 7);
-            GameState.keys += allDoneReward;
+            allDoneReward = Phaser.Math.Between(100, 250);
+            if (GameState.profile) {
+                GameState.profile.xp = (GameState.profile.xp || 0) + allDoneReward;
+            }
         }
         window.saveCurrency();
 
@@ -206,6 +213,8 @@ window.updateMissionProgress = function(type, amount = 1) {
                     let rText = "";
                     if (m.rewardType === "debris") rText = `${m.rewardAmt} Debris`;
                     else if (m.rewardType === "skips") rText = `${m.rewardAmt} Skips`;
+                    else if (m.rewardType === "keys") rText = `${m.rewardAmt} Keys`; 
+                    else if (m.rewardType === "xp") rText = `${m.rewardAmt} XP`; 
                     else rText = "1 Booster";
                     gameScene.showMissionToast(`মিশন কমপ্লিট!\nপুরস্কার: ${rText}`);
                 });
@@ -213,7 +222,7 @@ window.updateMissionProgress = function(type, amount = 1) {
                 if (allDoneReward > 0) {
                     setTimeout(() => {
                         if (gameScene && gameScene.scene.isActive()) {
-                            gameScene.showMissionToast(`সবগুলো মিশন শেষ!\nপুরস্কার: ${allDoneReward} Keys!`);
+                            gameScene.showMissionToast(`সবগুলো মিশন শেষ!\nপুরস্কার: ${allDoneReward} XP!`);
                         }
                     }, 2000);
                 }
