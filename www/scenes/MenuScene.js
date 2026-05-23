@@ -10,7 +10,7 @@ class MenuScene extends Phaser.Scene {
 
         this.dropdowns = []; 
         this.backgroundLayers = [];
-        this.isStartingGame = false; // Prevent multiple clicks freezing the engine
+        this.isStartingGame = false;
     }
 
     create() {
@@ -108,7 +108,7 @@ class MenuScene extends Phaser.Scene {
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
         const tipsY = startY + 165;
-        this.createTipsBox(cx, tipsY, UI_WIDTH + 60);
+        this.createInfoBox(cx, tipsY, UI_WIDTH + 60);
 
         this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90); 
         
@@ -300,7 +300,6 @@ class MenuScene extends Phaser.Scene {
         const boxW = 370;
         const boxH = 60; 
 
-        // Base Box
         const profBg = this.add.graphics();
         profBg.fillStyle(0x001122, 0.8);
         profBg.fillRoundedRect(boxX, boxY, boxW, boxH, 30);
@@ -310,23 +309,20 @@ class MenuScene extends Phaser.Scene {
         const lvlData = window.getLevelData();
         const rankData = window.getRankData(lvlData.level);
 
-        // Fluid Fill Progress
         const maskShape = this.make.graphics();
         maskShape.fillStyle(0xffffff);
         maskShape.fillRoundedRect(boxX, boxY, boxW, boxH, 30);
         const fluidMask = maskShape.createGeometryMask();
 
-        // Ensure minimum width to not break rendering
         const fillW = Math.max(15, boxW * lvlData.percent);
         const fluidFill = this.add.graphics();
-        fluidFill.fillGradientStyle(0x0044aa, 0x0088ff, 0x002288, 0x0066cc, 0.45);
+        fluidFill.fillGradientStyle(0x0066ff, 0x00ccff, 0x0044cc, 0x0099ff, 0.5); 
         fluidFill.fillRect(boxX, boxY, fillW, boxH);
         fluidFill.setMask(fluidMask);
 
-        // Gentle breathing animation to the fluid
         this.tweens.add({
             targets: fluidFill,
-            alpha: 0.7,
+            alpha: 0.85,
             duration: 1200,
             yoyo: true,
             repeat: -1,
@@ -335,21 +331,20 @@ class MenuScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
 
-        // Content Inside Pill Box
-        const avatarTxt = this.add.text(boxX + 35, boxY + boxH/2, rankData.avatar, {fontSize: '38px'}).setOrigin(0.5);
+        const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '44px'}).setOrigin(0.5);
 
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
-        const nameTxt = this.add.text(boxX + 75, boxY + boxH/2 - 12, playerName, {
-            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',
-            shadow: { offsetX: 1, offsetY: 1, color: "#000", blur: 2, fill: true }
+        const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 14, playerName, {
+            fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',
+            shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
         const tagShort = rankData.tag.split(" (")[0];
-        const lvlTxt = this.add.text(boxX + 75, boxY + boxH/2 + 12, `Lv.${lvlData.level} • ${tagShort}`, {
-            fontSize: '16px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold'
+        const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 12, `লেভেল ${lvlData.level} • ${tagShort}`, {
+            fontSize: '18px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',
+            shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
 
-        // Interactions
         hitArea.on('pointerover', () => { 
             profBg.lineStyle(3, 0xffffff, 1); 
             profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 30); 
@@ -365,7 +360,6 @@ class MenuScene extends Phaser.Scene {
             this.scene.launch("PlayerProfileScene");
         });
 
-        // === Settings Button (Transparent, Styled to match) ===
         const setY = 110;
         const setW = 140;
         const setH = 45;
@@ -381,7 +375,7 @@ class MenuScene extends Phaser.Scene {
         };
         drawSettings(false);
 
-        const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ Settings", {
+        const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ সেটিংস", {
             fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
@@ -405,7 +399,6 @@ class MenuScene extends Phaser.Scene {
         const boxW = 270;
         const boxH = 60; 
 
-        // === 1. TOP CURRENCY PILL UI ===
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 0.8);
         bg.fillRoundedRect(startX, startY, boxW, boxH, 30); 
@@ -417,7 +410,6 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#ffd700", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // Divider
         this.add.rectangle(startX + 135, startY + boxH/2, 3, 35, 0x0066aa, 0.8);
 
         this.add.image(startX + 180, startY + boxH/2 + 2, "ui_debris_icon").setScale(0.70);
@@ -425,7 +417,6 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // === 2. Exit Button (Transparent, Styled to match) ===
         const exitW = 140;
         const exitH = 45;
         const exitX = startX + boxW - exitW; 
@@ -442,7 +433,7 @@ class MenuScene extends Phaser.Scene {
         };
         drawExit(false);
 
-        const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ Exit", {
+        const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
             fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ff4444', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
@@ -941,7 +932,6 @@ class MenuScene extends Phaser.Scene {
             btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
         });
 
-        // BUG FIX: Added isStartingGame block to prevent duplicate execution freezes.
         hitArea.on("pointerdown", () => {
             if (this.isStartingGame) return;
             this.isStartingGame = true;
@@ -950,52 +940,39 @@ class MenuScene extends Phaser.Scene {
         });
     }
 
-    createTipsBox(x, y, width) {
-        const height = 75;
+    createInfoBox(x, y, width) {
+        const height = 110; // Slightly larger for clear dot placement
         const container = this.add.container(x, y);
 
         const bg = this.add.graphics();
-        bg.fillStyle(0x001122, 0.25);
+        bg.fillStyle(0x001122, 0.4); 
         bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
 
         this.normalTips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন ঘন না।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
-            "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ (Pause) বাটনে ক্লিক করুন।",
-            "💡 টিপস: 'Fire Shield' বুস্টার ব্যবহার করলে নির্দিষ্ট সময়ের জন্য আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
-            "💡 টিপস: লাল রঙের ব্যাটারি সংগ্রহ করলে অনেক বেশি চার্জ পাওয়া যায়।",
+            "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",
+            "💡 টিপস: 'Fire Shield' বুস্টার ব্যবহার করলে আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
             "💡 টিপস: সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
-            "💡 টিপস: ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।",
-            "💡 টিপস: চুম্বক (Magnet) পাওয়ার-আপ নিলে ব্যাটারিগুলো আপনাআপনি আপনার দিকে চলে আসবে।",
-            "💡 টিপস: গেম ওভার হয়ে গেলে 'চাবি' (Key) ব্যবহার করে আবার জীবন ফিরে পেতে পারেন।",
-            "💡 টিপস: শপ থেকে কেনা নতুন রকেট 'Customize' মেনু থেকে সজ্জিত (Equip) করতে পারবেন।",
-            "💡 টিপস: টিএনটি (TNT) বা শকওয়েভ পাওয়ার-আপ ব্যবহার করলে স্ক্রিনের সব শত্রু একসাথে ধ্বংস হয়ে যায়।",
-            "💡 টিপস: সেটিংস থেকে আপনার সুবিধামতো 'কুইক প্যানেল' (Quick Panel) ডান বা বাম দিকে সরিয়ে নিতে পারবেন অথবা বন্ধ করে রাখতে পারবেন।",
-            "💡 টিপস: প্রতিদিন 'স্টাডি' (Study) মোডে পড়াশোনা করলে আপনার প্রস্তুতি আরও মজবুত হবে।",
-            "💡 টিপস: 'New' মোড সিলেক্ট করে খেললে বারবার শুধু নতুন প্রশ্নই আসবে।",
-            "💡 টিপস: আপনার লাইফ ৩-এর নিচে নেমে গেলে বস ফাইট ছাড়া তা ধীরে ধীরে নিজে থেকেই বাড়তে থাকবে।",
-            "💡 টিপস: চাবি (Key) জমিয়ে রাখুন, এটি কঠিন লেভেলে গেম ওভার হওয়া থেকে বাঁচতে সাহায্য করবে।",
-            "💡 টিপস: মেনুর ফিল্টার থেকে 'All Without Math' সিলেক্ট করলে গণিত ছাড়া বাকি বিষয়ের প্রশ্ন আসবে।",
-            "💡 টিপস: 'স্টাডি Mode'-এ সাবজেক্ট ফিল্টার ব্যবহার করে নির্দিষ্ট বিষয়ের প্রশ্ন ঝালাই করে নিন।",
-            "💡 টিপস: 'হিস্ট্রি' চেক করে দেখুন আপনার স্কোর এবং কতগুলো সঠিক উত্তর দিয়েছেন।",
-            "💡 টিপস: 'হিস্ট্রি'দেখে আপনার ভুল করা প্রশ্নগুলো দেখে নিয়ে পরের গেমে আরও ভালো করার প্রস্তুতি নিন।",
-            "💡 টিপস: রিভিশন মোড খেলার আগে একবার স্টাডি মোড ঘুরে আসলে, আপনার মেমোরি বাড়াতে সাহায্য করবে।"
+            "💡 টিপস: ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।"
         ];
 
         this.revisionTips = [
-            "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে। পুরনো পড়া ঝালাই করার দারুণ সুযোগ!",
-            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবেবিধা, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+            "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে।",
+            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
         ];
 
         const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
+        
+        let currentTipIndex = Phaser.Math.Between(0, getActiveTips().length - 1);
+        let currentMissionIndex = 0;
+        let isShowingTips = true; 
 
-        let activeTips = getActiveTips();
-        let currentTipIndex = Phaser.Math.Between(0, activeTips.length - 1);
-
-        this.tipText = this.add.text(0, 0, activeTips[currentTipIndex], {
+        // Info Text shifted slightly UP to leave room for dots
+        this.infoText = this.add.text(0, -5, getActiveTips()[currentTipIndex], {
             fontSize: "21px",
             fontFamily: "'Anek Bangla'",
             color: "#aaccff",
@@ -1005,42 +982,75 @@ class MenuScene extends Phaser.Scene {
             lineSpacing: 10
         }).setOrigin(0.5);
 
-        container.add([bg, this.tipText]);
+        // Perfectly positioned pagination dots at the absolute bottom center
+        const dot1 = this.add.circle(-15, 40, 4, 0x00ffff, 0.5);
+        const dot2 = this.add.circle(15, 40, 4, 0x00ffff, 0.5);
 
-        this.cycleTip = () => {
+        const hitArea = this.add.rectangle(0, 0, width, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        container.add([bg, this.infoText, dot1, dot2, hitArea]);
+
+        const fetchMissionText = () => {
+            let missions = GameState.dailyMissions || [];
+            if (missions.length === 0) return "🎯 কোনো দৈনিক মিশন নেই";
+            
+            let m = missions[currentMissionIndex];
+            let status = m.completed ? "✅ সম্পন্ন" : `(${m.progress}/${m.target})`;
+            return `🎯 দৈনিক মিশন:\n${m.desc} ${status}`;
+        };
+
+        const toggleView = () => {
+            isShowingTips = !isShowingTips;
             this.tweens.add({
-                targets: this.tipText,
-                alpha: 0,
-                duration: 300,
+                targets: this.infoText, alpha: 0, duration: 150,
                 onComplete: () => {
-                    let tips = getActiveTips();
-                    let newIndex = currentTipIndex;
-                    
-                    if (tips.length > 1) {
-                        while(newIndex === currentTipIndex) {
-                            newIndex = Phaser.Math.Between(0, tips.length - 1);
-                        }
+                    if (isShowingTips) {
+                        this.infoText.setText(getActiveTips()[currentTipIndex]);
+                        this.infoText.setColor("#aaccff");
+                        dot1.setAlpha(1);
+                        dot2.setAlpha(0.3);
                     } else {
-                        newIndex = 0;
+                        // Reset mission index to 0 when opening missions view
+                        currentMissionIndex = 0; 
+                        this.infoText.setText(fetchMissionText());
+                        this.infoText.setColor("#ffdd44"); 
+                        dot1.setAlpha(0.3);
+                        dot2.setAlpha(1);
                     }
-                    
-                    currentTipIndex = newIndex;
-                    this.tipText.setText(tips[currentTipIndex]);
-                    
-                    this.tweens.add({ 
-                        targets: this.tipText, 
-                        alpha: 1, 
-                        duration: 300 
-                    });
+                    this.tweens.add({ targets: this.infoText, alpha: 1, duration: 150 });
                 }
             });
         };
 
-        this.tipTimerEvent = this.time.addEvent({
-            delay: 8000,
-            loop: true,
-            callback: this.cycleTip
+        hitArea.on('pointerdown', () => {
+            this.playSound('sfx_tick');
+            if (this.tipTimerEvent) this.tipTimerEvent.reset({ delay: 5000, loop: true, callback: this.cycleTip });
+            toggleView();
         });
+
+        // The auto-cycler handles BOTH tips and daily missions accurately!
+        this.cycleTip = () => {
+            this.tweens.add({
+                targets: this.infoText, alpha: 0, duration: 300,
+                onComplete: () => {
+                    if (isShowingTips) {
+                        let tips = getActiveTips();
+                        currentTipIndex = (currentTipIndex + 1) % tips.length;
+                        this.infoText.setText(tips[currentTipIndex]);
+                    } else {
+                        let missions = GameState.dailyMissions || [];
+                        if (missions.length > 0) {
+                            currentMissionIndex = (currentMissionIndex + 1) % missions.length;
+                        }
+                        this.infoText.setText(fetchMissionText());
+                    }
+                    this.tweens.add({ targets: this.infoText, alpha: 1, duration: 300 });
+                }
+            });
+        };
+
+        // Faster cycling when viewing missions so they read it all
+        this.tipTimerEvent = this.time.addEvent({ delay: 5000, loop: true, callback: this.cycleTip });
     }
 
     createBottomMenu(cx, y, totalWidth, height) {
@@ -1143,7 +1153,7 @@ class MenuScene extends Phaser.Scene {
         bg.lineStyle(4, 0x0066aa, 1);
         bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
 
-        const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি (History)", { 
+        const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি", { 
             fontSize: '40px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 

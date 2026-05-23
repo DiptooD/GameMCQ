@@ -4,39 +4,35 @@ class SettingsScene extends Phaser.Scene {
     }
 
     init(data) {
-        // Track which scene opened the settings so we can return to it
         this.returnScene = (data && data.returnScene) ? data.returnScene : "MenuScene";
     }
 
     create() {
-        // FIX: Force Settings to the very front so it is never hidden behind PauseScene
         this.scene.bringToTop();
 
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
 
-        // Ensure the container is created first so elements can be parented to it
         this.container = this.add.container(0, 0);
 
         this.overlay = this.add.rectangle(0, 0, 720, 1280, 0x000000, 0.85).setOrigin(0).setInteractive();
         
         this.bg = this.add.graphics();
         this.bg.fillStyle(0x000c22, 0.95);
-        this.bg.fillRoundedRect(cx - 290, cy - 350, 580, 700, 20);
+        this.bg.fillRoundedRect(cx - 290, cy - 360, 580, 740, 20);
         this.bg.lineStyle(4, 0x0066aa, 1);
-        this.bg.strokeRoundedRect(cx - 290, cy - 350, 580, 700, 20);
+        this.bg.strokeRoundedRect(cx - 290, cy - 360, 580, 740, 20);
 
-        this.title = this.add.text(cx, cy - 290, "সেটিংস (Settings)", { 
+        this.title = this.add.text(cx, cy - 310, "সেটিংস", { 
             fontSize: '44px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const closeHit = this.add.circle(cx + 230, cy - 290, 35).setInteractive({ useHandCursor: true });
-        const closeIcon = this.add.text(cx + 230, cy - 290, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
+        const closeHit = this.add.circle(cx + 230, cy - 310, 35).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(cx + 230, cy - 310, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             this.scene.stop();
-            // Only resume if the underlying scene was actually paused
             if (this.scene.isPaused(this.returnScene)) {
                 this.scene.resume(this.returnScene);
             }
@@ -44,159 +40,278 @@ class SettingsScene extends Phaser.Scene {
 
         this.container.add([this.overlay, this.bg, this.title, closeIcon, closeHit]);
 
-        // Add visual adjusters
+        // Modern Sliders (Robust Drag Implementation)
         let musicVol = Math.round((GameState.musicVolume !== undefined ? GameState.musicVolume : 0.5) * 10);
         if (musicVol < 0) musicVol = 0; 
-        this.musicAdj = this.createAdjuster(-170, "মিউজিক (Music):", 0, 10, musicVol, (val) => {
+        this.musicAdj = this.createSlider(-170, "মিউজিক ভলিউম:", 0, 10, musicVol, false, (val) => {
             GameState.musicVolume = val / 10;
             localStorage.setItem('settings_musicVol', GameState.musicVolume);
             this.updateLiveGameUI();
         });
 
-        let sfxVol = Math.round((GameState.sfxVolume !== undefined ? GameState.sfxVolume : 1.0) * 10);
+        let sfxVol = Math.round((GameState.sfxVolume !== undefined ? GameState.sfxVolume : 1.0) * 5);
         if (sfxVol < 0) sfxVol = 0;
-        this.sfxAdj = this.createAdjuster(-90, "সাউন্ড (SFX):", 0, 10, sfxVol, (val) => {
-            GameState.sfxVolume = val / 10;
+        if (sfxVol > 10) sfxVol = 10;
+        this.sfxAdj = this.createSlider(-70, "সাউন্ড ইফেক্ট:", 0, 10, sfxVol, false, (val) => {
+            GameState.sfxVolume = val / 5;
             localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
         });
         
+        // Replaced Slider with Stepper for UI Size
         let uiSize = parseInt(localStorage.getItem('settings_uiScaleLevel'));
         if (isNaN(uiSize)) uiSize = 0;
-        this.uiAdj = this.createAdjuster(-10, "ইউআই সাইজ (UI Size):", -5, 5, uiSize, (val) => {
+        this.uiAdj = this.createStepper(30, "ইউআই সাইজ:", -5, 5, uiSize, (val) => {
             localStorage.setItem('settings_uiScaleLevel', val);
             this.updateLiveGameUI();
         });
 
-        // Quick Panel Toggle
+        // Segmented Tab for Quick Panel
         this.quickPanelState = localStorage.getItem('settings_quickPanel') || 'right';
-        const qpLabel = this.add.text(cx - 240, cy + 70, "কুইক প্যানেল\n(Quick Panel):", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0, 0.5);
-        const qpOptions = ['right', 'left', 'hidden'];
-        const qpLabels = { 'right': 'Right (ডান)', 'left': 'Left (বাম)', 'hidden': 'Disable (বন্ধ)' };
+        const qpOptions = ['right', 'hidden', 'left'];
+        const qpLabels = ['ডান', 'বন্ধ', 'বাম'];
         
-        const qpBtnBg = this.add.graphics();
-        qpBtnBg.fillStyle(0x002255, 1);
-        qpBtnBg.fillRoundedRect(cx + 10, cy + 45, 220, 50, 10);
-        qpBtnBg.lineStyle(2, 0x00aaff);
-        qpBtnBg.strokeRoundedRect(cx + 10, cy + 45, 220, 50, 10);
+        const qpLabel = this.add.text(cx, cy + 95, "কুইক প্যানেল পজিশন:", { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0.5);
+        
+        const segW = 480;
+        const segH = 50;
+        const segX = cx;
+        const segY = cy + 145;
 
-        const qpBtnTxt = this.add.text(cx + 120, cy + 70, qpLabels[this.quickPanelState], { 
-            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' 
-        }).setOrigin(0.5);
+        const segBg = this.add.graphics();
+        segBg.fillStyle(0x001022, 1);
+        segBg.fillRoundedRect(segX - segW/2, segY - segH/2, segW, segH, segH/2);
+        segBg.lineStyle(2, 0x004488, 1);
+        segBg.strokeRoundedRect(segX - segW/2, segY - segH/2, segW, segH, segH/2);
 
-        const qpHit = this.add.rectangle(cx + 120, cy + 70, 220, 50).setInteractive({ useHandCursor: true });
-        qpHit.on('pointerdown', () => {
-            this.playSound('sfx_click');
-            let idx = qpOptions.indexOf(this.quickPanelState);
-            idx = (idx + 1) % qpOptions.length;
-            this.quickPanelState = qpOptions[idx];
-            localStorage.setItem('settings_quickPanel', this.quickPanelState);
-            qpBtnTxt.setText(qpLabels[this.quickPanelState]);
-            this.updateLiveGameUI();
+        const highlight = this.add.graphics();
+        const tabW = segW / 3;
+        
+        const drawHighlight = (idx) => {
+            highlight.clear();
+            highlight.fillStyle(0x0066aa, 1);
+            highlight.fillRoundedRect(segX - segW/2 + (idx * tabW) + 4, segY - segH/2 + 4, tabW - 8, segH - 8, (segH-8)/2);
+        };
+        
+        let currentIdx = qpOptions.indexOf(this.quickPanelState);
+        if (currentIdx === -1) currentIdx = 0;
+        drawHighlight(currentIdx);
+        
+        this.container.add([qpLabel, segBg, highlight]);
+
+        qpOptions.forEach((opt, idx) => {
+            const txt = this.add.text(segX - segW/2 + (idx * tabW) + tabW/2, segY, qpLabels[idx], {
+                fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold'
+            }).setOrigin(0.5);
+            
+            const hitArea = this.add.rectangle(segX - segW/2 + (idx * tabW) + tabW/2, segY, tabW, segH, 0, 0).setInteractive({useHandCursor: true});
+            
+            hitArea.on('pointerdown', () => {
+                this.playSound('sfx_tick');
+                this.quickPanelState = opt;
+                localStorage.setItem('settings_quickPanel', this.quickPanelState);
+                drawHighlight(idx);
+                this.updateLiveGameUI();
+            });
+            this.container.add([txt, hitArea]);
         });
 
-        // Reset Settings
+        // Reset Settings Button
         const resetBtnBg = this.add.graphics();
         resetBtnBg.fillStyle(0x004422, 1);
-        resetBtnBg.fillRoundedRect(cx - 200, cy + 150, 400, 55, 15);
-        resetBtnBg.lineStyle(3, 0x00ff88);
-        resetBtnBg.strokeRoundedRect(cx - 200, cy + 150, 400, 55, 15);
+        resetBtnBg.fillRoundedRect(cx - 240, cy + 220, 480, 55, 15);
+        resetBtnBg.lineStyle(2, 0x00ff88, 1);
+        resetBtnBg.strokeRoundedRect(cx - 240, cy + 220, 480, 55, 15);
 
-        const resetBtnTxt = this.add.text(cx, cy + 177, "ডিফল্ট সেট করুন (Reset Defaults)", { 
+        const resetBtnTxt = this.add.text(cx, cy + 247, "ডিফল্ট সেটিংসে ফিরুন", { 
             fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaffaa', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const resetHit = this.add.rectangle(cx, cy + 177, 400, 55).setInteractive({ useHandCursor: true });
+        const resetHit = this.add.rectangle(cx, cy + 247, 480, 55).setInteractive({ useHandCursor: true });
         resetHit.on('pointerdown', () => {
             this.playSound('sfx_powerup');
             this.musicAdj.setValue(5);
-            this.sfxAdj.setValue(10);
-            this.uiAdj.setValue(0);
+            this.sfxAdj.setValue(5);
+            this.uiAdj.setValue(0); 
             
             this.quickPanelState = 'right';
             localStorage.setItem('settings_quickPanel', 'right');
-            qpBtnTxt.setText(qpLabels[this.quickPanelState]);
+            drawHighlight(0);
 
             this.updateLiveGameUI();
         });
 
-        // Clear History
+        // Clear History Button
         const clearBtnBg = this.add.graphics();
         clearBtnBg.fillStyle(0x550000, 1);
-        clearBtnBg.fillRoundedRect(cx - 200, cy + 230, 400, 55, 15);
-        clearBtnBg.lineStyle(3, 0xff4444);
-        clearBtnBg.strokeRoundedRect(cx - 200, cy + 230, 400, 55, 15);
+        clearBtnBg.fillRoundedRect(cx - 240, cy + 290, 480, 55, 15);
+        clearBtnBg.lineStyle(2, 0xff4444, 1);
+        clearBtnBg.strokeRoundedRect(cx - 240, cy + 290, 480, 55, 15);
 
-        const clearBtnTxt = this.add.text(cx, cy + 257, "হিস্ট্রি মুছুন (Clear History)", { 
+        const clearBtnTxt = this.add.text(cx, cy + 317, "হিস্ট্রি মুছুন", { 
             fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffaaaa', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const clearHit = this.add.rectangle(cx, cy + 257, 400, 55).setInteractive({ useHandCursor: true });
+        const clearHit = this.add.rectangle(cx, cy + 317, 480, 55).setInteractive({ useHandCursor: true });
         clearHit.on('pointerdown', () => {
             this.playSound('sfx_warning');
             this.showClearHistoryWarning();
         });
         
-        this.container.add([
-            qpLabel, qpBtnBg, qpBtnTxt, qpHit,
-            resetBtnBg, resetBtnTxt, resetHit,
-            clearBtnBg, clearBtnTxt, clearHit
-        ]);
-
+        this.container.add([resetBtnBg, resetBtnTxt, resetHit, clearBtnBg, clearBtnTxt, clearHit]);
         this.container.setAlpha(0);
         this.tweens.add({ targets: this.container, alpha: 1, duration: 200 });
     }
 
-    createAdjuster(y, labelText, min, max, currentVal, callback) {
+    createSlider(yOffset, labelText, min, max, currentVal, isZeroCentered, callback) {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
         
-        const label = this.add.text(cx - 240, cy + y, labelText, { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0, 0.5);
+        const label = this.add.text(cx - 240, cy + yOffset - 25, labelText, { fontSize: '20px', fontFamily: "'Anek Bangla'", color: '#aaccff' }).setOrigin(0, 0.5);
+        const valText = this.add.text(cx + 240, cy + yOffset - 25, currentVal > 0 && isZeroCentered ? "+" + currentVal : currentVal, { fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' }).setOrigin(1, 0.5);
         
+        const sliderW = 480;
+        const sliderH = 14;
+        const sliderX = cx - sliderW/2;
+        const sliderY = cy + yOffset + 5;
+
+        const trackBg = this.add.graphics();
+        trackBg.fillStyle(0x001022, 1);
+        trackBg.fillRoundedRect(sliderX, sliderY - sliderH/2, sliderW, sliderH, sliderH/2);
+        trackBg.lineStyle(2, 0x003366, 1);
+        trackBg.strokeRoundedRect(sliderX, sliderY - sliderH/2, sliderW, sliderH, sliderH/2);
+
+        const steps = max - min;
+        const stepW = sliderW / steps;
+        
+        trackBg.lineStyle(2, 0x004488, 0.8);
+        for(let i = 0; i <= steps; i++) {
+            trackBg.beginPath();
+            trackBg.moveTo(sliderX + i*stepW, sliderY - sliderH/2 - 4);
+            trackBg.lineTo(sliderX + i*stepW, sliderY + sliderH/2 + 4);
+            trackBg.strokePath();
+        }
+
+        const fill = this.add.graphics();
         let val = currentVal;
-        const valText = this.add.text(cx + 120, cy + y, val > 0 && min < 0 ? "+" + val : val, { fontSize: '32px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' }).setOrigin(0.5);
+
+        const thumb = this.add.circle(0, sliderY, 16, 0xffffff);
+        thumb.setStrokeStyle(4, 0x0066cc);
+        const glow = this.add.circle(0, sliderY, 26, 0x00e1ff, 0.3);
+
+        // Huge hit area perfectly aligned across the track
+        const hitArea = this.add.rectangle(sliderX + sliderW/2, sliderY, sliderW + 60, 50, 0, 0).setInteractive({useHandCursor: true});
         
-        const drawBtn = (xPos, txt) => {
-            const bg = this.add.rectangle(xPos, cy + y, 50, 50, 0x002255).setStrokeStyle(3, 0x00aaff).setInteractive({useHandCursor: true});
-            const t = this.add.text(xPos, cy + y - 2, txt, {fontSize: '36px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5);
-            this.container.add([bg, t]);
-            return bg;
+        // Proper layering: hitArea in back, thumb/glow in front
+        this.container.add([label, valText, hitArea, trackBg, fill, glow, thumb]);
+
+        const updateVisuals = (xPos, isFinalSnap) => {
+            let clampedX = Phaser.Math.Clamp(xPos, sliderX, sliderX + sliderW);
+            let pct = (clampedX - sliderX) / sliderW;
+            let exactVal = min + pct * steps;
+            let nearestStep = Math.round(exactVal);
+            
+            let renderX = isFinalSnap ? (sliderX + ((nearestStep - min)/steps)*sliderW) : clampedX;
+            
+            thumb.x = renderX;
+            glow.x = renderX;
+            
+            fill.clear();
+            fill.fillStyle(0x00e1ff, 1);
+            let fW = Math.max(sliderH, renderX - sliderX);
+            fill.fillRoundedRect(sliderX, sliderY - sliderH/2, fW, sliderH, sliderH/2);
+
+            valText.setText(nearestStep > 0 && isZeroCentered ? "+" + nearestStep : nearestStep);
+
+            if (val !== nearestStep) {
+                val = nearestStep;
+                callback(val);
+                if (!isFinalSnap) this.playSound('sfx_tick', 0.1); 
+            }
         };
 
-        const btnMinusBg = drawBtn(cx + 40, "-");
-        const btnPlusBg = drawBtn(cx + 200, "+");
+        // Initialize display immediately
+        updateVisuals(sliderX + ((val - min)/steps)*sliderW, true);
+
+        let isDragging = false;
+
+        hitArea.on('pointerdown', (pointer) => {
+            isDragging = true;
+            glow.setScale(1.3);
+            updateVisuals(pointer.x, false);
+        });
+
+        this.input.on('pointermove', (pointer) => {
+            if (isDragging) {
+                updateVisuals(pointer.x, false);
+            }
+        });
+
+        this.input.on('pointerup', (pointer) => {
+            if (isDragging) {
+                isDragging = false;
+                glow.setScale(1);
+                updateVisuals(pointer.x, true);
+                this.playSound('sfx_tick', 0.2);
+            }
+        });
+
+        return {
+            setValue: (newVal) => { 
+                val = newVal; 
+                updateVisuals(sliderX + ((val - min)/steps)*sliderW, true);
+            }
+        };
+    }
+
+    createStepper(yOffset, labelText, min, max, currentVal, callback) {
+        const cx = this.cameras.main.centerX;
+        const cy = this.cameras.main.centerY;
         
-        this.container.add([label, valText]);
+        const label = this.add.text(cx - 240, cy + yOffset, labelText, { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0, 0.5);
         
-        const updateVisual = () => {
-            valText.setText(val > 0 && min < 0 ? "+" + val : val);
+        let val = currentVal;
+        const btnW = 60;
+        const btnH = 45;
+
+        const valText = this.add.text(cx + 120, cy + yOffset, val === 0 ? "ডিফল্ট" : (val > 0 ? "+" + val : val), { 
+            fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const minusBg = this.add.rectangle(cx + 40, cy + yOffset, btnW, btnH, 0x002244, 1).setStrokeStyle(2, 0x0066aa).setInteractive({useHandCursor: true});
+        const minusTxt = this.add.text(cx + 40, cy + yOffset, "-", { fontSize: '32px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
+        
+        const plusBg = this.add.rectangle(cx + 200, cy + yOffset, btnW, btnH, 0x002244, 1).setStrokeStyle(2, 0x0066aa).setInteractive({useHandCursor: true});
+        const plusTxt = this.add.text(cx + 200, cy + yOffset, "+", { fontSize: '28px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
+
+        const updateDisplay = () => {
+            valText.setText(val === 0 ? "ডিফল্ট" : (val > 0 ? "+" + val : val));
             callback(val);
         };
-        
-        btnMinusBg.on('pointerdown', () => {
-            this.playSound('sfx_tick', 0.5);
-            this.tweens.add({ targets: btnMinusBg, scale: 0.9, duration: 50, yoyo: true });
-            if (val > min) { val--; updateVisual(); }
+
+        minusBg.on('pointerdown', () => {
+            if (val > min) { val--; this.playSound('sfx_tick'); updateDisplay(); }
+            this.tweens.add({targets: minusBg, scale: 0.9, duration: 50, yoyo: true});
         });
-        btnPlusBg.on('pointerdown', () => {
-            this.playSound('sfx_tick', 0.5);
-            this.tweens.add({ targets: btnPlusBg, scale: 0.9, duration: 50, yoyo: true });
-            if (val < max) { val++; updateVisual(); }
+
+        plusBg.on('pointerdown', () => {
+            if (val < max) { val++; this.playSound('sfx_tick'); updateDisplay(); }
+            this.tweens.add({targets: plusBg, scale: 0.9, duration: 50, yoyo: true});
         });
-        
+
+        this.container.add([label, minusBg, minusTxt, valText, plusBg, plusTxt]);
+
         return {
-            setValue: (newVal) => { val = newVal; updateVisual(); }
+            setValue: (newVal) => { val = newVal; updateDisplay(); }
         };
     }
 
     updateLiveGameUI() {
-        // Sync music
         let menuMusic = this.sound.get('menubgm');
         if (menuMusic) menuMusic.setVolume(GameState.musicVolume);
         
         let bgMusic = this.sound.get('bg_music');
         if (bgMusic) bgMusic.setVolume(GameState.musicVolume);
 
-        // Sync visual UI elements natively while the game is paused in the background
         const qScene = this.scene.get('QuestionScene');
         if (qScene && (qScene.scene.isActive() || qScene.scene.isPaused())) {
             let uiScaleLevel = parseInt(localStorage.getItem('settings_uiScaleLevel'));
@@ -254,7 +369,7 @@ class SettingsScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         const yesBg = this.add.rectangle(cx - 100, cy + 80, 160, 55, 0x880000).setStrokeStyle(2, 0xff4444);
-        const yesTxt = this.add.text(cx - 100, cy + 80, "হ্যাঁ (Yes)", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+        const yesTxt = this.add.text(cx - 100, cy + 80, "হ্যাঁ", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
         const yesHit = this.add.rectangle(cx - 100, cy + 80, 160, 55).setInteractive({ useHandCursor: true });
 
         yesHit.on('pointerdown', () => {
@@ -269,7 +384,7 @@ class SettingsScene extends Phaser.Scene {
         });
 
         const noBg = this.add.rectangle(cx + 100, cy + 80, 160, 55, 0x004400).setStrokeStyle(2, 0x00ff00);
-        const noTxt = this.add.text(cx + 100, cy + 80, "না (No)", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+        const noTxt = this.add.text(cx + 100, cy + 80, "না", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
         const noHit = this.add.rectangle(cx + 100, cy + 80, 160, 55).setInteractive({ useHandCursor: true });
 
         noHit.on('pointerdown', () => {
