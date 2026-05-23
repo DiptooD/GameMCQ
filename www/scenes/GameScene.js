@@ -347,22 +347,28 @@ class GameScene extends GameBase {
     }
 
     showMissionToast(msg) {
-        const cx = this.cameras.main.width / 2;
-        const container = this.add.container(cx, -100).setDepth(5000);
+        // Render on QuestionScene (the top UI layer) if active, otherwise fallback to GameScene
+        const qScene = this.scene.get('QuestionScene');
+        const targetScene = (qScene && qScene.scene.isActive()) ? qScene : this;
 
-        const bg = this.add.graphics();
+        const cx = targetScene.cameras.main.width / 2;
+        
+        // Start the container off-screen at the top
+        const container = targetScene.add.container(cx, -100).setDepth(5000);
+
+        const bg = targetScene.add.graphics();
         bg.fillGradientStyle(0x004422, 0x002211, 0x002211, 0x001105, 0.95);
         bg.fillRoundedRect(-220, -45, 440, 90, 20);
         bg.lineStyle(3, 0x00ff88, 1);
         bg.strokeRoundedRect(-220, -45, 440, 90, 20);
 
-        const glow = this.add.graphics();
+        const glow = targetScene.add.graphics();
         glow.fillStyle(0x00ff88, 0.2);
         glow.fillRoundedRect(-225, -50, 450, 100, 25);
         
-        const icon = this.add.text(-170, 0, "🏆", { fontSize: '45px' }).setOrigin(0.5);
+        const icon = targetScene.add.text(-170, 0, "🏆", { fontSize: '45px' }).setOrigin(0.5);
 
-        const text = this.add.text(0, 0, msg, {
+        const text = targetScene.add.text(0, 0, msg, {
             fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
             align: 'left', fontStyle: 'bold', lineSpacing: 5
         }).setOrigin(0.5, 0.5);
@@ -374,19 +380,19 @@ class GameScene extends GameBase {
             this.playSFX('sfx_victory', 0.4, false); 
         }
         
-        this.tweens.add({ 
+        targetScene.tweens.add({ 
             targets: container, 
-            y: 120, 
+            y: 120, // Centers it safely between the Question Panel and the Bottom Quick Panel
             alpha: 1, 
             duration: 600, 
             ease: 'Back.easeOut',
             onComplete: () => {
-                this.tweens.add({ 
+                targetScene.tweens.add({ 
                     targets: container, 
-                    y: -100, 
+                    scale: 0.8,
                     alpha: 0, 
                     delay: 3500, 
-                    duration: 500, 
+                    duration: 400, 
                     ease: 'Cubic.easeIn',
                     onComplete: () => container.destroy() 
                 });

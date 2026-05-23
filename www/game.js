@@ -117,7 +117,7 @@ if (storedDate !== todayStr || !storedMissions) {
     storedMissionsCompleted = false;
 }
 
-let defaultProfile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
+let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
 let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
 let mergedProfile = { ...defaultProfile, ...storedProfile };
 

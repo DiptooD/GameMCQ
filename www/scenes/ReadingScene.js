@@ -521,10 +521,10 @@ class ReadingScene extends Phaser.Scene {
         });
 
         // --- Zoom Out Button ---
-        const zoomOutContainer = this.add.container(w - 110, 65);
+        const zoomOutContainer = this.add.container(w - 155, 65);
         const zOutBg = this.add.graphics();
-        zOutBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 50, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 50, 60, 15);
-        const zOutTxt = this.add.text(0, 0, "A-", { fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
+        zOutBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 70, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 70, 60, 15);
+        const zOutTxt = this.add.text(0, 0, "A-", { fontSize: "32px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
         const zOutHit = this.add.rectangle(0, 0, 50, 60, 0, 0).setInteractive({ useHandCursor: true });
         zoomOutContainer.add([zOutBg, zOutTxt, zOutHit]);
 
@@ -539,10 +539,10 @@ class ReadingScene extends Phaser.Scene {
         });
 
         // --- Zoom In Button ---
-        const zoomInContainer = this.add.container(w - 50, 65);
+        const zoomInContainer = this.add.container(w - 65, 65);
         const zInBg = this.add.graphics();
-        zInBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 50, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 50, 60, 15);
-        const zInTxt = this.add.text(0, 0, "A+", { fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
+        zInBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 70, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 70, 60, 15);
+        const zInTxt = this.add.text(0, 0, "A+", { fontSize: "32px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
         const zInHit = this.add.rectangle(0, 0, 50, 60, 0, 0).setInteractive({ useHandCursor: true });
         zoomInContainer.add([zInBg, zInTxt, zInHit]);
 
