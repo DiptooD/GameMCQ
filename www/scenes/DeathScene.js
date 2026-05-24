@@ -128,6 +128,12 @@ class DeathScene extends Phaser.Scene {
         this.add.text(cx, titleY + 60, GameState.viewingHistoryMatch.date, {
             fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#aaaaaa"
         }).setOrigin(0.5);
+    } else if (GameState.gamesPlayed <= 5) {
+        // --- NEW: BEGINNER'S LUCK INDICATOR ---
+        this.add.text(cx, titleY + 55, "🍀 বিগিনার্স লাক (Beginner's Luck)", {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold",
+            stroke: "#000000", strokeThickness: 4
+        }).setOrigin(0.5);
     }
 
     const panelY = 180; 

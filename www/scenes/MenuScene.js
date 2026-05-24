@@ -939,7 +939,6 @@ class MenuScene extends Phaser.Scene {
         hitArea.on("pointerdown", () => {
             if (this.isStartingGame) return;
 
-            // BUG FIX: Validate questions BEFORE playing launch animation to prevent softlock
             if (this.selectedMode === "revision" && this.getAvailableQuestionCount("revision") === 0) {
                 this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
                 return;
@@ -966,6 +965,22 @@ class MenuScene extends Phaser.Scene {
                 let dummy = this.add.image(wx, wy, shipTexture).setScale(0.85).setDepth(9999);
                 if(this.hangarShipIcon) this.hangarShipIcon.setVisible(false);
 
+                // --- SMOOTH BACKGROUND TRANSITION OVERLAY ---
+                const themeColors = (window.getThemeColors) ? window.getThemeColors() : { bgTop: 0x1A0545, bgBot: 0x003355 };
+                
+                const transitionBg = this.add.graphics();
+                transitionBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
+                transitionBg.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+                transitionBg.setDepth(9998); // Behind ship, above rest of the menu UI
+                transitionBg.setAlpha(0);
+
+                this.tweens.add({
+                    targets: transitionBg,
+                    alpha: 1,
+                    duration: 800,
+                    ease: 'Sine.easeInOut'
+                });
+
                 // Ship fly out animation
                 this.tweens.add({
                     targets: dummy,
@@ -976,9 +991,9 @@ class MenuScene extends Phaser.Scene {
                     onComplete: () => this.startGame()
                 });
                 
-                // Fade everything else out slowly, properly killing existing tweens
+                // Fade everything else out slowly
                 this.children.list.forEach(c => {
-                    if (c !== dummy && c.depth > -90) {
+                    if (c !== dummy && c !== transitionBg && c.depth > -90) {
                         this.tweens.killTweensOf(c);
                         this.tweens.add({ targets: c, alpha: 0, duration: 400 });
                     }
