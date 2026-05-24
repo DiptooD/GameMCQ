@@ -1286,22 +1286,19 @@ class GameScene extends GameBase {
         
         // --- COOL MINI-BOSS/REMNANT DEATH ANIMATION ---
         if (isRemnant) {
-            this.isAnimating = true;
-            this.physics.pause();
-            this.cameras.main.flash(300, 255, 255, 255);
-            this.createExplosion(enemy.x, enemy.y, 0x00ffff, 40);
-            this.playSFX('sfx_shockwave', 0.6);
+            // BUG FIX: Toned down flash, wave, and shockwave volume
+            this.cameras.main.flash(150, 200, 255, 255, 0.5); 
+            this.createExplosion(enemy.x, enemy.y, 0x00ffff, 20); 
+            this.playSFX('sfx_shockwave', 0.4); 
             let wave = this.add.image(enemy.x, enemy.y, 'tex_shockwave_heavy').setScale(0.2).setTint(0x00ffff);
             
             enemy.setVisible(false);
             enemy.body.enable = false;
 
             this.tweens.add({
-                targets: wave, scale: 10, alpha: 0, duration: 600, ease: 'Quad.out',
+                targets: wave, scale: 4, alpha: 0, duration: 400, ease: 'Quad.out',
                 onComplete: () => {
                     wave.destroy();
-                    this.physics.resume();
-                    this.isAnimating = false;
                     enemy.destroy();
                     
                     this.bossRemnantsActive--;
@@ -1489,10 +1486,13 @@ class GameScene extends GameBase {
 
     triggerBossFight() {
         GameState.bossActive = true;
+        GameState.battery = 0; // BUG FIX: Reset battery so it's not full during the boss fight
+        
         this.enemies.clear(true, true);
         this.obstacles.clear(true, true);
         this.batteries.clear(true, true);
         this.powerUps.clear(true, true);
+        this.meteors.clear(true, true); // Clean any incoming meteors
 
         this.playSFX('sfx_warning', 0.8, false);
 
@@ -1673,16 +1673,19 @@ class GameScene extends GameBase {
             this.tweens.add({ targets: aura, angle: 360, duration: 2000, repeat: -1 });
             this.tweens.add({ targets: [singularityCore, singularityGlow, aura], scale: 15, duration: 3000, ease: 'Sine.easeInOut' });
 
-            // Sucking the player in
+            // Sucking the player in (Spaghettification & Struggle)
             this.player.setDepth(4002);
+            this.player.setTint(0x00ffff); // High-energy warp glow
+            
             this.tweens.add({ 
                 targets: this.player, 
                 x: cx, 
                 y: cy, 
-                scale: 0.1, 
-                angle: 1080, 
+                scaleX: 0.05, // Stretch narrow horizontally
+                scaleY: 2.5,  // Stretch tall vertically into a beam of light
+                alpha: 0,     // Fade into the intense light
                 duration: 3000, 
-                ease: 'Cubic.easeIn' 
+                ease: 'Expo.easeIn' 
             });
 
             // Particles sucked into singularity
@@ -1706,8 +1709,13 @@ class GameScene extends GameBase {
                 GameState.bossActive = false;
                 GameState.bossStage++;
                 GameState.correctCount = 0;
+                
+                // BUG FIX: Resume spawning specifically for Endless Mode!
+                if (this.spawnTimer) this.spawnTimer.paused = false;
+
                 window.saveCurrency();
                 window.updateLevelTargets();
+                this.updateGameSpeed();
 
                 this.bossBarBg.setVisible(false);
                 this.bossBarFill.setVisible(false);
@@ -1755,6 +1763,9 @@ class GameScene extends GameBase {
         GameState.bossActive = false;
         GameState.bossStage++;
         GameState.correctCount = 0;
+        
+        // BUG FIX: Resume spawning for normal enemies post-boss
+        if (this.spawnTimer) this.spawnTimer.paused = false;
         
         GameState.skipsLeft += 5;
         window.saveCurrency();

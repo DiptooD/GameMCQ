@@ -936,11 +936,24 @@ class MenuScene extends Phaser.Scene {
             btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
         });
 
-        // --- COOL SHIP LAUNCH ANIMATION IMPLEMENTED ---
         hitArea.on("pointerdown", () => {
             if (this.isStartingGame) return;
+
+            // BUG FIX: Validate questions BEFORE playing launch animation to prevent softlock
+            if (this.selectedMode === "revision" && this.getAvailableQuestionCount("revision") === 0) {
+                this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
+                return;
+            } else if (this.selectedMode === "new" && this.getAvailableQuestionCount("new") === 0) {
+                this.showToast("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!");
+                return;
+            } else if (this.getAvailableQuestionCount(this.selectedMode) === 0) {
+                this.showToast("এই বিভাগে কোনো প্রশ্ন নেই!");
+                return;
+            }
+
             this.isStartingGame = true;
             this.playSound('sfx_powerup');
+            
             this.tweens.add({ targets: container, scale: 0.92, duration: 100, yoyo: true, onComplete: () => {
                 const equipped = window.GameState.equippedShip || "default";
                 const level = window.GameState.weaponLevel || 1;
@@ -963,9 +976,10 @@ class MenuScene extends Phaser.Scene {
                     onComplete: () => this.startGame()
                 });
                 
-                // Fade everything else out slowly
+                // Fade everything else out slowly, properly killing existing tweens
                 this.children.list.forEach(c => {
                     if (c !== dummy && c.depth > -90) {
+                        this.tweens.killTweensOf(c);
                         this.tweens.add({ targets: c, alpha: 0, duration: 400 });
                     }
                 });
@@ -984,7 +998,7 @@ class MenuScene extends Phaser.Scene {
         this.normalTips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন মজ না।",
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
             "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",

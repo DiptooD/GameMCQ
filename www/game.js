@@ -246,12 +246,12 @@ window.resetGameState = function () {
     GameState.score = 0;
     GameState.battery = 0;
     GameState.lives = 3;
-    GameState.weaponLevel = 1;
-    GameState.correctCount = 0; 
+    GameState.weaponLevel = 4;
+    GameState.correctCount = 6; 
     GameState.currentCombo = 0; 
     GameState.hasFiftyFifty = false;
     GameState.fiftyFiftyOptionsToHide = [];
-    GameState.bossStage = 0;
+    GameState.bossStage = 1;
     GameState.bossActive = false;
     GameState.sessionHistory = [];
     
