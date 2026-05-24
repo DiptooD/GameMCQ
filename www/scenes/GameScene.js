@@ -326,6 +326,7 @@ class GameScene extends GameBase {
     }
     
     // --- DASH ABILITY UPDATE ---
+    // --- DASH ABILITY UPDATE ---
     activateDash() {
         this.isDashActive = true;
         this.playSFX('sfx_speed_boost', 0.7); 
@@ -333,14 +334,15 @@ class GameScene extends GameBase {
         // Increase game speed temporarily
         if (!this.originalBgSpeedDash) this.originalBgSpeedDash = this.backgroundSpeed;
         this.backgroundSpeed = this.originalBgSpeedDash * 2.5;
-        this.physics.world.timeScale = 0.6; // Accelerate physics for cooler feel
+        this.physics.world.timeScale = 0.7; // Accelerate physics for cooler feel
 
         if (!this.dashAura) {
             this.dashAura = this.add.image(this.player.x, this.player.y - 20, "aura_dash").setDepth(12);
         }
         this.dashAura.setVisible(true);
-        this.dashAura.setScale(2.5); // Making the visualizer bigger
+        this.dashAura.setScale(2.5);
         this.dashAura.setTint(0x00ffff);
+        if (this.player && this.player.active) this.player.clearTint();
 
         this.tweens.killTweensOf(this.dashAura);
         this.dashAura.setAlpha(1);
@@ -360,15 +362,18 @@ class GameScene extends GameBase {
 
         const durationMs = Phaser.Math.Between(6000, 9000);
 
-        // Warning Effect (Blink Red) to show recovery is imminent
+        // Warning Effect: Aggressive Red Blink on Aura and Player
         this.time.delayedCall(durationMs - 1500, () => {
             if (this.isDashActive && this.dashAura) {
-                this.dashAura.setTint(0xff5555);
+                this.dashAura.setTint(0xff0000);
+                if (this.player && this.player.active) this.player.setTint(0xff5555);
+                
                 this.tweens.killTweensOf(this.dashAura);
                 this.tweens.add({
                     targets: this.dashAura,
-                    alpha: 0.1,
-                    duration: 100,
+                    alpha: { from: 1, to: 0 },
+                    scale: { from: 2.5, to: 3.5 }, // Explodes outward
+                    duration: 120, // Faster blink
                     yoyo: true,
                     repeat: -1
                 });
@@ -379,11 +384,33 @@ class GameScene extends GameBase {
             this.isDashActive = false;
             this.backgroundSpeed = this.originalBgSpeedDash || 1;
             this.physics.world.timeScale = 1.0;
+            
             if (this.dashAura) {
                 this.dashAura.setVisible(false);
                 this.dashAura.clearTint();
                 this.tweens.killTweensOf(this.dashAura);
             }
+            
+            if (this.player && this.player.active) {
+                this.player.clearTint();
+            }
+
+// --- 2.4s Post-Dash Invulnerability ---
+            this.isInvulnerable = true;
+            this.tweens.add({
+                targets: this.player,
+                alpha: 0.3,
+                duration: 150,
+                yoyo: true,
+                repeat: 7, // 1 play + 7 repeats = 8 cycles * 300ms = 2400ms (2.4s)
+                onComplete: () => {
+                    if (this.player && this.player.active) {
+                        this.player.setAlpha(1);
+                        this.player.clearTint(); // Forcefully remove warning tint
+                        this.isInvulnerable = false;
+                    }
+                }
+            });
         });
     }
 
@@ -540,13 +567,16 @@ class GameScene extends GameBase {
 
         if (this.debuffTimer) this.debuffTimer.remove();
         
-        this.debuffTimer = this.time.addEvent({
+this.debuffTimer = this.time.addEvent({
             delay: duration,
             callback: () => {
                 this.isJammed = false;
                 this.isHijacked = false;
                 
-                // FIX: Grant Invulnerability for the snap-back to original pointer location
+                if (this.debuffAura) this.debuffAura.clear();
+                if (this.player && this.player.active) this.player.clearTint(); // Clean up jam tint immediately
+                
+                // FIX: Grant Invulnerability for the snap-back
                 this.isInvulnerable = true;
                 this.tweens.add({
                     targets: this.player,
@@ -557,13 +587,11 @@ class GameScene extends GameBase {
                     onComplete: () => {
                         if (this.player && this.player.active) {
                             this.player.setAlpha(1);
+                            this.player.clearTint(); // Guaranteed texture reset
                             this.isInvulnerable = false;
                         }
                     }
                 });
-                
-                if (this.debuffAura) this.debuffAura.clear();
-                if (this.player && this.player.active && !this.isInvulnerable) this.player.clearTint();
                 
                 const restoreText = this.add.text(this.player.x, this.player.y - 50, "SYSTEMS RESTORED", {
                     fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#00ff00', align: 'center',

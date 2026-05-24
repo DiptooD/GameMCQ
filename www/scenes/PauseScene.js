@@ -60,18 +60,18 @@ class PauseScene extends Phaser.Scene {
     missionBg.lineStyle(3, 0x0088ff, 0.8);
     missionBg.strokeRoundedRect(cx - 260, panelY + 120, 520, 370, 20);
 
-    this.add.text(cx, panelY + 160, "ডেইলি মিশন (Daily Missions)", {
-        fontSize: "28px", color: "#00e1ff", fontFamily: "'Anek Bangla'", fontStyle: "bold",
+    this.add.text(cx, panelY + 157, "ডেইলি মিশন (Daily Missions)", {
+        fontSize: "28px", color: "#00e1ff", fontFamily: "'Anek Bangla'", fontStyle: "bold", padding: { y: 3 },
         shadow: { offsetX: 2, offsetY: 2, color: "#0044aa", blur: 4, stroke: true, fill: true }
     }).setOrigin(0.5);
 
     this.add.rectangle(cx, panelY + 183, 400, 2, 0x0088ff, 0.4);
 
-    let startY = panelY + 240;
+    let startY = panelY + 230;
     if (GameState.dailyMissions) {
         GameState.dailyMissions.forEach((m, i) => {
             const isDone = m.progress >= m.target;
-            const yPos = startY + (i * 90);
+            const yPos = startY + (i * 92.5);
 
             // Card Background
             const cardBg = this.add.graphics();
@@ -98,7 +98,7 @@ class PauseScene extends Phaser.Scene {
             else if (m.type === "answer_correct") descText = "সঠিক উত্তর দিন";
 
             this.add.text(cx - 165, yPos - 18, descText, {
-                fontSize: "22px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold'
+                fontSize: "22px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold', padding: { y: 3 }
             }).setOrigin(0, 0.5);
 
             // Progress Bar

@@ -334,14 +334,14 @@ class MenuScene extends Phaser.Scene {
         const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '44px'}).setOrigin(0.5);
 
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
-        const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 14, playerName, {
-            fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',
+        const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 12, playerName, {
+            fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
         const tagShort = rankData.tag.split(" (")[0];
-        const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 12, `লেভেল ${lvlData.level} • ${tagShort}`, {
-            fontSize: '18px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',
+        const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 15, `লেভেল ${lvlData.level} • ${tagShort}`, {
+            fontSize: '18px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
 
@@ -360,15 +360,15 @@ class MenuScene extends Phaser.Scene {
             this.scene.launch("PlayerProfileScene");
         });
 
-        const setY = 110;
-        const setW = 140;
-        const setH = 45;
+        const setY = 115;
+        const setW = 200;
+        const setH = 60;
         const setRadius = 22.5; 
 
         const setBg = this.add.graphics();
         const drawSettings = (hover) => {
             setBg.clear();
-            setBg.fillStyle(0x0a101a, hover ? 0.5 : 0.2); 
+            setBg.fillStyle(0x0a101a, hover ? 1 : 0.9); 
             setBg.fillRoundedRect(boxX, setY, setW, setH, setRadius);
             setBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
             setBg.strokeRoundedRect(boxX, setY, setW, setH, setRadius);
@@ -376,7 +376,7 @@ class MenuScene extends Phaser.Scene {
         drawSettings(false);
 
         const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ সেটিংস", {
-            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#b3d4ff', fontStyle: 'bold' 
+            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const setHitArea = this.add.rectangle(boxX + setW/2, setY + setH/2, setW, setH, 0x000000, 0).setInteractive({useHandCursor: true});
@@ -417,16 +417,16 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        const exitW = 140;
-        const exitH = 45;
+        const exitW = 200;
+        const exitH = 60;
         const exitX = startX + boxW - exitW; 
-        const exitY = 110;
+        const exitY = 115;
         const exitRadius = 22.5;
 
         const exitBg = this.add.graphics();
         const drawExit = (hover) => {
             exitBg.clear();
-            exitBg.fillStyle(0x0a101a, hover ? 0.5 : 0.2); 
+            exitBg.fillStyle(0x0a101a, hover ? 1 : 0.9); 
             exitBg.fillRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
             exitBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
             exitBg.strokeRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
@@ -434,7 +434,7 @@ class MenuScene extends Phaser.Scene {
         drawExit(false);
 
         const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
-            fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#ff4444', fontStyle: 'bold' 
+            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#ff2e2e', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});

@@ -45,6 +45,7 @@ class PlayerProfileScene extends Phaser.Scene {
             fontFamily: "'Anek Bangla', sans-serif", 
             color: "#00e1ff", 
             fontStyle: "bold",
+            padding: { y: 5 },
             stroke: "#000000", 
             strokeThickness: 8,
             shadow: { offsetX: 0, offsetY: 4, color: "#0044aa", blur: 12, fill: true, stroke: true }
