@@ -408,7 +408,9 @@ class GameBase extends Phaser.Scene {
     let powerUpType;
     const roll = Math.random();
     
-    if (roll > 0.90) {
+    if (roll > 0.95) {
+        powerUpType = "powerup_dash";
+    } else if (roll > 0.88) {
         powerUpType = "powerup_fiftyfifty";
     } else if (obstacleType === "obstacle_mine") {
       if (roll < 0.3) powerUpType = "powerup_tnt";

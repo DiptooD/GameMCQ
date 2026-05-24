@@ -18,6 +18,8 @@ class GameScene extends GameBase {
         
         this.isJammed = false;
         this.isHijacked = false;
+        
+        this.isDashActive = false; // NEW
 
         if ('wakeLock' in navigator) {
             try {
@@ -74,6 +76,7 @@ class GameScene extends GameBase {
         this.isInvulnerable = false;
         this.magnetTimer = null;
         this.magnetDuration = 0;
+        this.dashTimerEvent = null; // NEW
 
         this.regenDelay = 10000;
         this.lastRegenTime = 0;
@@ -321,6 +324,37 @@ class GameScene extends GameBase {
         this.cameras.main.shake(600, 0.025);
         this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
     }
+    
+    activateDash() {
+        this.isDashActive = true;
+        this.playSFX('sfx_speed_boost', 0.7); 
+        
+        if (!this.dashAura) {
+            this.dashAura = this.add.image(this.player.x, this.player.y - 45, "aura_dash").setDepth(12);
+        }
+        this.dashAura.setVisible(true);
+
+        this.tweens.add({
+            targets: this.dashAura,
+            alpha: { from: 1, to: 0.4 },
+            duration: 150,
+            yoyo: true,
+            repeat: -1
+        });
+
+        if (this.dashTimerEvent) {
+            this.dashTimerEvent.remove();
+        }
+
+        const durationMs = Phaser.Math.Between(6000, 9000);
+        this.dashTimerEvent = this.time.delayedCall(durationMs, () => {
+            this.isDashActive = false;
+            if (this.dashAura) {
+                this.dashAura.setVisible(false);
+                this.tweens.killTweensOf(this.dashAura);
+            }
+        });
+    }
 
     shutdown() {
         if (this.visibilityHandler) {
@@ -339,6 +373,7 @@ class GameScene extends GameBase {
         if (this.hazardTimer) this.hazardTimer.remove();
         if (this.bossTeleportTimer) this.bossTeleportTimer.remove();
         if (this.debuffTimer) this.debuffTimer.remove();
+        if (this.dashTimerEvent) this.dashTimerEvent.remove();
 
         if (this.reviveInterval) {
             clearInterval(this.reviveInterval);
@@ -536,6 +571,11 @@ class GameScene extends GameBase {
 
             this.player.x = Phaser.Math.Linear(this.player.x, actualTargetX, lerpSpeed);
             this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
+
+            if (this.isDashActive && this.dashAura) {
+                this.dashAura.x = this.player.x;
+                this.dashAura.y = this.player.y - 45;
+            }
 
             if (this.isJammed || this.isHijacked) {
                 this.debuffAura.clear();
@@ -1180,6 +1220,9 @@ class GameScene extends GameBase {
                 const qScene = this.scene.get('QuestionScene');
                 if(qScene) qScene.applyFiftyFifty(); 
                 break;
+            case "powerup_dash": 
+                this.activateDash(); 
+                break;
         }
 
         const names = { 
@@ -1187,14 +1230,16 @@ class GameScene extends GameBase {
             "powerup_magnet": "MAGNET", 
             "powerup_tnt": "SHOCKWAVE", 
             "powerup_heart": "+1 LIFE",
-            "powerup_fiftyfifty": "50/50 CHIP!"
+            "powerup_fiftyfifty": "50/50 CHIP!",
+            "powerup_dash": "DASH STRIKE"
         };
         const colors = { 
             "powerup_shield": "#ffcc00", 
             "powerup_magnet": "#ff0000", 
             "powerup_tnt": "#ff3300", 
             "powerup_heart": "#ff0033",
-            "powerup_fiftyfifty": "#00ffcc"
+            "powerup_fiftyfifty": "#00ffcc",
+            "powerup_dash": "#00ffff"
         };
         const text = this.add.text(powerUp.x, powerUp.y, names[type], { fontSize: "40px", color: colors[type], fontStyle: "bold", stroke: "#000000", strokeThickness: 3 }).setOrigin(0.5);
         this.tweens.add({ targets: text, y: powerUp.y - 80, alpha: 0, duration: 1200, ease: 'Cubic.easeOut', onComplete: () => text.destroy() });
@@ -1282,27 +1327,20 @@ class GameScene extends GameBase {
         
         const isRemnant = enemy.isBossRemnant;
         
-        // --- COOL MINI-BOSS/REMNANT DEATH ANIMATION ---
+        // Toned down remnant death sequence
         if (isRemnant) {
-            // Toned down flash, wave, and shockwave volume
-            this.cameras.main.flash(150, 200, 255, 255, 0.5); 
-            this.createExplosion(enemy.x, enemy.y, 0x00ffff, 20); 
-            this.playSFX('sfx_shockwave', 0.4); 
-            let wave = this.add.image(enemy.x, enemy.y, 'tex_shockwave_heavy').setScale(0.2).setTint(0x00ffff);
+            this.cameras.main.flash(50, 255, 255, 255, 0.3); 
+            this.createExplosion(enemy.x, enemy.y, 0x00ffff, 10); 
+            this.playSFX('sfx_explode', 0.5); 
             
             enemy.setVisible(false);
             enemy.body.enable = false;
 
-            this.tweens.add({
-                targets: wave, scale: 4, alpha: 0, duration: 400, ease: 'Quad.out',
-                onComplete: () => {
-                    wave.destroy();
-                    enemy.destroy();
-                    
-                    this.bossRemnantsActive--;
-                    if (this.bossRemnantsActive <= 0 && GameState.bossActive && !this.boss) {
-                        this.winBossFight();
-                    }
+            this.time.delayedCall(100, () => {
+                enemy.destroy();
+                this.bossRemnantsActive--;
+                if (this.bossRemnantsActive <= 0 && GameState.bossActive && !this.boss) {
+                    this.winBossFight();
                 }
             });
         } else {
@@ -1484,13 +1522,13 @@ class GameScene extends GameBase {
 
     triggerBossFight() {
         GameState.bossActive = true;
-        GameState.battery = 0; // BUG FIX: Reset battery so it's not full during the boss fight
+        GameState.battery = 0; 
         
         this.enemies.clear(true, true);
         this.obstacles.clear(true, true);
         this.batteries.clear(true, true);
         this.powerUps.clear(true, true);
-        this.meteors.clear(true, true); // Clean any incoming meteors
+        this.meteors.clear(true, true); 
 
         this.playSFX('sfx_warning', 0.8, false);
 
@@ -1520,7 +1558,6 @@ class GameScene extends GameBase {
             this.boss.setSize(216, 120);
             this.boss.setImmovable(true);
             
-            // BUG FIX: Make boss invulnerable during entry tween
             this.boss.isEntryInvulnerable = true;
 
             this.tweens.add({
@@ -1529,7 +1566,7 @@ class GameScene extends GameBase {
                 duration: 2000,
                 ease: 'Cubic.easeOut',
                 onComplete: () => {
-                    this.boss.isEntryInvulnerable = false; // Remvoe invulnerability
+                    this.boss.isEntryInvulnerable = false; 
                     this.bossBarBg.setVisible(true);
                     this.bossBarFill.setVisible(true);
 
@@ -1583,14 +1620,27 @@ class GameScene extends GameBase {
 
         // --- COOL BOSS DEATH ANIMATION (Phase 1 to Remnants) ---
         this.isAnimating = true;
-        this.playSFX('sfx_boss_spawn', 1.0, false);
 
-        // Slow down time for drama instead of pausing completely
-        this.physics.world.timeScale = 0.4;
-        this.cameras.main.zoomTo(1.05, 1500, 'Sine.easeInOut');
+        this.playSFX('sfx_boss_overload', 1.0, false);
+        this.cameras.main.shake(1500, 0.02);
 
-        boss.setTint(0xff0000);
-        this.tweens.add({ targets: boss, x: x + Phaser.Math.Between(-10, 10), y: y + Phaser.Math.Between(-10, 10), duration: 50, yoyo: true, repeat: 20 });
+        this.tweens.add({
+            targets: boss,
+            x: x + Phaser.Math.Between(-15, 15),
+            y: y + Phaser.Math.Between(-15, 15),
+            duration: 50,
+            yoyo: true,
+            repeat: 25
+        });
+
+        // Flash boss bright white and red
+        this.time.addEvent({
+            delay: 100,
+            repeat: 12,
+            callback: () => {
+                if(boss && boss.active) boss.setTintFill(Math.random() > 0.5 ? 0xffffff : 0xff0000);
+            }
+        });
 
         let explosions = 8;
         for(let i=0; i<explosions; i++) {
@@ -1598,20 +1648,15 @@ class GameScene extends GameBase {
                 let ex = x + Phaser.Math.Between(-100, 100);
                 let ey = y + Phaser.Math.Between(-80, 80);
                 this.createExplosion(ex, ey, 0xffaa00, 25);
-                this.cameras.main.shake(100, 0.01);
-                this.playSFX('sfx_explode', 0.6);
             });
         }
 
         this.time.delayedCall(explosions * 150 + 200, () => {
-            // Restore normal time and zoom
-            this.physics.world.timeScale = 1.0;
-            this.cameras.main.zoomTo(1.0, 500, 'Quad.easeOut');
-
             this.playSFX('sfx_shockwave', 1.0, false);
             this.playSFX('sfx_explode', 1.0);
             this.cameras.main.flash(800, 255, 255, 255);
             this.createExplosion(x, y, 0xff0000, 50);
+            this.cameras.main.shake(500, 0.04); 
 
             const shockwaveVisual = this.add.image(x, y, 'tex_shockwave_heavy').setScale(0.5);
             this.tweens.add({ targets: shockwaveVisual, scale: 20, alpha: 0, duration: 1500, ease: 'Quad.out', onComplete: () => shockwaveVisual.destroy() });
@@ -1654,30 +1699,22 @@ class GameScene extends GameBase {
     winBossFight() {
         if (!GameState.bossActive) return; 
         
-        if (GameState.profile) {
-            GameState.profile.bk = (GameState.profile.bk || 0) + 1;
-            GameState.profile.xp = (GameState.profile.xp || 0) + 100;
-        }
-
         // --- SICK FINAL BOSS DEATH ANIMATION ---
         if (GameState.bossStage === 2) {
             this.isAnimating = true;
             this.physics.pause();
             this.playSFX('sfx_boss_win', 1.0, false);
 
-            // Clear wingmen so they don't float statically
             this.wingmen.children.each(w => {
                 this.createExplosion(w.x, w.y, 0x0088ff, 10);
                 w.destroy();
             });
             
-            // Dim screen drastically (Keep reference for cleanup later)
             this.darkOverlay = this.add.rectangle(360, 640, 720, 1280, 0x000000, 0).setDepth(4000);
             this.tweens.add({ targets: this.darkOverlay, fillAlpha: 0.85, duration: 1500 });
             
             this.cameras.main.shake(3500, 0.015);
 
-            // Massive Singularity at the center
             const cx = 360, cy = 400;
             const singularityCore = this.add.circle(cx, cy, 5, 0x000000).setDepth(4001).setStrokeStyle(4, 0xff00ff);
             const singularityGlow = this.add.circle(cx, cy, 10, 0xcc00ff, 0.6).setDepth(4000);
@@ -1686,22 +1723,20 @@ class GameScene extends GameBase {
             this.tweens.add({ targets: aura, angle: 360, duration: 2000, repeat: -1 });
             this.tweens.add({ targets: [singularityCore, singularityGlow, aura], scale: 15, duration: 3000, ease: 'Sine.easeInOut' });
 
-            // Sucking the player in (Spaghettification & Struggle)
             this.player.setDepth(4002);
-            this.player.setTint(0x00ffff); // High-energy warp glow
+            this.player.setTint(0x00ffff);
             
             this.tweens.add({ 
                 targets: this.player, 
                 x: cx, 
                 y: cy, 
-                scaleX: 0.05, // Stretch narrow horizontally
-                scaleY: 2.5,  // Stretch tall vertically into a beam of light
-                alpha: 0,     // Fade into the intense light
+                scaleX: 0.05, 
+                scaleY: 2.5,  
+                alpha: 0,     
                 duration: 3000, 
                 ease: 'Expo.easeIn' 
             });
 
-            // Particles sucked into singularity
             for(let i=0; i<40; i++) {
                 let px = cx + Phaser.Math.Between(-350, 350);
                 let py = cy + Phaser.Math.Between(-350, 350);
@@ -1717,13 +1752,17 @@ class GameScene extends GameBase {
                 aura.destroy();
 
                 GameState.keys = (GameState.keys || 0) + 3;
-                GameState.skipsLeft += 5;
+                
+                const finalXpWon = 300;
+                if (GameState.profile) {
+                    GameState.profile.bk = (GameState.profile.bk || 0) + 1;
+                    GameState.profile.xp = (GameState.profile.xp || 0) + finalXpWon;
+                }
                 
                 GameState.bossActive = false;
                 GameState.bossStage++;
                 GameState.correctCount = 0;
                 
-                // BUG FIX: Resume spawning specifically for Endless Mode!
                 if (this.spawnTimer) this.spawnTimer.paused = false;
 
                 window.saveCurrency();
@@ -1759,16 +1798,24 @@ class GameScene extends GameBase {
                 rewardElements.push(keyIcon, keyTxt);
             }
 
-            const skipTxt = this.add.text(0, isValidSubject ? 35 : 0, "+5 Skips পাওয়া গেছে", { 
+            const xpWon = (GameState.bossStage + 1) * 75; 
+            if (GameState.profile) {
+                GameState.profile.bk = (GameState.profile.bk || 0) + 1;
+                GameState.profile.xp = (GameState.profile.xp || 0) + xpWon;
+            }
+
+            const xpTxt = this.add.text(0, isValidSubject ? 35 : 0, `+${xpWon} XP পাওয়া গেছে`, { 
                 fontSize: '40px', 
                 fontFamily: "'Anek Bangla'", 
-                color: '#00ffcc', 
+                color: '#ffbb00', 
                 stroke: '#000000', 
                 strokeThickness: 6 
             }).setOrigin(0.5, 0.5);
 
-            rewardElements.push(skipTxt);
+            rewardElements.push(xpTxt);
             rewardContainer.add(rewardElements);
+            
+            this.time.delayedCall(2800, () => this.playSFX('sfx_xp_gain', 0.8, false));
 
             this.tweens.add({ targets: rewardContainer, y: 800, alpha: 0.05, duration: 1500, delay: 2800, onComplete: () => rewardContainer.destroy() });
         }
@@ -1777,10 +1824,8 @@ class GameScene extends GameBase {
         GameState.bossStage++;
         GameState.correctCount = 0;
         
-        // BUG FIX: Resume spawning for normal enemies post-boss
         if (this.spawnTimer) this.spawnTimer.paused = false;
         
-        GameState.skipsLeft += 5;
         window.saveCurrency();
 
         window.updateLevelTargets();
@@ -1867,26 +1912,60 @@ class GameScene extends GameBase {
                 this.gamePaused = false;
                 this.voidChoiceMenu.destroy();
                 
-                // BUG FIX: Clean up overlay and reset the player from the Singularity effect
-                if (this.darkOverlay) {
-                    this.tweens.add({ targets: this.darkOverlay, fillAlpha: 0, duration: 1000, onComplete: () => this.darkOverlay.destroy() });
-                }
+                if (this.darkOverlay) this.darkOverlay.destroy();
+
+                this.playSFX('sfx_wormhole_exit', 0.5, false);
+                const flash = this.add.circle(cx, cy, 10, 0xffffff).setDepth(5000);
+                this.tweens.add({
+                    targets: flash,
+                    scale: 150,
+                    alpha: 0,
+                    duration: 1000,
+                    ease: 'Cubic.easeOut',
+                    onComplete: () => flash.destroy()
+                });
+                
+                // FIXED: Clear ALL active screen objects before respawning the player
+                this.enemies.clear(true, true);
+                this.obstacles.clear(true, true);
+                this.meteors.clear(true, true);
+                this.bossBullets.clear(true, true);
+                this.bullets.clear(true, true);
+                this.sideBullets.clear(true, true);
+                this.specialWeapons.clear(true, true);
+                this.batteries.clear(true, true);
+                this.powerUps.clear(true, true);
 
                 this.player.setDepth(1);
                 this.player.clearTint();
                 this.player.setAlpha(1);
-                this.player.setAngle(0);
-                this.player.setScale(0.9);
-                this.player.setPosition(360, this.cameras.main.height - 150);
-                this.applyShipAnimation(GameState.equippedShip || "default");
+                this.player.setScale(0);
+                this.player.setAngle(1080);
+                this.player.setPosition(cx, cy);
 
-                const qScene = this.scene.get('QuestionScene');
-                if (qScene) {
-                    qScene.toggleBattleMode(false);
-                    qScene.qText.setText("");
-                    qScene.refreshQuestion();
-                }
-                this.startCountdown();
+                this.tweens.add({
+                    targets: this.player,
+                    x: 360,
+                    y: this.cameras.main.height - 150,
+                    scaleX: 0.9,
+                    scaleY: 0.9,
+                    angle: 0,
+                    duration: 1200,
+                    ease: 'Back.easeOut',
+                    onComplete: () => {
+                        this.applyShipAnimation(GameState.equippedShip || "default");
+                        const qScene = this.scene.get('QuestionScene');
+                        if (qScene) {
+                            qScene.toggleBattleMode(false);
+                            qScene.qText.setText("");
+                            qScene.refreshQuestion();
+                        }
+                        
+                        // FIXED: Removed the countdown for a simpler, instant start
+                        this.isResuming = false;
+                        this.physics.resume();
+                    }
+                });
             }});
         });
         voidHitArea.on('pointerover', () => { this.playSFX('sfx_tick', 0.2); drawVoidBtn(true); });
@@ -1915,7 +1994,6 @@ class GameScene extends GameBase {
                 this.gamePaused = false;
                 this.voidChoiceMenu.destroy();
                 
-                // BUG FIX: Clean up overlay just in case before heading to DeathScene
                 if (this.darkOverlay) this.darkOverlay.destroy();
                 
                 this.finalizeGameOver();
@@ -1997,6 +2075,29 @@ class GameScene extends GameBase {
     }
 
     hitPlayer(player, source) {
+        // FIXED: Complete invulnerability to hazards, and instant kill to obstacles/enemies while Dashing
+        if (this.isDashActive) {
+            const isBoss = (source === this.boss);
+            if (!isBoss && source.active) {
+                if (this.enemies.contains(source)) {
+                    this.destroyEnemy(source);
+                } else if (this.obstacles.contains(source)) {
+                    this.createExplosion(source.x, source.y, 0x00ffff, 15);
+                    if (source.trail) source.trail.destroy();
+                    source.destroy();
+                    GameState.score += 15;
+                } else if (this.meteors.contains(source)) {
+                    this.createExplosion(source.x, source.y, 0xffaa00, 20);
+                    if (source.trail) source.trail.destroy();
+                    source.destroy();
+                } else if (this.bossBullets.contains(source)) {
+                    this.createExplosion(source.x, source.y, 0x00ffff, 5);
+                    source.destroy();
+                }
+            }
+            return; 
+        }
+        
         if (this.isInvulnerable) return;
 
         const isBoss = (source === this.boss);
@@ -2127,7 +2228,6 @@ class GameScene extends GameBase {
     }
 
     handleBossHit(boss, shot) {
-        // BUG FIX: Prevent boss from taking damage during its entry sequence
         if (boss.isEntryInvulnerable) {
             if (shot.weaponType !== "lightning" && shot.weaponType !== "plasma" && shot.weaponType !== "ice") {
                 shot.destroy();
@@ -2550,41 +2650,27 @@ class GameScene extends GameBase {
 
     startCountdown() {
         if (this.isResuming || this.isAnimating) return;
-        this.isResuming = true;
-        this.physics.pause();
+        
+        // FIXED: Removed the 3-2-1 countdown for a fast, simple start!
+        this.isResuming = false;
+        this.physics.resume();
+        this.playSFX('sfx_tick', 0.5, false);
 
-        let count = 3;
         const cx = this.cameras.main.width / 2;
         const cy = this.cameras.main.height / 2;
 
-        const countText = this.add.text(cx, cy, "3", {
-            fontSize: '100px', fontFamily: "'Anek Bangla'", color: '#04ddcb', fontStyle: 'bold',
+        const countText = this.add.text(cx, cy, "শুরু!", {
+            fontSize: '80px', fontFamily: "'Anek Bangla'", color: '#04d604', fontStyle: 'bold',
             stroke: '#000000', strokeThickness: 10, padding: { top: 20, bottom: 20 }
         }).setOrigin(0.5).setDepth(30000);
 
-        this.time.addEvent({
-            delay: 1000,
-            repeat: 2,
-            callback: () => {
-                count--;
-                this.playSFX('sfx_tick', 0.5, false);
-
-                if (count > 0) {
-                    countText.setText(count);
-                    countText.setScale(0.5);
-                    this.tweens.add({ targets: countText, scale: 1, duration: 400, ease: 'Back.out' });
-                } else if (count === 0) {
-                    countText.setText("শুরু!");
-                    countText.setColor("#04d604");
-                    countText.setFontSize('80px');
-                    this.isResuming = false;
-                    
-                    this.physics.resume();
-                    
-                    this.tweens.add({ targets: countText, alpha: 0, scale: 1.5, duration: 500, onComplete: () => countText.destroy() });
-                }
-            },
-            callbackScope: this
+        this.tweens.add({ 
+            targets: countText, 
+            alpha: 0, 
+            scale: 1.5, 
+            duration: 800, 
+            ease: 'Quad.out',
+            onComplete: () => countText.destroy() 
         });
     }
 

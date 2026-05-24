@@ -715,6 +715,32 @@ class GameTextures {
     g.fillRect(13, 17, 14, 4);
     g.generateTexture("powerup_heart", 40, 40);
     g.clear();
+    
+    // Dash / Strike (NEW)
+    g.fillStyle(0x00ffff, 1);
+    g.fillRoundedRect(5, 5, 30, 30, 8);
+    g.fillStyle(0x000000, 1);
+    g.fillTriangle(10, 22, 20, 8, 30, 22);
+    g.fillTriangle(10, 32, 20, 18, 30, 32);
+    g.generateTexture("powerup_dash", 40, 40);
+    g.clear();
+
+    // Dash Aura (Upside-down V) (NEW)
+    g.lineStyle(5, 0x00ffff, 1);
+    g.beginPath();
+    g.moveTo(5, 45); // Left bottom
+    g.lineTo(30, 5); // Top center
+    g.lineTo(55, 45); // Right bottom
+    g.strokePath();
+    g.fillStyle(0x00ffff, 0.4);
+    g.beginPath();
+    g.moveTo(5, 45);
+    g.lineTo(30, 5);
+    g.lineTo(55, 45);
+    g.closePath();
+    g.fillPath();
+    g.generateTexture("aura_dash", 60, 50);
+    g.clear();
 
     // --- BOSSES ---
     // Boss 1
