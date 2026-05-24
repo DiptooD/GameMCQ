@@ -508,6 +508,7 @@ class MenuScene extends Phaser.Scene {
         });
 
         hitArea.on('pointerdown', () => {
+            if (this.isStartingGame) return;
             this.playSound('sfx_click');
             this.tweens.add({
                 targets: container, scale: 0.95, duration: 80, yoyo: true, onComplete: () => this.scene.start("ShopScene") 
@@ -515,6 +516,9 @@ class MenuScene extends Phaser.Scene {
         });
 
         container.add([pedestal, bgGlow, this.reactorRing, shipIcon, labelBg, label, hitArea]);
+
+        this.hangarContainer = container;
+        this.hangarShipIcon = shipIcon;
     }
 
     createSettingsPanel(x, y, width, manifest) {
@@ -932,16 +936,45 @@ class MenuScene extends Phaser.Scene {
             btnBg.strokeRoundedRect(-width/2, -height/2, width, height, height/2);
         });
 
+        // --- COOL SHIP LAUNCH ANIMATION IMPLEMENTED ---
         hitArea.on("pointerdown", () => {
             if (this.isStartingGame) return;
             this.isStartingGame = true;
             this.playSound('sfx_powerup');
-            this.tweens.add({ targets: container, scale: 0.92, duration: 100, yoyo: true, onComplete: () => this.startGame() });
+            this.tweens.add({ targets: container, scale: 0.92, duration: 100, yoyo: true, onComplete: () => {
+                const equipped = window.GameState.equippedShip || "default";
+                const level = window.GameState.weaponLevel || 1;
+                let shipTexture = (equipped === "default") ? `player_lv${level}` : `${equipped}_lv${level}`;
+                if (!this.textures.exists(shipTexture)) shipTexture = "player_lv1";
+
+                let wx = this.hangarContainer.x + this.hangarShipIcon.x;
+                let wy = this.hangarContainer.y + this.hangarShipIcon.y;
+                
+                let dummy = this.add.image(wx, wy, shipTexture).setScale(0.85).setDepth(9999);
+                if(this.hangarShipIcon) this.hangarShipIcon.setVisible(false);
+
+                // Ship fly out animation
+                this.tweens.add({
+                    targets: dummy,
+                    y: -150,
+                    scale: 1.5,
+                    duration: 800,
+                    ease: 'Back.easeIn',
+                    onComplete: () => this.startGame()
+                });
+                
+                // Fade everything else out slowly
+                this.children.list.forEach(c => {
+                    if (c !== dummy && c.depth > -90) {
+                        this.tweens.add({ targets: c, alpha: 0, duration: 400 });
+                    }
+                });
+            }});
         });
     }
 
     createInfoBox(x, y, width) {
-        const height = 110; // Slightly larger for clear dot placement
+        const height = 110; 
         const container = this.add.container(x, y);
 
         const bg = this.add.graphics();
@@ -962,7 +995,7 @@ class MenuScene extends Phaser.Scene {
 
         this.revisionTips = [
             "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে।",
-            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে মোহ না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
         ];
 
         const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
@@ -971,7 +1004,6 @@ class MenuScene extends Phaser.Scene {
         let currentMissionIndex = 0;
         let isShowingTips = true; 
 
-        // Info Text shifted slightly UP to leave room for dots
         this.infoText = this.add.text(0, -5, getActiveTips()[currentTipIndex], {
             fontSize: "21px",
             fontFamily: "'Anek Bangla'",
@@ -982,7 +1014,6 @@ class MenuScene extends Phaser.Scene {
             lineSpacing: 10
         }).setOrigin(0.5);
 
-        // Perfectly positioned pagination dots at the absolute bottom center
         const dot1 = this.add.circle(-15, 40, 4, 0x00ffff, 0.5);
         const dot2 = this.add.circle(15, 40, 4, 0x00ffff, 0.5);
 
@@ -1010,7 +1041,6 @@ class MenuScene extends Phaser.Scene {
                         dot1.setAlpha(1);
                         dot2.setAlpha(0.3);
                     } else {
-                        // Reset mission index to 0 when opening missions view
                         currentMissionIndex = 0; 
                         this.infoText.setText(fetchMissionText());
                         this.infoText.setColor("#ffdd44"); 
@@ -1028,7 +1058,6 @@ class MenuScene extends Phaser.Scene {
             toggleView();
         });
 
-        // The auto-cycler handles BOTH tips and daily missions accurately!
         this.cycleTip = () => {
             this.tweens.add({
                 targets: this.infoText, alpha: 0, duration: 300,
@@ -1049,7 +1078,6 @@ class MenuScene extends Phaser.Scene {
             });
         };
 
-        // Faster cycling when viewing missions so they read it all
         this.tipTimerEvent = this.time.addEvent({ delay: 5000, loop: true, callback: this.cycleTip });
     }
 

@@ -11,6 +11,7 @@ class GameScene extends GameBase {
         const w = 720;
 
         this.isResuming = false;
+        this.isAnimating = true; // Block pausing & input during entry animation
         this.hasRevived = false;
         this.bossRemnantsActive = 0; 
         this.isTransitioningToBoss = false;
@@ -28,7 +29,7 @@ class GameScene extends GameBase {
 
         this.visibilityHandler = () => {
             if (document.hidden) {
-                if (this.scene.isActive("GameScene")) {
+                if (this.scene.isActive("GameScene") && !this.isAnimating && !this.gamePaused) {
                     const bgMusic = this.sound.get('bg_music');
                     if (bgMusic && bgMusic.isPlaying) bgMusic.pause();
 
@@ -84,7 +85,8 @@ class GameScene extends GameBase {
         this.targetX = 360;
         this.targetY = h - 150;
 
-        this.player = this.physics.add.image(this.targetX, this.targetY, "player_lv1")
+        // Player spawns off-screen for entry animation
+        this.player = this.physics.add.image(this.targetX, h + 150, "player_lv1")
             .setCollideWorldBounds(true)
             .setScale(0.9);
         this.player.setSize(90, 90);
@@ -188,6 +190,17 @@ class GameScene extends GameBase {
         this.comboText = this.add.text(30, h - 220, "", { 
             fontSize: '46px', fontFamily: "'Anek Bangla'", color: '#ffaa00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6
         }).setOrigin(0, 0.5).setDepth(100).setAlpha(0);
+
+        // --- ENTRY ANIMATION ---
+        this.tweens.add({
+            targets: this.player,
+            y: this.targetY,
+            duration: 1200,
+            ease: 'Cubic.easeOut',
+            onComplete: () => {
+                this.isAnimating = false;
+            }
+        });
     }
 
     applyShipAnimation(shipId) {
@@ -348,13 +361,11 @@ class GameScene extends GameBase {
     }
 
     showMissionToast(msg) {
-        // Render on QuestionScene (the top UI layer) if active, otherwise fallback to GameScene
         const qScene = this.scene.get('QuestionScene');
         const targetScene = (qScene && qScene.scene.isActive()) ? qScene : this;
 
         const cx = targetScene.cameras.main.width / 2;
         
-        // Start the container off-screen at the top
         const container = targetScene.add.container(cx, -100).setDepth(5000);
 
         const bg = targetScene.add.graphics();
@@ -383,7 +394,7 @@ class GameScene extends GameBase {
         
         targetScene.tweens.add({ 
             targets: container, 
-            y: 120, // Centers it safely between the Question Panel and the Bottom Quick Panel
+            y: 120, 
             alpha: 1, 
             duration: 600, 
             ease: 'Back.easeOut',
@@ -492,7 +503,6 @@ class GameScene extends GameBase {
         if (this.isResuming) return;
         
         const timeScale = this.time.timeScale || 1;
-        // BUG FIX: Clamped delta scale heavily to prevent physics engine jumping and freeze on tab change.
         const dtScale = Phaser.Math.Clamp(delta / 16.666, 0.1, 2.5); 
         const dt = timeScale * dtScale;
 
@@ -518,98 +528,96 @@ class GameScene extends GameBase {
 
         this.checkBossSpawn();
 
-        const lerpSpeed = 0.25 * dt;
-        
-        let actualTargetX = this.targetX;
-        if (this.isHijacked) {
-            actualTargetX = 720 - this.targetX;
-        }
-
-        this.player.x = Phaser.Math.Linear(this.player.x, actualTargetX, lerpSpeed);
-        this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
-
-        if (this.isJammed || this.isHijacked) {
-            this.debuffAura.clear();
+        if (!this.isAnimating) {
+            const lerpSpeed = 0.25 * dt;
             
-            // Glitchy erratic aura
-            for (let i = 0; i < 6; i++) {
-                const offsetX = Phaser.Math.Between(-45, 45);
-                const offsetY = Phaser.Math.Between(-45, 45);
-                const width = Phaser.Math.Between(10, 60);
-                const height = Phaser.Math.Between(2, 8);
-                
-                this.debuffAura.fillStyle(0xff00ff, Phaser.Math.FloatBetween(0.3, 0.8));
-                this.debuffAura.fillRect(this.player.x + offsetX, this.player.y + offsetY, width, height);
+            let actualTargetX = this.targetX;
+            if (this.isHijacked) {
+                actualTargetX = 720 - this.targetX;
             }
-            
-            // Random electric jagged lines
-            this.debuffAura.lineStyle(3, 0x00ffff, 0.9);
-            this.debuffAura.beginPath();
-            let startX = this.player.x + Phaser.Math.Between(-30, 30);
-            let startY = this.player.y + Phaser.Math.Between(-30, 30);
-            this.debuffAura.moveTo(startX, startY);
-            for(let j=0; j<4; j++){
-                startX += Phaser.Math.Between(-35, 35);
-                startY += Phaser.Math.Between(-35, 35);
-                this.debuffAura.lineTo(startX, startY);
-            }
-            this.debuffAura.strokePath();
 
-            // Glitch tint
-            if (this.time.now % 150 < 75) {
-                this.player.setTintFill(0xff00ff);
-            } else {
-                this.player.setTintFill(0x00ffff);
-            }
-        } else if (this.debuffAura) {
-            this.debuffAura.clear();
-        }
+            this.player.x = Phaser.Math.Linear(this.player.x, actualTargetX, lerpSpeed);
+            this.player.y = Phaser.Math.Linear(this.player.y, this.targetY, lerpSpeed);
 
-        this.wingmen.children.each((wingman, index) => {
-            if (wingman.active) {
-                const offset = index === 0 ? -70 : 70;
-                const targetX = this.player.x + offset;
-                const targetY = this.player.y + 30;
-                
-                wingman.x = Phaser.Math.Linear(wingman.x, targetX, 0.1 * dt);
-                wingman.y = Phaser.Math.Linear(wingman.y, targetY, 0.1 * dt);
-
-                const combo = GameState.currentCombo || 0;
-                let delay = 400;
-                if (combo >= 10) delay = 600;
-                else if (combo >= 5) delay = 350;
-
-                if (this.time.now > (wingman.lastShot || 0) + delay) {
-                    wingman.lastShot = this.time.now;
+            if (this.isJammed || this.isHijacked) {
+                this.debuffAura.clear();
+                for (let i = 0; i < 6; i++) {
+                    const offsetX = Phaser.Math.Between(-45, 45);
+                    const offsetY = Phaser.Math.Between(-45, 45);
+                    const width = Phaser.Math.Between(10, 60);
+                    const height = Phaser.Math.Between(2, 8);
                     
-                    const equip = GameState.equippedShip || "default";
-                    let mainTex = this.textures.exists(`bullet_${equip}`) ? `bullet_${equip}` : "bullet_default";
-                    let sideTex = this.textures.exists(`side_bullet_${equip}`) ? `side_bullet_${equip}` : "side_bullet_default";
-                    
-                    let projTex = sideTex;
-                    let speedY = -800;
-                    let scale = 0.8;
-                    let damageTag = "side_bullet"; 
-
-                    if (combo >= 10) {
-                        projTex = "missile";
-                        speedY = -1000;
-                        scale = 0.7;
-                        damageTag = "missile";
-                    } else if (combo >= 5) {
-                        projTex = mainTex;
-                        speedY = -900;
-                        scale = 1.0;
-                        damageTag = "bullet";
-                    }
-
-                    const b = this.sideBullets.create(wingman.x, wingman.y - 20, projTex);
-                    b.weaponType = damageTag;
-                    b.setVelocityY(speedY);
-                    b.setScale(scale);
+                    this.debuffAura.fillStyle(0xff00ff, Phaser.Math.FloatBetween(0.3, 0.8));
+                    this.debuffAura.fillRect(this.player.x + offsetX, this.player.y + offsetY, width, height);
                 }
+                
+                this.debuffAura.lineStyle(3, 0x00ffff, 0.9);
+                this.debuffAura.beginPath();
+                let startX = this.player.x + Phaser.Math.Between(-30, 30);
+                let startY = this.player.y + Phaser.Math.Between(-30, 30);
+                this.debuffAura.moveTo(startX, startY);
+                for(let j=0; j<4; j++){
+                    startX += Phaser.Math.Between(-35, 35);
+                    startY += Phaser.Math.Between(-35, 35);
+                    this.debuffAura.lineTo(startX, startY);
+                }
+                this.debuffAura.strokePath();
+
+                if (this.time.now % 150 < 75) {
+                    this.player.setTintFill(0xff00ff);
+                } else {
+                    this.player.setTintFill(0x00ffff);
+                }
+            } else if (this.debuffAura) {
+                this.debuffAura.clear();
             }
-        });
+
+            this.wingmen.children.each((wingman, index) => {
+                if (wingman.active) {
+                    const offset = index === 0 ? -70 : 70;
+                    const targetX = this.player.x + offset;
+                    const targetY = this.player.y + 30;
+                    
+                    wingman.x = Phaser.Math.Linear(wingman.x, targetX, 0.1 * dt);
+                    wingman.y = Phaser.Math.Linear(wingman.y, targetY, 0.1 * dt);
+
+                    const combo = GameState.currentCombo || 0;
+                    let delay = 400;
+                    if (combo >= 10) delay = 600;
+                    else if (combo >= 5) delay = 350;
+
+                    if (this.time.now > (wingman.lastShot || 0) + delay) {
+                        wingman.lastShot = this.time.now;
+                        
+                        const equip = GameState.equippedShip || "default";
+                        let mainTex = this.textures.exists(`bullet_${equip}`) ? `bullet_${equip}` : "bullet_default";
+                        let sideTex = this.textures.exists(`side_bullet_${equip}`) ? `side_bullet_${equip}` : "side_bullet_default";
+                        
+                        let projTex = sideTex;
+                        let speedY = -800;
+                        let scale = 0.8;
+                        let damageTag = "side_bullet"; 
+
+                        if (combo >= 10) {
+                            projTex = "missile";
+                            speedY = -1000;
+                            scale = 0.7;
+                            damageTag = "missile";
+                        } else if (combo >= 5) {
+                            projTex = mainTex;
+                            speedY = -900;
+                            scale = 1.0;
+                            damageTag = "bullet";
+                        }
+
+                        const b = this.sideBullets.create(wingman.x, wingman.y - 20, projTex);
+                        b.weaponType = damageTag;
+                        b.setVelocityY(speedY);
+                        b.setScale(scale);
+                    }
+                }
+            });
+        }
 
         if (this.hasShield) {
             this.shieldArc.clear();
@@ -1022,7 +1030,7 @@ class GameScene extends GameBase {
 
     fireWeapon() {
         if (this.isJammed) return;
-        if (this.isResuming) return;
+        if (this.isResuming || this.isAnimating) return;
 
         const x = this.player.x;
         const y = this.player.y - 60;
@@ -1275,13 +1283,35 @@ class GameScene extends GameBase {
         }
         
         const isRemnant = enemy.isBossRemnant;
-        enemy.destroy();
-
+        
+        // --- COOL MINI-BOSS/REMNANT DEATH ANIMATION ---
         if (isRemnant) {
-            this.bossRemnantsActive--;
-            if (this.bossRemnantsActive <= 0 && GameState.bossActive && !this.boss) {
-                this.winBossFight();
-            }
+            this.isAnimating = true;
+            this.physics.pause();
+            this.cameras.main.flash(300, 255, 255, 255);
+            this.createExplosion(enemy.x, enemy.y, 0x00ffff, 40);
+            this.playSFX('sfx_shockwave', 0.6);
+            let wave = this.add.image(enemy.x, enemy.y, 'tex_shockwave_heavy').setScale(0.2).setTint(0x00ffff);
+            
+            enemy.setVisible(false);
+            enemy.body.enable = false;
+
+            this.tweens.add({
+                targets: wave, scale: 10, alpha: 0, duration: 600, ease: 'Quad.out',
+                onComplete: () => {
+                    wave.destroy();
+                    this.physics.resume();
+                    this.isAnimating = false;
+                    enemy.destroy();
+                    
+                    this.bossRemnantsActive--;
+                    if (this.bossRemnantsActive <= 0 && GameState.bossActive && !this.boss) {
+                        this.winBossFight();
+                    }
+                }
+            });
+        } else {
+            enemy.destroy();
         }
     }
 
@@ -1549,45 +1579,69 @@ class GameScene extends GameBase {
         this.bossBarBg.setVisible(false);
         this.bossBarFill.setVisible(false);
 
-        this.playSFX('sfx_shockwave', 1.0, false);
-        this.playSFX('sfx_boss_spawn', 1.0, false); 
-        this.playSFX('sfx_explode', 1.0);
-        this.cameras.main.flash(800, 255, 255, 255);
-        this.createExplosion(x, y, 0xff0000, 40);
+        // --- COOL BOSS DEATH ANIMATION (Phase 1 to Remnants) ---
+        this.isAnimating = true;
+        this.physics.pause();
+        this.playSFX('sfx_boss_spawn', 1.0, false);
 
-        const shockwaveVisual = this.add.image(x, y, 'tex_shockwave_heavy').setScale(0.5);
-        this.tweens.add({ targets: shockwaveVisual, scale: 20, alpha: 0, duration: 1500, ease: 'Quad.out', onComplete: () => shockwaveVisual.destroy() });
-        
-        boss.destroy();
-        this.boss = null;
+        boss.setTint(0xff0000);
+        this.tweens.add({ targets: boss, x: x + Phaser.Math.Between(-10, 10), y: y + Phaser.Math.Between(-10, 10), duration: 50, yoyo: true, repeat: 20 });
 
-        let remnantTexture = "boss_lv" + (stage + 1);
-        if (stage > 2) remnantTexture = "boss_lv3"; 
-
-        const remnantCount = 3 + stage;
-        this.bossRemnantsActive = remnantCount;
-
-        for (let i = 0; i < remnantCount; i++) {
-            const remnant = this.enemies.create(x, y, remnantTexture);
-            remnant.hp = 120 * (stage + 1); 
-            remnant.maxHp = remnant.hp;
-            remnant.tier = "mini_boss"; 
-            remnant.enemyType = "mini_boss";
-            remnant.isBossRemnant = true;
-
-            remnant.setScale(0.8); 
-            remnant.body.setSize(216, 120); 
-
-            remnant.setCollideWorldBounds(true);
-            remnant.setBounce(1, 1);
-            remnant.movePattern = "remnant_pattern"; 
-
-            const angle = (i / remnantCount) * Math.PI * 2;
-            const speed = Phaser.Math.Between(250, 350);
-            remnant.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
-
-            this.tweens.add({ targets: remnant, scale: { from: 0.1, to: 0.8 }, duration: 500, ease: 'Back.out' });
+        let explosions = 8;
+        for(let i=0; i<explosions; i++) {
+            this.time.delayedCall(i * 150, () => {
+                let ex = x + Phaser.Math.Between(-100, 100);
+                let ey = y + Phaser.Math.Between(-80, 80);
+                this.createExplosion(ex, ey, 0xffaa00, 25);
+                this.cameras.main.shake(100, 0.01);
+                this.playSFX('sfx_explode', 0.6);
+            });
         }
+
+        this.time.delayedCall(explosions * 150 + 200, () => {
+            this.playSFX('sfx_shockwave', 1.0, false);
+            this.playSFX('sfx_explode', 1.0);
+            this.cameras.main.flash(800, 255, 255, 255);
+            this.createExplosion(x, y, 0xff0000, 50);
+
+            const shockwaveVisual = this.add.image(x, y, 'tex_shockwave_heavy').setScale(0.5);
+            this.tweens.add({ targets: shockwaveVisual, scale: 20, alpha: 0, duration: 1500, ease: 'Quad.out', onComplete: () => shockwaveVisual.destroy() });
+
+            boss.destroy();
+            this.boss = null;
+
+            let remnantTexture = "boss_lv" + (stage + 1);
+            if (stage > 2) remnantTexture = "boss_lv3"; 
+
+            const remnantCount = 3 + stage;
+            this.bossRemnantsActive = remnantCount;
+
+            this.physics.resume();
+
+            for (let i = 0; i < remnantCount; i++) {
+                const remnant = this.enemies.create(x, y, remnantTexture);
+                remnant.hp = 120 * (stage + 1); 
+                remnant.maxHp = remnant.hp;
+                remnant.tier = "mini_boss"; 
+                remnant.enemyType = "mini_boss";
+                remnant.isBossRemnant = true;
+
+                remnant.setScale(0.8); 
+                remnant.body.setSize(216, 120); 
+
+                remnant.setCollideWorldBounds(true);
+                remnant.setBounce(1, 1);
+                remnant.movePattern = "remnant_pattern"; 
+
+                const angle = (i / remnantCount) * Math.PI * 2;
+                const speed = Phaser.Math.Between(250, 350);
+                remnant.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+
+                this.tweens.add({ targets: remnant, scale: { from: 0.1, to: 0.8 }, duration: 500, ease: 'Back.out' });
+            }
+            
+            this.isAnimating = false;
+        });
     }
 
     winBossFight() {
@@ -1598,6 +1652,73 @@ class GameScene extends GameBase {
             GameState.profile.xp = (GameState.profile.xp || 0) + 100;
         }
 
+        // --- SICK FINAL BOSS DEATH ANIMATION ---
+        if (GameState.bossStage === 2) {
+            this.isAnimating = true;
+            this.physics.pause();
+            this.playSFX('sfx_boss_win', 1.0, false);
+            
+            // Dim screen drastically
+            const darkOverlay = this.add.rectangle(360, 640, 720, 1280, 0x000000, 0).setDepth(4000);
+            this.tweens.add({ targets: darkOverlay, fillAlpha: 0.85, duration: 1500 });
+            
+            this.cameras.main.shake(3500, 0.015);
+
+            // Massive Singularity at the center
+            const cx = 360, cy = 400;
+            const singularityCore = this.add.circle(cx, cy, 5, 0x000000).setDepth(4001).setStrokeStyle(4, 0xff00ff);
+            const singularityGlow = this.add.circle(cx, cy, 10, 0xcc00ff, 0.6).setDepth(4000);
+            const aura = this.add.image(cx, cy, "aura_plasma").setTint(0xff00ff).setDepth(4000).setScale(0.1);
+
+            this.tweens.add({ targets: aura, angle: 360, duration: 2000, repeat: -1 });
+            this.tweens.add({ targets: [singularityCore, singularityGlow, aura], scale: 15, duration: 3000, ease: 'Sine.easeInOut' });
+
+            // Sucking the player in
+            this.player.setDepth(4002);
+            this.tweens.add({ 
+                targets: this.player, 
+                x: cx, 
+                y: cy, 
+                scale: 0.1, 
+                angle: 1080, 
+                duration: 3000, 
+                ease: 'Cubic.easeIn' 
+            });
+
+            // Particles sucked into singularity
+            for(let i=0; i<40; i++) {
+                let px = cx + Phaser.Math.Between(-350, 350);
+                let py = cy + Phaser.Math.Between(-350, 350);
+                let p = this.add.circle(px, py, 4, 0x00ffff).setDepth(4001);
+                this.tweens.add({ targets: p, x: cx, y: cy, scale: 0, duration: Phaser.Math.Between(1000, 2500), ease: 'Cubic.easeIn', onComplete:()=>p.destroy() });
+            }
+
+            this.time.delayedCall(3500, () => {
+                this.playSFX('sfx_shockwave', 1.0, false);
+                this.cameras.main.flash(1500, 255, 255, 255);
+                singularityCore.destroy();
+                singularityGlow.destroy();
+                aura.destroy();
+
+                GameState.keys = (GameState.keys || 0) + 3;
+                GameState.skipsLeft += 5;
+                
+                GameState.bossActive = false;
+                GameState.bossStage++;
+                GameState.correctCount = 0;
+                window.saveCurrency();
+                window.updateLevelTargets();
+
+                this.bossBarBg.setVisible(false);
+                this.bossBarFill.setVisible(false);
+
+                this.showVoidChoiceMenu();
+                this.isAnimating = false;
+            });
+            return;
+        }
+
+        // --- NORMAL BOSS (1 AND 2) WIN LOGIC ---
         this.playSFX('sfx_boss_win', 0.8, false);
 
         if (GameState.gameMode !== "revision") {
@@ -2192,7 +2313,7 @@ class GameScene extends GameBase {
             delay: baseDelay,
             loop: true,
             callback: () => {
-                if (this.isResuming) return;
+                if (this.isResuming || this.isAnimating) return;
                 if (!this.boss || !this.boss.active) return;
                 
                 if (this.boss.phase === 1 && this.boss.hp < this.boss.maxHp * 0.5) {
@@ -2379,7 +2500,7 @@ class GameScene extends GameBase {
     }
 
     startCountdown() {
-        if (this.isResuming) return;
+        if (this.isResuming || this.isAnimating) return;
         this.isResuming = true;
         this.physics.pause();
 
