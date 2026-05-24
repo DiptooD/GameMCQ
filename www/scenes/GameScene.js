@@ -326,7 +326,6 @@ class GameScene extends GameBase {
     }
     
     // --- DASH ABILITY UPDATE ---
-    // --- DASH ABILITY UPDATE ---
     activateDash() {
         this.isDashActive = true;
         this.playSFX('sfx_speed_boost', 0.7); 
@@ -395,7 +394,7 @@ class GameScene extends GameBase {
                 this.player.clearTint();
             }
 
-// --- 2.4s Post-Dash Invulnerability ---
+            // --- 2.4s Post-Dash Invulnerability ---
             this.isInvulnerable = true;
             this.tweens.add({
                 targets: this.player,
@@ -567,7 +566,7 @@ class GameScene extends GameBase {
 
         if (this.debuffTimer) this.debuffTimer.remove();
         
-this.debuffTimer = this.time.addEvent({
+        this.debuffTimer = this.time.addEvent({
             delay: duration,
             callback: () => {
                 this.isJammed = false;
@@ -1087,6 +1086,7 @@ this.debuffTimer = this.time.addEvent({
     }
 
     activateFireShieldBooster() {
+        window.updateMissionProgress("use_boosters", 1);
         this.fireShieldActive = true;
         this.fireShieldArc.setVisible(true);
         this.playSFX('sfx_shield_activate', 0.6, false);
@@ -1104,6 +1104,7 @@ this.debuffTimer = this.time.addEvent({
     }
 
     activateSpeedBooster() {
+        window.updateMissionProgress("use_boosters", 1);
         this.playSFX('sfx_speed_boost', 0.6, false); 
         if (!this.isSpeedBoosted) {
             this.originalBgSpeed = this.backgroundSpeed;
@@ -1136,6 +1137,7 @@ this.debuffTimer = this.time.addEvent({
     }
 
     activateBatteryBooster() {
+        window.updateMissionProgress("use_boosters", 1);
         this.batteryMultiplier = 2.0;
         this.playSFX('sfx_powerup', 0.6);
         const txt = this.add.text(360, 580, "BATTERY BOOST (2x)", { fontSize: '42px', color: '#00ff00', fontStyle: 'bold' }).setOrigin(0.5);
@@ -1275,6 +1277,8 @@ this.debuffTimer = this.time.addEvent({
     }
 
     collectPowerUp(player, powerUp) {
+        window.updateMissionProgress("collect_powerups", 1);
+
         const type = powerUp.powerUpType;
         powerUp.destroy();
         this.playSFX('sfx_powerup', 0.5);
@@ -1689,6 +1693,8 @@ this.debuffTimer = this.time.addEvent({
         const stage = GameState.bossStage;
         const x = boss.x;
         const y = boss.y;
+
+        window.updateMissionProgress("kill_bosses", 1); // Triggers Boss Kill Mission
 
         if (this.bossAttackTimer) this.bossAttackTimer.remove();
         if (this.bossDipTween) this.bossDipTween.stop();

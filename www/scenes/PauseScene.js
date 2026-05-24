@@ -91,11 +91,8 @@ class PauseScene extends Phaser.Scene {
             const iconStr = isDone ? "✔" : "⏳";
             this.add.text(cx - 200, yPos, iconStr, { fontSize: isDone ? "22px" : "18px", color: isDone ? "#00ff00" : "#00aaff" }).setOrigin(0.5);
 
-            // Description
+            // Description - Now safely pulling from our dynamic pool!
             let descText = m.desc || m.type;
-            if (m.type === "kill_enemies") descText = "শত্রু ধ্বংস করুন";
-            else if (m.type === "collect_debris") descText = "ভাঙ্গারী সংগ্রহ করুন";
-            else if (m.type === "answer_correct") descText = "সঠিক উত্তর দিন";
 
             this.add.text(cx - 165, yPos - 18, descText, {
                 fontSize: "22px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold', padding: { y: 3 }

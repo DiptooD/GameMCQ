@@ -72,6 +72,7 @@ class DeathScene extends Phaser.Scene {
         
         if (typeof GameState.gamesPlayed !== 'undefined') {
             GameState.gamesPlayed++;
+            window.updateMissionProgress("play_matches", 1); // Mission Update Hook
         }
 
         const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };

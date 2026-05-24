@@ -843,9 +843,12 @@ class QuestionScene extends Phaser.Scene {
             if (GameState.weaponLevel < 4) GameState.weaponLevel++;
             
             GameState.currentCombo++;
+            
+            // --- NEW: MISSION HOOKS ---
             window.updateMissionProgress("answer_correct", 1); 
 
             if (GameState.currentCombo >= 3) {
+                window.updateMissionProgress("answer_combo", 1); // Combo hook!
                 gameScene.comboText.setText(`COMBO x${GameState.currentCombo}!`);
                 gameScene.comboText.setAlpha(1);
                 gameScene.comboText.setScale(0.8);

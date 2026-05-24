@@ -84,26 +84,66 @@ if (isNaN(storedSkips) || storedSkips < 10) {
     storedSkips = 10;
 }
 
+// Load Profile early so missions can scale based on Player Level
+let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
+let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
+let mergedProfile = { ...defaultProfile, ...storedProfile };
+
 const generateDailyMissions = () => {
+    // Determine player level for scaling
+    let xp = mergedProfile.xp || 0;
+    let level = Math.floor(Math.sqrt(xp / 50)) + 1;
+    let diffMult = 1 + (level * 0.15); // Scales targets up gradually
+
+    const missionPool = [
+        { type: "kill_enemies", desc: "শত্রু ধ্বংস করুন", min: 30, max: 60 },
+        { type: "collect_debris", desc: "ভাঙ্গারী সংগ্রহ করুন", min: 15, max: 30 },
+        { type: "answer_correct", desc: "সঠিক উত্তর দিন", min: 10, max: 25 },
+        { type: "play_matches", desc: "ম্যাচ খেলুন", min: 3, max: 6 },
+        { type: "kill_bosses", desc: "বস ধ্বংস করুন", min: 1, max: 3 },
+        { type: "collect_powerups", desc: "পাওয়ার-আপ সংগ্রহ করুন", min: 5, max: 12 },
+        { type: "use_boosters", desc: "বুস্টার ব্যবহার করুন", min: 2, max: 4 },
+        { type: "answer_combo", desc: "৩x কম্বো অর্জন করুন", min: 2, max: 5 }
+    ];
+
+    // Create a shuffled copy of the pool
+    const shuffledPool = [...missionPool];
+    Phaser.Utils.Array.Shuffle(shuffledPool);
+    const selectedMissions = shuffledPool.slice(0, 3); // Pick 3 random distinct missions
+
     const missions = [];
-    missions.push({ 
-        id: "m1", type: "kill_enemies", target: Phaser.Math.Between(30, 60), 
-        progress: 0, rewardType: "debris", rewardAmt: Phaser.Math.Between(20, 40), 
-        desc: "শত্রু ধ্বংস করুন", completed: false 
+    selectedMissions.forEach((mp, index) => {
+        // Apply level scaling to target, making sure it doesn't get wildly out of hand
+        let target = Math.floor(Phaser.Math.Between(mp.min, mp.max) * diffMult);
+        
+        let rewardType, rewardAmt;
+        const rewardRoll = Math.random();
+        
+        // Randomize Rewards securely within controlled Min/Max bounds
+        if (rewardRoll < 0.4) {
+            rewardType = "xp";
+            rewardAmt = Math.floor(Phaser.Math.Between(50, 100) * diffMult);
+        } else if (rewardRoll < 0.8) {
+            rewardType = "debris";
+            rewardAmt = Math.floor(Phaser.Math.Between(20, 50) * (1 + level * 0.05));
+        } else {
+            const boosters = ["fireShield", "speedBoost", "batteryEff"];
+            rewardType = "booster_" + Phaser.Utils.Array.GetRandom(boosters);
+            rewardAmt = Phaser.Math.Between(1, 1 + Math.floor(level / 10)); // Mostly 1, scales very slowly
+        }
+
+        missions.push({
+            id: "m" + (index + 1),
+            type: mp.type,
+            target: target,
+            progress: 0,
+            rewardType: rewardType,
+            rewardAmt: rewardAmt,
+            desc: mp.desc,
+            completed: false
+        });
     });
-    // Changed reward from 'keys' to 'xp'
-    missions.push({ 
-        id: "m2", type: "collect_debris", target: Phaser.Math.Between(15, 30), 
-        progress: 0, rewardType: "xp", rewardAmt: Phaser.Math.Between(50, 100), 
-        desc: "ভাঙ্গারী সংগ্রহ করুন", completed: false 
-    });
-    const boosters = ["fireShield", "speedBoost", "batteryEff"];
-    const randBooster = Phaser.Utils.Array.GetRandom(boosters);
-    missions.push({ 
-        id: "m3", type: "answer_correct", target: Phaser.Math.Between(10, 20), 
-        progress: 0, rewardType: "booster_" + randBooster, rewardAmt: 1, 
-        desc: "সঠিক উত্তর দিন", completed: false 
-    });
+
     return missions;
 };
 
@@ -117,10 +157,6 @@ if (storedDate !== todayStr || !storedMissions) {
     storedDate = todayStr;
     storedMissionsCompleted = false;
 }
-
-let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
-let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
-let mergedProfile = { ...defaultProfile, ...storedProfile };
 
 window.GameState = {
     score: 0,
