@@ -11,7 +11,7 @@ class GameScene extends GameBase {
         const w = 720;
 
         this.isResuming = false;
-        this.isAnimating = true; // Block pausing & input during entry animation
+        this.isAnimating = true; 
         this.hasRevived = false;
         this.bossRemnantsActive = 0; 
         this.isTransitioningToBoss = false;
@@ -85,7 +85,6 @@ class GameScene extends GameBase {
         this.targetX = 360;
         this.targetY = h - 150;
 
-        // Player spawns off-screen for entry animation
         this.player = this.physics.add.image(this.targetX, h + 150, "player_lv1")
             .setCollideWorldBounds(true)
             .setScale(0.9);
@@ -191,7 +190,6 @@ class GameScene extends GameBase {
             fontSize: '46px', fontFamily: "'Anek Bangla'", color: '#ffaa00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6
         }).setOrigin(0, 0.5).setDepth(100).setAlpha(0);
 
-        // --- ENTRY ANIMATION ---
         this.tweens.add({
             targets: this.player,
             y: this.targetY,
@@ -1286,7 +1284,7 @@ class GameScene extends GameBase {
         
         // --- COOL MINI-BOSS/REMNANT DEATH ANIMATION ---
         if (isRemnant) {
-            // BUG FIX: Toned down flash, wave, and shockwave volume
+            // Toned down flash, wave, and shockwave volume
             this.cameras.main.flash(150, 200, 255, 255, 0.5); 
             this.createExplosion(enemy.x, enemy.y, 0x00ffff, 20); 
             this.playSFX('sfx_shockwave', 0.4); 
@@ -1521,6 +1519,9 @@ class GameScene extends GameBase {
             this.boss.phase = 1;
             this.boss.setSize(216, 120);
             this.boss.setImmovable(true);
+            
+            // BUG FIX: Make boss invulnerable during entry tween
+            this.boss.isEntryInvulnerable = true;
 
             this.tweens.add({
                 targets: this.boss,
@@ -1528,6 +1529,7 @@ class GameScene extends GameBase {
                 duration: 2000,
                 ease: 'Cubic.easeOut',
                 onComplete: () => {
+                    this.boss.isEntryInvulnerable = false; // Remvoe invulnerability
                     this.bossBarBg.setVisible(true);
                     this.bossBarFill.setVisible(true);
 
@@ -1581,8 +1583,11 @@ class GameScene extends GameBase {
 
         // --- COOL BOSS DEATH ANIMATION (Phase 1 to Remnants) ---
         this.isAnimating = true;
-        this.physics.pause();
         this.playSFX('sfx_boss_spawn', 1.0, false);
+
+        // Slow down time for drama instead of pausing completely
+        this.physics.world.timeScale = 0.4;
+        this.cameras.main.zoomTo(1.05, 1500, 'Sine.easeInOut');
 
         boss.setTint(0xff0000);
         this.tweens.add({ targets: boss, x: x + Phaser.Math.Between(-10, 10), y: y + Phaser.Math.Between(-10, 10), duration: 50, yoyo: true, repeat: 20 });
@@ -1599,6 +1604,10 @@ class GameScene extends GameBase {
         }
 
         this.time.delayedCall(explosions * 150 + 200, () => {
+            // Restore normal time and zoom
+            this.physics.world.timeScale = 1.0;
+            this.cameras.main.zoomTo(1.0, 500, 'Quad.easeOut');
+
             this.playSFX('sfx_shockwave', 1.0, false);
             this.playSFX('sfx_explode', 1.0);
             this.cameras.main.flash(800, 255, 255, 255);
@@ -1615,8 +1624,6 @@ class GameScene extends GameBase {
 
             const remnantCount = 3 + stage;
             this.bossRemnantsActive = remnantCount;
-
-            this.physics.resume();
 
             for (let i = 0; i < remnantCount; i++) {
                 const remnant = this.enemies.create(x, y, remnantTexture);
@@ -1657,10 +1664,16 @@ class GameScene extends GameBase {
             this.isAnimating = true;
             this.physics.pause();
             this.playSFX('sfx_boss_win', 1.0, false);
+
+            // Clear wingmen so they don't float statically
+            this.wingmen.children.each(w => {
+                this.createExplosion(w.x, w.y, 0x0088ff, 10);
+                w.destroy();
+            });
             
-            // Dim screen drastically
-            const darkOverlay = this.add.rectangle(360, 640, 720, 1280, 0x000000, 0).setDepth(4000);
-            this.tweens.add({ targets: darkOverlay, fillAlpha: 0.85, duration: 1500 });
+            // Dim screen drastically (Keep reference for cleanup later)
+            this.darkOverlay = this.add.rectangle(360, 640, 720, 1280, 0x000000, 0).setDepth(4000);
+            this.tweens.add({ targets: this.darkOverlay, fillAlpha: 0.85, duration: 1500 });
             
             this.cameras.main.shake(3500, 0.015);
 
@@ -1854,6 +1867,19 @@ class GameScene extends GameBase {
                 this.gamePaused = false;
                 this.voidChoiceMenu.destroy();
                 
+                // BUG FIX: Clean up overlay and reset the player from the Singularity effect
+                if (this.darkOverlay) {
+                    this.tweens.add({ targets: this.darkOverlay, fillAlpha: 0, duration: 1000, onComplete: () => this.darkOverlay.destroy() });
+                }
+
+                this.player.setDepth(1);
+                this.player.clearTint();
+                this.player.setAlpha(1);
+                this.player.setAngle(0);
+                this.player.setScale(0.9);
+                this.player.setPosition(360, this.cameras.main.height - 150);
+                this.applyShipAnimation(GameState.equippedShip || "default");
+
                 const qScene = this.scene.get('QuestionScene');
                 if (qScene) {
                     qScene.toggleBattleMode(false);
@@ -1888,6 +1914,10 @@ class GameScene extends GameBase {
                 this.time.paused = false;
                 this.gamePaused = false;
                 this.voidChoiceMenu.destroy();
+                
+                // BUG FIX: Clean up overlay just in case before heading to DeathScene
+                if (this.darkOverlay) this.darkOverlay.destroy();
+                
                 this.finalizeGameOver();
             }});
         });
@@ -2097,6 +2127,14 @@ class GameScene extends GameBase {
     }
 
     handleBossHit(boss, shot) {
+        // BUG FIX: Prevent boss from taking damage during its entry sequence
+        if (boss.isEntryInvulnerable) {
+            if (shot.weaponType !== "lightning" && shot.weaponType !== "plasma" && shot.weaponType !== "ice") {
+                shot.destroy();
+            }
+            return;
+        }
+
         const weaponType = shot.weaponType || shot.texture.key;
         let damage = 1;
         const damageMultiplier = 1 + (this.getGlobalProgress() * 0.15);
