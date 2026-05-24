@@ -19,7 +19,7 @@ class GameScene extends GameBase {
         this.isJammed = false;
         this.isHijacked = false;
         
-        this.isDashActive = false; // NEW
+        this.isDashActive = false; 
 
         if ('wakeLock' in navigator) {
             try {
@@ -76,7 +76,7 @@ class GameScene extends GameBase {
         this.isInvulnerable = false;
         this.magnetTimer = null;
         this.magnetDuration = 0;
-        this.dashTimerEvent = null; // NEW
+        this.dashTimerEvent = null; 
 
         this.regenDelay = 10000;
         this.lastRegenTime = 0;
@@ -325,18 +325,30 @@ class GameScene extends GameBase {
         this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
     }
     
+    // --- DASH ABILITY UPDATE ---
     activateDash() {
         this.isDashActive = true;
         this.playSFX('sfx_speed_boost', 0.7); 
         
+        // Increase game speed temporarily
+        if (!this.originalBgSpeedDash) this.originalBgSpeedDash = this.backgroundSpeed;
+        this.backgroundSpeed = this.originalBgSpeedDash * 2.5;
+        this.physics.world.timeScale = 0.6; // Accelerate physics for cooler feel
+
         if (!this.dashAura) {
-            this.dashAura = this.add.image(this.player.x, this.player.y - 45, "aura_dash").setDepth(12);
+            this.dashAura = this.add.image(this.player.x, this.player.y - 20, "aura_dash").setDepth(12);
         }
         this.dashAura.setVisible(true);
+        this.dashAura.setScale(2.5); // Making the visualizer bigger
+        this.dashAura.setTint(0x00ffff);
+
+        this.tweens.killTweensOf(this.dashAura);
+        this.dashAura.setAlpha(1);
 
         this.tweens.add({
             targets: this.dashAura,
             alpha: { from: 1, to: 0.4 },
+            scale: { from: 2.5, to: 2.8 },
             duration: 150,
             yoyo: true,
             repeat: -1
@@ -347,10 +359,29 @@ class GameScene extends GameBase {
         }
 
         const durationMs = Phaser.Math.Between(6000, 9000);
+
+        // Warning Effect (Blink Red) to show recovery is imminent
+        this.time.delayedCall(durationMs - 1500, () => {
+            if (this.isDashActive && this.dashAura) {
+                this.dashAura.setTint(0xff5555);
+                this.tweens.killTweensOf(this.dashAura);
+                this.tweens.add({
+                    targets: this.dashAura,
+                    alpha: 0.1,
+                    duration: 100,
+                    yoyo: true,
+                    repeat: -1
+                });
+            }
+        });
+
         this.dashTimerEvent = this.time.delayedCall(durationMs, () => {
             this.isDashActive = false;
+            this.backgroundSpeed = this.originalBgSpeedDash || 1;
+            this.physics.world.timeScale = 1.0;
             if (this.dashAura) {
                 this.dashAura.setVisible(false);
+                this.dashAura.clearTint();
                 this.tweens.killTweensOf(this.dashAura);
             }
         });
@@ -483,6 +514,7 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
+    // --- DEBUFF UPDATE ---
     applyThiefDebuff() {
         const duration = Phaser.Math.Between(4000, 6000);
         
@@ -513,6 +545,23 @@ class GameScene extends GameBase {
             callback: () => {
                 this.isJammed = false;
                 this.isHijacked = false;
+                
+                // FIX: Grant Invulnerability for the snap-back to original pointer location
+                this.isInvulnerable = true;
+                this.tweens.add({
+                    targets: this.player,
+                    alpha: 0.3,
+                    duration: 150,
+                    yoyo: true,
+                    repeat: 7, // Protects player for ~2.4 seconds
+                    onComplete: () => {
+                        if (this.player && this.player.active) {
+                            this.player.setAlpha(1);
+                            this.isInvulnerable = false;
+                        }
+                    }
+                });
+                
                 if (this.debuffAura) this.debuffAura.clear();
                 if (this.player && this.player.active && !this.isInvulnerable) this.player.clearTint();
                 
@@ -574,7 +623,7 @@ class GameScene extends GameBase {
 
             if (this.isDashActive && this.dashAura) {
                 this.dashAura.x = this.player.x;
-                this.dashAura.y = this.player.y - 45;
+                this.dashAura.y = this.player.y - 20; // Adjusted for new scale
             }
 
             if (this.isJammed || this.isHijacked) {
@@ -1607,6 +1656,7 @@ class GameScene extends GameBase {
         });
     }
 
+    // --- BOSS DEATH FIXES ---
     triggerBossDeathSequence(boss) {
         const stage = GameState.bossStage;
         const x = boss.x;
@@ -1618,7 +1668,18 @@ class GameScene extends GameBase {
         this.bossBarBg.setVisible(false);
         this.bossBarFill.setVisible(false);
 
-        // --- COOL BOSS DEATH ANIMATION (Phase 1 to Remnants) ---
+        // FIX: Clear all hazards instantly to prevent unfair deaths during animation
+        this.bossBullets.clear(true, true);
+        this.obstacles.clear(true, true);
+        this.meteors.clear(true, true);
+        this.enemies.children.each(e => {
+            if (e !== boss && !e.isBossRemnant) {
+                e.destroy();
+            }
+        });
+
+        // Grant temporary invulnerability during the chaotic sequence
+        this.isInvulnerable = true; 
         this.isAnimating = true;
 
         this.playSFX('sfx_boss_overload', 1.0, false);
@@ -1633,7 +1694,6 @@ class GameScene extends GameBase {
             repeat: 25
         });
 
-        // Flash boss bright white and red
         this.time.addEvent({
             delay: 100,
             repeat: 12,
@@ -1693,29 +1753,41 @@ class GameScene extends GameBase {
             }
             
             this.isAnimating = false;
+            this.isInvulnerable = false; // Remnants active, remove invulnerability
         });
     }
 
     winBossFight() {
         if (!GameState.bossActive) return; 
         
-        // --- SICK FINAL BOSS DEATH ANIMATION ---
         if (GameState.bossStage === 2) {
             this.isAnimating = true;
             this.physics.pause();
             this.playSFX('sfx_boss_win', 1.0, false);
+
+            // FIX: Safely clear out everything left
+            this.bossBullets.clear(true, true);
+            this.enemies.clear(true, true);
+            this.obstacles.clear(true, true);
+            this.meteors.clear(true, true);
+            this.isInvulnerable = true;
 
             this.wingmen.children.each(w => {
                 this.createExplosion(w.x, w.y, 0x0088ff, 10);
                 w.destroy();
             });
             
-            this.darkOverlay = this.add.rectangle(360, 640, 720, 1280, 0x000000, 0).setDepth(4000);
+            // FIX: Use camera width/height to avoid cutoff on taller phones
+            const cx = this.cameras.main.centerX;
+            const cy = this.cameras.main.centerY;
+            const w = this.cameras.main.width;
+            const h = this.cameras.main.height;
+
+            this.darkOverlay = this.add.rectangle(cx, cy, w * 2, h * 2, 0x000000, 0).setDepth(4000);
             this.tweens.add({ targets: this.darkOverlay, fillAlpha: 0.85, duration: 1500 });
             
             this.cameras.main.shake(3500, 0.015);
 
-            const cx = 360, cy = 400;
             const singularityCore = this.add.circle(cx, cy, 5, 0x000000).setDepth(4001).setStrokeStyle(4, 0xff00ff);
             const singularityGlow = this.add.circle(cx, cy, 10, 0xcc00ff, 0.6).setDepth(4000);
             const aura = this.add.image(cx, cy, "aura_plasma").setTint(0xff00ff).setDepth(4000).setScale(0.1);
@@ -1855,6 +1927,7 @@ class GameScene extends GameBase {
         }
     }
 
+    // --- ENDLESS MODE RESET FIXES ---
     showVoidChoiceMenu() {
         this.physics.pause();
         this.time.paused = true;
@@ -1865,7 +1938,7 @@ class GameScene extends GameBase {
         const cx = w / 2, cy = h / 2;
 
         this.voidChoiceMenu = this.add.container(0, 0).setDepth(10000);
-        const bg = this.add.rectangle(cx, cy, w, h, 0x000000, 0.85).setInteractive();
+        const bg = this.add.rectangle(cx, cy, w * 2, h * 2, 0x000000, 0.85).setInteractive(); // Full size
 
         const panelW = 600, panelH = 500, panelX = cx - panelW / 2, panelY = cy - panelH / 2;
         const panelGraphics = this.add.graphics();
@@ -1914,7 +1987,7 @@ class GameScene extends GameBase {
                 
                 if (this.darkOverlay) this.darkOverlay.destroy();
 
-                this.playSFX('sfx_wormhole_exit', 0.5, false);
+                this.playSFX('sfx_wormhole_exit', 0.3, false);
                 const flash = this.add.circle(cx, cy, 10, 0xffffff).setDepth(5000);
                 this.tweens.add({
                     targets: flash,
@@ -1925,7 +1998,7 @@ class GameScene extends GameBase {
                     onComplete: () => flash.destroy()
                 });
                 
-                // FIXED: Clear ALL active screen objects before respawning the player
+                // FIX: Ensure complete screen wipeout
                 this.enemies.clear(true, true);
                 this.obstacles.clear(true, true);
                 this.meteors.clear(true, true);
@@ -1935,6 +2008,11 @@ class GameScene extends GameBase {
                 this.specialWeapons.clear(true, true);
                 this.batteries.clear(true, true);
                 this.powerUps.clear(true, true);
+
+                // FIX: Block shooting during warp-in and resume physics immediately
+                this.isAnimating = true; 
+                this.isResuming = true;
+                this.physics.resume(); 
 
                 this.player.setDepth(1);
                 this.player.clearTint();
@@ -1961,9 +2039,10 @@ class GameScene extends GameBase {
                             qScene.refreshQuestion();
                         }
                         
-                        // FIXED: Removed the countdown for a simpler, instant start
+                        // Release blocks
                         this.isResuming = false;
-                        this.physics.resume();
+                        this.isAnimating = false;
+                        this.isInvulnerable = false;
                     }
                 });
             }});
@@ -2075,7 +2154,6 @@ class GameScene extends GameBase {
     }
 
     hitPlayer(player, source) {
-        // FIXED: Complete invulnerability to hazards, and instant kill to obstacles/enemies while Dashing
         if (this.isDashActive) {
             const isBoss = (source === this.boss);
             if (!isBoss && source.active) {
@@ -2650,27 +2728,41 @@ class GameScene extends GameBase {
 
     startCountdown() {
         if (this.isResuming || this.isAnimating) return;
-        
-        // FIXED: Removed the 3-2-1 countdown for a fast, simple start!
-        this.isResuming = false;
-        this.physics.resume();
-        this.playSFX('sfx_tick', 0.5, false);
+        this.isResuming = true;
+        this.physics.pause();
 
+        let count = 3;
         const cx = this.cameras.main.width / 2;
         const cy = this.cameras.main.height / 2;
 
-        const countText = this.add.text(cx, cy, "শুরু!", {
-            fontSize: '80px', fontFamily: "'Anek Bangla'", color: '#04d604', fontStyle: 'bold',
+        const countText = this.add.text(cx, cy, "3", {
+            fontSize: '100px', fontFamily: "'Anek Bangla'", color: '#04ddcb', fontStyle: 'bold',
             stroke: '#000000', strokeThickness: 10, padding: { top: 20, bottom: 20 }
         }).setOrigin(0.5).setDepth(30000);
 
-        this.tweens.add({ 
-            targets: countText, 
-            alpha: 0, 
-            scale: 1.5, 
-            duration: 800, 
-            ease: 'Quad.out',
-            onComplete: () => countText.destroy() 
+        this.time.addEvent({
+            delay: 1000,
+            repeat: 2,
+            callback: () => {
+                count--;
+                this.playSFX('sfx_tick', 0.5, false);
+
+                if (count > 0) {
+                    countText.setText(count);
+                    countText.setScale(0.5);
+                    this.tweens.add({ targets: countText, scale: 1, duration: 400, ease: 'Back.out' });
+                } else if (count === 0) {
+                    countText.setText("শুরু!");
+                    countText.setColor("#04d604");
+                    countText.setFontSize('80px');
+                    this.isResuming = false;
+                    
+                    this.physics.resume();
+                    
+                    this.tweens.add({ targets: countText, alpha: 0, scale: 1.5, duration: 500, onComplete: () => countText.destroy() });
+                }
+            },
+            callbackScope: this
         });
     }
 
