@@ -17,14 +17,13 @@ class GameBase extends Phaser.Scene {
     // Balanced modifiers - no longer overly OP, just a slight edge for new players
     return {
         factor: luckFactor,                  
-        speedMult: 1.0 - (0.25 * luckFactor), // 25% slower at max luck (was 60%)
-        delayMult: 1.0 + (0.80 * luckFactor), // 80% slower spawns at max luck (was 80%)
-        batteryDropMult: 1.0 + (0.70 * luckFactor), // 70% more battery value (was 200%)
-        batteryDropChance: 0.15 * luckFactor, // 15% extra drop chance (was 50%)
-        hpMult: 1.0 - (0.25 * luckFactor), // 25% less HP (was 50%)
-        playerDamageMult: 1.0 + (0.30 * luckFactor), // 30% more player damage (was 100%)
+        speedMult: 1.0 - (0.25 * luckFactor), 
+        delayMult: 1.0 + (0.80 * luckFactor), 
+        batteryDropMult: 1.0 + (0.70 * luckFactor), 
+        batteryDropChance: 0.15 * luckFactor, 
+        hpMult: 1.0 - (0.25 * luckFactor), 
+        playerDamageMult: 1.0 + (0.30 * luckFactor), 
         
-        // Debris: Starts off 60% lower than normal at max luck, scales up to normal as luck fades.
         debrisDropChance: 0.5 * (1.0 - (0.6 * luckFactor)) 
     };
   }
@@ -356,7 +355,6 @@ class GameBase extends Phaser.Scene {
       e.rotSpeed = baseSpeed + (progress * 0.5);
     }
 
-    // Apply modifiers from GameScene (Shields, Bombs, Dashes)
     if (this.applyEnemyModifiers) {
         this.applyEnemyModifiers(e);
     }
@@ -408,7 +406,7 @@ class GameBase extends Phaser.Scene {
     let powerUpType;
     const roll = Math.random();
     
-    if (roll > 0.95) {
+    if (roll > 0.97) {
         powerUpType = "powerup_dash";
     } else if (roll > 0.88) {
         powerUpType = "powerup_fiftyfifty";
@@ -550,36 +548,38 @@ class GameBase extends Phaser.Scene {
             ease: 'Quint.easeOut', 
             onUpdate: () => {
                 wave.x += Math.sin(this.time.now * 0.1) * 0.5;
-
                 const currentRadius = 80 * (wave.scale / 0.15);
-                
-                // FIXED: Included meteors in the shockwave target array
-                const targets = [
-                    ...(this.enemies ? this.enemies.getChildren() : []), 
-                    ...(this.obstacles ? this.obstacles.getChildren() : []), 
-                    ...(this.meteors ? this.meteors.getChildren() : []),
-                    ...(this.bossBullets ? this.bossBullets.getChildren() : [])
-                ];
-                
-                targets.forEach(target => {
-                    if (target.active && !target.hitByWave) {
-                        const dist = Phaser.Math.Distance.Between(wave.x, wave.y, target.x, target.y);
-                        
-                        if (dist <= currentRadius) {
-                            target.hitByWave = true;
-                            this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
-                                if (this.enemies && this.enemies.contains(target)) {
-                                     this.destroyEnemy(target);
-                                } else {
-                                     this.createExplosion(target.x, target.y, 0xffff00, 20);
-                                     if (target.trail) target.trail.destroy(); // Properly clean up trails
-                                     target.destroy();
-                                     GameState.score += 20;
-                                }
-                            });
+
+                // FIX: Eliminated the massive GC Leak. Iterate cleanly instead of spreading Arrays per frame.
+                const evaluateGroup = (group) => {
+                    if (!group) return;
+                    group.getChildren().forEach(target => {
+                        if (target.active && !target.hitByWave) {
+                            const dist = Phaser.Math.Distance.Between(wave.x, wave.y, target.x, target.y);
+                            
+                            if (dist <= currentRadius) {
+                                target.hitByWave = true;
+                                this.time.delayedCall(Phaser.Math.Between(0, 100), () => {
+                                    if (this.enemies && this.enemies.contains(target)) {
+                                         this.destroyEnemy(target);
+                                    } else {
+                                         this.createExplosion(target.x, target.y, 0xffff00, 20);
+                                         if (target.trail) target.trail.destroy(); 
+                                         target.destroy();
+                                         if (this.obstacles && this.obstacles.contains(target)) {
+                                            GameState.score += 20;
+                                         }
+                                    }
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                };
+                
+                evaluateGroup(this.enemies);
+                evaluateGroup(this.obstacles);
+                evaluateGroup(this.meteors);
+                evaluateGroup(this.bossBullets);
             },
             onComplete: () => wave.destroy()
         });

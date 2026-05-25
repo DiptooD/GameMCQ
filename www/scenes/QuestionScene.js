@@ -484,10 +484,14 @@ class QuestionScene extends Phaser.Scene {
         const safeStage = (GameState.bossStage || 0) + 1;
         const stageText = safeStage >= 4 ? "Void" : safeStage;
         const safeCount = GameState.correctCount || 0;
-        const safeTotal = GameState.totalCorrectNeeded || 10;
-
-        this.correctLabel.setText(`লেভেল: ${stageText}  |  সঠিক: ${safeCount}/${safeTotal}`);
         
+        // FIX: Display Infinite requirement gracefully
+        const safeTotal = GameState.totalCorrectNeeded || 10;
+        const safeTotalStr = safeTotal === Infinity ? "অসীম" : safeTotal;
+
+        this.correctLabel.setText(`লেভেল: ${stageText}  |  সঠিক: ${safeCount}/${safeTotalStr}`);
+        
+        // FIX: Replaced `isReady` ReferenceError with proper `isNowReady` check
         const isNowReady = GameState.battery >= 100;
         
         if (isNowReady !== this.wasReady && !this.isProcessing) {
@@ -497,8 +501,8 @@ class QuestionScene extends Phaser.Scene {
             
             this.setButtonsState(isNowReady);
             this.updateReadyState(isNowReady);
-            this.manageMeteorTimer(isReady);
-            this.wasReady = isReady;
+            this.manageMeteorTimer(isNowReady);
+            this.wasReady = isNowReady;
         }
     }
 

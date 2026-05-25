@@ -282,7 +282,7 @@ window.updateLevelTargets = function() {
     if (GameState.bossStage === 0) GameState.totalCorrectNeeded = Math.max(3, 10 - discount); 
     else if (GameState.bossStage === 1) GameState.totalCorrectNeeded = Math.max(3, 7 - discount);  
     else if (GameState.bossStage === 2) GameState.totalCorrectNeeded = Math.max(2, 5 - discount);  
-    else GameState.totalCorrectNeeded = Infinity .textContent = "অসীম"; 
+    else GameState.totalCorrectNeeded = Infinity; // FIX: Prevented Infinity .textContent TypeError
 };
 
 window.resetGameState = function () {
