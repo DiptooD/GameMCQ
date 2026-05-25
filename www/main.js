@@ -32,7 +32,6 @@ const config = {
   input: {
     activePointers: 2, 
   },
-  // Added PlayerProfileScene here
   scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, GameScene, QuestionScene, PauseScene, DeathScene, PlayerProfileScene]
 };
 
@@ -126,7 +125,8 @@ document.addEventListener("deviceready", () => {
 
         if (isGameRunning) {
             const gameScene = sceneManager.getScene("GameScene");
-            if (gameScene && gameScene.isResuming) return; 
+            // FIX: Prevent routing conflicts when game state is locked in animation or death sequences
+            if (gameScene && (gameScene.isResuming || gameScene.isAnimating || gameScene.gamePaused)) return; 
 
             gameScene.scene.pause("GameScene");
             gameScene.scene.pause("QuestionScene");

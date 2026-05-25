@@ -325,15 +325,13 @@ class GameScene extends GameBase {
         this.createExplosion(this.player.x, this.player.y, 0xff3300, 40); 
     }
     
-    // --- DASH ABILITY UPDATE ---
     activateDash() {
         this.isDashActive = true;
         this.playSFX('sfx_speed_boost', 0.7); 
         
-        // Increase game speed temporarily
         if (!this.originalBgSpeedDash) this.originalBgSpeedDash = this.backgroundSpeed;
         this.backgroundSpeed = this.originalBgSpeedDash * 2.5;
-        this.physics.world.timeScale = 0.7; // Accelerate physics for cooler feel
+        this.physics.world.timeScale = 0.7; 
 
         if (!this.dashAura) {
             this.dashAura = this.add.image(this.player.x, this.player.y - 20, "aura_dash").setDepth(12);
@@ -361,7 +359,6 @@ class GameScene extends GameBase {
 
         const durationMs = Phaser.Math.Between(6000, 9000);
 
-        // Warning Effect: Aggressive Red Blink on Aura and Player
         this.time.delayedCall(durationMs - 1500, () => {
             if (this.isDashActive && this.dashAura) {
                 this.dashAura.setTint(0xff0000);
@@ -371,8 +368,8 @@ class GameScene extends GameBase {
                 this.tweens.add({
                     targets: this.dashAura,
                     alpha: { from: 1, to: 0 },
-                    scale: { from: 2.5, to: 3.5 }, // Explodes outward
-                    duration: 120, // Faster blink
+                    scale: { from: 2.5, to: 3.5 }, 
+                    duration: 120, 
                     yoyo: true,
                     repeat: -1
                 });
@@ -394,18 +391,17 @@ class GameScene extends GameBase {
                 this.player.clearTint();
             }
 
-            // --- 2.4s Post-Dash Invulnerability ---
             this.isInvulnerable = true;
             this.tweens.add({
                 targets: this.player,
                 alpha: 0.3,
                 duration: 150,
                 yoyo: true,
-                repeat: 7, // 1 play + 7 repeats = 8 cycles * 300ms = 2400ms (2.4s)
+                repeat: 7, 
                 onComplete: () => {
                     if (this.player && this.player.active) {
                         this.player.setAlpha(1);
-                        this.player.clearTint(); // Forcefully remove warning tint
+                        this.player.clearTint(); 
                         this.isInvulnerable = false;
                     }
                 }
@@ -540,7 +536,6 @@ class GameScene extends GameBase {
         this.sound.play(key, config);
     }
 
-    // --- DEBUFF UPDATE ---
     applyThiefDebuff() {
         const duration = Phaser.Math.Between(4000, 6000);
         
@@ -573,20 +568,19 @@ class GameScene extends GameBase {
                 this.isHijacked = false;
                 
                 if (this.debuffAura) this.debuffAura.clear();
-                if (this.player && this.player.active) this.player.clearTint(); // Clean up jam tint immediately
+                if (this.player && this.player.active) this.player.clearTint(); 
                 
-                // FIX: Grant Invulnerability for the snap-back
                 this.isInvulnerable = true;
                 this.tweens.add({
                     targets: this.player,
                     alpha: 0.3,
                     duration: 150,
                     yoyo: true,
-                    repeat: 7, // Protects player for ~2.4 seconds
+                    repeat: 7, 
                     onComplete: () => {
                         if (this.player && this.player.active) {
                             this.player.setAlpha(1);
-                            this.player.clearTint(); // Guaranteed texture reset
+                            this.player.clearTint(); 
                             this.isInvulnerable = false;
                         }
                     }
@@ -650,7 +644,7 @@ class GameScene extends GameBase {
 
             if (this.isDashActive && this.dashAura) {
                 this.dashAura.x = this.player.x;
-                this.dashAura.y = this.player.y - 20; // Adjusted for new scale
+                this.dashAura.y = this.player.y - 20; 
             }
 
             if (this.isJammed || this.isHijacked) {
@@ -877,17 +871,24 @@ class GameScene extends GameBase {
                 }
             }
 
+            // FIX: Safely calculate Centipede segment trailing to avoid null pointers
             if (e.enemyType === "centipede" && e.segments) {
+                e.segments = e.segments.filter(seg => seg && seg.active);
+                
                 e.segments.forEach((seg, i) => {
-                    if (seg.active) {
+                    if (seg && seg.active) {
                         const target = i === 0 ? e : e.segments[i - 1];
-                        const angle = Phaser.Math.Angle.Between(seg.x, seg.y, target.x, target.y);
-                        const dist = Phaser.Math.Distance.Between(seg.x, seg.y, target.x, target.y);
-                        const targetDist = 45;
+                        if (target && target.active) {
+                            const angle = Phaser.Math.Angle.Between(seg.x, seg.y, target.x, target.y);
+                            const dist = Phaser.Math.Distance.Between(seg.x, seg.y, target.x, target.y);
+                            const targetDist = 45;
 
-                        if (dist > targetDist) {
-                            seg.x += Math.cos(angle) * (dist - targetDist) * 0.3 * dtScale;
-                            seg.y += Math.sin(angle) * (dist - targetDist) * 0.3 * dtScale;
+                            if (dist > targetDist) {
+                                seg.x += Math.cos(angle) * (dist - targetDist) * 0.3 * dtScale;
+                                seg.y += Math.sin(angle) * (dist - targetDist) * 0.3 * dtScale;
+                            }
+                        } else {
+                            seg.setVelocityY((120 + (this.getGlobalProgress() * 3)) * this.luckMods.speedMult);
                         }
                     }
                 });
@@ -1030,6 +1031,25 @@ class GameScene extends GameBase {
         } else {
             this.isRegenerating = false;
         }
+
+        // FIX: Ensure tracking bullets don't crash rendering when player dies
+        this.bossBullets.children.each(bullet => {
+            if (bullet.trackingBullet && bullet.active) {
+                if (this.player && this.player.active) {
+                    const angle = Phaser.Math.Angle.Between(bullet.x, bullet.y, this.player.x, this.player.y);
+                    const currentAngle = Math.atan2(bullet.body.velocity.y, bullet.body.velocity.x);
+                    const angleDiff = Phaser.Math.Angle.Wrap(angle - currentAngle);
+                    const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -0.03, 0.03);
+                    const speed = 450 * (1 + (this.getGlobalProgress() * 0.03)) * this.luckMods.speedMult;
+                    bullet.setVelocity(Math.cos(newAngle) * speed, Math.sin(newAngle) * speed);
+                    bullet.setScale(1 + Math.sin(this.time.now / 100) * 0.1);
+                } else {
+                    bullet.setScale(1 + Math.sin(this.time.now / 100) * 0.1);
+                }
+            } else if (bullet.getData('isPoison')) {
+                bullet.x += Math.sin(this.time.now / 100) * 2;
+            }
+        });
     }
 
     createBoosterUI() {
@@ -1367,9 +1387,10 @@ class GameScene extends GameBase {
         const scoreValue = enemy.tier === "ultra" ? 50 : enemy.tier === "rare" ? 25 : enemy.tier === "dragon" ? 60 : enemy.tier === "spinner" ? 40 : enemy.tier === "centipede" ? 35 : (enemy.tier === "mini_boss" ? 30 : 10);
         GameState.score += scoreValue;
 
+        // FIX: Ensure Centipede Segments are securely destroyed without null pointer exceptions
         if (enemy.segments) {
             enemy.segments.forEach(seg => {
-                if (seg.active) {
+                if (seg && seg.active) {
                     this.createExplosion(seg.x, seg.y, 0x228822, 12);
                     seg.destroy();
                 }
@@ -1408,7 +1429,6 @@ class GameScene extends GameBase {
         
         const isRemnant = enemy.isBossRemnant;
         
-        // Toned down remnant death sequence
         if (isRemnant) {
             this.cameras.main.flash(50, 255, 255, 255, 0.3); 
             this.createExplosion(enemy.x, enemy.y, 0x00ffff, 10); 
@@ -1567,20 +1587,6 @@ class GameScene extends GameBase {
                 if (fired) this.playSFX('sfx_enemy_shoot', 0.15);
             }
         });
-
-        this.bossBullets.children.each(bullet => {
-            if (bullet.trackingBullet && bullet.active) {
-                const angle = Phaser.Math.Angle.Between(bullet.x, bullet.y, this.player.x, this.player.y);
-                const currentAngle = Math.atan2(bullet.body.velocity.y, bullet.body.velocity.x);
-                const angleDiff = Phaser.Math.Angle.Wrap(angle - currentAngle);
-                const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -0.03, 0.03);
-                const speed = 450 * bulletSpeedMultiplier;
-                bullet.setVelocity(Math.cos(newAngle) * speed, Math.sin(newAngle) * speed);
-                bullet.setScale(1 + Math.sin(this.time.now / 100) * 0.1);
-            } else if (bullet.getData('isPoison')) {
-                bullet.x += Math.sin(this.time.now / 100) * 2;
-            }
-        });
     }
 
     checkBossSpawn() {
@@ -1688,13 +1694,12 @@ class GameScene extends GameBase {
         });
     }
 
-    // --- BOSS DEATH FIXES ---
     triggerBossDeathSequence(boss) {
         const stage = GameState.bossStage;
         const x = boss.x;
         const y = boss.y;
 
-        window.updateMissionProgress("kill_bosses", 1); // Triggers Boss Kill Mission
+        window.updateMissionProgress("kill_bosses", 1); 
 
         if (this.bossAttackTimer) this.bossAttackTimer.remove();
         if (this.bossDipTween) this.bossDipTween.stop();
@@ -1702,7 +1707,6 @@ class GameScene extends GameBase {
         this.bossBarBg.setVisible(false);
         this.bossBarFill.setVisible(false);
 
-        // FIX: Clear all hazards instantly to prevent unfair deaths during animation
         this.bossBullets.clear(true, true);
         this.obstacles.clear(true, true);
         this.meteors.clear(true, true);
@@ -1712,7 +1716,6 @@ class GameScene extends GameBase {
             }
         });
 
-        // Grant temporary invulnerability during the chaotic sequence
         this.isInvulnerable = true; 
         this.isAnimating = true;
 
@@ -1787,7 +1790,7 @@ class GameScene extends GameBase {
             }
             
             this.isAnimating = false;
-            this.isInvulnerable = false; // Remnants active, remove invulnerability
+            this.isInvulnerable = false; 
         });
     }
 
@@ -1799,7 +1802,6 @@ class GameScene extends GameBase {
             this.physics.pause();
             this.playSFX('sfx_boss_win', 1.0, false);
 
-            // FIX: Safely clear out everything left
             this.bossBullets.clear(true, true);
             this.enemies.clear(true, true);
             this.obstacles.clear(true, true);
@@ -1811,7 +1813,6 @@ class GameScene extends GameBase {
                 w.destroy();
             });
             
-            // FIX: Use camera width/height to avoid cutoff on taller phones
             const cx = this.cameras.main.centerX;
             const cy = this.cameras.main.centerY;
             const w = this.cameras.main.width;
@@ -1884,7 +1885,6 @@ class GameScene extends GameBase {
             return;
         }
 
-        // --- NORMAL BOSS (1 AND 2) WIN LOGIC ---
         this.playSFX('sfx_boss_win', 0.8, false);
 
         if (GameState.gameMode !== "revision") {
@@ -1961,7 +1961,6 @@ class GameScene extends GameBase {
         }
     }
 
-    // --- ENDLESS MODE RESET FIXES ---
     showVoidChoiceMenu() {
         this.physics.pause();
         this.time.paused = true;
@@ -1972,7 +1971,7 @@ class GameScene extends GameBase {
         const cx = w / 2, cy = h / 2;
 
         this.voidChoiceMenu = this.add.container(0, 0).setDepth(10000);
-        const bg = this.add.rectangle(cx, cy, w * 2, h * 2, 0x000000, 0.85).setInteractive(); // Full size
+        const bg = this.add.rectangle(cx, cy, w * 2, h * 2, 0x000000, 0.85).setInteractive(); 
 
         const panelW = 600, panelH = 500, panelX = cx - panelW / 2, panelY = cy - panelH / 2;
         const panelGraphics = this.add.graphics();
@@ -2032,7 +2031,6 @@ class GameScene extends GameBase {
                     onComplete: () => flash.destroy()
                 });
                 
-                // FIX: Ensure complete screen wipeout
                 this.enemies.clear(true, true);
                 this.obstacles.clear(true, true);
                 this.meteors.clear(true, true);
@@ -2043,7 +2041,6 @@ class GameScene extends GameBase {
                 this.batteries.clear(true, true);
                 this.powerUps.clear(true, true);
 
-                // FIX: Block shooting during warp-in and resume physics immediately
                 this.isAnimating = true; 
                 this.isResuming = true;
                 this.physics.resume(); 
@@ -2073,7 +2070,6 @@ class GameScene extends GameBase {
                             qScene.refreshQuestion();
                         }
                         
-                        // Release blocks
                         this.isResuming = false;
                         this.isAnimating = false;
                         this.isInvulnerable = false;
@@ -2331,10 +2327,29 @@ class GameScene extends GameBase {
             const x = Phaser.Math.Between(50, 670);
             const type = (stage === 0) ? "enemy_common" : (stage === 1 ? "enemy_octopus" : "enemy_dragon");
             const minion = this.enemies.create(x, 200, type);
+            
+            // FIX: Supply the missing properties so the update loop doesn't choke
             minion.hp = 10;
+            minion.maxHp = 10;
+            minion.tier = type.replace("enemy_", "");
+            minion.enemyType = minion.tier;
+            
             minion.setVelocityY(150);
             minion.setAlpha(0.8);
             minion.setScale(1.2);
+            
+            // FIX: Initialize the specific move patterns properly
+            if (minion.tier === "octopus") {
+                minion.movePattern = "jet_pulse"; 
+                minion.pulseTimer = 0;
+            } else if (minion.tier === "dragon") {
+                minion.movePattern = "zigzag"; 
+                minion.setVelocityX(Phaser.Math.Between(-100, 100));
+            } else {
+                minion.movePattern = "straight"; 
+                minion.rotSpeed = 2;
+            }
+            
             this.tweens.add({ targets: minion, scale: { from: 0, to: 1.2 }, duration: 500 });
         }
     }

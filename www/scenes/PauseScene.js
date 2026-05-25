@@ -115,7 +115,7 @@ class PauseScene extends Phaser.Scene {
                 fontSize: "16px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#aaaaaa", fontStyle: "bold"
             }).setOrigin(0, 0.5);
 
-            // Reward Info
+// Reward Info
             let rewStr = `+${m.rewardAmt}`;
             let rewColor = "#ffffff";
             let tex = "";
@@ -137,11 +137,17 @@ class PauseScene extends Phaser.Scene {
                 rewColor = "#00ffcc"; 
                 tex = "ui_bolt";
                 texScale = 0.6;
+            } else if (m.rewardType && typeof m.rewardType === 'string' && m.rewardType.includes("fire")) { 
+                rewColor = "#ff00ff"; 
+                tex = "icon_booster_fire";
+                texScale = 0.6;
+            } else if (m.rewardType && typeof m.rewardType === 'string' && m.rewardType.includes("speed")) { 
+                rewColor = "#ff00ff"; 
+                tex = "icon_booster_speed";
+                texScale = 0.6;
             } else { 
                 rewColor = "#ff00ff"; 
-                if (m.rewardType.includes("fire")) tex = "icon_booster_fire";
-                else if (m.rewardType.includes("speed")) tex = "icon_booster_speed";
-                else tex = "icon_booster_battery";
+                tex = "icon_booster_battery";
                 texScale = 0.6;
             }
 

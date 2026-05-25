@@ -11,12 +11,10 @@ class SpinWheelScene extends Phaser.Scene {
         const h = this.cameras.main.height;
 
         // --- 0. AUDIO MANAGEMENT ---
-        // Initialize SFX if available
         if (typeof GameSFX !== 'undefined') {
             GameSFX.init(this);
         }
 
-        // Handle Background Music (Seamless Transition & Volume Sync)
         let menuMusic = this.sound.get('menubgm');
         const targetMusicVol = (window.GameState && window.GameState.musicVolume !== undefined) ? window.GameState.musicVolume : 0.5;
 
@@ -24,7 +22,6 @@ class SpinWheelScene extends Phaser.Scene {
             menuMusic = this.sound.add('menubgm', { loop: true, volume: targetMusicVol });
             menuMusic.play();
         } else {
-            // If already playing, ensure volume matches global setting
             menuMusic.setVolume(targetMusicVol);
             if (!menuMusic.isPlaying) {
                 menuMusic.play();
@@ -38,7 +35,6 @@ class SpinWheelScene extends Phaser.Scene {
             this.scene.start("MenuScene");
         };
 
-        // Handle Browser/Android Back Button
         if (window.history && window.history.pushState) {
             window.history.pushState(null, null, window.location.href);
             window.onpopstate = () => this.handleBack();
@@ -75,7 +71,6 @@ class SpinWheelScene extends Phaser.Scene {
         // --- 4. CONFIGURATION ---
         this.spinCost = 20; 
         
-        // Segments Data (Rebalanced for 6 segments)
         this.segments = [
             { id: 'jackpot', type: 'keys', amount: 10, color: 0xff0055, icon: 'ui_key', prob: 0.05, label: "10 KEYS" },
             { id: 'debris_stash', type: 'debris', amount: 50, color: 0x00ffff, icon: 'ui_debris_icon', prob: 0.15, label: "50 DEBRIS" },
@@ -135,7 +130,6 @@ class SpinWheelScene extends Phaser.Scene {
     }
 
     // --- SCENE COMPONENTS ---
-
     createBackground() {
         this.backgroundLayers = []; 
         if (!this.textures.exists('animated_bg_grad')) {
@@ -227,7 +221,6 @@ class SpinWheelScene extends Phaser.Scene {
     drawWheel(x, y) {
         const radius = 290; 
 
-        // Decorative Outer Rings
         this.outerRing1 = this.add.graphics({ x: x, y: y });
         this.outerRing1.lineStyle(3, 0x00ffff, 0.3); 
         this.outerRing1.strokeCircle(0, 0, radius + 25);
@@ -241,11 +234,10 @@ class SpinWheelScene extends Phaser.Scene {
         this.outerRing2.lineStyle(10, 0x0088ff, 0.15); 
         this.outerRing2.strokeCircle(0, 0, radius + 10);
 
-        // Wheel Container
         this.wheelContainer = this.add.container(x, y);
 
         const base = this.add.graphics();
-        base.fillStyle(0x000c22, 1); // Dark Glass Background
+        base.fillStyle(0x000c22, 1); 
         base.lineStyle(8, 0x0066aa, 0.9); 
         base.fillCircle(0, 0, radius);
         base.strokeCircle(0, 0, radius);
@@ -296,7 +288,6 @@ class SpinWheelScene extends Phaser.Scene {
             this.wheelContainer.add(peg);
         });
 
-        // Center Hub
         const hub = this.add.graphics();
         hub.fillStyle(0x051025, 1);
         hub.lineStyle(5, 0x00ffff, 1);
@@ -313,7 +304,6 @@ class SpinWheelScene extends Phaser.Scene {
 
         this.wheelContainer.add([hub, coreGlow, bolt]);
 
-        // Pointer
         const pY = y - radius - 15; 
         
         const pointerGlow = this.add.graphics();
@@ -399,21 +389,20 @@ class SpinWheelScene extends Phaser.Scene {
     spin() {
         if (this.isSpinning) return;
 
-        if (GameState.debris < this.spinCost) {
+        const state = window.GameState || {};
+        if ((state.debris || 0) < this.spinCost) {
             this.showError("যথেষ্ট ভাঙ্গারী নেই! (Not enough Debris)");
             return;
         }
 
-        GameState.debris -= this.spinCost;
+        if (window.GameState) window.GameState.debris -= this.spinCost;
         this.updateCurrencyDisplay();
-        window.saveCurrency();
+        if (typeof window.saveCurrency === 'function') window.saveCurrency();
 
         this.isSpinning = true;
-        
         this.btnPulse.pause();
         this.spinBtn.setScale(1);
 
-        // Disabled state styling
         this.spinBtnBg.clear();
         this.spinBtnBg.fillStyle(0x051025, 0.9);
         this.spinBtnBg.fillRoundedRect(-210, -47.5, 420, 95, 47.5);
@@ -443,7 +432,6 @@ class SpinWheelScene extends Phaser.Scene {
         targetRotation += Phaser.Math.Between(-15, 15); 
         const totalRotation = targetRotation + (360 * 6); 
 
-        // Variables for tick sound logic
         let lastAngle = this.wheelContainer.angle;
         let accumulatedAngle = 0;
 
@@ -453,7 +441,6 @@ class SpinWheelScene extends Phaser.Scene {
             duration: 5000,
             ease: 'Cubic.easeOut', 
             onUpdate: (tween, target) => {
-                // Play tick sound every segment pass
                 let currentAngle = target.angle;
                 let diff = currentAngle - lastAngle;
                 if (diff < 0) diff += 360; 
@@ -491,26 +478,36 @@ class SpinWheelScene extends Phaser.Scene {
             this.playSound('sfx_victory', 0.8);
         }
 
+        if (!window.GameState) window.GameState = {};
+
         if (winner.type === 'keys') {
-            GameState.keys += winner.amount;
+            window.GameState.keys = (window.GameState.keys || 0) + winner.amount;
         } else if (winner.type === 'debris') {
-            GameState.debris += winner.amount;
+            window.GameState.debris = (window.GameState.debris || 0) + winner.amount;
         } else if (winner.type === 'skips') {
-            // Securely added to persistent rewardSkips instead of old skips logic
-            GameState.rewardSkips = (GameState.rewardSkips || 0) + winner.amount;
+            window.GameState.rewardSkips = (window.GameState.rewardSkips || 0) + winner.amount;
         } else if (winner.type === 'booster') {
-            if (!GameState.boosters) GameState.boosters = {};
-            GameState.boosters[winner.key] = (GameState.boosters[winner.key] || 0) + winner.amount;
+            if (!window.GameState.boosters) window.GameState.boosters = {};
+            window.GameState.boosters[winner.key] = (window.GameState.boosters[winner.key] || 0) + winner.amount;
         }
 
-        window.saveCurrency();
+        if (typeof window.saveCurrency === 'function') window.saveCurrency();
         this.updateCurrencyDisplay();
 
-        const popup = this.add.container(360, 640).setDepth(1000).setScale(0);
-        
-        const overlay = this.add.rectangle(0, 0, 720, 1280, 0x000000, 0.85).setInteractive(); 
-        this.add.existing(overlay); 
+        const cx = this.cameras.main.centerX;
+        const cy = this.cameras.main.centerY;
 
+        // --- FIXED OVERLAY IMPLEMENTATION ---
+        // Properly placed at center (cx, cy) to fully cover the game screen. Depth set to 999.
+        const overlay = this.add.rectangle(cx, cy, 720, 1480, 0x000000, 0.85).setInteractive({ useHandCursor: true });
+        overlay.setDepth(999);
+
+        const popup = this.add.container(cx, cy).setDepth(1000).setScale(0);
+
+        // Blocking hit area inside the container so internal box clicks don't dismiss the reward early
+        const boxBarrier = this.add.rectangle(0, 0, 600, 600, 0x000000, 0).setInteractive();
+        popup.add(boxBarrier);
+        
         const burst = this.add.graphics();
         burst.fillStyle(winner.color, 0.3);
         for(let i=0; i<12; i++) {
@@ -525,7 +522,6 @@ class SpinWheelScene extends Phaser.Scene {
             repeat: -1
         });
 
-        // Glassmorphism Box
         const box = this.add.graphics();
         box.fillStyle(0x000c22, 0.95);
         box.fillRoundedRect(-300, -300, 600, 600, 24);
@@ -552,7 +548,6 @@ class SpinWheelScene extends Phaser.Scene {
             shadow: { color: Phaser.Display.Color.IntegerToColor(winner.color).rgba, blur: 20, fill: true }
         }).setOrigin(0.5);
 
-        // Claim Button
         const btnContainer = this.add.container(0, 220);
         const btnW = 340;
         const btnH = 80;
@@ -586,7 +581,8 @@ class SpinWheelScene extends Phaser.Scene {
             ease: 'Back.out'
         });
 
-        btnHitArea.on('pointerdown', () => {
+        // --- SHARED AUTO-CLAIM CLEANUP ROUTINE ---
+        const autoClaimAction = () => {
             this.playSound('sfx_coin');
             overlay.destroy();
             popup.destroy();
@@ -596,7 +592,11 @@ class SpinWheelScene extends Phaser.Scene {
             this.spinBtnTxt.setText("ঘুরান (SPIN)");
             this.spinBtnTxt.setColor("#ffffff");
             this.btnPulse.resume();
-        });
+        };
+
+        // Triggers auto-claim on explicit button touch OR clicking anywhere outside on the black overlay
+        btnHitArea.on('pointerdown', autoClaimAction);
+        overlay.on('pointerdown', autoClaimAction);
         
         btnHitArea.on('pointerover', () => drawClaimBtn(true));
         btnHitArea.on('pointerout', () => drawClaimBtn(false));
@@ -650,7 +650,8 @@ class SpinWheelScene extends Phaser.Scene {
     }
 
     updateCurrencyDisplay() {
-        if(this.kText) this.kText.setText((GameState.keys || 0).toString());
-        if(this.dText) this.dText.setText((GameState.debris || 0).toString());
+        const state = window.GameState || {};
+        if(this.kText) this.kText.setText((state.keys || 0).toString());
+        if(this.dText) this.dText.setText((state.debris || 0).toString());
     }
 }

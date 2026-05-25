@@ -85,7 +85,8 @@ class QuestionScene extends Phaser.Scene {
 
         pauseBtn.on("pointerdown", () => {
             const gameScene = this.scene.get("GameScene");
-            if (gameScene && gameScene.isResuming) return;
+            // FIX: Prevent bypassing Death/Boss sequences by spamming pause
+            if (gameScene && (gameScene.isResuming || gameScene.isAnimating || gameScene.gamePaused)) return;
 
             this.playSFX('sfx_click', 0.6, false); 
             this.scene.pause("GameScene");
@@ -856,8 +857,12 @@ class QuestionScene extends Phaser.Scene {
             window.updateMissionProgress("answer_correct", 1); 
 
             if (GameState.currentCombo >= 3) {
-                window.updateMissionProgress("answer_combo", 1); // Combo hook!
+                window.updateMissionProgress("answer_combo", 1); 
                 gameScene.comboText.setText(`COMBO x${GameState.currentCombo}!`);
+                
+                // FIX: Kill existing tweens on this object to prevent ghosting/flickering
+                gameScene.tweens.killTweensOf(gameScene.comboText);
+                
                 gameScene.comboText.setAlpha(1);
                 gameScene.comboText.setScale(0.8);
                 gameScene.tweens.add({ targets: gameScene.comboText, scale: 1.0, duration: 700, yoyo: true, onComplete:() => {
