@@ -17,7 +17,8 @@ window.saveGame = function() {
         localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
         localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
         
-        localStorage.setItem('game_skips', GameState.skipsLeft || 10);
+        // Save the persistent reward skips
+        localStorage.setItem('game_rewardSkips', GameState.rewardSkips || 0);
         
         localStorage.setItem('game_dailyMissions', JSON.stringify(GameState.dailyMissions));
         localStorage.setItem('game_lastMissionDate', GameState.lastMissionDate || "");
@@ -79,9 +80,12 @@ window.getLevelData = function() {
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
 
-let storedSkips = parseInt(localStorage.getItem('game_skips'));
-if (isNaN(storedSkips) || storedSkips < 10) {
-    storedSkips = 10;
+// Migration: Move old 'game_skips' to 'game_rewardSkips' without breaking old saves
+let storedRewardSkips = parseInt(localStorage.getItem('game_rewardSkips'));
+if (isNaN(storedRewardSkips)) {
+    let legacySkips = parseInt(localStorage.getItem('game_skips'));
+    storedRewardSkips = !isNaN(legacySkips) ? Math.max(0, legacySkips - 10) : 0;
+    localStorage.setItem('game_rewardSkips', storedRewardSkips);
 }
 
 // Load Profile early so missions can scale based on Player Level
@@ -168,7 +172,10 @@ window.GameState = {
     bossStage: 0, 
     bossActive: false,
     
-    skipsLeft: storedSkips,
+    // Separate Base Skips & Reward Skips
+    freeSkips: 10,
+    rewardSkips: storedRewardSkips,
+    
     sessionHistory: [],
     gameMode: "normal", 
     currentCombo: 0,
@@ -216,8 +223,8 @@ window.updateMissionProgress = function(type, amount = 1) {
                 newlyCompleted.push(m);
                 
                 if (m.rewardType === "debris") GameState.debris += m.rewardAmt;
-                else if (m.rewardType === "skips") GameState.skipsLeft += m.rewardAmt;
-                else if (m.rewardType === "keys") GameState.keys += m.rewardAmt; // Support for legacy keys
+                else if (m.rewardType === "skips") GameState.rewardSkips += m.rewardAmt;
+                else if (m.rewardType === "keys") GameState.keys += m.rewardAmt; 
                 else if (m.rewardType === "xp") {
                     if (GameState.profile) GameState.profile.xp = (GameState.profile.xp || 0) + m.rewardAmt;
                 }
@@ -291,9 +298,9 @@ window.resetGameState = function () {
     GameState.bossActive = false;
     GameState.sessionHistory = [];
     
-    if (typeof GameState.skipsLeft === 'undefined' || GameState.skipsLeft < 10) {
-        GameState.skipsLeft = 10;
-    }
+    // Refresh 10 free skips every time a new game starts
+    GameState.freeSkips = 10;
+    // (Note: GameState.rewardSkips is NOT reset, retaining the player's winnings)
     
     window.updateLevelTargets(); 
 };

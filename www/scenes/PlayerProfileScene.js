@@ -137,7 +137,7 @@ class PlayerProfileScene extends Phaser.Scene {
         const barY = 78;
 
         const nameTxt = this.add.text(textStartX, nameY, GameState.profile.n, {
-            fontSize: '40px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',
+            fontSize: '40px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 5 },
             stroke: "#002266", strokeThickness: 5,
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);

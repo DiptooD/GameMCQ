@@ -334,13 +334,13 @@ class MenuScene extends Phaser.Scene {
         const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '44px'}).setOrigin(0.5);
 
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
-        const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 12, playerName, {
+        const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 11, playerName, {
             fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
         const tagShort = rankData.tag.split(" (")[0];
-        const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 15, `লেভেল ${lvlData.level} • ${tagShort}`, {
+        const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 16.5, `লেভেল ${lvlData.level} • ${tagShort}`, {
             fontSize: '18px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
@@ -376,7 +376,7 @@ class MenuScene extends Phaser.Scene {
         drawSettings(false);
 
         const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ সেটিংস", {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#b3d4ff', fontStyle: 'bold' 
+            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const setHitArea = this.add.rectangle(boxX + setW/2, setY + setH/2, setW, setH, 0x000000, 0).setInteractive({useHandCursor: true});
@@ -434,7 +434,7 @@ class MenuScene extends Phaser.Scene {
         drawExit(false);
 
         const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#ff2e2e', fontStyle: 'bold' 
+            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});
@@ -1126,7 +1126,7 @@ class MenuScene extends Phaser.Scene {
             const hitArea = this.add.rectangle(cxOffset, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
             
             const tText = this.add.text(0, 0, label, { 
-                fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#b3d4ff" 
+                fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif",padding: { y: 10 }, fontWeight: 700, color: "#b3d4ff" 
             }).setOrigin(0.5, 0.5);
             
             const tIcon = this.add.text(0, 0, emoji, { fontSize: emojiSize }).setOrigin(0.5, 0.5);
@@ -1211,7 +1211,7 @@ class MenuScene extends Phaser.Scene {
         bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
 
         const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি", { 
-            fontSize: '40px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
+            fontSize: '40px', fontFamily: "'Anek Bangla'",padding: { y: 5 }, color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const closeHit = this.add.circle(panelW/2 - 40, -panelH/2 + 50, 30).setInteractive({ useHandCursor: true });

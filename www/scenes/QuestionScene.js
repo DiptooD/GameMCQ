@@ -93,7 +93,10 @@ class QuestionScene extends Phaser.Scene {
             this.scene.launch("PauseScene");
         });
 
-        this.skipBtn = this.add.text(rightAnchor - 50, headerY, `Skip (${GameState.skipsLeft})`, {
+        // Compute total skips available for display
+        const totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
+
+        this.skipBtn = this.add.text(rightAnchor - 50, headerY, `Skip (${totalSkips})`, {
             fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", fontStyle: 'bold',
             backgroundColor: "rgba(255, 255, 255, 0.15)",
             padding: { x: 14, y: 8 }, stroke: '#000000', strokeThickness: 3
@@ -259,7 +262,7 @@ class QuestionScene extends Phaser.Scene {
             qSkipBg.setStrokeStyle(3, 0xffffff, 0.2);
             qSkipBg.setInteractive({ useHandCursor: true });
             
-            this.quickSkipTxt = this.add.text(45, qSkipY, `Skip(${GameState.skipsLeft})`, {
+            this.quickSkipTxt = this.add.text(45, qSkipY, `Skip\n(${totalSkips})`, {
                 fontSize: "22px", 
                 fontFamily: "'Anek Bangla'",
                 fontWeight: 800,
@@ -466,9 +469,11 @@ class QuestionScene extends Phaser.Scene {
         this.keyText.setText(GameState.keys || 0);
         this.debrisText.setText(GameState.debris || 0);
         
-        this.skipBtn.setText(`Skip (${GameState.skipsLeft})`);
+        // Dynamically update total skips displayed (Free + Reward)
+        const totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
+        this.skipBtn.setText(`Skip (${totalSkips})`);
         if (this.quickSkipTxt) {
-            this.quickSkipTxt.setText(`Skip\n(${GameState.skipsLeft})`);
+            this.quickSkipTxt.setText(`Skip\n(${totalSkips})`);
         }
 
         if (GameState.battery !== this.lastBattery) {
@@ -492,8 +497,8 @@ class QuestionScene extends Phaser.Scene {
             
             this.setButtonsState(isNowReady);
             this.updateReadyState(isNowReady);
-            this.manageMeteorTimer(isNowReady);
-            this.wasReady = isNowReady;
+            this.manageMeteorTimer(isReady);
+            this.wasReady = isReady;
         }
     }
 
@@ -791,7 +796,6 @@ class QuestionScene extends Phaser.Scene {
         }
     }
 
-    // UPDATED: Connected to Player Profile Stats and XP
     handleAnswer(i) {
         if (this.isProcessing) return;
         this.isProcessing = true;
@@ -980,7 +984,9 @@ class QuestionScene extends Phaser.Scene {
     trySkipQuestion() {
         if (this.isProcessing) return;
 
-        if (GameState.skipsLeft > 0) {
+        let totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
+
+        if (totalSkips > 0) {
             this.playSFX('sfx_q_skip', 0.6, false); 
             
             const q = this.questions[this.qIdx % this.questions.length];
@@ -995,8 +1001,13 @@ class QuestionScene extends Phaser.Scene {
             
             this.manageMeteorTimer(false); 
             
-            GameState.skipsLeft--;
-            window.saveCurrency();
+            // Core Logic implementation: Deduct base free skips first, then use reserved reward skips
+            if (GameState.freeSkips > 0) {
+                GameState.freeSkips--;
+            } else {
+                GameState.rewardSkips--;
+                window.saveCurrency(); // Save if using a premium/reward skip
+            }
 
             GameState.fiftyFiftyOptionsToHide = []; 
             this.qIdx++;

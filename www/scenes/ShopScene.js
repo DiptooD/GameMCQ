@@ -453,12 +453,12 @@ class ShopScene extends Phaser.Scene {
         const preview = this.add.image(0, -95, finalKey).setScale(0.75);
 
         const name = this.add.text(0, 10, this.sanitizeBanglaText(ship.name), {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
+            fontSize: "26px", fontFamily: "'Anek Bangla'",padding: { y: 5 }, fontWeight: 800, color: "#ffffff",
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
         const desc = this.add.text(0, 65, this.sanitizeBanglaText(ship.desc), {
-            fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
+            fontSize: "18px", fontFamily: "'Anek Bangla'", padding: { y: 5 }, color: "#aaccff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
         }).setOrigin(0.5);
 

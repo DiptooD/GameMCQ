@@ -482,7 +482,7 @@ class SpinWheelScene extends Phaser.Scene {
         });
     }
 
-showReward(winner) {
+    showReward(winner) {
         this.cameras.main.flash(400, 255, 255, 255);
 
         if (winner.id === 'jackpot') {
@@ -496,8 +496,8 @@ showReward(winner) {
         } else if (winner.type === 'debris') {
             GameState.debris += winner.amount;
         } else if (winner.type === 'skips') {
-            // Track the skips securely 
-            GameState.skipsLeft = (GameState.skipsLeft || 0) + winner.amount;
+            // Securely added to persistent rewardSkips instead of old skips logic
+            GameState.rewardSkips = (GameState.rewardSkips || 0) + winner.amount;
         } else if (winner.type === 'booster') {
             if (!GameState.boosters) GameState.boosters = {};
             GameState.boosters[winner.key] = (GameState.boosters[winner.key] || 0) + winner.amount;
