@@ -15,49 +15,109 @@
         -webkit-user-select: none; -webkit-touch-callout: none; user-select: none;
     }
     canvas { display: block; width: 100% !important; height: 100% !important; }
+    #boot-screen {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #000; color: #00ffff; display: flex;
+        justify-content: center; align-items: center; z-index: 99999;
+        font-family: sans-serif; font-size: 18px; font-weight: bold;
+    }
   </style>
-
-  <script>
-      var isOnline = navigator.onLine;
-
-      // 1. Load Fonts
-      if (isOnline) {
-          document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700;800&display=swap">');
-      } else {
-          document.write('<link rel="stylesheet" href="css/local-fonts.css">');
-      }
-
-      // 2. Load Phaser
-      if (isOnline) {
-          // Try CDN first
-          document.write('<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"><\/script>');
-          // If CDN fails despite being "online" (e.g. firewall, captive portal), fallback to local
-          document.write('<script>window.Phaser || document.write(\'<script src="js/phaser.min.js"><\\/script>\')<\/script>');
-      } else {
-          // Strictly offline
-          document.write('<script src="js/phaser.min.js"><\/script>');
-      }
-  </script>
 
   <script src="cordova.js"></script> 
 </head>
 <body>
-  <script src="game.js"></script>
-  <script src="scenes/LoadingScene.js"></script>
-  <script src="scenes/PlayerProfileScene.js"></script>
-  <script src="scenes/MenuScene.js"></script>
-  <script src="scenes/SettingsScene.js"></script>
-  <script src="scenes/ReadingScene.js"></script>
-  <script src="scenes/ShopScene.js"></script>
-  <script src="scenes/SpinWheelScene.js"></script>
-  <script src="scenes/PlayerShipTextures.js"></script>
-  <script src="scenes/GameTextures.js"></script>
-  <script src="GameSFX.js"></script>
-  <script src="scenes/GameBase.js"></script>
-  <script src="scenes/GameScene.js"></script>
-  <script src="scenes/QuestionScene.js"></script>
-  <script src="scenes/PauseScene.js"></script>
-  <script src="scenes/DeathScene.js"></script>
-  <script src="main.js"></script>
+  
+  <div id="boot-screen">Connecting to Space...</div>
+
+  <script>
+    (async function bootApp() {
+        const bootScreen = document.getElementById('boot-screen');
+        let isOnline = false;
+        
+        // 1. Strict 3-Second Actual Connection Test
+        if (navigator.onLine) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 sec timeout
+            try {
+                // Ping a reliable small file (like the font stylesheet) to verify internet access
+                await fetch('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700;800&display=swap', { 
+                    method: 'HEAD', mode: 'no-cors', signal: controller.signal 
+                });
+                isOnline = true;
+                clearTimeout(timeoutId);
+            } catch(e) {
+                console.log("Network test failed or timed out. Forcing Offline Mode.");
+            }
+        }
+        window.isAppOnline = isOnline;
+
+        // 2. Register Service Worker for Caching & Background Sync
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('ServiceWorker registered:', reg.scope))
+                .catch(err => console.warn('ServiceWorker error:', err));
+        }
+
+        // 3. Load Fonts based on Connection Status
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = isOnline 
+            ? 'https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700;800&display=swap' 
+            : 'css/local-fonts.css';
+        document.head.appendChild(fontLink);
+
+        // 4. Sequential Script Loader
+        function loadScript(src) {
+            return new Promise((resolve) => {
+                const s = document.createElement('script');
+                s.src = src;
+                s.onload = resolve;
+                s.onerror = () => {
+                    console.warn('Failed to load: ' + src);
+                    resolve(); // Resolve to prevent breaking the chain
+                };
+                document.body.appendChild(s);
+            });
+        }
+
+        const phaserSrc = isOnline ? 'https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js' : 'js/phaser.min.js';
+        
+        await loadScript(phaserSrc);
+        
+        // Final fallback if CDN failed despite passing ping
+        if (!window.Phaser && isOnline) {
+            console.log("CDN failed, falling back to local Phaser...");
+            await loadScript('js/phaser.min.js');
+        }
+
+        // Load all game scripts strictly in order
+        const scripts = [
+            "game.js",
+            "scenes/LoadingScene.js",
+            "scenes/PlayerProfileScene.js",
+            "scenes/MenuScene.js",
+            "scenes/SettingsScene.js",
+            "scenes/ReadingScene.js",
+            "scenes/ShopScene.js",
+            "scenes/SpinWheelScene.js",
+            "scenes/PlayerShipTextures.js",
+            "scenes/GameTextures.js",
+            "GameSFX.js",
+            "scenes/GameBase.js",
+            "scenes/GameScene.js",
+            "scenes/QuestionScene.js",
+            "scenes/PauseScene.js",
+            "scenes/DeathScene.js",
+            "main.js"
+        ];
+
+        for (let src of scripts) {
+            await loadScript(src);
+        }
+        
+        // Hide bootloader
+        bootScreen.style.display = 'none';
+    })();
+  </script>
 </body>
 </html>

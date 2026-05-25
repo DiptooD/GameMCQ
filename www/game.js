@@ -17,7 +17,6 @@ window.saveGame = function() {
         localStorage.setItem('game_boosters', JSON.stringify(GameState.boosters));
         localStorage.setItem('game_gamesPlayed', GameState.gamesPlayed || 0);
         
-        // Save the persistent reward skips
         localStorage.setItem('game_rewardSkips', GameState.rewardSkips || 0);
         
         localStorage.setItem('game_dailyMissions', JSON.stringify(GameState.dailyMissions));
@@ -25,15 +24,21 @@ window.saveGame = function() {
         localStorage.setItem('game_dailyMissionsCompleted', GameState.dailyMissionsCompleted ? "true" : "false");
         
         localStorage.setItem('game_currentSubject', GameState.currentSubject || "all");
-        
-        // Save Player Profile (Highly compressed object structure)
         localStorage.setItem('game_profile', JSON.stringify(GameState.profile));
 
-        // Keep match history to a strict maximum of 15 items
         if (GameState.matchHistory && GameState.matchHistory.length > 15) {
             GameState.matchHistory = GameState.matchHistory.slice(-15);
         }
         localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
+
+        // --- NEW: Trigger Background Sync if supported ---
+        if ('serviceWorker' in navigator && 'SyncManager' in window) {
+            navigator.serviceWorker.ready.then(swRegistration => {
+                return swRegistration.sync.register('sync-game-data');
+            }).catch(err => {
+                console.log('Background Sync could not be registered!', err);
+            });
+        }
 
     } catch (e) {
         console.warn("Save failed: Storage is full.");

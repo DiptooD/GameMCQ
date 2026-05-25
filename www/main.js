@@ -171,3 +171,20 @@ function showToast(message) {
     setTimeout(() => document.body.removeChild(toast), 500);
   }, 2000);
 }
+// --- NEW: Auto-Detect Online/Offline state changes mid-game ---
+window.addEventListener('online', () => {
+    window.isAppOnline = true;
+    showToast("Internet Connection Restored! Syncing Data...");
+    
+    // Trigger Sync immediately on reconnect
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.ready.then(swRegistration => {
+            swRegistration.sync.register('sync-game-data');
+        });
+    }
+});
+
+window.addEventListener('offline', () => {
+    window.isAppOnline = false;
+    showToast("You are offline. Playing in Offline Mode.");
+});
