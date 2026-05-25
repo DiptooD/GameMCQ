@@ -1,11 +1,12 @@
 class DeathScene extends Phaser.Scene {
   constructor() {
     super("DeathScene");
-    this.backgroundLayers = [];
   }
 
+  // FIX: Shifted assignments to init() to enforce safety limits across restarts
   init() {
       this.matchSaved = false; 
+      this.backgroundLayers = [];
   }
 
   playSound(key, baseVolume = 1.0) {
@@ -60,7 +61,7 @@ class DeathScene extends Phaser.Scene {
 
     const totalQs = history.length;
     const percent = totalQs > 0 ? (safeCorrect / totalQs) : 0; 
-    const percentText = Math.round(percent * 100);
+    const percentText = Math.round(percent * 100) || 0; // Protected from NaN
 
     if (percentText >= 50) {
         this.playSound('sfx_victory', 0.1);
@@ -273,7 +274,8 @@ class DeathScene extends Phaser.Scene {
     }
 
     if (currentY > listHeight) {
-        const minScroll = listHeight - currentY;
+        // FIX: Bound it to 0 max to prevent aggressive bouncing UI
+        const minScroll = Math.min(0, listHeight - currentY - 20);
         let startY = 0;
         let containerStartY = 0;
         let lastTime = 0;
@@ -431,6 +433,8 @@ class DeathScene extends Phaser.Scene {
     if (this.scrollData && this.scrollState) {
         if (!this.scrollState.isDragging) {
             let { contentContainer, listStartY, minScroll } = this.scrollData;
+            if (!contentContainer || !contentContainer.active) return;
+
             let vY = this.scrollState.velocityY;
             let currentY = contentContainer.y;
 

@@ -1,15 +1,13 @@
 class ShopScene extends Phaser.Scene {
     constructor() {
         super("ShopScene");
+    }
+
+    // FIX: Moved constructor variables to init() to ensure state resets correctly when entering/exiting shop
+    init() {
         this.currentTab = "ships";
         this.scrollVelocity = 0;
         this.backgroundLayers = [];
-        this.contentHeight = 0;
-        this.containerY = 0; 
-    }
-
-    init() {
-        this.currentTab = "ships";
         this.contentHeight = 0;
         this.listStartY = 310; 
         this.containerY = this.listStartY; 
@@ -120,7 +118,8 @@ class ShopScene extends Phaser.Scene {
                 const diff = pointer.y - startY;
                 let newY = containerStartY + diff;
 
-                const minScroll = this.visibleHeight - this.contentHeight - 50; 
+                // FIX: Used Math.min(0, ...) to prevent out of bounds rubberbanding
+                const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
 
                 if (newY > this.listStartY) {
                     newY = this.listStartY + (newY - this.listStartY) * 0.4;
@@ -184,7 +183,8 @@ class ShopScene extends Phaser.Scene {
 
         if (this.contentHeight > this.visibleHeight && this.scrollState) {
             if (!this.scrollState.isDragging) {
-                const minScroll = this.visibleHeight - this.contentHeight - 50;
+                // FIX: Guaranteed negative boundary for safe scrolling mechanics
+                const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
                 let vY = this.scrollState.velocityY;
                 let currentY = this.container.y;
 
@@ -221,7 +221,6 @@ class ShopScene extends Phaser.Scene {
         }
     }
 
-    // A helper method to strip English names and descriptions (enclosed in parentheses) that might come from an external JS Array
     sanitizeBanglaText(text) {
         if (!text) return "";
         return text.replace(/\s*\([A-Za-z0-9\s-]+\)/g, '').trim();
@@ -781,6 +780,9 @@ class ShopScene extends Phaser.Scene {
 
     updateTimers() {
         if (this.currentTab !== "ships") return;
+
+        // FIX: Ensure container and list exist before iterating to prevent crashes during scene transitions
+        if (!this.container || !this.container.list) return;
 
         this.container.list.forEach(cardContainer => {
             if (cardContainer.type === 'Container' && cardContainer.list) {

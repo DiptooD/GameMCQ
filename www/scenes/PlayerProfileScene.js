@@ -1,6 +1,10 @@
 class PlayerProfileScene extends Phaser.Scene {
     constructor() {
         super("PlayerProfileScene");
+    }
+
+    // FIX: Moving setup variables into init() fixes layout breakage when resuming/restarting scene
+    init() {
         this.backgroundLayers = [];
     }
 
@@ -17,7 +21,12 @@ class PlayerProfileScene extends Phaser.Scene {
         // Ensure account creation date exists
         if (!GameState.profile.joined) {
             const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-            GameState.profile.joined = new Date().toLocaleDateString('bn-BD', dateOptions);
+            // FIX: Using fallback for unsupported locales to prevent crash in webview
+            try {
+                GameState.profile.joined = new Date().toLocaleDateString('bn-BD', dateOptions);
+            } catch (e) {
+                GameState.profile.joined = new Date().toLocaleDateString();
+            }
             if (window.saveGame) window.saveGame();
         }
 

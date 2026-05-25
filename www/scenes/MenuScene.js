@@ -1,7 +1,10 @@
 class MenuScene extends Phaser.Scene {
     constructor() {
         super("MenuScene");
-        
+    }
+
+    // FIX: Moved all state initializations from constructor to init() to prevent stale data and memory leaks across scene restarts.
+    init() {
         this.selectedBankKey = localStorage.getItem('saved_bankKey') || "all";
         this.selectedSubject = localStorage.getItem('saved_subject') || "all_no_math";
         this.selectedMode = localStorage.getItem('saved_mode') || "normal"; 
@@ -11,6 +14,7 @@ class MenuScene extends Phaser.Scene {
         this.dropdowns = []; 
         this.backgroundLayers = [];
         this.isStartingGame = false;
+        this.historyScrollData = null;
     }
 
     create() {
@@ -88,6 +92,7 @@ class MenuScene extends Phaser.Scene {
             delay: 400, 
             loop: true,
             callback: () => {
+                if (!this.scene.isActive()) return;
                 if (Math.random() > 0.85) { 
                     titleText.x = Phaser.Math.FloatBetween(-0.5, 0.5);
                     titleText.y = Phaser.Math.FloatBetween(-0.5, 0.5);
@@ -152,6 +157,8 @@ class MenuScene extends Phaser.Scene {
         if (this.historyScrollData && this.historyScrollState) {
             if (!this.historyScrollState.isDragging) {
                 let { contentContainer, listStartY, minScroll } = this.historyScrollData;
+                if (!contentContainer || !contentContainer.active) return;
+                
                 let vY = this.historyScrollState.velocityY;
                 let currentY = contentContainer.y;
 
@@ -177,7 +184,7 @@ class MenuScene extends Phaser.Scene {
         this.titleBird = this.add.image(-100, -100, "player_lv1").setScale(0.65).setDepth(50);
         
         const animateBird = () => {
-            if (!this.scene.isActive()) return;
+            if (!this.scene.isActive() || !this.titleBird || !this.titleBird.active) return;
             const w = this.cameras.main.width;
             
             const fromLeft = Math.random() > 0.5;
@@ -202,11 +209,13 @@ class MenuScene extends Phaser.Scene {
                 duration: 1500,
                 ease: 'Sine.easeOut',
                 onComplete: () => {
+                    if (!this.titleBird || !this.titleBird.active) return;
                     this.tweens.add({
                         targets: this.titleBird,
                         rotation: (fromLeft ? 0.2 : -0.2), 
                         duration: 200,
                         onComplete: () => {
+                            if (!this.titleBird || !this.titleBird.active) return;
                             this.tweens.add({
                                 targets: this.titleBird,
                                 y: landY - 20,
@@ -215,12 +224,14 @@ class MenuScene extends Phaser.Scene {
                                 repeat: 3,
                                 ease: 'Quad.easeOut',
                                 onComplete: () => {
+                                    if (!this.titleBird || !this.titleBird.active) return;
                                     const angleToExit = Phaser.Math.Angle.Between(landX, landY, endX, endY);
                                     this.tweens.add({
                                         targets: this.titleBird,
                                         rotation: angleToExit + Math.PI / 2,
                                         duration: 200,
                                         onComplete: () => {
+                                            if (!this.titleBird || !this.titleBird.active) return;
                                             this.tweens.add({
                                                 targets: this.titleBird,
                                                 x: endX,
@@ -1013,7 +1024,7 @@ class MenuScene extends Phaser.Scene {
         this.normalTips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন মজ না।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
             "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",
@@ -1024,7 +1035,7 @@ class MenuScene extends Phaser.Scene {
 
         this.revisionTips = [
             "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে।",
-            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে মোহ না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
         ];
 
         const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
@@ -1298,7 +1309,8 @@ class MenuScene extends Phaser.Scene {
         popup.add(contentContainer);
 
         if (currentY > listHeight) {
-            const minScroll = listHeight - currentY - 20;
+            // FIX: Guaranteed negative boundary for safe scrolling
+            const minScroll = Math.min(0, listHeight - currentY - 20);
             let startY = 0;
             let containerStartY = 0;
             let lastTime = 0;
@@ -1451,6 +1463,8 @@ class MenuScene extends Phaser.Scene {
     }
 
     closeAllDropdowns() {
-        this.dropdowns.forEach(d => d.close());
+        this.dropdowns.forEach(d => {
+            if (d && d.close) d.close();
+        });
     }
 }
