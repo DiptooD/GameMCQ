@@ -3,7 +3,6 @@ class MenuScene extends Phaser.Scene {
         super("MenuScene");
     }
 
-    // FIX: Moved all state initializations from constructor to init() to prevent stale data and memory leaks across scene restarts.
     init() {
         this.selectedBankKey = localStorage.getItem('saved_bankKey') || "all";
         this.selectedSubject = localStorage.getItem('saved_subject') || "all_no_math";
@@ -14,7 +13,11 @@ class MenuScene extends Phaser.Scene {
         this.dropdowns = []; 
         this.backgroundLayers = [];
         this.isStartingGame = false;
+        
+        // Reset history states on init to ensure a clean slate
         this.historyScrollData = null;
+        this.historyScrollState = null;
+        this.isHistoryPopupOpen = false;
     }
 
     create() {
@@ -154,19 +157,29 @@ class MenuScene extends Phaser.Scene {
             this.reactorRing.rotation += 0.015 * safeTimeScale;
         }
 
+        // Apply smooth physics to the match history popup if active
         if (this.historyScrollData && this.historyScrollState) {
+            let { contentContainer, listStartY, minScroll } = this.historyScrollData;
+            
+            // Safety check in case the container was destroyed
+            if (!contentContainer || !contentContainer.active) {
+                this.historyScrollData = null;
+                return;
+            }
+            
             if (!this.historyScrollState.isDragging) {
-                let { contentContainer, listStartY, minScroll } = this.historyScrollData;
-                if (!contentContainer || !contentContainer.active) return;
-                
                 let vY = this.historyScrollState.velocityY;
                 let currentY = contentContainer.y;
 
-                if (Math.abs(vY) > 0.01) {
+                // Apply velocity if it's high enough
+                if (Math.abs(vY) > 0.05) {
                     currentY += vY * 16 * safeTimeScale;
                     this.historyScrollState.velocityY *= Math.pow(0.9, safeTimeScale); 
+                } else {
+                    this.historyScrollState.velocityY = 0;
                 }
 
+                // Snap back smoothly if out of bounds
                 if (currentY > listStartY) {
                     currentY += (listStartY - currentY) * 0.2 * safeTimeScale;
                 } else if (currentY < listStartY + minScroll) {
@@ -175,7 +188,8 @@ class MenuScene extends Phaser.Scene {
 
                 contentContainer.y = currentY;
             } else {
-                this.historyScrollState.velocityY *= 0.8; 
+                // Decay velocity rapidly while holding but not moving
+                this.historyScrollState.velocityY *= Math.pow(0.8, safeTimeScale); 
             }
         }
     }
@@ -1024,7 +1038,7 @@ class MenuScene extends Phaser.Scene {
         this.normalTips = [
             "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
+            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন 초।",
             "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
             "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
             "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",
@@ -1204,6 +1218,10 @@ class MenuScene extends Phaser.Scene {
     }
 
     showMatchHistoryPopup() {
+        // Prevent multiple identical popups from opening if clicked rapidly
+        if (this.isHistoryPopupOpen) return;
+        this.isHistoryPopupOpen = true;
+
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
         const w = this.cameras.main.width;
@@ -1228,10 +1246,17 @@ class MenuScene extends Phaser.Scene {
         const closeHit = this.add.circle(panelW/2 - 40, -panelH/2 + 50, 30).setInteractive({ useHandCursor: true });
         const closeIcon = this.add.text(panelW/2 - 40, -panelH/2 + 50, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
         
+        // Centralized cleanup to safely destroy the popup and remove persistent event listeners
+        let cleanup = () => {
+            this.isHistoryPopupOpen = false;
+            if (popup) popup.destroy();
+            this.historyScrollData = null; 
+            this.historyScrollState = null;
+        };
+
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
-            popup.destroy();
-            this.historyScrollData = null; 
+            cleanup();
         });
 
         popup.add([overlay, bg, title, closeIcon, closeHit]);
@@ -1257,59 +1282,65 @@ class MenuScene extends Phaser.Scene {
             }).setOrigin(0.5);
             contentContainer.add(noData);
         } else {
-            history.forEach((match) => {
-                const cardH = 120;
-                const cardBg = this.add.graphics();
-                
-                const drawCard = (hover) => {
-                    cardBg.clear();
-                    cardBg.fillStyle(hover ? 0x0a1a3a : 0x051025, 0.9);
-                    cardBg.fillRoundedRect(-listWidth/2 + 10, currentY, listWidth - 20, cardH, 15);
-                    cardBg.lineStyle(2, hover ? 0x0088ff : 0x004488, 1);
-                    cardBg.strokeRoundedRect(-listWidth/2 + 10, currentY, listWidth - 20, cardH, 15);
-                };
-                drawCard(false);
+history.forEach((match) => {
+            const cardH = 120;
+            const cardBg = this.add.graphics();
+            
+            // FIX: Capture the exact position for THIS specific card
+            // so the hover effect doesn't use the final loop value of currentY.
+            const cardY = currentY; 
+            
+            const drawCard = (hover) => {
+                cardBg.clear();
+                cardBg.fillStyle(hover ? 0x0a1a3a : 0x051025, 0.9);
+                cardBg.fillRoundedRect(-listWidth/2 + 10, cardY, listWidth - 20, cardH, 15);
+                cardBg.lineStyle(2, hover ? 0x0088ff : 0x004488, 1);
+                cardBg.strokeRoundedRect(-listWidth/2 + 10, cardY, listWidth - 20, cardH, 15);
+            };
+            drawCard(false);
 
-                const dateTxt = this.add.text(-listWidth/2 + 30, currentY + 20, match.date, { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" });
-                
-                let pColor = "#ff4444";
-                if(match.percent === 100) pColor = "#ffffff";
-                else if(match.percent >= 80) pColor = "#00ff00";
-                else if(match.percent >= 26) pColor = "#ffff00";
+            const dateTxt = this.add.text(-listWidth/2 + 30, cardY + 20, match.date, { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" });
+            
+            let pColor = "#ff4444";
+            if(match.percent === 100) pColor = "#ffffff";
+            else if(match.percent >= 80) pColor = "#00ff00";
+            else if(match.percent >= 26) pColor = "#ffff00";
 
-                const pctTxt = this.add.text(listWidth/2 - 30, currentY + 30, `${match.percent}%`, { fontSize: "42px", fontFamily: "'Anek Bangla'", fontStyle: 'bold', color: pColor }).setOrigin(1, 0);
+            const pctTxt = this.add.text(listWidth/2 - 30, cardY + 30, `${match.percent}%`, { fontSize: "42px", fontFamily: "'Anek Bangla'", fontStyle: 'bold', color: pColor }).setOrigin(1, 0);
 
-                const stats = `মোট: ${match.total} | সঠিক: ${match.correct} | ভুল: ${match.wrong} | স্কিপ: ${match.skipped}`;
-                const statTxt = this.add.text(-listWidth/2 + 30, currentY + 65, stats, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff" });
+            const stats = `মোট: ${match.total} | সঠিক: ${match.correct} | ভুল: ${match.wrong} | স্কিপ: ${match.skipped}`;
+            const statTxt = this.add.text(-listWidth/2 + 30, cardY + 65, stats, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff" });
 
-                const hitArea = this.add.rectangle(0, currentY + cardH/2, listWidth - 20, cardH, 0x000000, 0).setInteractive({ useHandCursor: true });
-                
-                let downY = 0;
-                hitArea.on('pointerdown', (pointer) => {
-                    downY = pointer.y;
-                    drawCard(true);
-                });
-                hitArea.on('pointerup', (pointer) => {
-                    if (Math.abs(pointer.y - downY) < 15) {
-                        this.playSound('sfx_click');
-                        GameState.viewingHistoryMatch = match;
-                        popup.destroy();
-                        this.historyScrollData = null;
-                        this.scene.start("DeathScene");
-                    }
-                    drawCard(false);
-                });
-                hitArea.on('pointerout', () => drawCard(false));
-
-                contentContainer.add([cardBg, dateTxt, pctTxt, statTxt, hitArea]);
-                currentY += cardH + 15;
+            const hitArea = this.add.rectangle(0, cardY + cardH/2, listWidth - 20, cardH, 0x000000, 0).setInteractive({ useHandCursor: true });
+            
+            let downY = 0;
+            hitArea.on('pointerdown', (pointer) => {
+                downY = pointer.y;
+                drawCard(true);
             });
+            
+            hitArea.on('pointerup', (pointer) => {
+                if (Math.abs(pointer.y - downY) < 15) {
+                    this.playSound('sfx_click');
+                    GameState.viewingHistoryMatch = match;
+                    cleanup();
+                    this.scene.start("DeathScene");
+                }
+                drawCard(false);
+            });
+            
+            hitArea.on('pointerout', () => drawCard(false));
+
+            contentContainer.add([cardBg, dateTxt, pctTxt, statTxt, hitArea]);
+            
+            // Advance the global currentY for the NEXT card in the loop
+            currentY += cardH + 15;
+        });
         }
 
         popup.add(contentContainer);
 
         if (currentY > listHeight) {
-            // FIX: Guaranteed negative boundary for safe scrolling
             const minScroll = Math.min(0, listHeight - currentY - 20);
             let startY = 0;
             let containerStartY = 0;
@@ -1323,6 +1354,7 @@ class MenuScene extends Phaser.Scene {
             this.historyScrollData = { contentContainer, listStartY, minScroll };
 
             scrollZone.on('pointerdown', (pointer) => {
+                if(!this.historyScrollState) return;
                 this.historyScrollState.isDragging = true;
                 this.historyScrollState.velocityY = 0;
                 startY = pointer.y;
@@ -1331,8 +1363,18 @@ class MenuScene extends Phaser.Scene {
                 lastTime = this.time.now;
             });
 
-            this.input.on('pointermove', (pointer) => {
-                if (this.historyScrollState.isDragging) {
+            // Allow desktop users to use scrollwheel cleanly
+            scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
+                if (!this.historyScrollData) return;
+                let newY = contentContainer.y - deltaY;
+                if (newY > listStartY) newY = listStartY;
+                if (newY < listStartY + minScroll) newY = listStartY + minScroll;
+                contentContainer.y = newY;
+                if(this.historyScrollState) this.historyScrollState.velocityY = 0;
+            });
+
+            const onPointerMove = (pointer) => {
+                if (this.historyScrollState && this.historyScrollState.isDragging) {
                     const diff = pointer.y - startY;
                     let newY = containerStartY + diff;
 
@@ -1349,11 +1391,25 @@ class MenuScene extends Phaser.Scene {
                     lastTime = now;
                     lastY = pointer.y;
                 }
-            });
+            };
 
-            const stopDrag = () => { this.historyScrollState.isDragging = false; };
+            const stopDrag = () => { 
+                if(this.historyScrollState) this.historyScrollState.isDragging = false; 
+            };
+
+            // Bind listeners to global scene input to capture dragging outside the popup
+            this.input.on('pointermove', onPointerMove);
             this.input.on('pointerup', stopDrag);
-            this.input.on('pointerout', stopDrag);
+            this.input.on('gameout', stopDrag); // Better fail-safe when mouse leaves browser window
+
+            // Intercept the cleanup method so we can unbind these specific listeners correctly
+            const standardCleanup = cleanup;
+            cleanup = () => {
+                this.input.off('pointermove', onPointerMove);
+                this.input.off('pointerup', stopDrag);
+                this.input.off('gameout', stopDrag);
+                standardCleanup();
+            };
         }
         
         popup.setScale(0.8);
