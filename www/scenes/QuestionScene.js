@@ -85,7 +85,6 @@ class QuestionScene extends Phaser.Scene {
 
         pauseBtn.on("pointerdown", () => {
             const gameScene = this.scene.get("GameScene");
-            // FIX: Prevent bypassing Death/Boss sequences by spamming pause
             if (gameScene && (gameScene.isResuming || gameScene.isAnimating || gameScene.gamePaused)) return;
 
             this.playSFX('sfx_click', 0.6, false); 
@@ -94,7 +93,6 @@ class QuestionScene extends Phaser.Scene {
             this.scene.launch("PauseScene");
         });
 
-        // Compute total skips available for display
         const totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
 
         this.skipBtn = this.add.text(rightAnchor - 50, headerY, `Skip (${totalSkips})`, {
@@ -470,7 +468,6 @@ class QuestionScene extends Phaser.Scene {
         this.keyText.setText(GameState.keys || 0);
         this.debrisText.setText(GameState.debris || 0);
         
-        // Dynamically update total skips displayed (Free + Reward)
         const totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
         this.skipBtn.setText(`Skip (${totalSkips})`);
         if (this.quickSkipTxt) {
@@ -486,13 +483,11 @@ class QuestionScene extends Phaser.Scene {
         const stageText = safeStage >= 4 ? "Void" : safeStage;
         const safeCount = GameState.correctCount || 0;
         
-        // FIX: Display Infinite requirement gracefully
         const safeTotal = GameState.totalCorrectNeeded || 10;
         const safeTotalStr = safeTotal === Infinity ? "অসীম" : safeTotal;
 
         this.correctLabel.setText(`লেভেল: ${stageText}  |  সঠিক: ${safeCount}/${safeTotalStr}`);
         
-        // FIX: Replaced `isReady` ReferenceError with proper `isNowReady` check
         const isNowReady = GameState.battery >= 100;
         
         if (isNowReady !== this.wasReady && !this.isProcessing) {
@@ -670,6 +665,10 @@ class QuestionScene extends Phaser.Scene {
         const cleanStr = (str) => typeof str === 'string' ? str.replace(/।/g, '') : str;
         const cleanQuestion = cleanStr(q.question);
 
+        // FIX: Delay ms mapped properly for instant transition
+        let delayMs = (GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15) * 100;
+        let skipAnim = delayMs <= 500; // Anything equal to 0.5s or below disables transitions completely
+
         this.optionBtns.forEach((btn, i) => {
             btn.container.setAlpha(1);
             btn.container.setScale(1);
@@ -702,7 +701,7 @@ class QuestionScene extends Phaser.Scene {
             });
 
             this.markQuestionAsSeen(q.question);
-            this.tweens.add({ targets: elements, alpha: { from: 0, to: 1 }, duration: 400 });
+            this.tweens.add({ targets: elements, alpha: { from: 0, to: 1 }, duration: skipAnim ? 0 : 400 });
 
             const isReady = (GameState.battery >= 100);
             this.setButtonsState(isReady);
@@ -715,89 +714,155 @@ class QuestionScene extends Phaser.Scene {
 
         this.isProcessing = true;
 
-        this.tweens.add({
-            targets: elements,
-            alpha: 0,
-            y: "-=20",
-            duration: 180,
-            ease: 'Power2.easeIn',
-            onComplete: () => {
-                if (cleanQuestion.length > 80) {
-                    this.qText.setFontSize("26px");
+        if (skipAnim) {
+            // INSTANT UI UPDATE WITHOUT TWEENS
+            if (cleanQuestion.length > 80) {
+                this.qText.setFontSize("26px");
+            } else {
+                this.qText.setFontSize("34px");
+            }
+
+            this.qText.setText(cleanQuestion);
+            this.markQuestionAsSeen(q.question);
+            
+            this.qBankTag.setText(bankName);
+            
+            this.optionBtns.forEach((btn, i) => {
+                const cleanOpt = cleanStr(q.options[i]);
+                if (cleanOpt.length > 40) {
+                    btn.txt.setFontSize("22px");
                 } else {
-                    this.qText.setFontSize("34px");
+                    btn.txt.setFontSize("30px");
                 }
 
-                this.qText.setText(cleanQuestion);
-                this.qText.y = this.qText.originalY + 20; 
-                this.markQuestionAsSeen(q.question);
-                
-                this.qBankTag.setText(bankName);
-                this.qBankTag.y = this.qBankTag.originalY + 20;
-                
-                this.optionBtns.forEach((btn, i) => {
-                    const cleanOpt = cleanStr(q.options[i]);
-                    if (cleanOpt.length > 40) {
-                        btn.txt.setFontSize("22px");
-                    } else {
-                        btn.txt.setFontSize("30px");
-                    }
+                btn.txt.setText(cleanOpt);
+                btn.bg.setFillStyle(0x000000, 0.07); 
+                btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
+                btn.txt.setColor("#d3d3d3");
+            });
 
-                    btn.txt.setText(cleanOpt);
-                    btn.container.y = btn.originalY + 20; 
-                    
-                    btn.bg.setFillStyle(0x000000, 0.07); 
-                    btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
-                    btn.txt.setColor("#d3d3d3");
-                });
+            this.quickAnsContainer.setAlpha(0);
+            this.quickBtns.forEach((btn) => {
+                btn.bg.setFillStyle(0x000000, 0.07); 
+                btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
+                btn.txt.setColor("#d3d3d3");
+            });
 
+            const gameScene = this.scene.get('GameScene');
+            if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
+                this.isProcessing = false; 
+                elements.forEach(el => el.setAlpha(0)); 
                 this.quickAnsContainer.setAlpha(0);
-                this.quickBtns.forEach((btn) => {
-                    btn.bg.setFillStyle(0x000000, 0.07); 
-                    btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
-                    btn.txt.setColor("#d3d3d3");
-                });
+                return; 
+            }
 
-                const gameScene = this.scene.get('GameScene');
-                if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
-                    this.isProcessing = false; 
-                    elements.forEach(el => el.setAlpha(0)); 
-                    this.quickAnsContainer.setAlpha(0);
-                    return; 
-                }
+            elements.forEach(el => {
+                el.setAlpha(1);
+                el.y = el.originalY || el.y;
+            });
+            
+            this.isProcessing = false;
+            
+            const isReady = (GameState.battery >= 100);
+            this.setButtonsState(isReady);
+            this.updateReadyState(isReady);
+            this.manageMeteorTimer(isReady);
+            this.wasReady = isReady;
 
-                this.tweens.add({
-                    targets: elements,
-                    alpha: 1,
-                    y: "-=20",
-                    duration: 350,
-                    ease: 'Cubic.easeOut',
-                    onComplete: () => {
-                        this.isProcessing = false;
-                        this.playSFX('sfx_tick', 0.2);
-                        
-                        const isReady = (GameState.battery >= 100);
-                        this.setButtonsState(isReady);
-                        this.updateReadyState(isReady);
-                        this.manageMeteorTimer(isReady);
-                        this.wasReady = isReady;
+            if (isReady && !GameState.bossActive) {
+                this.playSFX('sfx_q_ready', 0.6, false);
+            }
 
-                        if (isReady && !GameState.bossActive) {
-                            this.playSFX('sfx_q_ready', 0.6, false);
-                        }
+            if (GameState.hasFiftyFifty) {
+                this.applyFiftyFifty();
+            }
+
+        } else {
+            // NORMAL TWEENING
+            this.tweens.add({
+                targets: elements,
+                alpha: 0,
+                y: "-=20",
+                duration: 180,
+                ease: 'Power2.easeIn',
+                onComplete: () => {
+                    if (cleanQuestion.length > 80) {
+                        this.qText.setFontSize("26px");
+                    } else {
+                        this.qText.setFontSize("34px");
                     }
-                });
-                
-                this.time.delayedCall(400, () => {
-                    this.isProcessing = false;
+
+                    this.qText.setText(cleanQuestion);
+                    this.qText.y = this.qText.originalY + 20; 
+                    this.markQuestionAsSeen(q.question);
+                    
+                    this.qBankTag.setText(bankName);
+                    this.qBankTag.y = this.qBankTag.originalY + 20;
+                    
+                    this.optionBtns.forEach((btn, i) => {
+                        const cleanOpt = cleanStr(q.options[i]);
+                        if (cleanOpt.length > 40) {
+                            btn.txt.setFontSize("22px");
+                        } else {
+                            btn.txt.setFontSize("30px");
+                        }
+
+                        btn.txt.setText(cleanOpt);
+                        btn.container.y = btn.originalY + 20; 
+                        
+                        btn.bg.setFillStyle(0x000000, 0.07); 
+                        btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
+                        btn.txt.setColor("#d3d3d3");
+                    });
+
+                    this.quickAnsContainer.setAlpha(0);
+                    this.quickBtns.forEach((btn) => {
+                        btn.bg.setFillStyle(0x000000, 0.07); 
+                        btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
+                        btn.txt.setColor("#d3d3d3");
+                    });
+
+                    const gameScene = this.scene.get('GameScene');
+                    if (GameState.bossActive || (gameScene && gameScene.isTransitioningToBoss)) {
+                        this.isProcessing = false; 
+                        elements.forEach(el => el.setAlpha(0)); 
+                        this.quickAnsContainer.setAlpha(0);
+                        return; 
+                    }
+
+                    this.tweens.add({
+                        targets: elements,
+                        alpha: 1,
+                        y: "-=20",
+                        duration: 350,
+                        ease: 'Cubic.easeOut',
+                        onComplete: () => {
+                            this.isProcessing = false;
+                            this.playSFX('sfx_tick', 0.2);
+                            
+                            const isReady = (GameState.battery >= 100);
+                            this.setButtonsState(isReady);
+                            this.updateReadyState(isReady);
+                            this.manageMeteorTimer(isReady);
+                            this.wasReady = isReady;
+
+                            if (isReady && !GameState.bossActive) {
+                                this.playSFX('sfx_q_ready', 0.6, false);
+                            }
+                        }
+                    });
+                    
+                    this.time.delayedCall(400, () => {
+                        this.isProcessing = false;
+                    });
+                }
+            });
+
+            if (GameState.hasFiftyFifty) {
+                this.time.delayedCall(500, () => {
+                    this.applyFiftyFifty();
                 });
             }
-        });
-
-        if (GameState.hasFiftyFifty) {
-            this.time.delayedCall(500, () => {
-                this.applyFiftyFifty();
-            });
         }
     }
 
@@ -853,14 +918,12 @@ class QuestionScene extends Phaser.Scene {
             
             GameState.currentCombo++;
             
-            // --- NEW: MISSION HOOKS ---
             window.updateMissionProgress("answer_correct", 1); 
 
             if (GameState.currentCombo >= 3) {
                 window.updateMissionProgress("answer_combo", 1); 
                 gameScene.comboText.setText(`COMBO x${GameState.currentCombo}!`);
                 
-                // FIX: Kill existing tweens on this object to prevent ghosting/flickering
                 gameScene.tweens.killTweensOf(gameScene.comboText);
                 
                 gameScene.comboText.setAlpha(1);
@@ -932,7 +995,7 @@ class QuestionScene extends Phaser.Scene {
             if (quickCorBtn) quickCorBtn.bg.setFillStyle(0x00ff00, 0.4); 
         }
 
-        window.saveGame(); // Save stats silently here
+        window.saveGame();
 
         GameState.hasFiftyFifty = false;
         GameState.fiftyFiftyOptionsToHide = [];
@@ -940,7 +1003,13 @@ class QuestionScene extends Phaser.Scene {
         GameState.battery = 0;
         this.lastBattery = -1;
 
-        this.time.delayedCall(i === q.answer ? 1500 : 3500, () => {
+        // FIX: Replaced multipliers with pure ms mapping from the time indicator setting
+        let delayMs = (GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15) * 100;
+        
+        // Correct delay = user setting, Incorrect delay = user setting + 1.5s (to show correct answer)
+        let finalDelay = (i === q.answer) ? delayMs : delayMs + 1500;
+
+        this.time.delayedCall(finalDelay, () => {
             this.isProcessing = false;  
             this.qIdx++;
 
@@ -1010,12 +1079,11 @@ class QuestionScene extends Phaser.Scene {
             
             this.manageMeteorTimer(false); 
             
-            // Core Logic implementation: Deduct base free skips first, then use reserved reward skips
             if (GameState.freeSkips > 0) {
                 GameState.freeSkips--;
             } else {
                 GameState.rewardSkips--;
-                window.saveCurrency(); // Save if using a premium/reward skip
+                window.saveCurrency();
             }
 
             GameState.fiftyFiftyOptionsToHide = []; 

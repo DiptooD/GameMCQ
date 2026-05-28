@@ -230,7 +230,7 @@ class PlayerProfileScene extends Phaser.Scene {
         this.connBtnContainer.add([this.connBg, this.connDot, this.connBtnTxt, this.connHitArea]);
 
         this.updateConnectionUI = (connected) => {
-            const btnTextStr = connected ? "Log Out" : "Connect Google";
+            const btnTextStr = connected ? "Log Out" : "Connect";
             this.connBtnTxt.setText(btnTextStr);
 
             const dotColor = connected ? 0x00ff88 : 0xff4444;

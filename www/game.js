@@ -32,7 +32,6 @@ window.saveGame = function() {
         localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
 
         // --- FIREBASE CLOUD SYNC ---
-        // Only sync to the cloud if the player is actively connected via Google Auth
         if (window.FirebaseAuth && window.FirebaseAuth.currentUser && window.FirebaseTools) {
             const uid = window.FirebaseAuth.currentUser.uid;
             const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
@@ -77,6 +76,7 @@ window.saveGame = function() {
 window.saveSettings = function() {
     localStorage.setItem('settings_musicVol', GameState.musicVolume);
     localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
+    localStorage.setItem('settings_qDelay', GameState.qDelayLevel);
 };
 
 window.getRankData = function(level) {
@@ -107,6 +107,13 @@ window.getLevelData = function() {
 
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
+
+// FIX: Ensure Delay logic stays strictly within bounds to prevent 0s freezing
+const storedQDelay = localStorage.getItem('settings_qDelay');
+let parsedQDelay = storedQDelay !== null ? parseInt(storedQDelay) : 15;
+if (isNaN(parsedQDelay) || parsedQDelay < 5 || parsedQDelay > 40) {
+    parsedQDelay = 15; // Default 1.5 seconds if data is corrupted or old format
+}
 
 let storedRewardSkips = parseInt(localStorage.getItem('game_rewardSkips'));
 if (isNaN(storedRewardSkips)) {
@@ -212,6 +219,7 @@ window.GameState = {
     
     musicVolume: storedMusicVol !== null ? parseFloat(storedMusicVol) : 0.5,
     sfxVolume: storedSfxVol !== null ? parseFloat(storedSfxVol) : 1.0,
+    qDelayLevel: parsedQDelay, // Applied parsed safe delay here
 
     keys: parseInt(localStorage.getItem('game_keys')) || 0,
     debris: parseInt(localStorage.getItem('game_debris')) || 0,

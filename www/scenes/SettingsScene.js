@@ -19,16 +19,16 @@ class SettingsScene extends Phaser.Scene {
         
         this.bg = this.add.graphics();
         this.bg.fillStyle(0x000c22, 0.95);
-        this.bg.fillRoundedRect(cx - 290, cy - 360, 580, 740, 20);
+        this.bg.fillRoundedRect(cx - 290, cy - 400, 580, 820, 20);
         this.bg.lineStyle(4, 0x0066aa, 1);
-        this.bg.strokeRoundedRect(cx - 290, cy - 360, 580, 740, 20);
+        this.bg.strokeRoundedRect(cx - 290, cy - 400, 580, 820, 20);
 
-        this.title = this.add.text(cx, cy - 310, "সেটিংস", { 
+        this.title = this.add.text(cx, cy - 350, "সেটিংস", { 
             fontSize: '44px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const closeHit = this.add.circle(cx + 230, cy - 310, 35).setInteractive({ useHandCursor: true });
-        const closeIcon = this.add.text(cx + 230, cy - 310, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
+        const closeHit = this.add.circle(cx + 230, cy - 350, 35).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(cx + 230, cy - 350, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
@@ -39,11 +39,11 @@ class SettingsScene extends Phaser.Scene {
         });
 
         this.container.add([this.overlay, this.bg, this.title, closeIcon, closeHit]);
-
-        // Modern Sliders (Robust Drag Implementation)
+        
         let musicVol = Math.round((GameState.musicVolume !== undefined ? GameState.musicVolume : 0.5) * 10);
         if (musicVol < 0) musicVol = 0; 
-        this.musicAdj = this.createSlider(-170, "মিউজিক ভলিউম:", 0, 10, musicVol, false, (val) => {
+        // Added stepSize of 1
+        this.musicAdj = this.createSlider(-210, "মিউজিক ভলিউম:", 0, 10, 1, musicVol, (v) => v, (val) => {
             GameState.musicVolume = val / 10;
             localStorage.setItem('settings_musicVol', GameState.musicVolume);
             this.updateLiveGameUI();
@@ -52,15 +52,22 @@ class SettingsScene extends Phaser.Scene {
         let sfxVol = Math.round((GameState.sfxVolume !== undefined ? GameState.sfxVolume : 1.0) * 5);
         if (sfxVol < 0) sfxVol = 0;
         if (sfxVol > 10) sfxVol = 10;
-        this.sfxAdj = this.createSlider(-70, "সাউন্ড ইফেক্ট:", 0, 10, sfxVol, false, (val) => {
+        // Added stepSize of 1
+        this.sfxAdj = this.createSlider(-120, "সাউন্ড ইফেক্ট:", 0, 10, 1, sfxVol, (v) => v, (val) => {
             GameState.sfxVolume = val / 5;
             localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
         });
         
-        // Replaced Slider with Stepper for UI Size
+        // Changed to use stepSize of 5 for much wider gaps and fewer teeth
+        let qDelayLevel = GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15;
+        this.qDelayAdj = this.createSlider(-30, "মধ্যবর্তী বিলম্ব: (Inter-Question Delay):", 5, 40, 5, qDelayLevel, (v) => (v / 10).toFixed(1) + "s", (val) => {
+            GameState.qDelayLevel = val;
+            localStorage.setItem('settings_qDelay', GameState.qDelayLevel);
+        });
+
         let uiSize = parseInt(localStorage.getItem('settings_uiScaleLevel'));
         if (isNaN(uiSize)) uiSize = 0;
-        this.uiAdj = this.createStepper(30, "ইউআই সাইজ:", -5, 5, uiSize, (val) => {
+        this.uiAdj = this.createStepper(50, "ডিসপ্লে জুম: (UI Zoom)", -5, 5, uiSize, (val) => {
             localStorage.setItem('settings_uiScaleLevel', val);
             this.updateLiveGameUI();
         });
@@ -70,12 +77,12 @@ class SettingsScene extends Phaser.Scene {
         const qpOptions = ['right', 'hidden', 'left'];
         const qpLabels = ['ডান', 'বন্ধ', 'বাম'];
         
-        const qpLabel = this.add.text(cx, cy + 95, "কুইক প্যানেল পজিশন:", { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0.5);
+        const qpLabel = this.add.text(cx, cy + 120, "কুইক প্যানেল পজিশন:", { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0.5);
         
         const segW = 480;
         const segH = 50;
         const segX = cx;
-        const segY = cy + 145;
+        const segY = cy + 180;
 
         const segBg = this.add.graphics();
         segBg.fillStyle(0x001022, 1);
@@ -118,19 +125,20 @@ class SettingsScene extends Phaser.Scene {
         // Reset Settings Button
         const resetBtnBg = this.add.graphics();
         resetBtnBg.fillStyle(0x004422, 1);
-        resetBtnBg.fillRoundedRect(cx - 240, cy + 220, 480, 55, 15);
+        resetBtnBg.fillRoundedRect(cx - 240, cy + 240, 480, 55, 15);
         resetBtnBg.lineStyle(2, 0x00ff88, 1);
-        resetBtnBg.strokeRoundedRect(cx - 240, cy + 220, 480, 55, 15);
+        resetBtnBg.strokeRoundedRect(cx - 240, cy + 240, 480, 55, 15);
 
-        const resetBtnTxt = this.add.text(cx, cy + 247, "ডিফল্ট সেটিংসে ফিরুন", { 
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaffaa', fontStyle: 'bold' 
+        const resetBtnTxt = this.add.text(cx, cy + 267, "ডিফল্ট সেটিংসে ফিরুন", { 
+            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaffaa', fontStyle: 'bold' ,padding: { y: 3 }
         }).setOrigin(0.5);
 
-        const resetHit = this.add.rectangle(cx, cy + 247, 480, 55).setInteractive({ useHandCursor: true });
+        const resetHit = this.add.rectangle(cx, cy + 267, 480, 55).setInteractive({ useHandCursor: true });
         resetHit.on('pointerdown', () => {
             this.playSound('sfx_powerup');
             this.musicAdj.setValue(5);
             this.sfxAdj.setValue(5);
+            this.qDelayAdj.setValue(15); 
             this.uiAdj.setValue(0); 
             
             this.quickPanelState = 'right';
@@ -143,15 +151,15 @@ class SettingsScene extends Phaser.Scene {
         // Clear History Button
         const clearBtnBg = this.add.graphics();
         clearBtnBg.fillStyle(0x550000, 1);
-        clearBtnBg.fillRoundedRect(cx - 240, cy + 290, 480, 55, 15);
+        clearBtnBg.fillRoundedRect(cx - 240, cy + 310, 480, 55, 15);
         clearBtnBg.lineStyle(2, 0xff4444, 1);
-        clearBtnBg.strokeRoundedRect(cx - 240, cy + 290, 480, 55, 15);
+        clearBtnBg.strokeRoundedRect(cx - 240, cy + 310, 480, 55, 15);
 
-        const clearBtnTxt = this.add.text(cx, cy + 317, "হিস্ট্রি মুছুন", { 
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffaaaa', fontStyle: 'bold' 
+        const clearBtnTxt = this.add.text(cx, cy + 337, "হিস্ট্রি মুছুন", { 
+            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffaaaa', fontStyle: 'bold',padding: { y: 3} 
         }).setOrigin(0.5);
 
-        const clearHit = this.add.rectangle(cx, cy + 317, 480, 55).setInteractive({ useHandCursor: true });
+        const clearHit = this.add.rectangle(cx, cy + 337, 480, 55).setInteractive({ useHandCursor: true });
         clearHit.on('pointerdown', () => {
             this.playSound('sfx_warning');
             this.showClearHistoryWarning();
@@ -162,12 +170,13 @@ class SettingsScene extends Phaser.Scene {
         this.tweens.add({ targets: this.container, alpha: 1, duration: 200 });
     }
 
-    createSlider(yOffset, labelText, min, max, currentVal, isZeroCentered, callback) {
+    // Added stepSize parameter
+    createSlider(yOffset, labelText, min, max, stepSize, currentVal, formatFn, callback) {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
         
         const label = this.add.text(cx - 240, cy + yOffset - 25, labelText, { fontSize: '20px', fontFamily: "'Anek Bangla'", color: '#aaccff' }).setOrigin(0, 0.5);
-        const valText = this.add.text(cx + 240, cy + yOffset - 25, currentVal > 0 && isZeroCentered ? "+" + currentVal : currentVal, { fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' }).setOrigin(1, 0.5);
+        const valText = this.add.text(cx + 240, cy + yOffset - 25, formatFn(currentVal), { fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' }).setOrigin(1, 0.5);
         
         const sliderW = 480;
         const sliderH = 14;
@@ -180,7 +189,8 @@ class SettingsScene extends Phaser.Scene {
         trackBg.lineStyle(2, 0x003366, 1);
         trackBg.strokeRoundedRect(sliderX, sliderY - sliderH/2, sliderW, sliderH, sliderH/2);
 
-        const steps = max - min;
+        // Calculated steps based on stepSize
+        const steps = (max - min) / stepSize;
         const stepW = sliderW / steps;
         
         trackBg.lineStyle(2, 0x004488, 0.8);
@@ -198,19 +208,19 @@ class SettingsScene extends Phaser.Scene {
         thumb.setStrokeStyle(4, 0x0066cc);
         const glow = this.add.circle(0, sliderY, 26, 0x00e1ff, 0.3);
 
-        // Huge hit area perfectly aligned across the track
         const hitArea = this.add.rectangle(sliderX + sliderW/2, sliderY, sliderW + 60, 50, 0, 0).setInteractive({useHandCursor: true});
         
-        // Proper layering: hitArea in back, thumb/glow in front
         this.container.add([label, valText, hitArea, trackBg, fill, glow, thumb]);
 
         const updateVisuals = (xPos, isFinalSnap) => {
             let clampedX = Phaser.Math.Clamp(xPos, sliderX, sliderX + sliderW);
             let pct = (clampedX - sliderX) / sliderW;
-            let exactVal = min + pct * steps;
-            let nearestStep = Math.round(exactVal);
+            let exactVal = min + pct * (max - min);
             
-            let renderX = isFinalSnap ? (sliderX + ((nearestStep - min)/steps)*sliderW) : clampedX;
+            // Snap to nearest stepSize
+            let nearestStep = min + Math.round((exactVal - min) / stepSize) * stepSize;
+            
+            let renderX = isFinalSnap ? (sliderX + ((nearestStep - min)/(max - min))*sliderW) : clampedX;
             
             thumb.x = renderX;
             glow.x = renderX;
@@ -220,7 +230,8 @@ class SettingsScene extends Phaser.Scene {
             let fW = Math.max(sliderH, renderX - sliderX);
             fill.fillRoundedRect(sliderX, sliderY - sliderH/2, fW, sliderH, sliderH/2);
 
-            valText.setText(nearestStep > 0 && isZeroCentered ? "+" + nearestStep : nearestStep);
+            // Dynamically formatted using the passed function
+            valText.setText(formatFn(nearestStep));
 
             if (val !== nearestStep) {
                 val = nearestStep;
@@ -229,8 +240,7 @@ class SettingsScene extends Phaser.Scene {
             }
         };
 
-        // Initialize display immediately
-        updateVisuals(sliderX + ((val - min)/steps)*sliderW, true);
+        updateVisuals(sliderX + ((val - min)/(max - min))*sliderW, true);
 
         let isDragging = false;
 
@@ -258,7 +268,7 @@ class SettingsScene extends Phaser.Scene {
         return {
             setValue: (newVal) => { 
                 val = newVal; 
-                updateVisuals(sliderX + ((val - min)/steps)*sliderW, true);
+                updateVisuals(sliderX + ((val - min)/(max - min))*sliderW, true);
             }
         };
     }
