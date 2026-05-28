@@ -3,7 +3,8 @@
         version="1.0.0" 
         android-versionCode="1"
         xmlns="http://www.w3.org/ns/widgets" 
-        xmlns:cdv="http://cordova.apache.org/ns/1.0">
+        xmlns:cdv="http://cordova.apache.org/ns/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
   
   <name>Game MCQ</name>
   <description>BCS Learning Shooter</description>
@@ -17,18 +18,12 @@
   <preference name="DisallowOverscroll" value="true" />
   <preference name="KeepRunning" value="true" />
 
-  <!-- Add Google Plus Plugin for Native Authentication -->
   <plugin name="cordova-plugin-googleplus" spec="^8.5.2">
-      <!-- Replace with your REVERSED_CLIENT_ID from google-services.json -->
-      <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.YOUR-REVERSED-CLIENT-ID" />
-      <!-- Replace with your Web Client ID from Firebase/Google Cloud Console -->
-      <variable name="WEB_APPLICATION_CLIENT_ID" value="YOUR-WEB-CLIENT-ID.apps.googleusercontent.com" />
+      <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.1060690619330-cb5uqvur0e3c6p1290ie61j6n61nkrq7" />
+      <variable name="WEB_APPLICATION_CLIENT_ID" value="1060690619330-cb5uqvur0e3c6p1290ie61j6n61nkrq7.apps.googleusercontent.com" />
   </plugin>
 
   <platform name="android">
-    <!-- This line ensures Firebase config is copied into the Android build -->
-    <resource-file src="google-services.json" target="app/google-services.json" />
-
     <preference name="android-minSdkVersion" value="24" />
     <preference name="android-targetSdkVersion" value="36" />
     <preference name="android-compileSdkVersion" value="36" />

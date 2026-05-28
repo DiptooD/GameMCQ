@@ -25,7 +25,6 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    // ADDED: signInWithCredential to authenticate via the native plugin's token
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
@@ -44,7 +43,6 @@
     window.FirebaseAuth.useDeviceLanguage(); 
     window.FirebaseDB = getFirestore(app);
     
-    // ADDED: Export signInWithCredential
     window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc };
 
     window.connectToCloud = function() {
@@ -98,7 +96,6 @@
         });
     };
 
-    // --- REWRITTEN: Google Authentication UI Logic ---
     window.signInWithGoogle = async function() {
         if (!navigator.onLine) {
             alert("Please connect to the internet to sign in.");
@@ -106,16 +103,13 @@
         }
 
         try {
-            // Check if running on Android/iOS natively via Cordova
             if (window.cordova && window.plugins && window.plugins.googleplus) {
                 window.plugins.googleplus.login(
                     {
-                        // IMPORTANT: Replace this with the exact Web Client ID from your Firebase Console
-                        'webClientId': 'YOUR-WEB-CLIENT-ID.apps.googleusercontent.com',
+                        'webClientId': '1060690619330-cb5uqvur0e3c6p1290ie61j6n61nkrq7.apps.googleusercontent.com',
                         'offline': true
                     },
                     async function (obj) {
-                        // Exchange native Google Token for Firebase Credentials
                         const credential = window.FirebaseTools.GoogleAuthProvider.credential(obj.idToken);
                         const result = await window.FirebaseTools.signInWithCredential(window.FirebaseAuth, credential);
                         
@@ -134,7 +128,6 @@
                     }
                 );
             } else {
-                // Fallback for Web/Browser testing
                 const provider = new window.FirebaseTools.GoogleAuthProvider();
                 const result = await window.FirebaseTools.signInWithPopup(window.FirebaseAuth, provider);
                 
