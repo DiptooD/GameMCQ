@@ -24,10 +24,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Recreates your google-services.json securely before Cordova needs it
-      - name: Decode google-services.json
-        run: echo "${{ secrets.GOOGLE_SERVICES_BASE64 }}" | base64 --decode > google-services.json
-
       - name: Initialize NPM and Cordova
         run: |
           npm init -y
@@ -36,11 +32,13 @@ jobs:
       - name: Add Android Platform
         run: cordova platform add android
 
-      # Recreates your Keystore file secretly
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > my-release-key.keystore
 
-      # --- STEP 1: BUILD THE APK (For your Redmi Note 5 Pro) ---
+      - name: Print SHA-1 to Logs
+        run: |
+          keytool -list -v -keystore my-release-key.keystore -alias '${{ secrets.KEY_ALIAS }}' -storepass '${{ secrets.KEY_PASSWORD }}' | grep SHA1
+
       - name: Build and Sign Release APK
         run: |
           cordova build android --release -- --packageType=apk \
@@ -55,7 +53,6 @@ jobs:
           name: game-mcq-release-apk
           path: platforms/android/app/build/outputs/apk/release/*.apk
 
-      # --- STEP 2: BUILD THE AAB (For Google Play Store) ---
       - name: Build and Sign Release AAB
         run: |
           cordova build android --release -- --packageType=bundle \
