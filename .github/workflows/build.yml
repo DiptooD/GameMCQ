@@ -32,7 +32,6 @@ jobs:
         run: |
           npm init -y
           npm install -g cordova
-          cordova telemetry off
 
       - name: Add Android Platform
         run: cordova platform add android
