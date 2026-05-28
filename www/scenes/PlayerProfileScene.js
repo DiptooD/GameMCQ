@@ -3,7 +3,6 @@ class PlayerProfileScene extends Phaser.Scene {
         super("PlayerProfileScene");
     }
 
-    // FIX: Moving setup variables into init() fixes layout breakage when resuming/restarting scene
     init() {
         this.backgroundLayers = [];
     }
@@ -13,15 +12,12 @@ class PlayerProfileScene extends Phaser.Scene {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
 
-        // Ensure Profile Object & Stats exist safely
         if (!GameState.profile) {
             GameState.profile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
         }
         
-        // Ensure account creation date exists
         if (!GameState.profile.joined) {
             const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-            // FIX: Using fallback for unsupported locales to prevent crash in webview
             try {
                 GameState.profile.joined = new Date().toLocaleDateString('bn-BD', dateOptions);
             } catch (e) {
@@ -34,13 +30,11 @@ class PlayerProfileScene extends Phaser.Scene {
             GameState.gamesPlayed = 0;
         }
 
-        // Fetch Global Level/Rank Data
         this.lvlData = window.getLevelData();
         this.rankData = window.getRankData(this.lvlData.level);
 
-        // Auto-assign the correct avatar based on level tag
         GameState.profile.a = window.getAvatars().indexOf(this.rankData.avatar);
-        if (GameState.profile.a === -1) GameState.profile.a = 0; // fallback
+        if (GameState.profile.a === -1) GameState.profile.a = 0; 
 
         // --- BACKGROUND ---
         this.createBackground(w, h);
@@ -95,55 +89,45 @@ class PlayerProfileScene extends Phaser.Scene {
         }
     }
 
-    // ========================================================================
-    // --- CONTAINER PANELS ---
-    // ========================================================================
-
     createIdentitySection(x, y, w, h) {
         const container = this.add.container(x, y + 40).setAlpha(0);
         this.drawGlassPanel(container, 0, 0, w, h);
 
-        // 1. Interactive Tech Ring & Profile Avatar
         if (!this.textures.exists("profile_ring_clean")) this.generateTechRingClean();
         
         const avatarX = -w / 2 + 130; 
-        const avatarY = 0; // Vertically centered
-        const baseRingScale = 0.55; // Slightly scaled up
+        const avatarY = 0; 
+        const baseRingScale = 0.55; 
         
-        // Avatar Background Base
         const avatarBg = this.add.graphics();
         avatarBg.fillStyle(0x020815, 0.95);
         avatarBg.fillCircle(avatarX, avatarY, 70);
         avatarBg.lineStyle(3, 0x0055aa, 0.8);
         avatarBg.strokeCircle(avatarX, avatarY, 70);
 
-        // Primary clean ring
         const techRing = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.8).setScale(baseRingScale);
         techRing.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRing, rotation: Math.PI * 2, duration: 35000, repeat: -1, ease: 'Linear' });
 
-        // Counter-rotating inner ring
         const techRingInner = this.add.image(avatarX, avatarY, "profile_ring_clean").setAlpha(0.5).setScale(baseRingScale * 0.82).setTint(0x00ffcc);
         techRingInner.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRingInner, rotation: -Math.PI * 2, duration: 25000, repeat: -1, ease: 'Linear' });
 
-        // Avatar Text with drop shadow
         const avatarTxt = this.add.text(avatarX, avatarY, this.rankData.avatar, { 
             fontSize: '70px',
             shadow: { offsetX: 0, offsetY: 4, color: 'rgba(0,0,0,0.6)', blur: 8 }
         }).setOrigin(0.5);
         this.tweens.add({ targets: avatarTxt, y: avatarY - 4, duration: 2000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
-        // === VERTICAL DIVIDER ===
         const dividerX = avatarX + 120;
         const vertDivider = this.add.rectangle(dividerX, 0, 2, 180, 0x0066aa, 0.5);
 
-        // 2. Y-Coordinates for perfectly balanced right-side text
+        // 2. Setup Y Coordinates
         const textStartX = dividerX + 30; 
-        const nameY = -72;
-        const rankY = -30;
-        const dateY = 12;
-        const barY = 78;
+        const nameY = -72; // Everything on this line: [Name] [Edit] [Status]
+        const rankY = -22;
+        const dateY = 15;
+        const barY = 82;
 
         const nameTxt = this.add.text(textStartX, nameY, GameState.profile.n, {
             fontSize: '40px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 5 },
@@ -151,8 +135,8 @@ class PlayerProfileScene extends Phaser.Scene {
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
-        // Styled Edit Button 
-        const editBtnContainer = this.add.container(textStartX + nameTxt.width + 25, nameY);
+        // Edit Button Container
+        const editBtnContainer = this.add.container(0, nameY);
         const editBg = this.add.graphics();
         editBg.fillStyle(0x004488, 0.8);
         editBg.fillRoundedRect(0, -14, 70, 28, 14);
@@ -166,10 +150,42 @@ class PlayerProfileScene extends Phaser.Scene {
         const editHitArea = this.add.rectangle(35, 0, 70, 28, 0x000000, 0).setInteractive({ useHandCursor: true });
         editBtnContainer.add([editBg, editTxt, editHitArea]);
 
-        this.updateNameDisplay = () => {
-             nameTxt.setText(GameState.profile.n);
-             editBtnContainer.setX(textStartX + nameTxt.width + 25);
+        // Connection Indicator
+        const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
+        const connColor = isConnected ? '#00ff00' : '#ff4444';
+        const connTextStr = isConnected ? '● Connected' : '○ Not Connected (Click)';
+
+        const connTxt = this.add.text(0, nameY, connTextStr, {
+            fontSize: '14px', fontFamily: "Arial", color: connColor, fontStyle: 'bold'
+        }).setOrigin(0, 0.5);
+
+        let connHitArea;
+        if (!isConnected) {
+            connHitArea = this.add.rectangle(0, nameY, 150, 30, 0x000000, 0).setInteractive({ useHandCursor: true });
+            connHitArea.on('pointerdown', () => {
+                this.playSound('sfx_click');
+                if (window.signInWithGoogle) window.signInWithGoogle();
+            });
         }
+
+        // Dynamic Spacing Logic: Shifts the buttons if the name gets longer/shorter
+        this.updateNameDisplay = () => {
+            nameTxt.setText(GameState.profile.n);
+            
+            const editX = textStartX + nameTxt.width + 20;
+            editBtnContainer.setX(editX);
+            
+            const connX = editX + 85; // 70px (button width) + 15px gap
+            connTxt.setX(connX);
+            
+            if (connHitArea) {
+                connHitArea.setX(connX + (connTxt.width / 2));
+                connHitArea.setSize(connTxt.width + 10, 30);
+            }
+        }
+
+        // Call immediately to set initial layout
+        this.updateNameDisplay();
 
         editHitArea.on('pointerover', () => { editBg.fillStyle(0x0066cc, 1).fillRoundedRect(0, -14, 70, 28, 14); });
         editHitArea.on('pointerout', () => { editBg.fillStyle(0x004488, 0.8).fillRoundedRect(0, -14, 70, 28, 14); });
@@ -193,13 +209,13 @@ class PlayerProfileScene extends Phaser.Scene {
             stroke: "#001133", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        // 4. Account Creation Date (Neat background pill styling)
+        // 4. Account Creation Date
         const joinedDate = GameState.profile.joined || "Unknown Date";
         const joinedTxt = this.add.text(textStartX, dateY, ` 📅 যুক্ত হয়েছেন: ${joinedDate} `, {
             fontSize: '15px', 
             fontFamily: "'Anek Bangla', sans-serif", 
             color: '#aaccff', 
-            backgroundColor: 'rgba(0, 40, 80, 0.6)', // Subtle pill background
+            backgroundColor: 'rgba(0, 40, 80, 0.6)', 
             padding: { x: 5, y: 3 },
             stroke: "#001122",
             strokeThickness: 2
@@ -218,20 +234,20 @@ class PlayerProfileScene extends Phaser.Scene {
             fontSize: '18px', fontFamily: "Arial", color: '#aaccff', fontStyle: 'bold'
         }).setOrigin(1, 0.5);
 
-        // Bar Track
         const barBg = this.add.graphics();
         barBg.fillStyle(0x000a1a, 1);
         barBg.fillRoundedRect(textStartX, barY, barW, 16, 8);
         barBg.lineStyle(2, 0x004488, 1);
         barBg.strokeRoundedRect(textStartX, barY, barW, 16, 8);
 
-        // Bar Progress Fill
         const fillW = Math.max(16, barW * this.lvlData.percent);
         const xpFill = this.add.graphics();
         xpFill.fillGradientStyle(0x0055ff, 0x00ffff, 0x001188, 0x0088cc, 1);
         xpFill.fillRoundedRect(textStartX, barY, fillW, 16, 8);
 
-        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
+        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, connTxt, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
+        if (connHitArea) container.add(connHitArea);
+        
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 100 });
     }
 
@@ -246,21 +262,19 @@ class PlayerProfileScene extends Phaser.Scene {
 
         const divider = this.add.rectangle(0, -h / 2 + 70, w - 60, 2, 0x0066aa, 0.6);
 
-        // Process Statistical Logs
         const profile = GameState.profile;
         const totalQs = (profile.qr || 0) + (profile.qw || 0);
         const accuracy = totalQs > 0 ? ((profile.qr / totalQs) * 100).toFixed(1) : "0.0";
         const gamesPlayed = GameState.gamesPlayed || 0;
         const avgKills = gamesPlayed > 0 ? (profile.k / gamesPlayed).toFixed(1) : "0.0";
 
-        // Grid Metric Matrix Configuration
         const cols = 2;
         const padX = 20;
         const padY = 20;
-        const cardW = (w - 60 - padX) / 2; // (680 - 60 - 20) / 2 = 300
+        const cardW = (w - 60 - padX) / 2;
         const cardH = 80; 
         
-        const startX = -w / 2 + 30 + cardW / 2; // -340 + 30 + 150 = -160
+        const startX = -w / 2 + 30 + cardW / 2; 
         const startY = -h / 2 + 130;
 
         const statData = [
@@ -299,7 +313,6 @@ class PlayerProfileScene extends Phaser.Scene {
         const divider = this.add.rectangle(0, -h / 2 + 70, w - 60, 2, 0x0066aa, 0.6);
         container.add([title, divider]);
 
-        // Filter and compile subject array sorted by total questions answered (right + wrong)
         const subStats = GameState.profile.s || {};
         const sortedSubs = Object.entries(subStats).map(([name, data]) => {
             const r = data.r || 0;
@@ -322,11 +335,9 @@ class PlayerProfileScene extends Phaser.Scene {
                 const pct = sub.acc * 100;
                 const pctText = pct.toFixed(1) + "%";
                 
-                // Color Code System
                 const color = sub.acc >= 0.8 ? 0x00ff88 : (sub.acc >= 0.5 ? 0xffcc00 : 0xff4444);
                 const colorStr = "#" + color.toString(16).padStart(6, '0');
 
-                // Subject Identity Typography
                 const nameTxt = this.add.text(-barW / 2, currY - 10, `${i + 1}. ${sub.name}`, {
                     fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold'
                 }).setOrigin(0, 0.5);
@@ -336,7 +347,6 @@ class PlayerProfileScene extends Phaser.Scene {
                     stroke: "#000000", strokeThickness: 3
                 }).setOrigin(1, 0.5);
 
-                // Mini Performance Track
                 const barBg = this.add.graphics();
                 barBg.fillStyle(0x000a1a, 1);
                 barBg.fillRoundedRect(-barW / 2, currY + 12, barW, 10, 5);
@@ -358,32 +368,23 @@ class PlayerProfileScene extends Phaser.Scene {
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 300 });
     }
 
-    // ========================================================================
-    // --- COMPONENT RENDER HELPER UTILITIES ---
-    // ========================================================================
-
     createStatCard(x, y, w, h, label, val, hexColor) {
         const card = this.add.container(x, y);
 
-        // Panel Surface
         const bg = this.add.graphics();
         bg.fillStyle(0x000a1f, 0.85);
         bg.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
         
-        // Brand Side-Accent Strip
         bg.fillStyle(hexColor, 0.8);
         bg.fillRoundedRect(-w / 2, -h / 2, 8, h, { tl: 12, bl: 12, tr: 0, br: 0 });
         
-        // Structure Contour Border
         bg.lineStyle(2, 0x003377, 0.7);
         bg.strokeRoundedRect(-w / 2, -h / 2, w, h, 12);
 
-        // Subtle gradient backing for depth
         const innerGlow = this.add.graphics();
         innerGlow.fillGradientStyle(hexColor, 0x000000, hexColor, 0x000000, 0.1);
         innerGlow.fillRoundedRect(-w / 2 + 8, -h / 2, w - 8, h, { tl: 0, bl: 0, tr: 12, br: 12 });
 
-        // Centered Labels & Values
         const labelTxt = this.add.text(0, -16, label, {
             fontSize: '18px', fontFamily: "'Anek Bangla', sans-serif, Arial", color: '#aaccff', fontStyle: 'bold'
         }).setOrigin(0.5);
@@ -401,19 +402,15 @@ class PlayerProfileScene extends Phaser.Scene {
     drawGlassPanel(container, x, y, w, h) {
         const graphics = this.add.graphics();
         
-        // Depth Shadow Blur Mask
         graphics.fillStyle(0x000000, 0.6);
         graphics.fillRoundedRect(x - w / 2 + 8, y - h / 2 + 8, w, h, 20);
 
-        // Main Frosted Terminal Core Surface
         graphics.fillStyle(0x020816, 0.92);
         graphics.fillRoundedRect(x - w / 2, y - h / 2, w, h, 20);
         
-        // High-Tech Digital Neon Cyber Border
         graphics.lineStyle(3, 0x0066aa, 0.85);
         graphics.strokeRoundedRect(x - w / 2, y - h / 2, w, h, 20);
 
-        // Secondary Inside Refraction Rim Line
         graphics.lineStyle(1.5, 0x00ffff, 0.25);
         graphics.strokeRoundedRect(x - w / 2 + 4, y - h / 2 + 4, w - 8, h - 8, 16);
 
@@ -421,7 +418,6 @@ class PlayerProfileScene extends Phaser.Scene {
     }
 
     createTopUI(w) {
-        // --- BACK BUTTON ---
         const backContainer = this.add.container(100, 65);
         
         const backBg = this.add.graphics();
@@ -506,11 +502,9 @@ class PlayerProfileScene extends Phaser.Scene {
         ringGraphics.fillStyle(0xffffff, 0); 
         ringGraphics.fillRect(0, 0, size, size);
 
-        // Segment 1: Inner thin data track
         ringGraphics.lineStyle(1.5, 0x00ffff, 0.2);
         ringGraphics.strokeCircle(radius, radius, radius - 20);
 
-        // Segment 2: Bold Structural Arc Dividers
         ringGraphics.lineStyle(4, 0x0088ff, 0.8);
         for (let i = 0; i < 4; i++) {
             const angle = Phaser.Math.DegToRad(i * 90 + 5); 

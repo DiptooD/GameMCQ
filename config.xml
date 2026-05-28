@@ -17,19 +17,30 @@
   <preference name="DisallowOverscroll" value="true" />
   <preference name="KeepRunning" value="true" />
 
-<platform name="android">
-<preference name="android-minSdkVersion" value="24" />
+  <!-- Add Google Plus Plugin for Native Authentication -->
+  <plugin name="cordova-plugin-googleplus" spec="^8.5.2">
+      <!-- Replace with your REVERSED_CLIENT_ID from google-services.json -->
+      <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.YOUR-REVERSED-CLIENT-ID" />
+      <!-- Replace with your Web Client ID from Firebase/Google Cloud Console -->
+      <variable name="WEB_APPLICATION_CLIENT_ID" value="YOUR-WEB-CLIENT-ID.apps.googleusercontent.com" />
+  </plugin>
+
+  <platform name="android">
+    <!-- This line ensures Firebase config is copied into the Android build -->
+    <resource-file src="google-services.json" target="app/google-services.json" />
+
+    <preference name="android-minSdkVersion" value="24" />
     <preference name="android-targetSdkVersion" value="36" />
     <preference name="android-compileSdkVersion" value="36" />
     <preference name="AndroidXEnabled" value="true" />
 
-<icon src="icon.png" />
-<splash src="splash.png" />
+    <icon src="icon.png" />
+    <splash src="splash.png" />
     
     <preference name="SplashScreen" value="screen" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="SplashScreenDelay" value="0" /> 
     <preference name="FadeSplashScreen" value="false" /> 
-    </platform>
+  </platform>
 </widget>

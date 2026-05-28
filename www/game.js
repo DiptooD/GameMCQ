@@ -31,7 +31,36 @@ window.saveGame = function() {
         }
         localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
 
-        // --- NEW: Trigger Background Sync if supported ---
+        // --- FIREBASE CLOUD SYNC ---
+        // Only sync to the cloud if the player is actively connected via Google Auth
+        if (window.FirebaseAuth && window.FirebaseAuth.currentUser && window.FirebaseTools) {
+            const uid = window.FirebaseAuth.currentUser.uid;
+            const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
+            
+            window.FirebaseTools.setDoc(playerRef, {
+                keys: GameState.keys || 0,
+                debris: GameState.debris || 0,
+                ownedShips: GameState.ownedShips || ["default"],
+                equippedShip: GameState.equippedShip || "default",
+                ownedThemes: GameState.ownedThemes || ["theme_default"],
+                equippedTheme: GameState.equippedTheme || "theme_default",
+                boosters: GameState.boosters || {},
+                rewardSkips: GameState.rewardSkips || 0,
+                gamesPlayed: GameState.gamesPlayed || 0,
+                profile: GameState.profile || {},
+                matchHistory: GameState.matchHistory || [],
+                dailyMissions: GameState.dailyMissions || [],
+                lastMissionDate: GameState.lastMissionDate || "",
+                dailyMissionsCompleted: GameState.dailyMissionsCompleted || false,
+                lastSaved: new Date().toISOString()
+            }, { merge: true }).then(() => {
+                console.log("Cloud Sync Successful!");
+            }).catch((err) => {
+                console.warn("Cloud Sync Failed (Player might be offline). Local save secure.", err);
+            });
+        }
+
+        // --- Trigger Background PWA Sync if supported ---
         if ('serviceWorker' in navigator && 'SyncManager' in window) {
             navigator.serviceWorker.ready.then(swRegistration => {
                 return swRegistration.sync.register('sync-game-data');
@@ -54,7 +83,6 @@ window.saveSettings = function() {
     localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
 };
 
-// --- NEW TAG & AVATAR RANKING SYSTEM ---
 window.getRankData = function(level) {
     if (level <= 5) return { tag: "শিক্ষানবিশ (Space Cadet)", avatar: "🛸" };
     if (level <= 10) return { tag: "নভোচারী (Astronaut)", avatar: "👨‍🚀" };
@@ -66,7 +94,6 @@ window.getRankData = function(level) {
     return { tag: "লিজেন্ড (Galactic Legend)", avatar: "👑" };
 };
 
-// Keep for fallback/legacy logic if anything strictly looks for this array
 window.getAvatars = function() {
     return ["👨‍🚀", "👽", "🤖", "👾", "🦸‍♂️", "🥷", "🧙‍♂️", "🧛‍♂️", "🧟‍♂️", "🧝‍♂️"];
 };
@@ -85,7 +112,6 @@ window.getLevelData = function() {
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
 
-// Migration: Move old 'game_skips' to 'game_rewardSkips' without breaking old saves
 let storedRewardSkips = parseInt(localStorage.getItem('game_rewardSkips'));
 if (isNaN(storedRewardSkips)) {
     let legacySkips = parseInt(localStorage.getItem('game_skips'));
@@ -93,16 +119,14 @@ if (isNaN(storedRewardSkips)) {
     localStorage.setItem('game_rewardSkips', storedRewardSkips);
 }
 
-// Load Profile early so missions can scale based on Player Level
 let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
 let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
 let mergedProfile = { ...defaultProfile, ...storedProfile };
 
 const generateDailyMissions = () => {
-    // Determine player level for scaling
     let xp = mergedProfile.xp || 0;
     let level = Math.floor(Math.sqrt(xp / 50)) + 1;
-    let diffMult = 1 + (level * 0.15); // Scales targets up gradually
+    let diffMult = 1 + (level * 0.15); 
 
     const missionPool = [
         { type: "kill_enemies", desc: "শত্রু ধ্বংস করুন", min: 30, max: 60 },
@@ -115,20 +139,17 @@ const generateDailyMissions = () => {
         { type: "answer_combo", desc: "৩x কম্বো অর্জন করুন", min: 2, max: 5 }
     ];
 
-    // Create a shuffled copy of the pool
     const shuffledPool = [...missionPool];
     Phaser.Utils.Array.Shuffle(shuffledPool);
-    const selectedMissions = shuffledPool.slice(0, 3); // Pick 3 random distinct missions
+    const selectedMissions = shuffledPool.slice(0, 3); 
 
     const missions = [];
     selectedMissions.forEach((mp, index) => {
-        // Apply level scaling to target, making sure it doesn't get wildly out of hand
         let target = Math.floor(Phaser.Math.Between(mp.min, mp.max) * diffMult);
         
         let rewardType, rewardAmt;
         const rewardRoll = Math.random();
         
-        // Randomize Rewards securely within controlled Min/Max bounds
         if (rewardRoll < 0.4) {
             rewardType = "xp";
             rewardAmt = Math.floor(Phaser.Math.Between(50, 100) * diffMult);
@@ -138,7 +159,7 @@ const generateDailyMissions = () => {
         } else {
             const boosters = ["fireShield", "speedBoost", "batteryEff"];
             rewardType = "booster_" + Phaser.Utils.Array.GetRandom(boosters);
-            rewardAmt = Phaser.Math.Between(1, 1 + Math.floor(level / 10)); // Mostly 1, scales very slowly
+            rewardAmt = Phaser.Math.Between(1, 1 + Math.floor(level / 10));
         }
 
         missions.push({
@@ -177,7 +198,6 @@ window.GameState = {
     bossStage: 0, 
     bossActive: false,
     
-    // Separate Base Skips & Reward Skips
     freeSkips: 10,
     rewardSkips: storedRewardSkips,
     
@@ -287,7 +307,7 @@ window.updateLevelTargets = function() {
     if (GameState.bossStage === 0) GameState.totalCorrectNeeded = Math.max(3, 10 - discount); 
     else if (GameState.bossStage === 1) GameState.totalCorrectNeeded = Math.max(3, 7 - discount);  
     else if (GameState.bossStage === 2) GameState.totalCorrectNeeded = Math.max(2, 5 - discount);  
-    else GameState.totalCorrectNeeded = Infinity; // FIX: Prevented Infinity .textContent TypeError
+    else GameState.totalCorrectNeeded = Infinity; 
 };
 
 window.resetGameState = function () {
@@ -303,9 +323,7 @@ window.resetGameState = function () {
     GameState.bossActive = false;
     GameState.sessionHistory = [];
     
-    // Refresh 10 free skips every time a new game starts
     GameState.freeSkips = 10;
-    // (Note: GameState.rewardSkips is NOT reset, retaining the player's winnings)
     
     window.updateLevelTargets(); 
 };

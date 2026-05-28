@@ -40,10 +40,17 @@ Promise.all([
   document.fonts.load('600 10px "Anek Bangla"'),
   document.fonts.load('700 10px "Anek Bangla"'),
   document.fonts.load('800 10px "Anek Bangla"')
-]).then(() => {
+]).then(async () => {
+  // NEW: Wait for Firebase to download data before making the game
+  if (window.connectToCloud) {
+      await window.connectToCloud();
+  }
   window.game = new Phaser.Game(config);
-}).catch((err) => {
+}).catch(async (err) => {
   console.log("Font load error, starting anyway:", err);
+  if (window.connectToCloud) {
+      await window.connectToCloud();
+  }
   window.game = new Phaser.Game(config);
 });
 

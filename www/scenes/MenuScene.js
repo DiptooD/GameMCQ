@@ -14,7 +14,6 @@ class MenuScene extends Phaser.Scene {
         this.backgroundLayers = [];
         this.isStartingGame = false;
         
-        // Reset history states on init to ensure a clean slate
         this.historyScrollData = null;
         this.historyScrollState = null;
         this.isHistoryPopupOpen = false;
@@ -126,10 +125,61 @@ class MenuScene extends Phaser.Scene {
             }
         });
 
+        // First Time Google Auth Prompt
+        if (!localStorage.getItem('google_prompt_seen') && (!window.FirebaseAuth || !window.FirebaseAuth.currentUser)) {
+            this.showGoogleAuthPrompt(cx, cy);
+        }
+
         if (GameState.showHistoryPopupOnLoad) {
             GameState.showHistoryPopupOnLoad = false;
             this.showMatchHistoryPopup(); 
         }
+    }
+
+    showGoogleAuthPrompt(cx, cy) {
+        const w = this.cameras.main.width;
+        const h = this.cameras.main.height;
+        const overlay = this.add.rectangle(w/2, h/2, w, h, 0x000000, 0.8).setInteractive().setDepth(9999);
+        const container = this.add.container(cx, cy).setDepth(10000);
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 1);
+        bg.fillRoundedRect(-250, -160, 500, 320, 20);
+        bg.lineStyle(4, 0x00ffff, 1);
+        bg.strokeRoundedRect(-250, -160, 500, 320, 20);
+
+        const title = this.add.text(0, -110, "Cloud Save", {
+            fontSize: "40px", fontFamily: "'Anek Bangla'", color: "#00ffff", fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        const desc = this.add.text(0, -25, "আপনার Google অ্যাকাউন্টের সাহায্যে গেমের\nপ্রোফাইল কানেক্ট করুন। এতে আপনার গেমের\nসব প্রগ্রেস ক্লাউডে নিরাপদে সেভ থাকবে!", {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
+        }).setOrigin(0.5);
+
+        const closeBtn = this.add.text(210, -120, "✖", { fontSize: "30px", color: "#ff4444" }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        
+        closeBtn.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            localStorage.setItem('google_prompt_seen', 'true');
+            overlay.destroy();
+            container.destroy();
+        });
+
+        const btnBg = this.add.graphics();
+        btnBg.fillStyle(0x0066aa, 1);
+        btnBg.fillRoundedRect(-120, 70, 240, 60, 30);
+        const connectBtnTxt = this.add.text(0, 100, "Connect Google", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const connectHit = this.add.rectangle(0, 100, 240, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        connectHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            localStorage.setItem('google_prompt_seen', 'true');
+            overlay.destroy();
+            container.destroy();
+            if (window.signInWithGoogle) window.signInWithGoogle();
+        });
+
+        container.add([bg, title, desc, closeBtn, btnBg, connectBtnTxt, connectHit]);
     }
 
     update(time, delta) {
@@ -157,11 +207,9 @@ class MenuScene extends Phaser.Scene {
             this.reactorRing.rotation += 0.015 * safeTimeScale;
         }
 
-        // Apply smooth physics to the match history popup if active
         if (this.historyScrollData && this.historyScrollState) {
             let { contentContainer, listStartY, minScroll } = this.historyScrollData;
             
-            // Safety check in case the container was destroyed
             if (!contentContainer || !contentContainer.active) {
                 this.historyScrollData = null;
                 return;
@@ -171,7 +219,6 @@ class MenuScene extends Phaser.Scene {
                 let vY = this.historyScrollState.velocityY;
                 let currentY = contentContainer.y;
 
-                // Apply velocity if it's high enough
                 if (Math.abs(vY) > 0.05) {
                     currentY += vY * 16 * safeTimeScale;
                     this.historyScrollState.velocityY *= Math.pow(0.9, safeTimeScale); 
@@ -179,7 +226,6 @@ class MenuScene extends Phaser.Scene {
                     this.historyScrollState.velocityY = 0;
                 }
 
-                // Snap back smoothly if out of bounds
                 if (currentY > listStartY) {
                     currentY += (listStartY - currentY) * 0.2 * safeTimeScale;
                 } else if (currentY < listStartY + minScroll) {
@@ -188,7 +234,6 @@ class MenuScene extends Phaser.Scene {
 
                 contentContainer.y = currentY;
             } else {
-                // Decay velocity rapidly while holding but not moving
                 this.historyScrollState.velocityY *= Math.pow(0.8, safeTimeScale); 
             }
         }
@@ -990,13 +1035,12 @@ class MenuScene extends Phaser.Scene {
                 let dummy = this.add.image(wx, wy, shipTexture).setScale(0.85).setDepth(9999);
                 if(this.hangarShipIcon) this.hangarShipIcon.setVisible(false);
 
-                // --- SMOOTH BACKGROUND TRANSITION OVERLAY ---
                 const themeColors = (window.getThemeColors) ? window.getThemeColors() : { bgTop: 0x1A0545, bgBot: 0x003355 };
                 
                 const transitionBg = this.add.graphics();
                 transitionBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
                 transitionBg.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
-                transitionBg.setDepth(9998); // Behind ship, above rest of the menu UI
+                transitionBg.setDepth(9998); 
                 transitionBg.setAlpha(0);
 
                 this.tweens.add({
@@ -1006,7 +1050,6 @@ class MenuScene extends Phaser.Scene {
                     ease: 'Sine.easeInOut'
                 });
 
-                // Ship fly out animation
                 this.tweens.add({
                     targets: dummy,
                     y: -150,
@@ -1016,7 +1059,6 @@ class MenuScene extends Phaser.Scene {
                     onComplete: () => this.startGame()
                 });
                 
-                // Fade everything else out slowly
                 this.children.list.forEach(c => {
                     if (c !== dummy && c !== transitionBg && c.depth > -90) {
                         this.tweens.killTweensOf(c);
@@ -1049,7 +1091,7 @@ class MenuScene extends Phaser.Scene {
 
         this.revisionTips = [
             "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে।",
-            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে শাহ, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
         ];
 
         const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
@@ -1218,7 +1260,6 @@ class MenuScene extends Phaser.Scene {
     }
 
     showMatchHistoryPopup() {
-        // Prevent multiple identical popups from opening if clicked rapidly
         if (this.isHistoryPopupOpen) return;
         this.isHistoryPopupOpen = true;
 
@@ -1246,7 +1287,6 @@ class MenuScene extends Phaser.Scene {
         const closeHit = this.add.circle(panelW/2 - 40, -panelH/2 + 50, 30).setInteractive({ useHandCursor: true });
         const closeIcon = this.add.text(panelW/2 - 40, -panelH/2 + 50, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
         
-        // Centralized cleanup to safely destroy the popup and remove persistent event listeners
         let cleanup = () => {
             this.isHistoryPopupOpen = false;
             if (popup) popup.destroy();
@@ -1282,60 +1322,57 @@ class MenuScene extends Phaser.Scene {
             }).setOrigin(0.5);
             contentContainer.add(noData);
         } else {
-history.forEach((match) => {
-            const cardH = 120;
-            const cardBg = this.add.graphics();
-            
-            // FIX: Capture the exact position for THIS specific card
-            // so the hover effect doesn't use the final loop value of currentY.
-            const cardY = currentY; 
-            
-            const drawCard = (hover) => {
-                cardBg.clear();
-                cardBg.fillStyle(hover ? 0x0a1a3a : 0x051025, 0.9);
-                cardBg.fillRoundedRect(-listWidth/2 + 10, cardY, listWidth - 20, cardH, 15);
-                cardBg.lineStyle(2, hover ? 0x0088ff : 0x004488, 1);
-                cardBg.strokeRoundedRect(-listWidth/2 + 10, cardY, listWidth - 20, cardH, 15);
-            };
-            drawCard(false);
-
-            const dateTxt = this.add.text(-listWidth/2 + 30, cardY + 20, match.date, { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" });
-            
-            let pColor = "#ff4444";
-            if(match.percent === 100) pColor = "#ffffff";
-            else if(match.percent >= 80) pColor = "#00ff00";
-            else if(match.percent >= 26) pColor = "#ffff00";
-
-            const pctTxt = this.add.text(listWidth/2 - 30, cardY + 30, `${match.percent}%`, { fontSize: "42px", fontFamily: "'Anek Bangla'", fontStyle: 'bold', color: pColor }).setOrigin(1, 0);
-
-            const stats = `মোট: ${match.total} | সঠিক: ${match.correct} | ভুল: ${match.wrong} | স্কিপ: ${match.skipped}`;
-            const statTxt = this.add.text(-listWidth/2 + 30, cardY + 65, stats, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff" });
-
-            const hitArea = this.add.rectangle(0, cardY + cardH/2, listWidth - 20, cardH, 0x000000, 0).setInteractive({ useHandCursor: true });
-            
-            let downY = 0;
-            hitArea.on('pointerdown', (pointer) => {
-                downY = pointer.y;
-                drawCard(true);
-            });
-            
-            hitArea.on('pointerup', (pointer) => {
-                if (Math.abs(pointer.y - downY) < 15) {
-                    this.playSound('sfx_click');
-                    GameState.viewingHistoryMatch = match;
-                    cleanup();
-                    this.scene.start("DeathScene");
-                }
+            history.forEach((match) => {
+                const cardH = 120;
+                const cardBg = this.add.graphics();
+                
+                const cardY = currentY; 
+                
+                const drawCard = (hover) => {
+                    cardBg.clear();
+                    cardBg.fillStyle(hover ? 0x0a1a3a : 0x051025, 0.9);
+                    cardBg.fillRoundedRect(-listWidth/2 + 10, cardY, listWidth - 20, cardH, 15);
+                    cardBg.lineStyle(2, hover ? 0x0088ff : 0x004488, 1);
+                    cardBg.strokeRoundedRect(-listWidth/2 + 10, cardY, listWidth - 20, cardH, 15);
+                };
                 drawCard(false);
-            });
-            
-            hitArea.on('pointerout', () => drawCard(false));
 
-            contentContainer.add([cardBg, dateTxt, pctTxt, statTxt, hitArea]);
-            
-            // Advance the global currentY for the NEXT card in the loop
-            currentY += cardH + 15;
-        });
+                const dateTxt = this.add.text(-listWidth/2 + 30, cardY + 20, match.date, { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" });
+                
+                let pColor = "#ff4444";
+                if(match.percent === 100) pColor = "#ffffff";
+                else if(match.percent >= 80) pColor = "#00ff00";
+                else if(match.percent >= 26) pColor = "#ffff00";
+
+                const pctTxt = this.add.text(listWidth/2 - 30, cardY + 30, `${match.percent}%`, { fontSize: "42px", fontFamily: "'Anek Bangla'", fontStyle: 'bold', color: pColor }).setOrigin(1, 0);
+
+                const stats = `মোট: ${match.total} | সঠিক: ${match.correct} | ভুল: ${match.wrong} | স্কিপ: ${match.skipped}`;
+                const statTxt = this.add.text(-listWidth/2 + 30, cardY + 65, stats, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff" });
+
+                const hitArea = this.add.rectangle(0, cardY + cardH/2, listWidth - 20, cardH, 0x000000, 0).setInteractive({ useHandCursor: true });
+                
+                let downY = 0;
+                hitArea.on('pointerdown', (pointer) => {
+                    downY = pointer.y;
+                    drawCard(true);
+                });
+                
+                hitArea.on('pointerup', (pointer) => {
+                    if (Math.abs(pointer.y - downY) < 15) {
+                        this.playSound('sfx_click');
+                        GameState.viewingHistoryMatch = match;
+                        cleanup();
+                        this.scene.start("DeathScene");
+                    }
+                    drawCard(false);
+                });
+                
+                hitArea.on('pointerout', () => drawCard(false));
+
+                contentContainer.add([cardBg, dateTxt, pctTxt, statTxt, hitArea]);
+                
+                currentY += cardH + 15;
+            });
         }
 
         popup.add(contentContainer);
@@ -1363,7 +1400,6 @@ history.forEach((match) => {
                 lastTime = this.time.now;
             });
 
-            // Allow desktop users to use scrollwheel cleanly
             scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
                 if (!this.historyScrollData) return;
                 let newY = contentContainer.y - deltaY;
@@ -1397,12 +1433,10 @@ history.forEach((match) => {
                 if(this.historyScrollState) this.historyScrollState.isDragging = false; 
             };
 
-            // Bind listeners to global scene input to capture dragging outside the popup
             this.input.on('pointermove', onPointerMove);
             this.input.on('pointerup', stopDrag);
-            this.input.on('gameout', stopDrag); // Better fail-safe when mouse leaves browser window
+            this.input.on('gameout', stopDrag); 
 
-            // Intercept the cleanup method so we can unbind these specific listeners correctly
             const standardCleanup = cleanup;
             cleanup = () => {
                 this.input.off('pointermove', onPointerMove);

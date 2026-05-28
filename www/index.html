@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Game MCQ</title>
   
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; frame-src 'self' https://gamemcq.firebaseapp.com https://accounts.google.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com;">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   
@@ -23,6 +23,159 @@
     }
   </style>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    // ADDED: signInWithCredential to authenticate via the native plugin's token
+    import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCT-5xo5GAmbloUaYIweUm81QQvz8uWgGM",
+      authDomain: "gamemcq.firebaseapp.com",
+      projectId: "gamemcq",
+      storageBucket: "gamemcq.firebasestorage.app",
+      messagingSenderId: "1060690619330",
+      appId: "1:1060690619330:web:a31cfeaf73a34aa904445b",
+      measurementId: "G-XJTRXMQ8DZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.FirebaseAuth = getAuth(app);
+    window.FirebaseAuth.useDeviceLanguage(); 
+    window.FirebaseDB = getFirestore(app);
+    
+    // ADDED: Export signInWithCredential
+    window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc };
+
+    window.connectToCloud = function() {
+        return new Promise((resolve) => {
+            console.log("Checking Firebase Auth state...");
+            
+            if (!navigator.onLine) {
+                console.log("No internet. Playing offline.");
+                resolve();
+                return;
+            }
+
+            window.FirebaseTools.onAuthStateChanged(window.FirebaseAuth, async (user) => {
+                if (user) {
+                    console.log("Player Logged In. ID:", user.uid);
+                    const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", user.uid);
+                    try {
+                        const saveFile = await window.FirebaseTools.getDoc(playerRef);
+                        if (saveFile.exists()) {
+                            console.log("Cloud save found! Syncing data to device...");
+                            const cloudData = saveFile.data();
+                            const gs = window.GameState || {};
+                            
+                            if (cloudData.keys !== undefined) gs.keys = cloudData.keys;
+                            if (cloudData.debris !== undefined) gs.debris = cloudData.debris;
+                            if (cloudData.equippedShip) gs.equippedShip = cloudData.equippedShip;
+                            if (cloudData.ownedShips) gs.ownedShips = cloudData.ownedShips;
+                            if (cloudData.equippedTheme) gs.equippedTheme = cloudData.equippedTheme;
+                            if (cloudData.ownedThemes) gs.ownedThemes = cloudData.ownedThemes;
+                            if (cloudData.boosters) gs.boosters = cloudData.boosters;
+                            if (cloudData.rewardSkips !== undefined) gs.rewardSkips = cloudData.rewardSkips;
+                            if (cloudData.gamesPlayed !== undefined) gs.gamesPlayed = cloudData.gamesPlayed;
+                            if (cloudData.profile) gs.profile = cloudData.profile;
+                            if (cloudData.matchHistory) gs.matchHistory = cloudData.matchHistory;
+                            if (cloudData.dailyMissions) gs.dailyMissions = cloudData.dailyMissions;
+                            if (cloudData.lastMissionDate) gs.lastMissionDate = cloudData.lastMissionDate;
+                            if (cloudData.dailyMissionsCompleted !== undefined) gs.dailyMissionsCompleted = cloudData.dailyMissionsCompleted;
+
+                            localStorage.setItem('game_keys', gs.keys);
+                            localStorage.setItem('game_debris', gs.debris);
+                            localStorage.setItem('game_profile', JSON.stringify(gs.profile));
+                        }
+                    } catch (error) {
+                        console.error("Failed to load cloud save", error);
+                    }
+                } else {
+                    console.log("No connected account found. Playing locally/offline.");
+                }
+                resolve(); 
+            });
+        });
+    };
+
+    // --- REWRITTEN: Google Authentication UI Logic ---
+    window.signInWithGoogle = async function() {
+        if (!navigator.onLine) {
+            alert("Please connect to the internet to sign in.");
+            return;
+        }
+
+        try {
+            // Check if running on Android/iOS natively via Cordova
+            if (window.cordova && window.plugins && window.plugins.googleplus) {
+                window.plugins.googleplus.login(
+                    {
+                        // IMPORTANT: Replace this with the exact Web Client ID from your Firebase Console
+                        'webClientId': 'YOUR-WEB-CLIENT-ID.apps.googleusercontent.com',
+                        'offline': true
+                    },
+                    async function (obj) {
+                        // Exchange native Google Token for Firebase Credentials
+                        const credential = window.FirebaseTools.GoogleAuthProvider.credential(obj.idToken);
+                        const result = await window.FirebaseTools.signInWithCredential(window.FirebaseAuth, credential);
+                        
+                        console.log("Successfully logged in natively:", result.user.displayName);
+                        await window.syncAfterLogin(result.user.uid);
+                        
+                        if (window.game && window.game.scene) {
+                            const activeScenes = window.game.scene.getScenes(true);
+                            activeScenes.forEach(s => s.scene.restart());
+                        }
+                        alert("Successfully connected to Cloud!");
+                    },
+                    function (msg) {
+                        console.error("Google Sign-In Error (Native):", msg);
+                        alert("Sign-in failed: " + JSON.stringify(msg));
+                    }
+                );
+            } else {
+                // Fallback for Web/Browser testing
+                const provider = new window.FirebaseTools.GoogleAuthProvider();
+                const result = await window.FirebaseTools.signInWithPopup(window.FirebaseAuth, provider);
+                
+                console.log("Successfully logged in with Google Web:", result.user.displayName);
+                await window.syncAfterLogin(result.user.uid);
+                
+                if (window.game && window.game.scene) {
+                    const activeScenes = window.game.scene.getScenes(true);
+                    activeScenes.forEach(s => s.scene.restart());
+                }
+                alert("Successfully connected to Cloud!");
+            }
+        } catch(e) {
+            console.error("Google Sign-In Error:", e);
+            alert("Sign-in failed: " + e.message);
+        }
+    };
+
+    window.syncAfterLogin = async function(uid) {
+        const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
+        try {
+            const saveFile = await window.FirebaseTools.getDoc(playerRef);
+            if (saveFile.exists()) {
+                const cloudData = saveFile.data();
+                const gs = window.GameState;
+                
+                if (cloudData.keys !== undefined) gs.keys = cloudData.keys;
+                if (cloudData.debris !== undefined) gs.debris = cloudData.debris;
+                if (cloudData.profile) gs.profile = cloudData.profile;
+                if (cloudData.equippedShip) gs.equippedShip = cloudData.equippedShip;
+                if (cloudData.ownedShips) gs.ownedShips = cloudData.ownedShips;
+                if (cloudData.gamesPlayed !== undefined) gs.gamesPlayed = cloudData.gamesPlayed;
+                if (cloudData.matchHistory) gs.matchHistory = cloudData.matchHistory;
+            }
+            if (window.saveGame) window.saveGame();
+        } catch (e) {
+            console.error("Error syncing after login", e);
+        }
+    };
+  </script>
+
   <script src="cordova.js"></script> 
 </head>
 <body>
@@ -34,12 +187,10 @@
         const bootScreen = document.getElementById('boot-screen');
         let isOnline = false;
         
-        // 1. Strict 3-Second Actual Connection Test
         if (navigator.onLine) {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 sec timeout
+            const timeoutId = setTimeout(() => controller.abort(), 3000); 
             try {
-                // Ping a reliable small file (like the font stylesheet) to verify internet access
                 await fetch('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700;800&display=swap', { 
                     method: 'HEAD', mode: 'no-cors', signal: controller.signal 
                 });
@@ -51,14 +202,12 @@
         }
         window.isAppOnline = isOnline;
 
-        // 2. Register Service Worker for Caching & Background Sync
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('ServiceWorker registered:', reg.scope))
                 .catch(err => console.warn('ServiceWorker error:', err));
         }
 
-        // 3. Load Fonts based on Connection Status
         const fontLink = document.createElement('link');
         fontLink.rel = 'stylesheet';
         fontLink.href = isOnline 
@@ -66,7 +215,6 @@
             : 'css/local-fonts.css';
         document.head.appendChild(fontLink);
 
-        // 4. Sequential Script Loader
         function loadScript(src) {
             return new Promise((resolve) => {
                 const s = document.createElement('script');
@@ -74,23 +222,20 @@
                 s.onload = resolve;
                 s.onerror = () => {
                     console.warn('Failed to load: ' + src);
-                    resolve(); // Resolve to prevent breaking the chain
+                    resolve(); 
                 };
                 document.body.appendChild(s);
             });
         }
 
         const phaserSrc = isOnline ? 'https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js' : 'js/phaser.min.js';
-        
         await loadScript(phaserSrc);
         
-        // Final fallback if CDN failed despite passing ping
         if (!window.Phaser && isOnline) {
             console.log("CDN failed, falling back to local Phaser...");
             await loadScript('js/phaser.min.js');
         }
 
-        // Load all game scripts strictly in order
         const scripts = [
             "game.js",
             "scenes/LoadingScene.js",
@@ -115,7 +260,6 @@
             await loadScript(src);
         }
         
-        // Hide bootloader
         bootScreen.style.display = 'none';
     })();
   </script>
