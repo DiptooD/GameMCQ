@@ -17,6 +17,8 @@ class MenuScene extends Phaser.Scene {
         this.historyScrollData = null;
         this.historyScrollState = null;
         this.isHistoryPopupOpen = false;
+        
+        this.activeNotification = null;
     }
 
     create() {
@@ -125,7 +127,6 @@ class MenuScene extends Phaser.Scene {
             }
         });
 
-        // First Time Google Auth Prompt
         if (!localStorage.getItem('google_prompt_seen') && (!window.FirebaseAuth || !window.FirebaseAuth.currentUser)) {
             this.showGoogleAuthPrompt(cx, cy);
         }
@@ -134,6 +135,73 @@ class MenuScene extends Phaser.Scene {
             GameState.showHistoryPopupOnLoad = false;
             this.showMatchHistoryPopup(); 
         }
+    }
+
+    showNotification(msg, type = 'info') {
+        if (this.activeNotification) {
+            this.activeNotification.destroy();
+        }
+
+        const cx = this.cameras.main.width / 2;
+        const container = this.add.container(cx, -120).setDepth(10000);
+        this.activeNotification = container;
+
+        let colors = {
+            success: { bg: 0x004422, border: 0x00ff88, glow: 0x00ff88, icon: "✅" },
+            error: { bg: 0x440000, border: 0xff4444, glow: 0xff4444, icon: "❌" },
+            info: { bg: 0x002244, border: 0x00aaff, glow: 0x00aaff, icon: "ℹ️" }
+        };
+        let style = colors[type] || colors.info;
+
+        const bg = this.add.graphics();
+        bg.fillGradientStyle(style.bg, 0x000000, 0x000000, 0x000000, 0.95);
+        bg.fillRoundedRect(-240, -45, 480, 90, 20);
+        bg.lineStyle(3, style.border, 1);
+        bg.strokeRoundedRect(-240, -45, 480, 90, 20);
+
+        const glow = this.add.graphics();
+        glow.fillStyle(style.glow, 0.15);
+        glow.fillRoundedRect(-245, -50, 490, 100, 25);
+        
+        const icon = this.add.text(-190, 0, style.icon, { fontSize: '40px' }).setOrigin(0.5);
+        const text = this.add.text(-150, 0, msg, {
+            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+            align: 'left', fontStyle: 'bold', lineSpacing: 5
+        }).setOrigin(0, 0.5);
+
+        container.add([glow, bg, icon, text]);
+
+        if (type === 'success' && this.cache.audio.exists('sfx_powerup')) {
+            this.playSound('sfx_powerup', 0.4); 
+        } else if (type === 'error' && this.cache.audio.exists('sfx_error')) {
+            this.playSound('sfx_error', 0.5);
+        } else {
+            this.playSound('sfx_tick', 0.5);
+        }
+        
+        this.tweens.add({ 
+            targets: container, 
+            y: 90, 
+            alpha: 1, 
+            duration: 500, 
+            ease: 'Back.easeOut',
+            onComplete: () => {
+                this.tweens.add({ 
+                    targets: container, 
+                    y: -120,
+                    alpha: 0, 
+                    delay: 3500, 
+                    duration: 400, 
+                    ease: 'Cubic.easeIn',
+                    onComplete: () => {
+                        if (this.activeNotification === container) {
+                            this.activeNotification = null;
+                        }
+                        container.destroy();
+                    }
+                });
+            }
+        });
     }
 
     showGoogleAuthPrompt(cx, cy) {
@@ -176,7 +244,18 @@ class MenuScene extends Phaser.Scene {
             localStorage.setItem('google_prompt_seen', 'true');
             overlay.destroy();
             container.destroy();
-            if (window.signInWithGoogle) window.signInWithGoogle();
+            if (window.signInWithGoogle) {
+                let res = window.signInWithGoogle();
+                if (res && res.then) {
+                    res.then(() => {
+                        this.showNotification("Google Account Connected!\nCloud sync active.", "success");
+                        if (this.profileRedDot) this.profileRedDot.setVisible(false);
+                    }).catch((error) => {
+                        console.error("Sign in failed:", error);
+                        this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
+                    });
+                }
+            }
         });
 
         container.add([bg, title, desc, closeBtn, btnBg, connectBtnTxt, connectHit]);
@@ -320,17 +399,6 @@ class MenuScene extends Phaser.Scene {
         }
     }
 
-    showToast(msg) {
-        const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
-            backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 20, y: 12}
-        }).setOrigin(0.5).setDepth(5000).setAlpha(0);
-        
-        this.tweens.add({ 
-            targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() 
-        });
-    }
-
     getAvailableQuestionCount(mode) {
         const manifest = this.cache.json.get('bank_directory');
         if (!manifest) return 0;
@@ -403,11 +471,18 @@ class MenuScene extends Phaser.Scene {
 
         const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '44px'}).setOrigin(0.5);
 
+        const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
         const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 11, playerName, {
             fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
+
+        // Disconnected Red Dot Indicator
+        this.profileRedDot = this.add.circle(boxX + 85 + nameTxt.width + 15, boxY + boxH/2 - 11, 6, 0xff3333);
+        this.profileRedDot.setStrokeStyle(2, 0xff0000);
+        this.profileRedDot.setVisible(!isConnected);
+        this.tweens.add({ targets: this.profileRedDot, alpha: 0.2, duration: 800, yoyo: true, repeat: -1 });
 
         const tagShort = rankData.tag.split(" (")[0];
         const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 16.5, `লেভেল ${lvlData.level} • ${tagShort}`, {
@@ -908,7 +983,7 @@ class MenuScene extends Phaser.Scene {
             hitArea.on('pointerdown', () => {
                 if (opt.value === "revision" && this.getAvailableQuestionCount("revision") === 0) {
                     this.playSound('sfx_q_wrong', 0.2);
-                    this.showToast("Play a game to earn revision questions.");
+                    this.showNotification("Play a game to earn revision questions.", "error");
                     return; 
                 }
 
@@ -1010,13 +1085,13 @@ class MenuScene extends Phaser.Scene {
             if (this.isStartingGame) return;
 
             if (this.selectedMode === "revision" && this.getAvailableQuestionCount("revision") === 0) {
-                this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
+                this.showNotification("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।", "error");
                 return;
             } else if (this.selectedMode === "new" && this.getAvailableQuestionCount("new") === 0) {
-                this.showToast("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!");
+                this.showNotification("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!", "error");
                 return;
             } else if (this.getAvailableQuestionCount(this.selectedMode) === 0) {
-                this.showToast("এই বিভাগে কোনো প্রশ্ন নেই!");
+                this.showNotification("এই বিভাগে কোনো প্রশ্ন নেই!", "error");
                 return;
             }
 
@@ -1519,21 +1594,21 @@ class MenuScene extends Phaser.Scene {
         if (this.selectedMode === "revision") {
             finalQuestions = finalQuestions.filter(q => seenQuestions.includes(q.question));
             if (finalQuestions.length === 0) {
-                this.showToast("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।");
+                this.showNotification("আগের কোনো প্রশ্ন পাওয়া যায়নি! আগে নরমাল মোড খেলুন।", "error");
                 this.isStartingGame = false;
                 return;
             }
         } else if (this.selectedMode === "new") {
             finalQuestions = finalQuestions.filter(q => !seenQuestions.includes(q.question));
             if (finalQuestions.length === 0) {
-                this.showToast("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!");
+                this.showNotification("আপনি এই বিভাগের সব প্রশ্নের উত্তর দিয়ে দিয়েছেন!", "error");
                 this.isStartingGame = false;
                 return;
             }
         }
 
         if (finalQuestions.length === 0) {
-            this.showToast("এই বিভাগে কোনো প্রশ্ন নেই!");
+            this.showNotification("এই বিভাগে কোনো প্রশ্ন নেই!", "error");
             this.isStartingGame = false;
             return;
         }

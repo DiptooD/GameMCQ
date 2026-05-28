@@ -48,10 +48,6 @@ window.saveGame = function() {
                 rewardSkips: GameState.rewardSkips || 0,
                 gamesPlayed: GameState.gamesPlayed || 0,
                 profile: GameState.profile || {},
-                matchHistory: GameState.matchHistory || [],
-                dailyMissions: GameState.dailyMissions || [],
-                lastMissionDate: GameState.lastMissionDate || "",
-                dailyMissionsCompleted: GameState.dailyMissionsCompleted || false,
                 lastSaved: new Date().toISOString()
             }, { merge: true }).then(() => {
                 console.log("Cloud Sync Successful!");

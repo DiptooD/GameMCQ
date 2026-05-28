@@ -5,6 +5,7 @@ class PlayerProfileScene extends Phaser.Scene {
 
     init() {
         this.backgroundLayers = [];
+        this.activeNotification = null; // Track active notification to prevent overlaps
     }
 
     create() {
@@ -69,6 +70,73 @@ class PlayerProfileScene extends Phaser.Scene {
         this.createMasterySection(cx, 1125, panelW, 350);
     }
 
+    showNotification(msg, type = 'info') {
+        if (this.activeNotification) {
+            this.activeNotification.destroy();
+        }
+
+        const cx = this.cameras.main.width / 2;
+        const container = this.add.container(cx, -120).setDepth(10000);
+        this.activeNotification = container;
+
+        let colors = {
+            success: { bg: 0x004422, border: 0x00ff88, glow: 0x00ff88, icon: "✅" },
+            error: { bg: 0x440000, border: 0xff4444, glow: 0xff4444, icon: "❌" },
+            info: { bg: 0x002244, border: 0x00aaff, glow: 0x00aaff, icon: "ℹ️" }
+        };
+        let style = colors[type] || colors.info;
+
+        const bg = this.add.graphics();
+        bg.fillGradientStyle(style.bg, 0x000000, 0x000000, 0x000000, 0.95);
+        bg.fillRoundedRect(-240, -45, 480, 90, 20);
+        bg.lineStyle(3, style.border, 1);
+        bg.strokeRoundedRect(-240, -45, 480, 90, 20);
+
+        const glow = this.add.graphics();
+        glow.fillStyle(style.glow, 0.15);
+        glow.fillRoundedRect(-245, -50, 490, 100, 25);
+        
+        const icon = this.add.text(-190, 0, style.icon, { fontSize: '40px' }).setOrigin(0.5);
+        const text = this.add.text(-150, 0, msg, {
+            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+            align: 'left', fontStyle: 'bold', lineSpacing: 5
+        }).setOrigin(0, 0.5);
+
+        container.add([glow, bg, icon, text]);
+
+        if (type === 'success' && this.cache.audio.exists('sfx_powerup')) {
+            this.playSound('sfx_powerup', 0.4); 
+        } else if (type === 'error' && this.cache.audio.exists('sfx_error')) {
+            this.playSound('sfx_error', 0.5);
+        } else {
+            this.playSound('sfx_tick', 0.5);
+        }
+        
+        this.tweens.add({ 
+            targets: container, 
+            y: 90, 
+            alpha: 1, 
+            duration: 500, 
+            ease: 'Back.easeOut',
+            onComplete: () => {
+                this.tweens.add({ 
+                    targets: container, 
+                    y: -120,
+                    alpha: 0, 
+                    delay: 3500, 
+                    duration: 400, 
+                    ease: 'Cubic.easeIn',
+                    onComplete: () => {
+                        if (this.activeNotification === container) {
+                            this.activeNotification = null;
+                        }
+                        container.destroy();
+                    }
+                });
+            }
+        });
+    }
+
     update() {
         if (this.scrollingBg) {
             this.scrollingBg.tilePositionY -= 0.4;
@@ -124,7 +192,7 @@ class PlayerProfileScene extends Phaser.Scene {
 
         // 2. Setup Y Coordinates
         const textStartX = dividerX + 30; 
-        const nameY = -72; // Everything on this line: [Name] [Edit] [Status]
+        const nameY = -72; 
         const rankY = -22;
         const dateY = 15;
         const barY = 82;
@@ -150,42 +218,144 @@ class PlayerProfileScene extends Phaser.Scene {
         const editHitArea = this.add.rectangle(35, 0, 70, 28, 0x000000, 0).setInteractive({ useHandCursor: true });
         editBtnContainer.add([editBg, editTxt, editHitArea]);
 
-        // Connection Indicator
-        const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
-        const connColor = isConnected ? '#00ff00' : '#ff4444';
-        const connTextStr = isConnected ? '● Connected' : '○ Not Connected (Click)';
-
-        const connTxt = this.add.text(0, nameY, connTextStr, {
-            fontSize: '14px', fontFamily: "Arial", color: connColor, fontStyle: 'bold'
+        // Connection Indicator Button Overhaul
+        this.connBtnContainer = this.add.container(0, nameY);
+        this.connBg = this.add.graphics();
+        this.connDot = this.add.circle(-8, 0, 5); 
+        this.connBtnTxt = this.add.text(5, 0, "", {
+            fontSize: '14px', fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0, 0.5);
+        this.connHitArea = this.add.rectangle(0, 0, 10, 10, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        this.connBtnContainer.add([this.connBg, this.connDot, this.connBtnTxt, this.connHitArea]);
 
-        let connHitArea;
-        if (!isConnected) {
-            connHitArea = this.add.rectangle(0, nameY, 150, 30, 0x000000, 0).setInteractive({ useHandCursor: true });
-            connHitArea.on('pointerdown', () => {
-                this.playSound('sfx_click');
-                if (window.signInWithGoogle) window.signInWithGoogle();
-            });
-        }
+        this.updateConnectionUI = (connected) => {
+            const btnTextStr = connected ? "Log Out" : "Connect Google";
+            this.connBtnTxt.setText(btnTextStr);
+
+            const dotColor = connected ? 0x00ff88 : 0xff4444;
+            const strokeColor = connected ? 0x00aa00 : 0xaa0000;
+            
+            this.connDot.setFillStyle(dotColor);
+            this.connDot.setStrokeStyle(1.5, strokeColor);
+
+            if (!connected) {
+                if (!this.dotTween) {
+                    this.dotTween = this.tweens.add({ targets: this.connDot, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 });
+                } else {
+                    this.dotTween.play();
+                }
+            } else {
+                if (this.dotTween) {
+                    this.dotTween.stop();
+                    this.connDot.setAlpha(1);
+                }
+            }
+
+            const padX = 14;
+            const h = 28;
+            const textW = this.connBtnTxt.width;
+            const totalW = textW + 28 + padX; // Account for dot space and padding
+
+            this.connHitArea.setSize(totalW, h);
+            this.connHitArea.setPosition((totalW / 2) - 18, 0); 
+
+            const drawBg = (hover = false) => {
+                this.connBg.clear();
+                const bgColor = connected
+                    ? (hover ? 0xaa2222 : 0x661111) // Red hues for Log Out
+                    : (hover ? 0x0066cc : 0x004488); // Blue hues for Connect
+                const borderColor = connected ? 0xff4444 : 0x00aaff;
+
+                this.connBg.fillStyle(bgColor, hover ? 1 : 0.8);
+                this.connBg.fillRoundedRect(-20, -h/2, totalW, h, h/2);
+                this.connBg.lineStyle(2, borderColor, 0.9);
+                this.connBg.strokeRoundedRect(-20, -h/2, totalW, h, h/2);
+            };
+
+            drawBg(false);
+
+            this.connHitArea.off('pointerover');
+            this.connHitArea.off('pointerout');
+            this.connHitArea.on('pointerover', () => drawBg(true));
+            this.connHitArea.on('pointerout', () => drawBg(false));
+
+            this.updateNameDisplay();
+        };
 
         // Dynamic Spacing Logic: Shifts the buttons if the name gets longer/shorter
         this.updateNameDisplay = () => {
             nameTxt.setText(GameState.profile.n);
-            
             const editX = textStartX + nameTxt.width + 20;
             editBtnContainer.setX(editX);
-            
-            const connX = editX + 85; // 70px (button width) + 15px gap
-            connTxt.setX(connX);
-            
-            if (connHitArea) {
-                connHitArea.setX(connX + (connTxt.width / 2));
-                connHitArea.setSize(connTxt.width + 10, 30);
-            }
-        }
+            const connX = editX + 85 + 15; // Offset past the edit button
+            this.connBtnContainer.setX(connX);
+        };
 
-        // Call immediately to set initial layout
-        this.updateNameDisplay();
+        this.showLogoutConfirmation = () => {
+            const cxScreen = this.cameras.main.width / 2;
+            const cyScreen = this.cameras.main.height / 2;
+            
+            const overlay = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000, 0.85).setOrigin(0).setInteractive().setDepth(9999);
+            const popup = this.add.container(cxScreen, cyScreen).setDepth(10000);
+            
+            const bg = this.add.graphics();
+            bg.fillStyle(0x001122, 1);
+            bg.fillRoundedRect(-220, -120, 440, 240, 20);
+            bg.lineStyle(4, 0xff0000, 1);
+            bg.strokeRoundedRect(-220, -120, 440, 240, 20);
+            
+            const warnTitle = this.add.text(0, -60, "সতর্কতা!", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ff4444", fontStyle: "bold" }).setOrigin(0.5);
+            const desc = this.add.text(0, -10, "আপনি কি লগ আউট করতে চান?\nআপনার ক্লাউড সেভ বন্ধ হয়ে যাবে।", { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 5 }).setOrigin(0.5);
+            
+            const cancelBtn = this.add.text(-90, 65, "বাতিল", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#444444", padding: {x: 18, y: 8} }).setOrigin(0.5).setInteractive({useHandCursor: true});
+            const confirmBtn = this.add.text(90, 65, "লগ আউট", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#aa0000", padding: {x: 18, y: 8} }).setOrigin(0.5).setInteractive({useHandCursor: true});
+            
+            cancelBtn.on('pointerdown', () => {
+                this.playSound('sfx_click');
+                overlay.destroy();
+                popup.destroy();
+            });
+            
+            confirmBtn.on('pointerdown', () => {
+                this.playSound('sfx_click');
+                if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
+                    window.FirebaseAuth.signOut().then(() => {
+                        this.updateConnectionUI(false);
+                    });
+                } else {
+                    this.updateConnectionUI(false); // Fallback
+                }
+                overlay.destroy();
+                popup.destroy();
+            });
+            
+            popup.add([bg, warnTitle, desc, cancelBtn, confirmBtn]);
+        };
+
+        this.connHitArea.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            const currentlyConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
+            
+            if (currentlyConnected) {
+                this.showLogoutConfirmation();
+            } else {
+                if (window.signInWithGoogle) {
+                    let res = window.signInWithGoogle();
+                    if (res && res.then) {
+                        res.then(() => {
+                            this.showNotification("Google Account Connected!\nCloud sync active.", "success");
+                            this.updateConnectionUI(true);
+                        }).catch(() => {
+                            this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
+                        });
+                    }
+                }
+            }
+        });
+
+        // Initialize connection state
+        this.updateConnectionUI(window.FirebaseAuth && window.FirebaseAuth.currentUser);
 
         editHitArea.on('pointerover', () => { editBg.fillStyle(0x0066cc, 1).fillRoundedRect(0, -14, 70, 28, 14); });
         editHitArea.on('pointerout', () => { editBg.fillStyle(0x004488, 0.8).fillRoundedRect(0, -14, 70, 28, 14); });
@@ -245,8 +415,7 @@ class PlayerProfileScene extends Phaser.Scene {
         xpFill.fillGradientStyle(0x0055ff, 0x00ffff, 0x001188, 0x0088cc, 1);
         xpFill.fillRoundedRect(textStartX, barY, fillW, 16, 8);
 
-        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, connTxt, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
-        if (connHitArea) container.add(connHitArea);
+        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, this.connBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
         
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 100 });
     }
