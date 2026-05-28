@@ -28,14 +28,15 @@ jobs:
         run: |
           npm init -y
           npm install -g cordova
-          cordova telemetry off
 
       - name: Add Android Platform
         run: cordova platform add android
 
+      # Recreates your Keystore file secretly
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > my-release-key.keystore
 
+      # --- STEP 1: BUILD THE APK (For your Redmi Note 5 Pro) ---
       - name: Build and Sign Release APK
         run: |
           cordova build android --release -- --packageType=apk \
@@ -50,6 +51,7 @@ jobs:
           name: game-mcq-release-apk
           path: platforms/android/app/build/outputs/apk/release/*.apk
 
+      # --- STEP 2: BUILD THE AAB (For Google Play Store) ---
       - name: Build and Sign Release AAB
         run: |
           cordova build android --release -- --packageType=bundle \
