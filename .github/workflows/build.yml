@@ -36,10 +36,6 @@ jobs:
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > my-release-key.keystore
 
-      - name: Print SHA-1 to Logs
-        run: |
-          keytool -list -v -keystore my-release-key.keystore -alias '${{ secrets.KEY_ALIAS }}' -storepass '${{ secrets.KEY_PASSWORD }}' | grep SHA1
-
       - name: Build and Sign Release APK
         run: |
           cordova build android --release -- --packageType=apk \
