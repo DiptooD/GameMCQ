@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1060690619330",
+    "project_id": "gamemcq",
+    "storage_bucket": "gamemcq.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060690619330:android:a0e3029e2faa904404445b",
+        "android_client_info": {
+          "package_name": "com.gamemcq.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1060690619330-cb5uqvur0e3c6p1290ie61j6n61nkrq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjYiTMnAZTZY0JGogUEpSqFp6Sb5toW2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1060690619330-cb5uqvur0e3c6p1290ie61j6n61nkrq7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
