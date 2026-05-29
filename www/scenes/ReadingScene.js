@@ -6,16 +6,14 @@ class ReadingScene extends Phaser.Scene {
     init() {
         this.currentPage = 0;
         this.itemsPerPage = 25; 
-        this.listStartY = 390; 
-        this.paginationHeight = 100; // Fixed height reserved for pagination at the bottom
+        this.listStartY = 410; // Adjusted for larger dropdowns
+        this.paginationHeight = 120; // SCALED UP: Taller pagination area
         
-        // Initialize Zoom Level from LocalStorage or default to 1.0
         let savedZoom = parseFloat(localStorage.getItem('reading_zoom'));
-        this.zoomLevel = isNaN(savedZoom) ? 1.0 : savedZoom;
+        this.zoomLevel = isNaN(savedZoom) ? 1.1 : savedZoom; // Default to 1.1 for better readability
     }
 
     create() {
-        // --- 0. AUDIO INITIALIZATION ---
         if (typeof GameSFX !== 'undefined') {
             GameSFX.init(this);
         }
@@ -23,16 +21,14 @@ class ReadingScene extends Phaser.Scene {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
         const cx = w / 2;
-        const UI_WIDTH = w - 60;
+        const UI_WIDTH = w - 40; // Wider UI
 
-        // FIXED: Using separate keys for Reading Mode so it doesn't conflict with MenuScene
         this.selectedBankKey = localStorage.getItem('reading_bankKey') || "all";
         this.selectedSubject = localStorage.getItem('reading_subject') || "all_no_math";
 
         this.dropdowns = [];
         this.backgroundLayers = [];
 
-        // --- 1. BACK BUTTON HARDWARE HANDLER ---
         this.handleBack = () => {
             this.playSound('sfx_back', 0.8);
             this.scene.start("MenuScene");
@@ -44,13 +40,12 @@ class ReadingScene extends Phaser.Scene {
         }
         document.addEventListener("backbutton", this.handleBack, false);
 
-        // --- 2. BACKGROUND & HEADER ---
         this.createBackground();
         this.createTopUI();
 
-        // Modern Floating Title
+        // SCALED TITLE
         const titleText = this.add.text(cx, 140, "স্টাডি মোড", {
-            fontSize: "64px", 
+            fontSize: "68px", 
             fontFamily: "'Anek Bangla'", 
             color: "#00e1ff",
             fontStyle: "bold", 
@@ -68,14 +63,12 @@ class ReadingScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // --- 3. LOAD DATA ---
         const manifest = this.cache.json.get('bank_directory');
         if (!manifest) {
             this.showToast("প্রশ্ন ব্যাংক পাওয়া যায়নি!");
             return;
         }
 
-        // --- 4. FILTERS AREA ---
         const bankOptions = ["All", ...manifest.banks.map(b => b.name).reverse()];
         const subjectOptions = ["All", "All Without Math", ...manifest.subjects];
 
@@ -89,8 +82,8 @@ class ReadingScene extends Phaser.Scene {
         if (this.selectedSubject === "all") initSubName = "All";
         else if (this.selectedSubject !== "all_no_math") initSubName = this.selectedSubject;
 
-        // Top Filter Dropdowns
-        this.createDropdown(cx, 230, UI_WIDTH, 65, "Bank", bankOptions, initBankName, (selectedName) => {
+        // SCALED UI HEIGHT FOR DROPDOWNS
+        this.createDropdown(cx, 240, UI_WIDTH, 75, "Bank", bankOptions, initBankName, (selectedName) => {
             if (selectedName === "All") {
                 this.selectedBankKey = "all";
             } else {
@@ -102,7 +95,7 @@ class ReadingScene extends Phaser.Scene {
             this.renderQuestionsList();
         });
 
-        this.createDropdown(cx, 310, UI_WIDTH, 65, "Subject", subjectOptions, initSubName, (selectedSub) => {
+        this.createDropdown(cx, 335, UI_WIDTH, 75, "Subject", subjectOptions, initSubName, (selectedSub) => {
             if (selectedSub === "All") this.selectedSubject = "all";
             else if (selectedSub === "All Without Math") this.selectedSubject = "all_no_math";
             else this.selectedSubject = selectedSub;
@@ -111,8 +104,6 @@ class ReadingScene extends Phaser.Scene {
             this.renderQuestionsList();
         });
 
-        // --- 5. LIST AREA SETUP ---
-        // Dynamically calculate list height leaving space for the fixed pagination bar
         this.listHeight = h - this.listStartY - this.paginationHeight - 10;
 
         this.contentContainer = this.add.container(0, this.listStartY);
@@ -123,11 +114,9 @@ class ReadingScene extends Phaser.Scene {
         const mask = maskShape.createGeometryMask();
         this.contentContainer.setMask(mask);
 
-        // Fixed Pagination Container at the bottom
-        this.paginationContainer = this.add.container(cx, h - (this.paginationHeight / 2) - 10);
-        this.paginationContainer.setDepth(100); // Always on top of scrolling content
+        this.paginationContainer = this.add.container(cx, h - (this.paginationHeight / 2) - 5);
+        this.paginationContainer.setDepth(100); 
 
-        // Click outside closes dropdowns
         this.input.on('pointerdown', (pointer, gameObjects) => {
             if (gameObjects.length === 0) {
                 this.closeAllDropdowns();
@@ -136,7 +125,6 @@ class ReadingScene extends Phaser.Scene {
 
         this.renderQuestionsList();
 
-        // Cleanup listener
         this.events.on('shutdown', () => {
             document.removeEventListener("backbutton", this.handleBack);
             window.onpopstate = null;
@@ -164,14 +152,12 @@ class ReadingScene extends Phaser.Scene {
             });
         }
 
-        // --- UPDATED SMOOTH SCROLLING PHYSICS ---
         if (this.scrollData && this.scrollState) {
             if (!this.scrollState.isDragging) {
                 let { contentContainer, listStartY, minScroll } = this.scrollData;
                 let vY = this.scrollState.velocityY;
                 let currentY = contentContainer.y;
 
-                // Apply velocity with smooth friction
                 if (Math.abs(vY) > 0.05) {
                     currentY += vY * 16 * safeTimeScale;
                     this.scrollState.velocityY *= Math.pow(0.93, safeTimeScale); 
@@ -179,7 +165,6 @@ class ReadingScene extends Phaser.Scene {
                     this.scrollState.velocityY = 0;
                 }
 
-                // Spring-back bounds detection
                 if (currentY > listStartY) {
                     currentY += (listStartY - currentY) * 0.2 * safeTimeScale;
                 } else if (currentY < listStartY + minScroll) {
@@ -197,7 +182,6 @@ class ReadingScene extends Phaser.Scene {
             this.scrollZone = null;
         }
 
-        // Prevent lag by full cleanup
         this.contentContainer.removeAll(true);
         this.contentContainer.y = this.listStartY;
         this.scrollData = null;
@@ -206,7 +190,6 @@ class ReadingScene extends Phaser.Scene {
         const manifest = this.cache.json.get('bank_directory');
         let finalQuestions = [];
 
-        // Apply Bank Filter
         if (this.selectedBankKey === "all") {
             manifest.banks.forEach(bank => {
                 const data = this.cache.json.get(bank.key);
@@ -219,7 +202,6 @@ class ReadingScene extends Phaser.Scene {
 
         finalQuestions = finalQuestions.filter(q => q.question && q.question.trim() !== "");
 
-        // Apply Subject Filter
         if (this.selectedSubject === "all_no_math") {
             finalQuestions = finalQuestions.filter(q => q.subject !== "Math");
         } else if (this.selectedSubject !== "all") {
@@ -230,14 +212,14 @@ class ReadingScene extends Phaser.Scene {
         const w = this.cameras.main.width;
         let currentY = 10;
         
-        // Setup Dynamic Font Sizes based on zoomLevel
         const z = this.zoomLevel;
-        const sStats = `${Math.round(22 * z)}px`;
-        const sQ = `${Math.round(26 * z)}px`;
-        const sOpt = `${Math.round(24 * z)}px`;
-        const sCheck = `${Math.round(20 * z)}px`;
-        const sTag = `${Math.round(16 * z)}px`;
-        const sNoData = `${Math.round(32 * z)}px`;
+        // UI SCALING BASE INCREASE FOR CONTENT
+        const sStats = `${Math.round(24 * z)}px`;
+        const sQ = `${Math.round(30 * z)}px`;
+        const sOpt = `${Math.round(26 * z)}px`;
+        const sCheck = `${Math.round(24 * z)}px`;
+        const sTag = `${Math.round(18 * z)}px`;
+        const sNoData = `${Math.round(36 * z)}px`;
 
         if (finalQuestions.length === 0) {
             const noData = this.add.text(cx, this.listHeight / 2, "কোন প্রশ্ন পাওয়া যায়নি", { 
@@ -250,7 +232,6 @@ class ReadingScene extends Phaser.Scene {
 
         const totalPages = Math.max(1, Math.ceil(finalQuestions.length / this.itemsPerPage));
         
-        // Ensure we don't end up on an empty page if data changes
         if (this.currentPage >= totalPages) this.currentPage = Math.max(0, totalPages - 1);
 
         const paginatedQs = finalQuestions.slice(this.currentPage * this.itemsPerPage, (this.currentPage + 1) * this.itemsPerPage);
@@ -260,7 +241,7 @@ class ReadingScene extends Phaser.Scene {
             backgroundColor: "rgba(0, 225, 255, 0.1)", padding: { x: 15*z, y: 5*z }
         }).setOrigin(0.5);
         this.contentContainer.add(statsText);
-        currentY += (45 * z);
+        currentY += (55 * z);
 
         const cardW = w - 40;
         const startX = cx - cardW / 2;
@@ -292,7 +273,6 @@ class ReadingScene extends Phaser.Scene {
                         wordWrap: { width: textW - correctOffset }, lineSpacing: 4 * z
                     }).setOrigin(0, 0);
 
-                    // Add robust glowing highlight for correct answer
                     if (isCorrect) {
                         const highlightBg = this.add.graphics();
                         highlightBg.fillStyle(0x00ff00, 0.15);
@@ -316,7 +296,6 @@ class ReadingScene extends Phaser.Scene {
             const subTag = item.subject || item.category || "General";
             const bankTag = item.bank || "General";
             
-            // Modern Tag Pill
             const tagText = this.add.text(startX + cardW - p, tagY, `${subTag} | ${bankTag}`, {
                 fontSize: sTag, fontFamily: "'Anek Bangla'", color: "#00aaff", fontStyle: "bold"
             }).setOrigin(1, 0);
@@ -341,26 +320,22 @@ class ReadingScene extends Phaser.Scene {
             currentY += totalHeight + (15 * z); 
         });
 
-        // Add bottom padding so the last item doesn't get hidden behind pagination
         currentY += 20;
 
-        // --- UPDATE FIXED PAGINATION ---
         this.renderPagination(totalPages);
 
-        // --- SCROLL ZONE LOGIC ---
         if (currentY > this.listHeight) {
-            const minScroll = this.listHeight - currentY;
+            // FIX: Clamp scrolling bounds safely
+            const minScroll = Math.min(0, this.listHeight - currentY - 20);
             let startY = 0;
             let containerStartY = 0;
             let lastTime = 0;
             let lastY = 0;
 
-            // Restrict interaction zone exactly to the list container area
             this.scrollZone = this.add.zone(cx, this.listStartY + this.listHeight/2, w, this.listHeight).setInteractive();
             this.scrollState = { isDragging: false, velocityY: 0 };
             this.scrollData = { contentContainer: this.contentContainer, listStartY: this.listStartY, minScroll };
 
-            // Wheel Support for Desktop
             this.scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
                 this.scrollState.velocityY -= (deltaY * 0.02);
             });
@@ -379,7 +354,6 @@ class ReadingScene extends Phaser.Scene {
                     const diff = pointer.y - startY;
                     let newY = containerStartY + diff;
 
-                    // Rubber band effect while dragging out of bounds
                     if (newY > this.listStartY) {
                         newY = this.listStartY + (newY - this.listStartY) * 0.4;
                     } else if (newY < this.listStartY + minScroll) {
@@ -392,7 +366,6 @@ class ReadingScene extends Phaser.Scene {
                     const dt = now - lastTime;
                     if (dt > 0) {
                         const instantVelocity = (pointer.y - lastY) / dt;
-                        // Smooth Velocity Blending
                         this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (instantVelocity * 0.6);
                     }
                     
@@ -412,10 +385,9 @@ class ReadingScene extends Phaser.Scene {
         if (totalPages <= 1) return;
 
         const w = this.cameras.main.width;
-        const barW = w - 40;
-        const barH = 75;
+        const barW = w - 20;
+        const barH = 100; // SCALED UP
 
-        // Main Glass Background
         const bg = this.add.graphics();
         bg.fillStyle(0x000c22, 0.95);
         bg.fillRoundedRect(-barW/2, -barH/2, barW, barH, 20);
@@ -423,28 +395,28 @@ class ReadingScene extends Phaser.Scene {
         bg.strokeRoundedRect(-barW/2, -barH/2, barW, barH, 20);
         this.paginationContainer.add(bg);
 
-        // Page Indicator
+        // UI SCALING
         const pageText = this.add.text(0, 0, `পেজ ${this.currentPage + 1} / ${totalPages}`, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
+            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0.5);
         this.paginationContainer.add(pageText);
 
-        // --- Previous Button ---
+        // SCALED UP PREV/NEXT
         if (this.currentPage > 0) {
-            const prevContainer = this.add.container(-130, 0);
+            const prevContainer = this.add.container(-170, 0);
             const prevBg = this.add.graphics();
             
             const drawBtn = (hover) => {
                 prevBg.clear();
                 prevBg.fillGradientStyle(hover ? 0x003388 : 0x002266, hover ? 0x003388 : 0x002266, hover ? 0x0066cc : 0x004488, hover ? 0x0066cc : 0x004488, 1);
-                prevBg.fillRoundedRect(-55, -25, 110, 50, 25);
+                prevBg.fillRoundedRect(-75, -35, 150, 70, 35);
                 prevBg.lineStyle(2, hover ? 0xffffff : 0x00aaff, 1);
-                prevBg.strokeRoundedRect(-55, -25, 110, 50, 25);
+                prevBg.strokeRoundedRect(-75, -35, 150, 70, 35);
             };
             drawBtn(false);
 
-            const prevHitArea = this.add.rectangle(0, 0, 110, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
-            const prevTxt = this.add.text(0, 0, "◄ PREV", { fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
+            const prevHitArea = this.add.rectangle(0, 0, 150, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
+            const prevTxt = this.add.text(0, 0, "◄ PREV", { fontSize: "24px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
             
             prevHitArea.on('pointerover', () => drawBtn(true));
             prevHitArea.on('pointerout', () => drawBtn(false));
@@ -460,22 +432,21 @@ class ReadingScene extends Phaser.Scene {
             this.paginationContainer.add(prevContainer);
         }
 
-        // --- Next Button ---
         if (this.currentPage < totalPages - 1) {
-            const nextContainer = this.add.container(130, 0);
+            const nextContainer = this.add.container(170, 0);
             const nextBg = this.add.graphics();
             
             const drawBtn = (hover) => {
                 nextBg.clear();
                 nextBg.fillGradientStyle(hover ? 0x003388 : 0x002266, hover ? 0x003388 : 0x002266, hover ? 0x0066cc : 0x004488, hover ? 0x0066cc : 0x004488, 1);
-                nextBg.fillRoundedRect(-55, -25, 110, 50, 25);
+                nextBg.fillRoundedRect(-75, -35, 150, 70, 35);
                 nextBg.lineStyle(2, hover ? 0xffffff : 0x00aaff, 1);
-                nextBg.strokeRoundedRect(-55, -25, 110, 50, 25);
+                nextBg.strokeRoundedRect(-75, -35, 150, 70, 35);
             };
             drawBtn(false);
 
-            const nextHitArea = this.add.rectangle(0, 0, 110, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
-            const nextTxt = this.add.text(0, 0, "NEXT ►", { fontSize: "20px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
+            const nextHitArea = this.add.rectangle(0, 0, 150, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
+            const nextTxt = this.add.text(0, 0, "NEXT ►", { fontSize: "24px", fontFamily: "Arial", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
             
             nextHitArea.on('pointerover', () => drawBtn(true));
             nextHitArea.on('pointerout', () => drawBtn(false));
@@ -495,7 +466,6 @@ class ReadingScene extends Phaser.Scene {
     createTopUI() {
         const w = this.cameras.main.width;
         
-        // --- Back Button ---
         const backContainer = this.add.container(100, 65);
 
         const backBg = this.add.graphics();
@@ -520,12 +490,12 @@ class ReadingScene extends Phaser.Scene {
             });
         });
 
-        // --- Zoom Out Button ---
-        const zoomOutContainer = this.add.container(w - 155, 65);
+        // SCALED ZOOM BUTTONS
+        const zoomOutContainer = this.add.container(w - 175, 65);
         const zOutBg = this.add.graphics();
-        zOutBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 70, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 70, 60, 15);
+        zOutBg.fillStyle(0x001122, 0.8).fillRoundedRect(-35, -35, 70, 70, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-35, -35, 70, 70, 15);
         const zOutTxt = this.add.text(0, 0, "A-", { fontSize: "32px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
-        const zOutHit = this.add.rectangle(0, 0, 50, 60, 0, 0).setInteractive({ useHandCursor: true });
+        const zOutHit = this.add.rectangle(0, 0, 80, 80, 0, 0).setInteractive({ useHandCursor: true });
         zoomOutContainer.add([zOutBg, zOutTxt, zOutHit]);
 
         zOutHit.on('pointerdown', () => {
@@ -538,12 +508,11 @@ class ReadingScene extends Phaser.Scene {
             }
         });
 
-        // --- Zoom In Button ---
-        const zoomInContainer = this.add.container(w - 65, 65);
+        const zoomInContainer = this.add.container(w - 75, 65);
         const zInBg = this.add.graphics();
-        zInBg.fillStyle(0x001122, 0.8).fillRoundedRect(-25, -30, 70, 60, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-25, -30, 70, 60, 15);
+        zInBg.fillStyle(0x001122, 0.8).fillRoundedRect(-35, -35, 70, 70, 15).lineStyle(2, 0x0066aa, 0.9).strokeRoundedRect(-35, -35, 70, 70, 15);
         const zInTxt = this.add.text(0, 0, "A+", { fontSize: "32px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
-        const zInHit = this.add.rectangle(0, 0, 50, 60, 0, 0).setInteractive({ useHandCursor: true });
+        const zInHit = this.add.rectangle(0, 0, 80, 80, 0, 0).setInteractive({ useHandCursor: true });
         zoomInContainer.add([zInBg, zInTxt, zInHit]);
 
         zInHit.on('pointerdown', () => {
@@ -573,12 +542,13 @@ class ReadingScene extends Phaser.Scene {
             return str.length > 25 ? str.substring(0, 23) + "..." : str;
         };
 
+        // SCALED TEXT
         const mainText = this.add.text(-width/2 + 25, 0, formatText(label, initialVal), { 
-            fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 600, color: "#ffffff" 
+            fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 600, color: "#ffffff" 
         }).setOrigin(0, 0.5);
 
         const arrow = this.add.text(width/2 - 30, 0, "▼", { 
-            fontSize: "20px", color: "#00ffff" 
+            fontSize: "22px", color: "#00ffff" 
         }).setOrigin(0.5);
 
         container.add([bg, mainText, arrow, hitArea]);
@@ -617,8 +587,9 @@ class ReadingScene extends Phaser.Scene {
 
         let currentY = 0;
         options.forEach((opt, index) => {
+            // SCALED LIST ITEM
             const optText = this.add.text(-width/2 + 25, currentY + itemHeight/2, opt, {
-                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 500, color: "#b3d4ff" 
+                fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 500, color: "#b3d4ff" 
             }).setOrigin(0, 0.5);
 
             if (index < options.length - 1) {
@@ -632,9 +603,9 @@ class ReadingScene extends Phaser.Scene {
 
         let scrollBarThumb;
         if (isScrollable) {
-            const scrollBarBg = this.add.rectangle(width/2 - 8, visibleHeight/2, 6, visibleHeight - 10, 0x000000, 0.5);
+            const scrollBarBg = this.add.rectangle(width/2 - 8, visibleHeight/2, 8, visibleHeight - 10, 0x000000, 0.5);
             const thumbHeight = Math.max(30, (visibleHeight / totalListHeight) * visibleHeight);
-            scrollBarThumb = this.add.rectangle(width/2 - 8, thumbHeight/2 + 5, 6, thumbHeight, 0x00aaff, 0.8).setOrigin(0.5);
+            scrollBarThumb = this.add.rectangle(width/2 - 8, thumbHeight/2 + 5, 8, thumbHeight, 0x00aaff, 0.8).setOrigin(0.5);
             listContainer.add([scrollBarBg, scrollBarThumb]);
         }
 
@@ -838,8 +809,8 @@ class ReadingScene extends Phaser.Scene {
 
     showToast(msg) {
         const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
-            backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 20, y: 12}
+            fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+            backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 24, y: 16}
         }).setOrigin(0.5).setDepth(5000).setAlpha(0);
         
         this.tweens.add({ targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() });

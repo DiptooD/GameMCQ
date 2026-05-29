@@ -10,7 +10,6 @@ class SpinWheelScene extends Phaser.Scene {
         const cy = this.cameras.main.centerY;
         const h = this.cameras.main.height;
 
-        // --- 0. AUDIO MANAGEMENT ---
         if (typeof GameSFX !== 'undefined') {
             GameSFX.init(this);
         }
@@ -28,7 +27,6 @@ class SpinWheelScene extends Phaser.Scene {
             }
         }
 
-        // --- 1. BACK BUTTON HANDLER ---
         this.handleBack = () => {
             if (this.isSpinning) return;
             this.playSound('sfx_back', 0.8);
@@ -41,10 +39,8 @@ class SpinWheelScene extends Phaser.Scene {
         }
         document.addEventListener("backbutton", this.handleBack, false);
 
-        // --- 2. DYNAMIC BACKGROUND ---
         this.createBackground(); 
 
-        // Title
         this.add.text(cx, 200, "ভাগ্যের চাকা", { 
             fontSize: "76px",
             fontFamily: "'Anek Bangla', sans-serif", 
@@ -55,20 +51,18 @@ class SpinWheelScene extends Phaser.Scene {
             shadow: { offsetX: 0, offsetY: 4, color: "#0044aa", blur: 15, fill: true, stroke: true }
         }).setOrigin(0.5);
 
-        // Subtitle
+        // UI SCALING
         this.add.text(cx, 265, "LUCKY WHEEL", {
-            fontSize: "26px",
+            fontSize: "28px",
             fontFamily: "'Anek Bangla', sans-serif",
             fontWeight: 700,
             color: "#aaccff",
             letterSpacing: 4
         }).setOrigin(0.5);
 
-        // --- 3. UI ELEMENTS ---
         this.createTopUI();
         this.createCurrencyUI();
 
-        // --- 4. CONFIGURATION ---
         this.spinCost = 20; 
         
         this.segments = [
@@ -80,14 +74,11 @@ class SpinWheelScene extends Phaser.Scene {
             { id: 'battery', type: 'booster', key: 'batteryEff', amount: 2, color: 0x00cc44, icon: 'icon_booster_battery', prob: 0.20, label: "2x BATTERY" }
         ];
 
-        // --- 5. THE WHEEL ---
         this.wheelY = cy + 20; 
         this.drawWheel(cx, this.wheelY);
 
-        // --- 6. CONTROL CONSOLE ---
         this.createControls(cx, h - 190);
 
-        // Cleanup listener
         this.events.on('shutdown', () => {
             document.removeEventListener("backbutton", this.handleBack);
             window.onpopstate = null;
@@ -117,7 +108,6 @@ class SpinWheelScene extends Phaser.Scene {
         if (this.outerRing2) this.outerRing2.rotation -= 0.003;
     }
 
-    // --- AUDIO HELPER ---
     playSound(key, baseVolume = 1.0) {
         if (!this.sound || !this.cache.audio.exists(key)) return;
         
@@ -129,7 +119,6 @@ class SpinWheelScene extends Phaser.Scene {
         }
     }
 
-    // --- SCENE COMPONENTS ---
     createBackground() {
         this.backgroundLayers = []; 
         if (!this.textures.exists('animated_bg_grad')) {
@@ -271,8 +260,9 @@ class SpinWheelScene extends Phaser.Scene {
             
             const icon = this.add.image(0, -15, seg.icon).setScale(1.6); 
             
+            // UI SCALING
             const label = this.add.text(0, 40, seg.label, {
-                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff", 
+                fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff", 
                 stroke: "#000000", strokeThickness: 5
             }).setOrigin(0.5);
 
@@ -359,8 +349,9 @@ class SpinWheelScene extends Phaser.Scene {
             shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }, padding: { top: 20, bottom: 20 }
         }).setOrigin(0.5);
         
+        // UI SCALING
         const costText = this.add.text(0, 28, `Cost: ${this.spinCost} ভাঙ্গারী`, {
-            fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#aaccff" 
+            fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#aaccff" 
         }).setOrigin(0.5);
 
         this.spinBtn.add([btnBg, btnText, costText, hitArea]);
@@ -497,14 +488,11 @@ class SpinWheelScene extends Phaser.Scene {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
 
-        // --- FIXED OVERLAY IMPLEMENTATION ---
-        // Properly placed at center (cx, cy) to fully cover the game screen. Depth set to 999.
         const overlay = this.add.rectangle(cx, cy, 720, 1480, 0x000000, 0.85).setInteractive({ useHandCursor: true });
         overlay.setDepth(999);
 
         const popup = this.add.container(cx, cy).setDepth(1000).setScale(0);
 
-        // Blocking hit area inside the container so internal box clicks don't dismiss the reward early
         const boxBarrier = this.add.rectangle(0, 0, 600, 600, 0x000000, 0).setInteractive();
         popup.add(boxBarrier);
         
@@ -549,8 +537,8 @@ class SpinWheelScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         const btnContainer = this.add.container(0, 220);
-        const btnW = 340;
-        const btnH = 80;
+        const btnW = 380; // SCALED
+        const btnH = 90; // SCALED
         const btnR = btnH / 2;
 
         const btnBg = this.add.graphics();
@@ -567,8 +555,10 @@ class SpinWheelScene extends Phaser.Scene {
         drawClaimBtn(false);
 
         const btnHitArea = this.add.rectangle(0, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        // UI SCALING
         const btnTxt = this.add.text(0, 0, "সংগ্রহ করুন (CLAIM)", {
-            fontSize: "32px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
+            fontSize: "36px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
         }).setOrigin(0.5);
 
         btnContainer.add([btnBg, btnTxt, btnHitArea]);
@@ -581,7 +571,6 @@ class SpinWheelScene extends Phaser.Scene {
             ease: 'Back.out'
         });
 
-        // --- SHARED AUTO-CLAIM CLEANUP ROUTINE ---
         const autoClaimAction = () => {
             this.playSound('sfx_coin');
             overlay.destroy();
@@ -594,7 +583,6 @@ class SpinWheelScene extends Phaser.Scene {
             this.btnPulse.resume();
         };
 
-        // Triggers auto-claim on explicit button touch OR clicking anywhere outside on the black overlay
         btnHitArea.on('pointerdown', autoClaimAction);
         overlay.on('pointerdown', autoClaimAction);
         

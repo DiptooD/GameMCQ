@@ -73,7 +73,6 @@ class PauseScene extends Phaser.Scene {
             const isDone = m.progress >= m.target;
             const yPos = startY + (i * 92.5);
 
-            // Card Background
             const cardBg = this.add.graphics();
             cardBg.fillStyle(isDone ? 0x002211 : 0x001122, 0.9);
             cardBg.fillRoundedRect(cx - 240, yPos - 40, 480, 80, 12);
@@ -86,19 +85,16 @@ class PauseScene extends Phaser.Scene {
                 glow.fillRoundedRect(cx - 240, yPos - 40, 480, 80, 12);
             }
 
-            // Checkbox / Status Icon
             const iconBg = this.add.circle(cx - 200, yPos, 20, isDone ? 0x004411 : 0x001133).setStrokeStyle(2, isDone ? 0x00ff00 : 0x0055aa);
             const iconStr = isDone ? "✔" : "⏳";
             this.add.text(cx - 200, yPos, iconStr, { fontSize: isDone ? "22px" : "18px", color: isDone ? "#00ff00" : "#00aaff" }).setOrigin(0.5);
 
-            // Description - Now safely pulling from our dynamic pool!
             let descText = m.desc || m.type;
 
             this.add.text(cx - 165, yPos - 18, descText, {
                 fontSize: "22px", fontFamily: "'Anek Bangla'", color: isDone ? "#aaffaa" : "#ffffff", fontStyle: 'bold', padding: { y: 3 }
             }).setOrigin(0, 0.5);
 
-            // Progress Bar
             const barWidth = 200;
             const barHeight = 8;
             const barX = cx - 165;
@@ -110,12 +106,11 @@ class PauseScene extends Phaser.Scene {
                 this.add.rectangle(barX + (barWidth * pct)/2, barY, barWidth * pct, barHeight, isDone ? 0x00ff00 : 0x00aaff);
             }
 
-            // Progress Text
+            // UI SCALING
             this.add.text(barX + barWidth + 10, barY, `${m.progress}/${m.target}`, {
-                fontSize: "16px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#aaaaaa", fontStyle: "bold"
+                fontSize: "20px", fontFamily: "Arial", color: isDone ? "#00ff00" : "#aaaaaa", fontStyle: "bold"
             }).setOrigin(0, 0.5);
 
-// Reward Info
             let rewStr = `+${m.rewardAmt}`;
             let rewColor = "#ffffff";
             let tex = "";
@@ -160,19 +155,19 @@ class PauseScene extends Phaser.Scene {
                 this.add.image(cx + 220 - rewText.width - 8, yPos - 10, tex).setScale(texScale).setOrigin(1, 0.5);
             }
 
+            // UI SCALING
             if (isDone) {
                 this.add.text(cx + 220, yPos + 16, "সম্পন্ন!", {
-                    fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold"
+                    fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold"
                 }).setOrigin(1, 0.5);
             } else {
                 this.add.text(cx + 220, yPos + 16, "পুরস্কার", {
-                    fontSize: "16px", fontFamily: "'Anek Bangla'", color: "#888888"
+                    fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#888888"
                 }).setOrigin(1, 0.5);
             }
         });
     }
 
-    // --- MAIN BUTTONS ---
     this.createModernButton(cx, panelY + 563, "খেলায় ফিরুন", true, () => {
         this.resumeGame();
     });
@@ -183,10 +178,10 @@ class PauseScene extends Phaser.Scene {
         this.scene.start("DeathScene"); 
     });
 
-    // --- SETTINGS ICON ---
-    const settingsBg = this.add.circle(60, 60, 28, 0x001122, 0.8).setStrokeStyle(3, 0x0066aa).setDepth(25);
-    const settingsIcon = this.add.text(60, 60, "⚙️", { fontSize: '30px' }).setOrigin(0.5).setDepth(25);
-    const settingsHitArea = this.add.circle(60, 60, 35).setInteractive({ useHandCursor: true }).setDepth(25);
+    // UI SCALING: Increased touch zones and icons
+    const settingsBg = this.add.circle(60, 60, 35, 0x001122, 0.8).setStrokeStyle(3, 0x0066aa).setDepth(25);
+    const settingsIcon = this.add.text(60, 60, "⚙️", { fontSize: '36px' }).setOrigin(0.5).setDepth(25);
+    const settingsHitArea = this.add.circle(60, 60, 45).setInteractive({ useHandCursor: true }).setDepth(25);
 
     settingsHitArea.on('pointerdown', () => {
         this.playSound('sfx_click', 0.8);
@@ -196,10 +191,9 @@ class PauseScene extends Phaser.Scene {
         this.scene.bringToTop("SettingsScene");
     });
 
-    // --- CLOSE / QUIT ICON ---
-    const closeBg = this.add.circle(w - 60, 60, 28, 0x001122, 0.8).setStrokeStyle(3, 0xaa0000).setDepth(25);
-    const closeIcon = this.add.text(w - 60, 60, "❌", { fontSize: '24px' }).setOrigin(0.5).setDepth(25);
-    const closeHitArea = this.add.circle(w - 60, 60, 35).setInteractive({ useHandCursor: true }).setDepth(25);
+    const closeBg = this.add.circle(w - 60, 60, 35, 0x001122, 0.8).setStrokeStyle(3, 0xaa0000).setDepth(25);
+    const closeIcon = this.add.text(w - 60, 60, "❌", { fontSize: '30px' }).setOrigin(0.5).setDepth(25);
+    const closeHitArea = this.add.circle(w - 60, 60, 45).setInteractive({ useHandCursor: true }).setDepth(25);
 
     closeHitArea.on('pointerdown', () => {
         this.playSound('sfx_click', 0.8);

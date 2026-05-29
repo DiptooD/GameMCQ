@@ -3,7 +3,6 @@ class DeathScene extends Phaser.Scene {
     super("DeathScene");
   }
 
-  // FIX: Shifted assignments to init() to enforce safety limits across restarts
   init() {
       this.matchSaved = false; 
       this.backgroundLayers = [];
@@ -21,9 +20,10 @@ class DeathScene extends Phaser.Scene {
           window.showToast(msg);
           return;
       }
+      // UI SCALING
       const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
-          fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
-          backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 20, y: 12}
+          fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+          backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 24, y: 16}
       }).setOrigin(0.5).setDepth(5000).setAlpha(0);
       
       this.tweens.add({ targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() });
@@ -61,7 +61,7 @@ class DeathScene extends Phaser.Scene {
 
     const totalQs = history.length;
     const percent = totalQs > 0 ? (safeCorrect / totalQs) : 0; 
-    const percentText = Math.round(percent * 100) || 0; // Protected from NaN
+    const percentText = Math.round(percent * 100) || 0; 
 
     if (percentText >= 50) {
         this.playSound('sfx_victory', 0.1);
@@ -73,7 +73,7 @@ class DeathScene extends Phaser.Scene {
         
         if (typeof GameState.gamesPlayed !== 'undefined') {
             GameState.gamesPlayed++;
-            window.updateMissionProgress("play_matches", 1); // Mission Update Hook
+            window.updateMissionProgress("play_matches", 1); 
         }
 
         const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -128,17 +128,16 @@ class DeathScene extends Phaser.Scene {
 
     if (isViewingHistory) {
         this.add.text(cx, titleY + 60, GameState.viewingHistoryMatch.date, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#aaaaaa"
+            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#aaaaaa"
         }).setOrigin(0.5);
     } else if (GameState.gamesPlayed <= 5) {
-        // --- NEW: BEGINNER'S LUCK INDICATOR ---
         this.add.text(cx, titleY + 55, "🍀 বিগিনার্স লাক (Beginner's Luck)", {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold",
+            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold",
             stroke: "#000000", strokeThickness: 4
         }).setOrigin(0.5);
     }
 
-    const panelY = 180; 
+    const panelY = 190; 
     const panelH = 280; 
     const panelW = w - 40; 
     const panelX = (w - panelW) / 2;
@@ -189,10 +188,10 @@ class DeathScene extends Phaser.Scene {
     statData.forEach((item, index) => {
         const cx = getColX(index);
         this.add.text(cx, statY - 15, item.val, { 
-            fontSize: "34px", color: item.color, fontStyle: "bold", fontFamily: "'Anek Bangla'" 
+            fontSize: "36px", color: item.color, fontStyle: "bold", fontFamily: "'Anek Bangla'" 
         }).setOrigin(0.5);
-        this.add.text(cx, statY + 25, item.label, { 
-            fontSize: "20px", color: "#aaaaaa", fontFamily: "'Anek Bangla'" 
+        this.add.text(cx, statY + 28, item.label, { 
+            fontSize: "22px", color: "#aaaaaa", fontFamily: "'Anek Bangla'" 
         }).setOrigin(0.5);
     });
 
@@ -214,7 +213,7 @@ class DeathScene extends Phaser.Scene {
     const subY = panelY + 190; 
 
     if (sortedSubs.length === 0) {
-        this.add.text(rightStart + rightWidth/2, subY, "কোন তথ্য নেই", { fontSize: "20px", color: "#666" }).setOrigin(0.5);
+        this.add.text(rightStart + rightWidth/2, subY, "কোন তথ্য নেই", { fontSize: "22px", color: "#666" }).setOrigin(0.5);
     } else {
         for(let i=0; i<4; i++) {
             const cx = getColX(i);
@@ -222,7 +221,6 @@ class DeathScene extends Phaser.Scene {
                 const [name, data] = sortedSubs[i];
                 const subAcc = Math.round((data.correct / data.total) * 100);
                 
-                // Dynamic Color based on Percentage
                 let accColor = "#ff4444"; 
                 if (subAcc === 100) accColor = "#ffffff";
                 else if (subAcc >= 80) accColor = "#00ff00";
@@ -230,14 +228,14 @@ class DeathScene extends Phaser.Scene {
                 else if (subAcc >= 26) accColor = "#ffff00";
 
                 this.add.text(cx, subY - 18, `${subAcc}%`, { 
-                    fontSize: "26px", color: accColor, fontStyle: "bold", fontFamily: "'Anek Bangla'" 
+                    fontSize: "28px", color: accColor, fontStyle: "bold", fontFamily: "'Anek Bangla'" 
                 }).setOrigin(0.5);
                 this.add.text(cx, subY + 18, name, { 
-                    fontSize: "18px", color: "#cccccc", fontFamily: "'Anek Bangla'",
+                    fontSize: "20px", color: "#cccccc", fontFamily: "'Anek Bangla'",
                     wordWrap: { width: colWidth - 5 }, align: 'center'
                 }).setOrigin(0.5, 0); 
             } else {
-                this.add.text(cx, subY, "•", { fontSize: "26px", color: "#333" }).setOrigin(0.5);
+                this.add.text(cx, subY, "•", { fontSize: "28px", color: "#333" }).setOrigin(0.5);
             }
         }
     }
@@ -259,7 +257,7 @@ class DeathScene extends Phaser.Scene {
     
     if (totalQs === 0) {
         this.add.text(cx, listStartY + 50, "কোন প্রশ্ন খেলা হয়নি", { 
-            fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#666" 
+            fontSize: "34px", fontFamily: "'Anek Bangla'", color: "#666" 
         }).setOrigin(0.5);
     } else {
         history.forEach((item, index) => {
@@ -274,7 +272,6 @@ class DeathScene extends Phaser.Scene {
     }
 
     if (currentY > listHeight) {
-        // FIX: Bound it to 0 max to prevent aggressive bouncing UI
         const minScroll = Math.min(0, listHeight - currentY - 20);
         let startY = 0;
         let containerStartY = 0;
@@ -515,8 +512,9 @@ class DeathScene extends Phaser.Scene {
         bgColor = 0x1a1a00; strokeColor = 0x666600;
     }
 
+    // UI SCALING
     const qText = this.add.text(textX, p, item.question, {
-        fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", padding: { x: 0, y: 5 },
+        fontSize: "30px", fontFamily: "'Anek Bangla'", color: "#ffffff", padding: { x: 0, y: 5 },
         wordWrap: { width: textW }, lineSpacing: 8 
     }).setOrigin(0, 0);
 
@@ -525,12 +523,13 @@ class DeathScene extends Phaser.Scene {
     const uPrefix = status === 'skipped' ? "স্কিপ করেছেন" : "আপনার উত্তর: ";
     const uVal = status === 'skipped' ? "" : item.userAnswer;
 
+    // UI SCALING
     const uLabel = this.add.text(textX, ansY, uPrefix, {
-        fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" 
+        fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" 
     }).setOrigin(0, 0);
 
     const uAns = this.add.text(textX + uLabel.width, ansY, `${uVal} ${icon}`, {
-        fontSize: "26px", fontFamily: "'Anek Bangla'", color: color, fontStyle: "bold" 
+        fontSize: "28px", fontFamily: "'Anek Bangla'", color: color, fontStyle: "bold" 
     }).setOrigin(0, 0);
 
     let totalHeight = ansY + Math.max(uLabel.height, uAns.height);
@@ -539,11 +538,11 @@ class DeathScene extends Phaser.Scene {
     if (status !== 'correct') {
         const cY = totalHeight + 12;
         cLabel = this.add.text(textX, cY, "সঠিক উত্তর: ", {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" 
+            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" 
         }).setOrigin(0, 0);
 
         cAns = this.add.text(textX + cLabel.width, cY, item.correctAnswer, {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#00aaff", fontStyle: "bold" 
+            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#00aaff", fontStyle: "bold" 
         }).setOrigin(0, 0);
         
         totalHeight = cY + Math.max(cLabel.height, cAns.height);
@@ -563,7 +562,7 @@ class DeathScene extends Phaser.Scene {
 
     const numX = startX + (numColW / 2);
     const badgeText = this.add.text(numX, totalHeight / 2, `${index}`, {
-        fontSize: "42px", color: color, fontFamily: "'Anek Bangla'", fontStyle: "bold" 
+        fontSize: "44px", color: color, fontFamily: "'Anek Bangla'", fontStyle: "bold" 
     }).setOrigin(0.5, 0.5);
 
     const itemContainer = this.add.container(screenW / 2, y);
@@ -579,8 +578,8 @@ class DeathScene extends Phaser.Scene {
       const container = this.add.container(x, y).setDepth(20);
       const bg = this.add.graphics();
       
-      const btnW = 320; 
-      const btnH = 80;  
+      const btnW = 330; 
+      const btnH = 90;  
       const btnRad = btnH / 2;
 
       const draw = (scale, hover) => {
@@ -600,8 +599,9 @@ class DeathScene extends Phaser.Scene {
       };
       draw(1, false);
 
+      // UI SCALING
       const txt = this.add.text(0, 0, text, {
-          fontSize: "34px", 
+          fontSize: "36px", 
           fontFamily: "'Anek Bangla'", 
           color: isPrimary ? "#ffffff" : "#b3d4ff", 
           fontStyle: "bold",

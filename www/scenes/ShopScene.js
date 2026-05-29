@@ -3,7 +3,6 @@ class ShopScene extends Phaser.Scene {
         super("ShopScene");
     }
 
-    // FIX: Moved constructor variables to init() to ensure state resets correctly when entering/exiting shop
     init() {
         this.currentTab = "ships";
         this.scrollVelocity = 0;
@@ -19,7 +18,6 @@ class ShopScene extends Phaser.Scene {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
 
-        // --- 0. AUDIO MANAGEMENT ---
         if (typeof GameSFX !== 'undefined') {
             GameSFX.init(this);
         }
@@ -37,7 +35,6 @@ class ShopScene extends Phaser.Scene {
             }
         }
 
-        // --- 1. BACK BUTTON HANDLER ---
         this.handleBack = () => {
             this.playSound('sfx_back', 0.8);
             this.scene.start("MenuScene");
@@ -49,10 +46,8 @@ class ShopScene extends Phaser.Scene {
         }
         document.addEventListener("backbutton", this.handleBack, false);
 
-        // --- 2. BACKGROUND VISUALS ---
         this.createBackground();
 
-        // Title
         const title = this.add.text(cx, 160, "দোকান", {
             fontSize: "76px",
             fontFamily: "'Anek Bangla'",
@@ -72,12 +67,10 @@ class ShopScene extends Phaser.Scene {
             ease: 'Sine.easeInOut'
         });
 
-        // --- 3. UI LAYOUT ---
         this.createTopUI();
         this.createCurrencyUI();
         this.createTabs(cx);
 
-        // --- 4. SCROLLABLE CONTAINER ---
         const topMargin = 310;
         const bottomMargin = 20;
         this.visibleHeight = h - topMargin - bottomMargin;
@@ -91,10 +84,8 @@ class ShopScene extends Phaser.Scene {
         this.container.setMask(mask);
         this.containerY = topMargin; 
 
-        // --- 5. CONTENT GENERATION ---
         this.refreshContent();
 
-        // --- 6. SMOOTH SCROLL INPUT LOGIC ---
         this.scrollState = { isDragging: false, velocityY: 0 };
         let startY = 0;
         let lastY = 0;
@@ -118,7 +109,6 @@ class ShopScene extends Phaser.Scene {
                 const diff = pointer.y - startY;
                 let newY = containerStartY + diff;
 
-                // FIX: Used Math.min(0, ...) to prevent out of bounds rubberbanding
                 const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
 
                 if (newY > this.listStartY) {
@@ -149,7 +139,6 @@ class ShopScene extends Phaser.Scene {
         this.input.on('pointerup', stopDrag);
         this.input.on('pointerout', stopDrag);
 
-        // --- 7. TIMERS ---
         this.time.addEvent({
             delay: 1000,
             loop: true,
@@ -183,7 +172,6 @@ class ShopScene extends Phaser.Scene {
 
         if (this.contentHeight > this.visibleHeight && this.scrollState) {
             if (!this.scrollState.isDragging) {
-                // FIX: Guaranteed negative boundary for safe scrolling mechanics
                 const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
                 let vY = this.scrollState.velocityY;
                 let currentY = this.container.y;
@@ -332,16 +320,17 @@ class ShopScene extends Phaser.Scene {
         this.tabHighlight.x = -btnWidth; 
         container.add(this.tabHighlight);
 
+        // UI SCALING
         this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 পাখি", {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
         }).setOrigin(0.5);
 
         this.boosterTabTxt = this.add.text(0, 0, "⚡ বুস্টার", {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
         }).setOrigin(0.5);
 
         this.themeTabTxt = this.add.text(btnWidth, 0, "🌌 থিম", {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
         }).setOrigin(0.5);
 
         const shipHitArea = this.add.rectangle(-btnWidth, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
@@ -456,8 +445,9 @@ class ShopScene extends Phaser.Scene {
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
+        // UI SCALING
         const desc = this.add.text(0, 65, this.sanitizeBanglaText(ship.desc), {
-            fontSize: "18px", fontFamily: "'Anek Bangla'", padding: { y: 5 }, color: "#aaccff", 
+            fontSize: "20px", fontFamily: "'Anek Bangla'", padding: { y: 5 }, color: "#aaccff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
         }).setOrigin(0.5);
 
@@ -522,7 +512,7 @@ class ShopScene extends Phaser.Scene {
                 const canAfford = GameState.debris >= ship.cost;
                 btnColor1 = canAfford ? 0x006688 : 0x002233; btnColor2 = canAfford ? 0x003344 : 0x001122;
                 btnStroke = canAfford ? 0x00ffff : 0x004466;
-                btnTextStr = `তৈরি করুন (${ship.cost})`;
+                btnTextStr = `তৈরি (${ship.cost})`;
                 onClick = () => {
                     if (canAfford) {
                         this.playSound('sfx_coin');
@@ -549,8 +539,10 @@ class ShopScene extends Phaser.Scene {
         btnBg.strokeRoundedRect(-110, -30, 220, 60, 30);
 
         const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        // UI SCALING
         const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnLabel.shipId = ship.id;
@@ -595,14 +587,15 @@ class ShopScene extends Phaser.Scene {
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
+        // UI SCALING
         const desc = this.add.text(0, 60, this.sanitizeBanglaText(item.desc), {
-            fontSize: "17px", fontFamily: "'Anek Bangla'", color: "#ddaaff", 
+            fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ddaaff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 3
         }).setOrigin(0.5);
 
         const count = GameState.boosters[item.id] || 0;
         const countText = this.add.text(0, 110, `মজুদ: ${count}`, {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ff00"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#00ff00"
         }).setOrigin(0.5);
 
         cardContainer.add([bg, icon, name, desc, countText]);
@@ -620,8 +613,10 @@ class ShopScene extends Phaser.Scene {
         btnBg.strokeRoundedRect(-110, -25, 220, 50, 25);
 
         const hitArea = this.add.rectangle(0, 0, 220, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        // UI SCALING
         const btnTxt = this.add.text(0, 0, `${item.cost} ডেব্রি`, {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnContainer.add([btnBg, btnTxt, hitArea]);
@@ -668,7 +663,6 @@ class ShopScene extends Phaser.Scene {
         bg.lineStyle(3, 0x0066aa, 0.6);
         bg.strokeRoundedRect(-155, -205, 310, 410, 20);
 
-        // Preview rendering for the theme directly inside the card
         const previewBg = this.add.graphics();
         previewBg.fillGradientStyle(theme.colors.bgTop, theme.colors.bgTop, theme.colors.bgBot, theme.colors.bgBot, 1);
         previewBg.fillRoundedRect(-130, -180, 260, 150, 10);
@@ -689,8 +683,9 @@ class ShopScene extends Phaser.Scene {
             align: 'center', wordWrap: { width: 280 }
         }).setOrigin(0.5);
 
+        // UI SCALING
         const desc = this.add.text(0, 50, this.sanitizeBanglaText(theme.desc), {
-            fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
+            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
             align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
         }).setOrigin(0.5);
 
@@ -711,7 +706,6 @@ class ShopScene extends Phaser.Scene {
                 this.playSound('sfx_powerup');
                 GameState.equippedTheme = theme.id;
                 this.updateCurrencyDisplay();
-                // Also update shop background instantly
                 this.textures.remove('animated_bg_grad');
                 this.createBackground();
                 this.refreshContent();
@@ -748,8 +742,10 @@ class ShopScene extends Phaser.Scene {
         btnBg2.strokeRoundedRect(-110, -30, 220, 60, 30);
 
         const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        // UI SCALING
         const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
+            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
         }).setOrigin(0.5);
 
         btnContainer.add([btnBg2, btnLabel, hitArea]);
@@ -781,7 +777,6 @@ class ShopScene extends Phaser.Scene {
     updateTimers() {
         if (this.currentTab !== "ships") return;
 
-        // FIX: Ensure container and list exist before iterating to prevent crashes during scene transitions
         if (!this.container || !this.container.list) return;
 
         this.container.list.forEach(cardContainer => {

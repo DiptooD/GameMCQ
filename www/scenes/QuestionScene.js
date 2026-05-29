@@ -23,39 +23,37 @@ class QuestionScene extends Phaser.Scene {
         }
         this.qIdx = 0;
 
-        // --- METEOR SHOWER VIGNETTE (Visual Warning) ---
         this.meteorVignette = this.add.graphics().setDepth(-10);
 
-        // --- 1. MAIN UI CONTAINER ---
         this.qContainer = this.add.container(0, 0);
 
-        // --- 2. GLASS PANEL SETUP ---
-        const boxX = 20;
-        const boxY = 20;
-        const boxW = 680;
-        const boxH = 415; 
+        // UI SCALING
+        const boxX = 10;
+        const boxY = 15;
+        const boxW = 700;
+        const boxH = 445; 
 
         this.qPanel = this.add.graphics();
         this.drawGlassPanel(this.qPanel, boxX, boxY, boxW, boxH);
         this.qContainer.add(this.qPanel);
 
-        // --- 3. THE "POWER ROW" HEADER ---
-        const headerY = boxY + 45; 
+        // UI SCALING
+        const headerY = boxY + 50; 
         const edgePadding = 45;    
 
         const leftAnchor = boxX + edgePadding;
         
         this.keyIcon = this.add.image(leftAnchor, headerY, "ui_key")
-            .setScale(0.70).setOrigin(0.7, 0.5); 
-        this.keyText = this.add.text(leftAnchor + 15, headerY, GameState.keys || "0", {
-            fontSize: "26px", fontFamily: "Arial", color: "#ffd700", stroke: "#000000", strokeThickness: 4
+            .setScale(0.80).setOrigin(0.7, 0.5); 
+        this.keyText = this.add.text(leftAnchor + 20, headerY, GameState.keys || "0", {
+            fontSize: "28px", fontFamily: "Arial", color: "#ffd700", stroke: "#000000", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        const debrisX = leftAnchor + 75;
+        const debrisX = leftAnchor + 85;
         this.debrisIcon = this.add.image(debrisX, headerY, "ui_debris_icon")
-            .setScale(0.95).setOrigin(0.38, 0.41);
-        this.debrisText = this.add.text(debrisX + 25, headerY, GameState.debris || "0", {
-            fontSize: "26px", fontFamily: "Arial", color: "#aaccff", stroke: "#000000", strokeThickness: 4
+            .setScale(1.0).setOrigin(0.38, 0.41);
+        this.debrisText = this.add.text(debrisX + 30, headerY, GameState.debris || "0", {
+            fontSize: "28px", fontFamily: "Arial", color: "#aaccff", stroke: "#000000", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
         const isValidSubject = (GameState.currentSubject === "all" || GameState.currentSubject === "all_no_math");
@@ -79,7 +77,7 @@ class QuestionScene extends Phaser.Scene {
 
         const pauseBtn = this.add.image(rightAnchor + 2, headerY, "ui_pause")
             .setInteractive({ useHandCursor: true })
-            .setScale(1.3) 
+            .setScale(1.4) 
             .setAlpha(0.7)
             .setOrigin(0.5, 0.5);
 
@@ -95,10 +93,10 @@ class QuestionScene extends Phaser.Scene {
 
         const totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
 
-        this.skipBtn = this.add.text(rightAnchor - 50, headerY, `Skip (${totalSkips})`, {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", fontStyle: 'bold',
+        this.skipBtn = this.add.text(rightAnchor - 60, headerY, `Skip (${totalSkips})`, {
+            fontSize: "28px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", fontStyle: 'bold',
             backgroundColor: "rgba(255, 255, 255, 0.15)",
-            padding: { x: 14, y: 8 }, stroke: '#000000', strokeThickness: 3
+            padding: { x: 16, y: 10 }, stroke: '#000000', strokeThickness: 3
         }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true }).setAlpha(0.8);
 
         this.skipBtn.on("pointerdown", () => { 
@@ -110,15 +108,15 @@ class QuestionScene extends Phaser.Scene {
         
         this.qContainer.add([pauseBtn, this.skipBtn]);
 
-        // --- 4. QUESTION TEXT SECTION ---
-        const questionAreaY = boxY + 140; 
+        // UI SCALING
+        const questionAreaY = boxY + 150; 
         this.qText = this.add.text(boxX + (boxW / 2), questionAreaY, "", {
-            fontSize: "34px", 
+            fontSize: "36px", 
             fontFamily: "'Anek Bangla', sans-serif",
             fontWeight: 800,
             color: "#ffffff",
             align: "center",
-            wordWrap: { width: boxW - 50 },
+            wordWrap: { width: boxW - 40 },
             padding: { x: 10, y: 100 },
             lineSpacing: 5,
             stroke: "#000000",
@@ -126,33 +124,33 @@ class QuestionScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.qText.originalY = questionAreaY;
 
-        const tagY = boxY + 180; 
+        const tagY = boxY + 200; 
         const rightEdge = boxX + boxW - 15; 
 
         this.qBankTag = this.add.text(rightEdge, tagY, "", {
-            fontSize: "20px", 
+            fontSize: "22px", 
             fontFamily: "'Anek Bangla', sans-serif",
             fontWeight: 700,
             color: "#dbdbdb",
             backgroundColor: "rgba(66, 66, 66, 0.12)",
-            padding: { x: 12, y: 6 },
+            padding: { x: 14, y: 8 },
         }).setOrigin(1, 0.5); 
         this.qBankTag.originalY = tagY;
 
         this.qContainer.add([this.qText, this.qBankTag]);
 
-        // --- 5. OPTION BUTTONS ---
+        // UI SCALING
         this.optionBtns = [];
-        const btnW = 315; 
-        const btnH = 85;  
+        const btnW = 330; 
+        const btnH = 95;  
         const gap = 20;   
-        const startY = boxY + 250; 
+        const startY = boxY + 270; 
         
         for (let i = 0; i < 4; i++) {
             let col = i % 2;
             let row = Math.floor(i / 2);
             
-            let x = (col === 0) ? 190 : 530;
+            let x = (col === 0) ? 185 : 535;
             let y = startY + (row * (btnH + gap));
 
             let container = this.add.container(x, y);
@@ -162,7 +160,7 @@ class QuestionScene extends Phaser.Scene {
             bg.setInteractive({ useHandCursor: true });
 
             let txt = this.add.text(0, 0, "", {
-                fontSize: "30px", 
+                fontSize: "32px", 
                 fontFamily: "'Anek Bangla'",
                 fontWeight: 800,
                 color: "#aaddff",
@@ -205,7 +203,7 @@ class QuestionScene extends Phaser.Scene {
             this.optionBtns.push({ container, bg, txt, originalY: y, pulseTween: null });
         }
 
-        // --- 6. QUICK ANSWER PANEL ---
+        // UI SCALING
         this.quickPanelState = localStorage.getItem('settings_quickPanel') || 'right';
         this.quickPanelEnabled = (this.quickPanelState !== 'hidden');
         
@@ -215,20 +213,20 @@ class QuestionScene extends Phaser.Scene {
 
         if (this.quickPanelEnabled) {
             const qaBg = this.add.graphics();
-            this.drawGlassPanel(qaBg, -12, -10, 120, 460);
+            this.drawGlassPanel(qaBg, -20, -10, 140, 520);
             this.quickAnsContainer.add(qaBg);
 
             const qaLabels = ["ক", "খ", "গ", "ঘ"];
 
             for (let i = 0; i < 4; i++) {
-                let btnY = 55 + (i * 110);
+                let btnY = 60 + (i * 120);
                 
-                let btnBg = this.add.rectangle(45, btnY, 80, 80, 0x000510, 0.4);
+                let btnBg = this.add.rectangle(50, btnY, 90, 90, 0x000510, 0.4);
                 btnBg.setStrokeStyle(3, 0xffffff, 0.15); 
                 btnBg.setInteractive({ useHandCursor: true });
 
-                let btnTxt = this.add.text(45, btnY, qaLabels[i], {
-                    fontSize: "42px", 
+                let btnTxt = this.add.text(50, btnY, qaLabels[i], {
+                    fontSize: "46px", 
                     fontFamily: "'Anek Bangla'",
                     fontWeight: 800,
                     color: "#aaddff"
@@ -256,13 +254,13 @@ class QuestionScene extends Phaser.Scene {
                 this.quickBtns.push({ bg: btnBg, txt: btnTxt, originalY: btnY });
             }
 
-            const qSkipY = -50; 
-            const qSkipBg = this.add.rectangle(45, qSkipY, 112, 60, 0x000510, 0.3);
+            const qSkipY = -55; 
+            const qSkipBg = this.add.rectangle(50, qSkipY, 120, 65, 0x000510, 0.3);
             qSkipBg.setStrokeStyle(3, 0xffffff, 0.2);
             qSkipBg.setInteractive({ useHandCursor: true });
             
-            this.quickSkipTxt = this.add.text(45, qSkipY, `Skip\n(${totalSkips})`, {
-                fontSize: "22px", 
+            this.quickSkipTxt = this.add.text(50, qSkipY, `Skip\n(${totalSkips})`, {
+                fontSize: "24px", 
                 fontFamily: "'Anek Bangla'",
                 fontWeight: 800,
                 color: "#d8d8d8",
@@ -291,7 +289,6 @@ class QuestionScene extends Phaser.Scene {
             this.quickSkipBtn = { bg: qSkipBg, txt: this.quickSkipTxt, originalY: qSkipY };
         }
 
-        // --- 7. INSTRUCTION TEXT ---
         this.instructionText = this.add.text(boxX + (boxW / 2), boxY + boxH + 27, "উত্তর দিতে হলে আগে শত্রু মেরে ব্যাটারী সংগ্রহ করুন", {
             fontSize: "28px", 
             fontFamily: "'Anek Bangla'",
@@ -323,9 +320,9 @@ class QuestionScene extends Phaser.Scene {
         if (this.quickPanelEnabled) {
             this.quickAnsContainer.setScale(uiScale);
             if (this.quickPanelState === 'left') {
-                this.quickAnsContainer.setX(15 * uiScale);
+                this.quickAnsContainer.setX(25 * uiScale);
             } else {
-                this.quickAnsContainer.setX(720 - (102 * uiScale));
+                this.quickAnsContainer.setX(720 - (122 * uiScale));
             }
             this.quickAnsContainer.setY(760 - (460 * (uiScale - 1) / 2));
         }
@@ -665,9 +662,8 @@ class QuestionScene extends Phaser.Scene {
         const cleanStr = (str) => typeof str === 'string' ? str.replace(/।/g, '') : str;
         const cleanQuestion = cleanStr(q.question);
 
-        // FIX: Delay ms mapped properly for instant transition
         let delayMs = (GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15) * 100;
-        let skipAnim = delayMs <= 500; // Anything equal to 0.5s or below disables transitions completely
+        let skipAnim = delayMs <= 500; 
 
         this.optionBtns.forEach((btn, i) => {
             btn.container.setAlpha(1);
@@ -681,10 +677,11 @@ class QuestionScene extends Phaser.Scene {
         }
 
         if (this.qText.text === "") {
+            // UI SCALING
             if (cleanQuestion.length > 80) {
-                this.qText.setFontSize("26px");
+                this.qText.setFontSize("28px");
             } else {
-                this.qText.setFontSize("34px");
+                this.qText.setFontSize("36px");
             }
 
             this.qText.setText(cleanQuestion);
@@ -692,10 +689,11 @@ class QuestionScene extends Phaser.Scene {
             
             this.optionBtns.forEach((btn, i) => {
                 const cleanOpt = cleanStr(q.options[i]);
+                // UI SCALING
                 if (cleanOpt.length > 40) {
-                    btn.txt.setFontSize("22px");
+                    btn.txt.setFontSize("24px");
                 } else {
-                    btn.txt.setFontSize("30px");
+                    btn.txt.setFontSize("32px");
                 }
                 btn.txt.setText(cleanOpt);
             });
@@ -715,11 +713,11 @@ class QuestionScene extends Phaser.Scene {
         this.isProcessing = true;
 
         if (skipAnim) {
-            // INSTANT UI UPDATE WITHOUT TWEENS
+            // UI SCALING
             if (cleanQuestion.length > 80) {
-                this.qText.setFontSize("26px");
+                this.qText.setFontSize("28px");
             } else {
-                this.qText.setFontSize("34px");
+                this.qText.setFontSize("36px");
             }
 
             this.qText.setText(cleanQuestion);
@@ -729,10 +727,11 @@ class QuestionScene extends Phaser.Scene {
             
             this.optionBtns.forEach((btn, i) => {
                 const cleanOpt = cleanStr(q.options[i]);
+                // UI SCALING
                 if (cleanOpt.length > 40) {
-                    btn.txt.setFontSize("22px");
+                    btn.txt.setFontSize("24px");
                 } else {
-                    btn.txt.setFontSize("30px");
+                    btn.txt.setFontSize("32px");
                 }
 
                 btn.txt.setText(cleanOpt);
@@ -778,7 +777,6 @@ class QuestionScene extends Phaser.Scene {
             }
 
         } else {
-            // NORMAL TWEENING
             this.tweens.add({
                 targets: elements,
                 alpha: 0,
@@ -786,10 +784,11 @@ class QuestionScene extends Phaser.Scene {
                 duration: 180,
                 ease: 'Power2.easeIn',
                 onComplete: () => {
+                    // UI SCALING
                     if (cleanQuestion.length > 80) {
-                        this.qText.setFontSize("26px");
+                        this.qText.setFontSize("28px");
                     } else {
-                        this.qText.setFontSize("34px");
+                        this.qText.setFontSize("36px");
                     }
 
                     this.qText.setText(cleanQuestion);
@@ -801,10 +800,11 @@ class QuestionScene extends Phaser.Scene {
                     
                     this.optionBtns.forEach((btn, i) => {
                         const cleanOpt = cleanStr(q.options[i]);
+                        // UI SCALING
                         if (cleanOpt.length > 40) {
-                            btn.txt.setFontSize("22px");
+                            btn.txt.setFontSize("24px");
                         } else {
-                            btn.txt.setFontSize("30px");
+                            btn.txt.setFontSize("32px");
                         }
 
                         btn.txt.setText(cleanOpt);
@@ -905,7 +905,6 @@ class QuestionScene extends Phaser.Scene {
         if (i === q.answer) {
             this.playSFX('sfx_q_correct', 0.5, false);
             
-            // PROFILE STATS TRACKING
             if (GameState.profile) {
                 GameState.profile.qr = (GameState.profile.qr || 0) + 1;
                 GameState.profile.xp = (GameState.profile.xp || 0) + 10;
@@ -971,7 +970,6 @@ class QuestionScene extends Phaser.Scene {
         } else {
             this.playSFX('sfx_q_wrong', 0.6, false);
             
-            // PROFILE STATS TRACKING
             if (GameState.profile) {
                 GameState.profile.qw = (GameState.profile.qw || 0) + 1;
                 if (!GameState.profile.s[category]) GameState.profile.s[category] = { r: 0, w: 0 };
@@ -1003,10 +1001,7 @@ class QuestionScene extends Phaser.Scene {
         GameState.battery = 0;
         this.lastBattery = -1;
 
-        // FIX: Replaced multipliers with pure ms mapping from the time indicator setting
         let delayMs = (GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15) * 100;
-        
-        // Correct delay = user setting, Incorrect delay = user setting + 1.5s (to show correct answer)
         let finalDelay = (i === q.answer) ? delayMs : delayMs + 1500;
 
         this.time.delayedCall(finalDelay, () => {

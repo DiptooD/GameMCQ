@@ -469,16 +469,16 @@ class MenuScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
 
-        const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '44px'}).setOrigin(0.5);
+        // UI SCALING: UI Sizes increased
+        const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '50px'}).setOrigin(0.5);
 
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
         const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 11, playerName, {
-            fontSize: '24px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 10 },
+            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
-        // Disconnected Red Dot Indicator
         this.profileRedDot = this.add.circle(boxX + 85 + nameTxt.width + 15, boxY + boxH/2 - 11, 6, 0xff3333);
         this.profileRedDot.setStrokeStyle(2, 0xff0000);
         this.profileRedDot.setVisible(!isConnected);
@@ -486,7 +486,7 @@ class MenuScene extends Phaser.Scene {
 
         const tagShort = rankData.tag.split(" (")[0];
         const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 16.5, `লেভেল ${lvlData.level} • ${tagShort}`, {
-            fontSize: '18px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',padding: { y: 10 },
+            fontSize: '20px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',padding: { y: 10 },
             shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
 
@@ -507,8 +507,8 @@ class MenuScene extends Phaser.Scene {
 
         const setY = 115;
         const setW = 200;
-        const setH = 60;
-        const setRadius = 22.5; 
+        const setH = 65; // SCALED
+        const setRadius = 25; 
 
         const setBg = this.add.graphics();
         const drawSettings = (hover) => {
@@ -520,8 +520,9 @@ class MenuScene extends Phaser.Scene {
         };
         drawSettings(false);
 
+        // UI SCALING
         const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ সেটিংস", {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#b3d4ff', fontStyle: 'bold' 
+            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const setHitArea = this.add.rectangle(boxX + setW/2, setY + setH/2, setW, setH, 0x000000, 0).setInteractive({useHandCursor: true});
@@ -562,11 +563,11 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        const exitW = 200;
-        const exitH = 60;
+        const exitW = 210; // SCALED
+        const exitH = 65; // SCALED
         const exitX = startX + boxW - exitW; 
         const exitY = 115;
-        const exitRadius = 22.5;
+        const exitRadius = 25;
 
         const exitBg = this.add.graphics();
         const drawExit = (hover) => {
@@ -578,8 +579,9 @@ class MenuScene extends Phaser.Scene {
         };
         drawExit(false);
 
+        // UI SCALING
         const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
+            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});
@@ -732,12 +734,13 @@ class MenuScene extends Phaser.Scene {
             return str.length > 25 ? str.substring(0, 23) + "..." : str;
         };
 
+        // UI SCALING
         const mainText = this.add.text(-width/2 + 25, 0, formatText(label, initialVal), { 
-            fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 600, color: "#ffffff" 
+            fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 600, color: "#ffffff" 
         }).setOrigin(0, 0.5);
 
         const arrow = this.add.text(width/2 - 30, 0, "▼", { 
-            fontSize: "20px", color: "#00ffff" 
+            fontSize: "24px", color: "#00ffff" 
         }).setOrigin(0.5);
 
         container.add([bg, mainText, arrow, hitArea]);
@@ -776,8 +779,9 @@ class MenuScene extends Phaser.Scene {
 
         let currentY = 0;
         options.forEach((opt, index) => {
+            // UI SCALING
             const optText = this.add.text(-width/2 + 25, currentY + itemHeight/2, opt, {
-                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 500, color: "#b3d4ff" 
+                fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 500, color: "#b3d4ff" 
             }).setOrigin(0, 0.5);
 
             if (index < options.length - 1) {
@@ -1267,8 +1271,9 @@ class MenuScene extends Phaser.Scene {
         const createNavBtn = (cxOffset, emoji, label, emojiSize) => {
             const hitArea = this.add.rectangle(cxOffset, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
             
+            // UI SCALING
             const tText = this.add.text(0, 0, label, { 
-                fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif",padding: { y: 10 }, fontWeight: 700, color: "#b3d4ff" 
+                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif",padding: { y: 10 }, fontWeight: 700, color: "#b3d4ff" 
             }).setOrigin(0.5, 0.5);
             
             const tIcon = this.add.text(0, 0, emoji, { fontSize: emojiSize }).setOrigin(0.5, 0.5);
@@ -1287,7 +1292,8 @@ class MenuScene extends Phaser.Scene {
             return { hitArea, tIcon, tText };
         };
 
-        const shop = createNavBtn(-totalWidth/2 + btnWidth/2, "🛒", "শপ", "26px");
+        // UI SCALING
+        const shop = createNavBtn(-totalWidth/2 + btnWidth/2, "🛒", "শপ", "30px");
         shop.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.scene.start("ShopScene");
@@ -1297,7 +1303,7 @@ class MenuScene extends Phaser.Scene {
 
         const div1 = this.add.rectangle(-totalWidth/2 + btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const study = createNavBtn(-totalWidth/2 + btnWidth*1.5, "📖", "স্টাডি", "26px");
+        const study = createNavBtn(-totalWidth/2 + btnWidth*1.5, "📖", "স্টাডি", "30px");
         study.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.scene.start("ReadingScene");
@@ -1307,7 +1313,7 @@ class MenuScene extends Phaser.Scene {
 
         const div2 = this.add.rectangle(0, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const hist = createNavBtn(totalWidth/2 - btnWidth*1.5, "📜", "হিস্ট্রি", "26px");
+        const hist = createNavBtn(totalWidth/2 - btnWidth*1.5, "📜", "হিস্ট্রি", "30px");
         hist.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.showMatchHistoryPopup();
@@ -1317,7 +1323,7 @@ class MenuScene extends Phaser.Scene {
 
         const div3 = this.add.rectangle(totalWidth/2 - btnWidth, 0, 3, height - 20, 0x0066aa, 0.7);
 
-        const wheel = createNavBtn(totalWidth/2 - btnWidth/2, "🌀", "স্পিন", "26px");
+        const wheel = createNavBtn(totalWidth/2 - btnWidth/2, "🌀", "স্পিন", "30px");
         this.tweens.add({ targets: wheel.tIcon, angle: 360, duration: 50000, repeat: -1, ease: "Linear" });
         wheel.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
@@ -1623,8 +1629,13 @@ class MenuScene extends Phaser.Scene {
         GameState.currentQuestions = finalQuestions;
         GameState.gameMode = this.selectedMode;
 
-        this.scene.start("GameScene");
-        this.scene.launch("QuestionScene");
+        // NEW: Check for Tutorial Completion
+        if (localStorage.getItem('tutorial_completed') === 'true') {
+            this.scene.start("GameScene");
+            this.scene.launch("QuestionScene");
+        } else {
+            this.scene.start("InstructionScene");
+        }
     }
 
     closeAllDropdowns() {

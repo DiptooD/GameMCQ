@@ -5,7 +5,7 @@ class PlayerProfileScene extends Phaser.Scene {
 
     init() {
         this.backgroundLayers = [];
-        this.activeNotification = null; // Track active notification to prevent overlaps
+        this.activeNotification = null; 
     }
 
     create() {
@@ -60,13 +60,8 @@ class PlayerProfileScene extends Phaser.Scene {
         // --- PANEL LAYOUT CONFIGURATION ---
         const panelW = 680;
         
-        // 1. Identity Card (Avatar, Name, Rank, Date, XP Progress)
         this.createIdentitySection(cx, 340, panelW, 260);
-
-        // 2. Combat Records Grid (Detailed Game Metrics)
         this.createStatsSection(cx, 710, panelW, 400);
-
-        // 3. Subject Specialization Panel (Top 3 Most Answered)
         this.createMasterySection(cx, 1125, panelW, 350);
     }
 
@@ -190,7 +185,6 @@ class PlayerProfileScene extends Phaser.Scene {
         const dividerX = avatarX + 120;
         const vertDivider = this.add.rectangle(dividerX, 0, 2, 180, 0x0066aa, 0.5);
 
-        // 2. Setup Y Coordinates
         const textStartX = dividerX + 30; 
         const nameY = -72; 
         const rankY = -22;
@@ -203,27 +197,27 @@ class PlayerProfileScene extends Phaser.Scene {
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
-        // Edit Button Container
+        // UI SCALING: Edit Button
         const editBtnContainer = this.add.container(0, nameY);
         const editBg = this.add.graphics();
         editBg.fillStyle(0x004488, 0.8);
-        editBg.fillRoundedRect(0, -14, 70, 28, 14);
+        editBg.fillRoundedRect(0, -18, 90, 36, 18);
         editBg.lineStyle(2, 0x00ffff, 0.8);
-        editBg.strokeRoundedRect(0, -14, 70, 28, 14);
+        editBg.strokeRoundedRect(0, -18, 90, 36, 18);
         
-        const editTxt = this.add.text(35, 0, "✎ EDIT", { 
-            fontSize: '14px', fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
+        const editTxt = this.add.text(45, 0, "✎ EDIT", { 
+            fontSize: '16px', fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0.5);
         
-        const editHitArea = this.add.rectangle(35, 0, 70, 28, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const editHitArea = this.add.rectangle(45, 0, 90, 36, 0x000000, 0).setInteractive({ useHandCursor: true });
         editBtnContainer.add([editBg, editTxt, editHitArea]);
 
-        // Connection Indicator Button Overhaul
+        // UI SCALING: Connection Indicator Button
         this.connBtnContainer = this.add.container(0, nameY);
         this.connBg = this.add.graphics();
-        this.connDot = this.add.circle(-8, 0, 5); 
+        this.connDot = this.add.circle(-8, 0, 6); 
         this.connBtnTxt = this.add.text(5, 0, "", {
-            fontSize: '14px', fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
+            fontSize: '16px', fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0, 0.5);
         this.connHitArea = this.add.rectangle(0, 0, 10, 10, 0x000000, 0).setInteractive({ useHandCursor: true });
         
@@ -252,25 +246,25 @@ class PlayerProfileScene extends Phaser.Scene {
                 }
             }
 
-            const padX = 14;
-            const h = 28;
+            const padX = 18;
+            const h = 36;
             const textW = this.connBtnTxt.width;
-            const totalW = textW + 28 + padX; // Account for dot space and padding
+            const totalW = textW + 32 + padX; 
 
             this.connHitArea.setSize(totalW, h);
-            this.connHitArea.setPosition((totalW / 2) - 18, 0); 
+            this.connHitArea.setPosition((totalW / 2) - 20, 0); 
 
             const drawBg = (hover = false) => {
                 this.connBg.clear();
                 const bgColor = connected
-                    ? (hover ? 0xaa2222 : 0x661111) // Red hues for Log Out
-                    : (hover ? 0x0066cc : 0x004488); // Blue hues for Connect
+                    ? (hover ? 0xaa2222 : 0x661111) 
+                    : (hover ? 0x0066cc : 0x004488); 
                 const borderColor = connected ? 0xff4444 : 0x00aaff;
 
                 this.connBg.fillStyle(bgColor, hover ? 1 : 0.8);
-                this.connBg.fillRoundedRect(-20, -h/2, totalW, h, h/2);
+                this.connBg.fillRoundedRect(-24, -h/2, totalW, h, h/2);
                 this.connBg.lineStyle(2, borderColor, 0.9);
-                this.connBg.strokeRoundedRect(-20, -h/2, totalW, h, h/2);
+                this.connBg.strokeRoundedRect(-24, -h/2, totalW, h, h/2);
             };
 
             drawBg(false);
@@ -283,15 +277,15 @@ class PlayerProfileScene extends Phaser.Scene {
             this.updateNameDisplay();
         };
 
-        // Dynamic Spacing Logic: Shifts the buttons if the name gets longer/shorter
         this.updateNameDisplay = () => {
             nameTxt.setText(GameState.profile.n);
             const editX = textStartX + nameTxt.width + 20;
             editBtnContainer.setX(editX);
-            const connX = editX + 85 + 15; // Offset past the edit button
+            const connX = editX + 110 + 15; 
             this.connBtnContainer.setX(connX);
         };
 
+        // FIX: Enlarged the confirmation popup
         this.showLogoutConfirmation = () => {
             const cxScreen = this.cameras.main.width / 2;
             const cyScreen = this.cameras.main.height / 2;
@@ -301,15 +295,15 @@ class PlayerProfileScene extends Phaser.Scene {
             
             const bg = this.add.graphics();
             bg.fillStyle(0x001122, 1);
-            bg.fillRoundedRect(-220, -120, 440, 240, 20);
+            bg.fillRoundedRect(-260, -140, 520, 280, 20); // Enlarged background
             bg.lineStyle(4, 0xff0000, 1);
-            bg.strokeRoundedRect(-220, -120, 440, 240, 20);
+            bg.strokeRoundedRect(-260, -140, 520, 280, 20);
             
-            const warnTitle = this.add.text(0, -60, "সতর্কতা!", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ff4444", fontStyle: "bold" }).setOrigin(0.5);
-            const desc = this.add.text(0, -10, "আপনি কি লগ আউট করতে চান?\nআপনার ক্লাউড সেভ বন্ধ হয়ে যাবে।", { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 5 }).setOrigin(0.5);
+            const warnTitle = this.add.text(0, -80, "সতর্কতা!", { fontSize: "38px", fontFamily: "'Anek Bangla'", color: "#ff4444", fontStyle: "bold" }).setOrigin(0.5); // Enlarged font
+            const desc = this.add.text(0, -15, "আপনি কি লগ আউট করতে চান?\nআপনার ক্লাউড সেভ বন্ধ হয়ে যাবে।", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 5 }).setOrigin(0.5); // Enlarged font
             
-            const cancelBtn = this.add.text(-90, 65, "বাতিল", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#444444", padding: {x: 18, y: 8} }).setOrigin(0.5).setInteractive({useHandCursor: true});
-            const confirmBtn = this.add.text(90, 65, "লগ আউট", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#aa0000", padding: {x: 18, y: 8} }).setOrigin(0.5).setInteractive({useHandCursor: true});
+            const cancelBtn = this.add.text(-120, 80, "বাতিল", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#444444", padding: {x: 24, y: 12} }).setOrigin(0.5).setInteractive({useHandCursor: true}); // Enlarged btn
+            const confirmBtn = this.add.text(120, 80, "লগ আউট", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#aa0000", padding: {x: 24, y: 12} }).setOrigin(0.5).setInteractive({useHandCursor: true}); // Enlarged btn
             
             cancelBtn.on('pointerdown', () => {
                 this.playSound('sfx_click');
@@ -324,7 +318,7 @@ class PlayerProfileScene extends Phaser.Scene {
                         this.updateConnectionUI(false);
                     });
                 } else {
-                    this.updateConnectionUI(false); // Fallback
+                    this.updateConnectionUI(false); 
                 }
                 overlay.destroy();
                 popup.destroy();
@@ -354,11 +348,10 @@ class PlayerProfileScene extends Phaser.Scene {
             }
         });
 
-        // Initialize connection state
         this.updateConnectionUI(window.FirebaseAuth && window.FirebaseAuth.currentUser);
 
-        editHitArea.on('pointerover', () => { editBg.fillStyle(0x0066cc, 1).fillRoundedRect(0, -14, 70, 28, 14); });
-        editHitArea.on('pointerout', () => { editBg.fillStyle(0x004488, 0.8).fillRoundedRect(0, -14, 70, 28, 14); });
+        editHitArea.on('pointerover', () => { editBg.fillStyle(0x0066cc, 1).fillRoundedRect(0, -18, 90, 36, 18); });
+        editHitArea.on('pointerout', () => { editBg.fillStyle(0x004488, 0.8).fillRoundedRect(0, -18, 90, 36, 18); });
         editHitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             this.tweens.add({ targets: editBtnContainer, scale: 0.9, duration: 50, yoyo: true });
@@ -373,16 +366,15 @@ class PlayerProfileScene extends Phaser.Scene {
             }
         });
 
-        // 3. Rank Tag
         const rankTxt = this.add.text(textStartX, rankY, this.rankData.tag, {
             fontSize: '22px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',
             stroke: "#001133", strokeThickness: 4
         }).setOrigin(0, 0.5);
 
-        // 4. Account Creation Date
+        // UI SCALING: Increased Font Size
         const joinedDate = GameState.profile.joined || "Unknown Date";
         const joinedTxt = this.add.text(textStartX, dateY, ` 📅 যুক্ত হয়েছেন: ${joinedDate} `, {
-            fontSize: '15px', 
+            fontSize: '18px', 
             fontFamily: "'Anek Bangla', sans-serif", 
             color: '#aaccff', 
             backgroundColor: 'rgba(0, 40, 80, 0.6)', 
@@ -391,7 +383,6 @@ class PlayerProfileScene extends Phaser.Scene {
             strokeThickness: 2
         }).setOrigin(0, 0.5);
 
-        // 5. Experience Progression System
         const barRightPadding = 30;
         const barW = (w / 2) - textStartX - barRightPadding; 
         
@@ -525,8 +516,9 @@ class PlayerProfileScene extends Phaser.Scene {
                 barFill.fillStyle(color, 1);
                 barFill.fillRoundedRect(-barW / 2, currY + 12, fillW, 10, 5);
 
+                // UI SCALING
                 const detailTxt = this.add.text(barW / 2, currY + 36, `${sub.r}/${sub.total} Correct`, {
-                    fontSize: '16px', fontFamily: "Arial", color: '#88aacc'
+                    fontSize: '20px', fontFamily: "Arial", color: '#88aacc'
                 }).setOrigin(1, 0.5);
 
                 container.add([nameTxt, accTxt, barBg, barFill, detailTxt]);

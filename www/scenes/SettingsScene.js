@@ -27,8 +27,9 @@ class SettingsScene extends Phaser.Scene {
             fontSize: '44px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const closeHit = this.add.circle(cx + 230, cy - 350, 35).setInteractive({ useHandCursor: true });
-        const closeIcon = this.add.text(cx + 230, cy - 350, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
+        // UI SCALING
+        const closeHit = this.add.circle(cx + 230, cy - 350, 45).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(cx + 230, cy - 350, "✖", { fontSize: '40px', color: '#ff4444' }).setOrigin(0.5);
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
@@ -42,7 +43,6 @@ class SettingsScene extends Phaser.Scene {
         
         let musicVol = Math.round((GameState.musicVolume !== undefined ? GameState.musicVolume : 0.5) * 10);
         if (musicVol < 0) musicVol = 0; 
-        // Added stepSize of 1
         this.musicAdj = this.createSlider(-210, "মিউজিক ভলিউম:", 0, 10, 1, musicVol, (v) => v, (val) => {
             GameState.musicVolume = val / 10;
             localStorage.setItem('settings_musicVol', GameState.musicVolume);
@@ -52,13 +52,11 @@ class SettingsScene extends Phaser.Scene {
         let sfxVol = Math.round((GameState.sfxVolume !== undefined ? GameState.sfxVolume : 1.0) * 5);
         if (sfxVol < 0) sfxVol = 0;
         if (sfxVol > 10) sfxVol = 10;
-        // Added stepSize of 1
         this.sfxAdj = this.createSlider(-120, "সাউন্ড ইফেক্ট:", 0, 10, 1, sfxVol, (v) => v, (val) => {
             GameState.sfxVolume = val / 5;
             localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
         });
         
-        // Changed to use stepSize of 5 for much wider gaps and fewer teeth
         let qDelayLevel = GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15;
         this.qDelayAdj = this.createSlider(-30, "মধ্যবর্তী বিলম্ব: (Inter-Question Delay):", 5, 40, 5, qDelayLevel, (v) => (v / 10).toFixed(1) + "s", (val) => {
             GameState.qDelayLevel = val;
@@ -170,7 +168,6 @@ class SettingsScene extends Phaser.Scene {
         this.tweens.add({ targets: this.container, alpha: 1, duration: 200 });
     }
 
-    // Added stepSize parameter
     createSlider(yOffset, labelText, min, max, stepSize, currentVal, formatFn, callback) {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
@@ -189,7 +186,6 @@ class SettingsScene extends Phaser.Scene {
         trackBg.lineStyle(2, 0x003366, 1);
         trackBg.strokeRoundedRect(sliderX, sliderY - sliderH/2, sliderW, sliderH, sliderH/2);
 
-        // Calculated steps based on stepSize
         const steps = (max - min) / stepSize;
         const stepW = sliderW / steps;
         
@@ -204,11 +200,12 @@ class SettingsScene extends Phaser.Scene {
         const fill = this.add.graphics();
         let val = currentVal;
 
-        const thumb = this.add.circle(0, sliderY, 16, 0xffffff);
+        // UI SCALING: Increased touch zones for sliders
+        const thumb = this.add.circle(0, sliderY, 20, 0xffffff);
         thumb.setStrokeStyle(4, 0x0066cc);
-        const glow = this.add.circle(0, sliderY, 26, 0x00e1ff, 0.3);
+        const glow = this.add.circle(0, sliderY, 30, 0x00e1ff, 0.3);
 
-        const hitArea = this.add.rectangle(sliderX + sliderW/2, sliderY, sliderW + 60, 50, 0, 0).setInteractive({useHandCursor: true});
+        const hitArea = this.add.rectangle(sliderX + sliderW/2, sliderY, sliderW + 80, 70, 0, 0).setInteractive({useHandCursor: true});
         
         this.container.add([label, valText, hitArea, trackBg, fill, glow, thumb]);
 
@@ -217,7 +214,6 @@ class SettingsScene extends Phaser.Scene {
             let pct = (clampedX - sliderX) / sliderW;
             let exactVal = min + pct * (max - min);
             
-            // Snap to nearest stepSize
             let nearestStep = min + Math.round((exactVal - min) / stepSize) * stepSize;
             
             let renderX = isFinalSnap ? (sliderX + ((nearestStep - min)/(max - min))*sliderW) : clampedX;
@@ -230,7 +226,6 @@ class SettingsScene extends Phaser.Scene {
             let fW = Math.max(sliderH, renderX - sliderX);
             fill.fillRoundedRect(sliderX, sliderY - sliderH/2, fW, sliderH, sliderH/2);
 
-            // Dynamically formatted using the passed function
             valText.setText(formatFn(nearestStep));
 
             if (val !== nearestStep) {
@@ -280,18 +275,20 @@ class SettingsScene extends Phaser.Scene {
         const label = this.add.text(cx - 240, cy + yOffset, labelText, { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0, 0.5);
         
         let val = currentVal;
-        const btnW = 60;
-        const btnH = 45;
+        
+        // UI SCALING
+        const btnW = 70;
+        const btnH = 50;
 
         const valText = this.add.text(cx + 120, cy + yOffset, val === 0 ? "ডিফল্ট" : (val > 0 ? "+" + val : val), { 
             fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const minusBg = this.add.rectangle(cx + 40, cy + yOffset, btnW, btnH, 0x002244, 1).setStrokeStyle(2, 0x0066aa).setInteractive({useHandCursor: true});
-        const minusTxt = this.add.text(cx + 40, cy + yOffset, "-", { fontSize: '32px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
+        const minusTxt = this.add.text(cx + 40, cy + yOffset, "-", { fontSize: '36px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
         
         const plusBg = this.add.rectangle(cx + 200, cy + yOffset, btnW, btnH, 0x002244, 1).setStrokeStyle(2, 0x0066aa).setInteractive({useHandCursor: true});
-        const plusTxt = this.add.text(cx + 200, cy + yOffset, "+", { fontSize: '28px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
+        const plusTxt = this.add.text(cx + 200, cy + yOffset, "+", { fontSize: '32px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
 
         const updateDisplay = () => {
             valText.setText(val === 0 ? "ডিফল্ট" : (val > 0 ? "+" + val : val));

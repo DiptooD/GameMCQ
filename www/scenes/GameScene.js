@@ -163,7 +163,7 @@ class GameScene extends GameBase {
         this.bossBarBg = this.add.rectangle(360, 110, 600, 16, 0x333333).setVisible(false).setAlpha(.3);
         this.bossBarFill = this.add.rectangle(60, 110, 0, 16, 0x6E6E6E).setOrigin(0, 0.5).setVisible(false).setAlpha(.6);
         this.warningText = this.add.text(360, h / 2, "BOSS APPROACHING!", {
-            fontSize: '54px', color: '#ff0000', fontStyle: 'bold', fontFamily: "'Anek Bangla'",
+            fontSize: '60px', color: '#ff0000', fontStyle: 'bold', fontFamily: "'Anek Bangla'",
             stroke: '#000000', strokeThickness: 8
         }).setOrigin(0.5).setVisible(false);
 
@@ -190,7 +190,7 @@ class GameScene extends GameBase {
         }
 
         this.comboText = this.add.text(30, h - 220, "", { 
-            fontSize: '46px', fontFamily: "'Anek Bangla'", color: '#ffaa00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6
+            fontSize: '52px', fontFamily: "'Anek Bangla'", color: '#ffaa00', fontStyle: 'bold', stroke: '#000000', strokeThickness: 6
         }).setOrigin(0, 0.5).setDepth(100).setAlpha(0);
 
         this.tweens.add({
@@ -387,25 +387,30 @@ class GameScene extends GameBase {
                 this.tweens.killTweensOf(this.dashAura);
             }
             
+            // FIX: Invulnerability bug - cleanly turn off and clear player tint 
             if (this.player && this.player.active) {
                 this.player.clearTint();
-            }
-
-            this.isInvulnerable = true;
-            this.tweens.add({
-                targets: this.player,
-                alpha: 0.3,
-                duration: 150,
-                yoyo: true,
-                repeat: 7, 
-                onComplete: () => {
-                    if (this.player && this.player.active) {
-                        this.player.setAlpha(1);
-                        this.player.clearTint(); 
-                        this.isInvulnerable = false;
+                this.isInvulnerable = true;
+                this.tweens.add({
+                    targets: this.player,
+                    alpha: 0.3,
+                    duration: 150,
+                    yoyo: true,
+                    repeat: 7, 
+                    onComplete: () => {
+                        if (this.player && this.player.active) {
+                            this.player.setAlpha(1);
+                            this.player.clearTint(); 
+                            this.isInvulnerable = false;
+                        } else {
+                            // Failsafe 
+                            this.isInvulnerable = false;
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                this.isInvulnerable = false;
+            }
         });
     }
 
@@ -466,8 +471,9 @@ class GameScene extends GameBase {
         
         const icon = targetScene.add.text(-170, 0, "🏆", { fontSize: '45px' }).setOrigin(0.5);
 
+        // SCALING
         const text = targetScene.add.text(0, 0, msg, {
-            fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
+            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
             align: 'left', fontStyle: 'bold', lineSpacing: 5
         }).setOrigin(0.5, 0.5);
         text.x = 20;
@@ -502,11 +508,11 @@ class GameScene extends GameBase {
         const startX = 60;
         const buttonY = 1280;
 
-        const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '38px',padding: { y: 10 } }).setOrigin(0.5);
+        const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '42px',padding: { y: 10 } }).setOrigin(0.5);
         const percent = Math.round(this.luckMods.factor * 100);
         
         const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nEasier start, but fewer debris drops!`, { 
-            fontSize: '18px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
+            fontSize: '20px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
             stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
 
@@ -546,7 +552,7 @@ class GameScene extends GameBase {
         this.cameras.main.flash(200, 255, 0, 255); 
         
         const jamText = this.add.text(this.player.x, this.player.y - 70, "WEAPONS JAMMED!\nCONTROLS INVERTED!", {
-            fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#ff00ff', align: 'center',
+            fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ff00ff', align: 'center',
             stroke: '#000000', strokeThickness: 5, fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(200);
         
@@ -582,12 +588,14 @@ class GameScene extends GameBase {
                             this.player.setAlpha(1);
                             this.player.clearTint(); 
                             this.isInvulnerable = false;
+                        } else {
+                            this.isInvulnerable = false; 
                         }
                     }
                 });
                 
                 const restoreText = this.add.text(this.player.x, this.player.y - 50, "SYSTEMS RESTORED", {
-                    fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#00ff00', align: 'center',
+                    fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ff00', align: 'center',
                     stroke: '#000000', strokeThickness: 4, fontStyle: 'bold'
                 }).setOrigin(0.5).setDepth(200);
                 
@@ -871,7 +879,6 @@ class GameScene extends GameBase {
                 }
             }
 
-            // FIX: Safely calculate Centipede segment trailing to avoid null pointers
             if (e.enemyType === "centipede" && e.segments) {
                 e.segments = e.segments.filter(seg => seg && seg.active);
                 
@@ -1032,7 +1039,6 @@ class GameScene extends GameBase {
             this.isRegenerating = false;
         }
 
-        // FIX: Ensure tracking bullets don't crash rendering when player dies
         this.bossBullets.children.each(bullet => {
             if (bullet.trackingBullet && bullet.active) {
                 if (this.player && this.player.active) {
@@ -1387,7 +1393,6 @@ class GameScene extends GameBase {
         const scoreValue = enemy.tier === "ultra" ? 50 : enemy.tier === "rare" ? 25 : enemy.tier === "dragon" ? 60 : enemy.tier === "spinner" ? 40 : enemy.tier === "centipede" ? 35 : (enemy.tier === "mini_boss" ? 30 : 10);
         GameState.score += scoreValue;
 
-        // FIX: Ensure Centipede Segments are securely destroyed without null pointer exceptions
         if (enemy.segments) {
             enemy.segments.forEach(seg => {
                 if (seg && seg.active) {
@@ -2273,6 +2278,8 @@ class GameScene extends GameBase {
                 onComplete: () => {
                     if (player && player.active) {
                         player.setAlpha(1); player.clearTint(); this.isInvulnerable = false;
+                    } else {
+                        this.isInvulnerable = false;
                     }
                 }
             });
@@ -2328,7 +2335,6 @@ class GameScene extends GameBase {
             const type = (stage === 0) ? "enemy_common" : (stage === 1 ? "enemy_octopus" : "enemy_dragon");
             const minion = this.enemies.create(x, 200, type);
             
-            // FIX: Supply the missing properties so the update loop doesn't choke
             minion.hp = 10;
             minion.maxHp = 10;
             minion.tier = type.replace("enemy_", "");
@@ -2338,7 +2344,6 @@ class GameScene extends GameBase {
             minion.setAlpha(0.8);
             minion.setScale(1.2);
             
-            // FIX: Initialize the specific move patterns properly
             if (minion.tier === "octopus") {
                 minion.movePattern = "jet_pulse"; 
                 minion.pulseTimer = 0;
@@ -2461,7 +2466,7 @@ class GameScene extends GameBase {
         }).setOrigin(0.5);
 
         this.timerText = this.add.text(cx, panelY + 160, `AUTO-ABORT: ${this.reviveTime}s`, {
-            fontSize: "26px", color: "#00ffff", fontFamily: "Arial", fontStyle: "bold"
+            fontSize: "28px", color: "#00ffff", fontFamily: "Arial", fontStyle: "bold"
         }).setOrigin(0.5);
 
         const btnW = 440, btnH = 86, radius = btnH / 2;
@@ -2484,7 +2489,7 @@ class GameScene extends GameBase {
             fontSize: "38px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold", stroke: "#003366", strokeThickness: 3
         }).setOrigin(0.5);
         const keyInfo = this.add.text(0, 22, `১টি চাবি ব্যবহার করুন (${GameState.keys} আছে)`, {
-            fontSize: "20px", color: "#b3d4ff", fontFamily: "'Anek Bangla'", fontStyle: "bold"
+            fontSize: "22px", color: "#b3d4ff", fontFamily: "'Anek Bangla'", fontStyle: "bold"
         }).setOrigin(0.5);
 
         const btnHitArea = this.add.rectangle(0, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
@@ -2565,7 +2570,12 @@ class GameScene extends GameBase {
         this.isInvulnerable = true;
         this.tweens.add({
             targets: this.player, alpha: 0.2, duration: 100, yoyo: true, repeat: 15,
-            onComplete: () => { this.player.setAlpha(1); this.isInvulnerable = false; }
+            onComplete: () => { 
+                if(this.player && this.player.active) {
+                    this.player.setAlpha(1); 
+                    this.isInvulnerable = false; 
+                }
+            }
         });
         this.startCountdown();
     }

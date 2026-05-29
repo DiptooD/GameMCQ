@@ -32,7 +32,8 @@ const config = {
   input: {
     activePointers: 2, 
   },
-  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, GameScene, QuestionScene, PauseScene, DeathScene, PlayerProfileScene]
+  // INSTRUCTION SCENE REGISTERED HERE
+  scene: [LoadingScene, MenuScene, ShopScene, SpinWheelScene, ReadingScene, SettingsScene, InstructionScene, GameScene, QuestionScene, PauseScene, DeathScene, PlayerProfileScene]
 };
 
 Promise.all([
@@ -96,6 +97,7 @@ document.addEventListener("deviceready", () => {
         const isReadingOpen = sceneManager.isActive("ReadingScene"); 
         const isSettingsOpen = sceneManager.isActive("SettingsScene"); 
         const isProfileOpen = sceneManager.isActive("PlayerProfileScene");
+        const isInstructionOpen = sceneManager.isActive("InstructionScene");
 
         if (!isMenuOpen) {
             if (now - lastBackTime < 300) return; 
@@ -109,10 +111,11 @@ document.addEventListener("deviceready", () => {
             return;
         }
 
-        if (isWheelOpen || isShopOpen || isReadingOpen) {
+        if (isWheelOpen || isShopOpen || isReadingOpen || isInstructionOpen) {
             if(isWheelOpen) sceneManager.stop("SpinWheelScene");
             if(isShopOpen) sceneManager.stop("ShopScene");
             if(isReadingOpen) sceneManager.stop("ReadingScene");
+            if(isInstructionOpen) sceneManager.stop("InstructionScene");
             
             sceneManager.start("MenuScene");
             return;
