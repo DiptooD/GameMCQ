@@ -387,7 +387,6 @@ class GameScene extends GameBase {
                 this.tweens.killTweensOf(this.dashAura);
             }
             
-            // FIX: Invulnerability bug - cleanly turn off and clear player tint 
             if (this.player && this.player.active) {
                 this.player.clearTint();
                 this.isInvulnerable = true;
@@ -403,7 +402,6 @@ class GameScene extends GameBase {
                             this.player.clearTint(); 
                             this.isInvulnerable = false;
                         } else {
-                            // Failsafe 
                             this.isInvulnerable = false;
                         }
                     }
@@ -471,7 +469,6 @@ class GameScene extends GameBase {
         
         const icon = targetScene.add.text(-170, 0, "🏆", { fontSize: '45px' }).setOrigin(0.5);
 
-        // SCALING
         const text = targetScene.add.text(0, 0, msg, {
             fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
             align: 'left', fontStyle: 'bold', lineSpacing: 5
@@ -1022,7 +1019,15 @@ class GameScene extends GameBase {
         
         if (this.bossBullets) {
             this.bossBullets.children.each(bullet => {
-                if (bullet.y > bottomEdge || bullet.y < topEdge || bullet.x < -100 || bullet.x > wView + 100) bullet.destroy();
+                // Ensure boss laser moves with the boss if present
+                if (bullet.isBossLaser && this.boss && this.boss.active) {
+                    bullet.x = this.boss.x;
+                    bullet.y = this.boss.y + 60;
+                }
+                
+                if (bullet.y > bottomEdge || bullet.y < topEdge || bullet.x < -100 || bullet.x > wView + 100) {
+                    if (!bullet.isBossLaser) bullet.destroy(); 
+                }
             });
         }
 
@@ -1039,19 +1044,10 @@ class GameScene extends GameBase {
             this.isRegenerating = false;
         }
 
+        // Keep visual pulse for tracking bullets and wobble for poison drops
         this.bossBullets.children.each(bullet => {
             if (bullet.trackingBullet && bullet.active) {
-                if (this.player && this.player.active) {
-                    const angle = Phaser.Math.Angle.Between(bullet.x, bullet.y, this.player.x, this.player.y);
-                    const currentAngle = Math.atan2(bullet.body.velocity.y, bullet.body.velocity.x);
-                    const angleDiff = Phaser.Math.Angle.Wrap(angle - currentAngle);
-                    const newAngle = currentAngle + Phaser.Math.Clamp(angleDiff, -0.03, 0.03);
-                    const speed = 450 * (1 + (this.getGlobalProgress() * 0.03)) * this.luckMods.speedMult;
-                    bullet.setVelocity(Math.cos(newAngle) * speed, Math.sin(newAngle) * speed);
-                    bullet.setScale(1 + Math.sin(this.time.now / 100) * 0.1);
-                } else {
-                    bullet.setScale(1 + Math.sin(this.time.now / 100) * 0.1);
-                }
+                bullet.setScale(1 + Math.sin(this.time.now / 100) * 0.1); 
             } else if (bullet.getData('isPoison')) {
                 bullet.x += Math.sin(this.time.now / 100) * 2;
             }
@@ -1537,6 +1533,10 @@ class GameScene extends GameBase {
         let fireCount = 0;
         let bulletSpeedMultiplier = (1 + (this.getGlobalProgress() * 0.03)) * this.luckMods.speedMult;
 
+        // Check if there are tracking bullets already active on screen
+        let activeTrackingBullets = this.bossBullets.getChildren().filter(b => b.active && b.trackingBullet && b.texture.key === "bossBullet_tracking").length;
+        let ultraTrackingFired = activeTrackingBullets >= 1; // Limit to 1 on screen at a time
+
         this.enemies.children.each(e => {
             if (!e.active || fireCount > 8 || e.tier === "common") return;
 
@@ -1551,12 +1551,15 @@ class GameScene extends GameBase {
                             const b = this.bossBullets.create(e.x + (i * 20), e.y + 40, "enemyBullet"); b.setVelocity(i * 80, 450 * bulletSpeedMultiplier); fireCount++; fired = true;
                         }
                     } else {
-                        if (Phaser.Math.Between(0, 4) === 0) {
+                        // Check if a tracking bullet is allowed to be fired
+                        if (!ultraTrackingFired && Phaser.Math.Between(0, 4) === 0) {
                             const b = this.bossBullets.create(e.x, e.y + 40, "bossBullet_tracking");
                             const angle = Phaser.Math.Angle.Between(e.x, e.y, this.player.x, this.player.y);
-                            b.setVelocity(Math.cos(angle) * 250 * bulletSpeedMultiplier, Math.sin(angle) * 450 * bulletSpeedMultiplier);
-                            b.trackingBullet = true;
+                            const speed = 350 * bulletSpeedMultiplier;
+                            b.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+                            b.trackingBullet = true; 
                             fireCount++; fired = true;
+                            ultraTrackingFired = true; // Prevent others from firing tracking bullets
                         } else {
                             for (let i = -1; i <= 1; i++) {
                                 const b = this.bossBullets.create(e.x + (i * 20), e.y + 40, "enemyBullet"); b.setVelocity(i * 80, 450 * bulletSpeedMultiplier); fireCount++; fired = true;
@@ -1675,7 +1678,7 @@ class GameScene extends GameBase {
                             delay: 3500, loop: true,
                             callback: () => {
                                 if (this.isResuming) return;
-                                if (!this.boss || !this.boss.active) return;
+                                if (!this.boss || !this.boss.active || this.boss.isLaserInvulnerable) return; // Prevent teleport during laser
                                 this.tweens.add({
                                     targets: this.boss, alpha: 0, scale: 0.5, duration: 300,
                                     onComplete: () => {
@@ -1696,6 +1699,85 @@ class GameScene extends GameBase {
             });
             
             this.physics.add.overlap(this.player, this.boss, this.hitPlayer, null, this);
+        });
+    }
+
+    fireBossLaser(stage) {
+        if (!this.boss || !this.boss.active) return;
+        
+        this.boss.isLaserInvulnerable = true;
+        this.boss.setTint(0xaaaaaa); 
+        
+        if (this.bossAttackTimer) this.bossAttackTimer.paused = true;
+
+        const isBoss3 = (stage >= 2);
+        const laserColor = isBoss3 ? 0x39ff14 : 0xff0000; // Lime Green for Boss 3, Red for Boss 2
+        const warningDuration = isBoss3 ? 1000 : 1500; // Boss 3 is faster
+        const laserDuration = isBoss3 ? 2000 : 1500;
+        const laserWidth = isBoss3 ? 120 : 80; // Boss 3 has thicker laser
+
+        const prevVelocityX = this.boss.body.velocity.x;
+        if (!isBoss3) {
+            this.boss.setVelocityX(0); 
+        }
+
+        const warningRect = this.add.rectangle(this.boss.x, this.boss.y + 60, laserWidth, this.cameras.main.height, laserColor, 0.25).setOrigin(0.5, 0);
+        this.tweens.add({ targets: warningRect, alpha: 0.6, duration: 150, yoyo: true, repeat: -1 });
+
+        let trackEvent = null;
+        if (isBoss3) {
+            trackEvent = this.time.addEvent({
+                delay: 20,
+                loop: true,
+                callback: () => {
+                    if (this.boss && this.boss.active) {
+                        this.boss.x = Phaser.Math.Linear(this.boss.x, this.player.x, 0.04);
+                        if (warningRect && warningRect.active) warningRect.x = this.boss.x;
+                    }
+                }
+            });
+        }
+
+        this.time.delayedCall(warningDuration, () => {
+            if (trackEvent) trackEvent.remove();
+            if (!this.boss || !this.boss.active) {
+                if (warningRect) warningRect.destroy();
+                return;
+            }
+
+            if (warningRect) warningRect.destroy();
+            this.playSFX('sfx_shockwave', 0.8, false); 
+            this.cameras.main.shake(laserDuration, 0.015);
+
+            const laser = this.add.rectangle(this.boss.x, this.boss.y + 60, laserWidth, this.cameras.main.height * 1.5, laserColor, 1).setOrigin(0.5, 0);
+            this.physics.add.existing(laser);
+            laser.body.setAllowGravity(false);
+            laser.body.setImmovable(true);
+            laser.isBossLaser = true; 
+            
+            this.bossBullets.add(laser);
+
+            let sweepTween = null;
+            if (isBoss3) {
+                sweepTween = this.tweens.add({
+                    targets: this.boss,
+                    x: this.player.x,
+                    duration: laserDuration,
+                    ease: 'Sine.easeInOut'
+                });
+            }
+
+            this.time.delayedCall(laserDuration, () => {
+                if (laser && laser.active) laser.destroy();
+                if (this.boss && this.boss.active) {
+                    this.boss.isLaserInvulnerable = false;
+                    this.boss.clearTint();
+                    this.boss.setTint(0xff0000); 
+                    
+                    this.boss.setVelocityX(prevVelocityX);
+                    if (this.bossAttackTimer) this.bossAttackTimer.paused = false;
+                }
+            });
         });
     }
 
@@ -2205,7 +2287,7 @@ class GameScene extends GameBase {
                     source.destroy();
                 } else if (this.bossBullets.contains(source)) {
                     this.createExplosion(source.x, source.y, 0x00ffff, 5);
-                    source.destroy();
+                    if (!source.isBossLaser) source.destroy();
                 }
             }
             return; 
@@ -2231,7 +2313,7 @@ class GameScene extends GameBase {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
                 else {
                     if (source.trail) source.trail.destroy(); 
-                    if (source.destroy) source.destroy();
+                    if (source.destroy && !source.isBossLaser) source.destroy();
                 }
             }
             return;
@@ -2244,7 +2326,7 @@ class GameScene extends GameBase {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
                 else {
                     if (source.trail) source.trail.destroy(); 
-                    if (source.destroy) source.destroy();
+                    if (source.destroy && !source.isBossLaser) source.destroy();
                 }
             }
             return;
@@ -2257,7 +2339,7 @@ class GameScene extends GameBase {
             if (this.enemies.contains(source)) this.destroyEnemy(source);
             else {
                 if (source.trail) source.trail.destroy(); 
-                if (source.destroy) source.destroy();
+                if (source.destroy && !source.isBossLaser) source.destroy();
             }
         }
         
@@ -2311,7 +2393,12 @@ class GameScene extends GameBase {
 
         const safeZone = this.add.circle(this.player.x, this.player.y, 600);
         this.physics.add.existing(safeZone);
-        this.physics.overlap(safeZone, this.bossBullets, (zone, bullet) => { this.createExplosion(bullet.x, bullet.y, 0xffaa00, 50); bullet.destroy(); });
+        this.physics.overlap(safeZone, this.bossBullets, (zone, bullet) => { 
+            if (!bullet.isBossLaser) {
+                this.createExplosion(bullet.x, bullet.y, 0xffaa00, 50); 
+                bullet.destroy(); 
+            }
+        });
         this.physics.overlap(safeZone, this.enemies, (zone, enemy) => { this.destroyEnemy(enemy); });
         this.physics.overlap(safeZone, this.obstacles, (zone, obs) => {
             this.createExplosion(obs.x, obs.y, 0x888888, 100);
@@ -2360,7 +2447,7 @@ class GameScene extends GameBase {
     }
 
     handleBossHit(boss, shot) {
-        if (boss.isEntryInvulnerable) {
+        if (boss.isEntryInvulnerable || boss.isLaserInvulnerable) {
             if (shot.weaponType !== "lightning" && shot.weaponType !== "plasma" && shot.weaponType !== "ice") {
                 shot.destroy();
             }
@@ -2396,8 +2483,8 @@ class GameScene extends GameBase {
 
         boss.setTint(0xffffff);
         this.time.delayedCall(50, () => {
-            if (boss.active) boss.setTint(boss.phase === 2 ? 0xff0000 : 0xffffff);
-            if (boss.phase === 1 && boss.active) boss.clearTint();
+            if (boss.active && !boss.isLaserInvulnerable) boss.setTint(boss.phase === 2 ? 0xff0000 : 0xffffff);
+            if (boss.phase === 1 && boss.active && !boss.isLaserInvulnerable) boss.clearTint();
         });
 
         if (boss.hp <= 0 && !boss.isDying) {
@@ -2624,6 +2711,14 @@ class GameScene extends GameBase {
                 let bossFired = false;
                 this.boss.attackState++;
 
+                // Trigger Laser attack periodically in Phase 2 for Boss 2 (stage 1) and Boss 3 (stage >= 2)
+                if (isPhase2 && (stage === 1 || stage >= 2)) {
+                    if (this.boss.attackState % 5 === 0) {
+                        this.fireBossLaser(stage);
+                        return; // Skip normal attack during laser setup
+                    }
+                }
+
                 if (stage === 0) {
                     const atkType = this.boss.attackState % 4; 
                     if (atkType === 0) {
@@ -2639,8 +2734,10 @@ class GameScene extends GameBase {
                         const count = isPhase2 ? 2 : 1; 
                         for(let i=0; i<count; i++) {
                             const b = this.bossBullets.create(this.boss.x + (i*40 - (count-1)*20), this.boss.y + 60, "bossBullet_tracking");
+                            const angle = Phaser.Math.Angle.Between(b.x, b.y, this.player.x, this.player.y);
+                            const speed = 300 * luckMult;
+                            b.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
                             b.trackingBullet = true;
-                            b.setVelocityY(200 * luckMult);
                         }
                         bossFired = true;
                     } else if (atkType === 2) {
@@ -2719,45 +2816,48 @@ class GameScene extends GameBase {
                     }
                 }
                 else if (stage >= 2) {
-                    const atkType = this.boss.attackState % 4; 
+                    const atkType = this.boss.attackState % 5; 
                     
-                    if (atkType === 0) {
-                        const branches = isPhase2 ? 4 : 2;
+                    if (atkType === 1) {
+                        const branches = isPhase2 ? 4 : 3;
                         for (let i = 0; i < branches; i++) {
                             const offset = (Math.PI * 2 / branches) * i;
                             const b1 = this.bossBullets.create(this.boss.x - 40, this.boss.y + 40, "enemyBullet");
                             b1.setTint(0xff00ff);
-                            b1.setVelocity(Math.cos(this.boss.spiralAngle + offset) * 350 * luckMult, (Math.sin(this.boss.spiralAngle + offset) * 350 + 100) * luckMult);
+                            b1.setVelocity(Math.cos(this.boss.spiralAngle + offset) * 300 * luckMult, (Math.sin(this.boss.spiralAngle + offset) * 300 + 100) * luckMult);
                             
                             const b2 = this.bossBullets.create(this.boss.x + 40, this.boss.y + 40, "enemyBullet");
                             b2.setTint(0x00ffff);
-                            b2.setVelocity(Math.cos(-this.boss.spiralAngle + offset) * 350 * luckMult, (Math.sin(-this.boss.spiralAngle + offset) * 350 + 100) * luckMult);
+                            b2.setVelocity(Math.cos(-this.boss.spiralAngle + offset) * 300 * luckMult, (Math.sin(-this.boss.spiralAngle + offset) * 300 + 100) * luckMult);
                         }
-                        this.boss.spiralAngle += 0.5;
+                        this.boss.spiralAngle += 0.8;
                         bossFired = true;
-                    } else if (atkType === 1) {
-                        const count = isPhase2 ? 5 : 3;
+                    } else if (atkType === 2) {
+                        const count = isPhase2 ? 6 : 4;
                         for (let i = 0; i < count; i++) {
                             this.time.delayedCall(i * 150, () => {
                                 if(this.boss && this.boss.active) {
                                     const b = this.bossBullets.create(this.boss.x + Phaser.Math.Between(-50, 50), this.boss.y + 40, "bossBullet_tracking");
                                     b.trackingBullet = true;
-                                    b.setVelocity(Phaser.Math.Between(-150, 150) * luckMult, 100 * luckMult);
+                                    const angle = Phaser.Math.Angle.Between(b.x, b.y, this.player.x, this.player.y);
+                                    const speed = 400 * luckMult;
+                                    b.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
                                 }
                             });
                         }
                         bossFired = true;
-                    } else if (atkType === 2) {
+                    } else if (atkType === 3) {
                         const streamCount = isPhase2 ? 8 : 5;
                         const angleToPlayer = Phaser.Math.Angle.Between(this.boss.x, this.boss.y, this.player.x, this.player.y);
                         
                         for (let i = 0; i < streamCount; i++) {
-                            this.time.delayedCall(i * 80, () => {
+                            this.time.delayedCall(i * 100, () => {
                                 if(this.boss && this.boss.active) {
                                     const b = this.bossBullets.create(this.boss.x, this.boss.y + 60, "bossBullet");
                                     b.setTint(0xffff00);
                                     b.setScale(1.2);
-                                    b.setVelocity(Math.cos(angleToPlayer) * 600 * luckMult, Math.sin(angleToPlayer) * 600 * luckMult);
+                                    const finalAngle = angleToPlayer + Phaser.Math.FloatBetween(-0.08, 0.08);
+                                    b.setVelocity(Math.cos(finalAngle) * 500 * luckMult, Math.sin(finalAngle) * 500 * luckMult);
                                 }
                             });
                         }
@@ -2767,12 +2867,17 @@ class GameScene extends GameBase {
                     } else { 
                         const swarm = isPhase2 ? 8 : 5;
                         for (let i = 0; i < swarm; i++) {
-                            this.time.delayedCall(i * 150, () => {
+                            this.time.delayedCall(i * 250, () => {
                                 if (this.boss && this.boss.active) {
-                                    const b = this.bossBullets.create(this.boss.x + Phaser.Math.Between(-80, 80), this.boss.y + 50, "bossBullet_tracking");
+                                    const b = this.bossBullets.create(this.boss.x + Phaser.Math.Between(-60, 60), this.boss.y + 50, "bossBullet_tracking");
                                     b.setTint(0x00ff00).setScale(1.5);
                                     b.trackingBullet = true;
-                                    b.setVelocity(Phaser.Math.Between(-250, 250) * luckMult, 150 * luckMult);
+                                    
+                                    const angleToPlayer = Phaser.Math.Angle.Between(b.x, b.y, this.player.x, this.player.y);
+                                    const finalAngle = angleToPlayer + Phaser.Math.FloatBetween(-0.15, 0.15);
+                                    const speed = Phaser.Math.Between(300, 400) * luckMult; 
+                                    
+                                    b.setVelocity(Math.cos(finalAngle) * speed, Math.sin(finalAngle) * speed);
                                 }
                             });
                         }
