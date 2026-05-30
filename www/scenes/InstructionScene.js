@@ -14,7 +14,14 @@ class InstructionScene extends Phaser.Scene {
         if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
 
-        // --- 1. DYNAMIC BACKGROUND (Matches Main Game) ---
+        // --- PERMANENT BEGINNER'S LUCK FOR NEW PLAYERS ---
+        GameState.allowBeginnersLuck = true; 
+        localStorage.setItem('allowBeginnersLuck', 'true');
+
+        // State Machine ID to prevent animation overlapping between steps
+        this.stepSequenceId = 0;
+
+        // --- 1. DYNAMIC BACKGROUND ---
         this.createBackground(w, h);
 
         // --- 2. MOCK MAIN UI (Bottom HUD) ---
@@ -22,7 +29,6 @@ class InstructionScene extends Phaser.Scene {
         
         const uiY = h - 80; 
         
-        // Expose Battery UI components to 'this' to toggle visibility strictly
         this.botBar = this.add.graphics();
         this.botBar.fillGradientStyle(0x000000, 0x000000, 0x000510, 0x000510, 0, 0, 0.9, 0.9);
         this.botBar.fillRect(0, h - 120, w, 120);
@@ -32,10 +38,9 @@ class InstructionScene extends Phaser.Scene {
         this.batteryFill = this.add.graphics();
         this.updateBatteryVisuals(0);
         
-        // Group them for convenient toggling later
         this.batteryUI = [this.botBar, this.boltIcon, this.batteryBg, this.batteryFill];
 
-        // Mock Hearts UI (Top Left Area)
+        // Mock Hearts UI
         this.mockHearts = [];
         for (let i = 0; i < 3; i++) {
             let heart = this.add.image(cx - 50 + (i * 50), 280, "ui_heart").setScale(0.9).setAlpha(0);
@@ -45,7 +50,7 @@ class InstructionScene extends Phaser.Scene {
 
         this.uiContainer.add([...this.batteryUI]);
 
-        // --- 3. ACTION ELEMENTS (Ship, Enemy, Mock Bullets) ---
+        // --- 3. ACTION ELEMENTS ---
         this.actionContainer = this.add.container(0, 0);
 
         this.mockPlayer = this.add.image(cx, h - 260, "player_lv1").setScale(0.9);
@@ -64,7 +69,7 @@ class InstructionScene extends Phaser.Scene {
             fontSize: '70px', shadow: { offsetX: 3, offsetY: 3, color: "#000000", blur: 5, fill: true } 
         }).setOrigin(0.2, 0).setAlpha(0).setDepth(200);
 
-        // --- 4. MOCK MCQ PANEL (Matches QuestionScene precisely) ---
+        // --- 4. MOCK MCQ PANEL ---
         this.mockMcqContainer = this.add.container(0, 0).setAlpha(0).setDepth(150);
         const boxX = 10;
         const boxY = 15;
@@ -73,6 +78,12 @@ class InstructionScene extends Phaser.Scene {
 
         this.qPanel = this.add.graphics();
         this.drawGlassPanel(this.qPanel, boxX, boxY, boxW, boxH);
+
+        // Mock Skip Button inside MCQ Panel
+        this.mockSkipBtn = this.add.text(boxX + boxW - 105, boxY + 50, "Skip (10)", {
+            fontSize: "28px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", fontStyle: 'bold',
+            backgroundColor: "rgba(255, 255, 255, 0.15)", padding: { x: 16, y: 10 }, stroke: '#000000', strokeThickness: 3
+        }).setOrigin(1, 0.5).setAlpha(0.8);
         
         const questionAreaY = boxY + 150; 
         this.mockQText = this.add.text(boxX + (boxW / 2), questionAreaY, "মহাশূন্যে কিভাবে শত্রুকে ধ্বংস করবেন?", {
@@ -80,19 +91,11 @@ class InstructionScene extends Phaser.Scene {
             align: "center", wordWrap: { width: boxW - 40 }, lineSpacing: 5, stroke: "#000000", strokeThickness: 2
         }).setOrigin(0.5);
 
-        // Mock Skip Button on the Panel
-        this.mockSkipBtn = this.add.text(boxX + boxW - 60, boxY + 50, "Skip (2)", {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", fontStyle: 'bold',
-            backgroundColor: "rgba(255, 255, 255, 0.15)",
-            padding: { x: 12, y: 8 }, stroke: '#000000', strokeThickness: 3
-        }).setOrigin(1, 0.5);
-
-        // Position Ready text immediately under the question box exactly like the main game
         this.readyText = this.add.text(boxX + (boxW / 2), boxY + boxH + 27, "Ready! উত্তর দিন!", {
             fontSize: "31px", fontFamily: "'Anek Bangla'", fontWeight: 'bold', color: "#00ff00", stroke: "#000000", strokeThickness: 2
         }).setOrigin(0.5).setAlpha(0);
 
-        this.mockMcqContainer.add([this.qPanel, this.mockQText, this.mockSkipBtn, this.readyText]);
+        this.mockMcqContainer.add([this.qPanel, this.mockSkipBtn, this.mockQText, this.readyText]);
 
         this.mockOptions = [];
         const btnW = 330; 
@@ -120,44 +123,63 @@ class InstructionScene extends Phaser.Scene {
 
         this.actionContainer.add([this.mockPlayer, this.mockEnemy, this.mockBatteryDrop, this.mockBullet, this.handPointer]);
 
-        // --- 5. DIALOGUE UI (Transparent Sleek HUD) ---
-        const dialogH = 200;
-        const dialogY = cy + 60; 
+
+        // --- 5. DIALOGUE UI (OVERHAULED & REFINED) ---
+        const dialogW = w - 40;
+        const dialogH = 260;
+        const dialogY = cy + 40; 
 
         this.dialogContainer = this.add.container(0, 0).setDepth(100);
         
         this.dialogBg = this.add.graphics();
-        this.dialogBg.fillStyle(0x000c22, 0.75); 
-        this.dialogBg.fillRoundedRect(30, dialogY, w - 60, dialogH, 20);
-        this.dialogBg.lineStyle(4, 0x00e1ff, 1);
-        this.dialogBg.strokeRoundedRect(30, dialogY, w - 60, dialogH, 20);
+        this.dialogBg.fillStyle(0x0a1526, 0.6); 
+        this.dialogBg.fillRoundedRect(20, dialogY, dialogW, dialogH, 20);
+        this.dialogBg.lineStyle(2, 0x00e1ff, 0.7); 
+        this.dialogBg.strokeRoundedRect(20, dialogY, dialogW, dialogH, 20);
 
-        this.dialogBg.lineStyle(6, 0xffffff, 1);
-        this.dialogBg.beginPath(); this.dialogBg.moveTo(50, dialogY); this.dialogBg.lineTo(30, dialogY); this.dialogBg.lineTo(30, dialogY + 20); this.dialogBg.strokePath();
-        this.dialogBg.beginPath(); this.dialogBg.moveTo(w - 50, dialogY + dialogH); this.dialogBg.lineTo(w - 30, dialogY + dialogH); this.dialogBg.lineTo(w - 30, dialogY + dialogH - 20); this.dialogBg.strokePath();
+        this.dialogBg.lineStyle(2, 0x005588, 1);
+        this.dialogBg.beginPath();
+        this.dialogBg.moveTo(40, dialogY + 50);
+        this.dialogBg.lineTo(w - 40, dialogY + 50);
+        this.dialogBg.strokePath();
 
-        this.instructionText = this.add.text(cx, dialogY + 70, "", {
+        this.stepCounter = this.add.text(40, dialogY + 25, "ধাপ ১/১০", {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#00b7cf", fontStyle: "bold"
+        }).setOrigin(0, 0.5);
+
+        // Skip Button 
+        this.skipTxtHit = this.add.text(w - 40, dialogY + 25, "Skip ✖", { 
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "rgb(255, 61, 61)", fontStyle: "bold" 
+        }).setOrigin(1, 0.5).setInteractive({useHandCursor: true});
+        
+        this.skipTxtHit.on('pointerdown', () => {
+            this.playSound('sfx_back', 0.6);
+            this.tweens.add({ targets: this.skipTxtHit, scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.endTutorial() });
+        });
+
+        this.instructionText = this.add.text(cx, dialogY + 97, "", {
             fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", 
-            align: "center", wordWrap: { width: w - 100 }, lineSpacing: 10, fontStyle: "bold",
-            stroke: "#000000", strokeThickness: 3
+            align: "center", wordWrap: { width: dialogW - 40 }, lineSpacing: 10, fontStyle: "bold", padding: { x: 10, y: 10 },
+            shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, stroke: false, fill: true }
         }).setOrigin(0.5);
 
+        const btnY = dialogY + dialogH - 55;
+
+        // Prev Button
+        this.prevBtn = this.add.rectangle(cx - 160, btnY, 180, 60, 0x1a2b3c, 0.85).setInteractive({ useHandCursor: true }).setStrokeStyle(1, 0x3a4b5c);
+        this.prevTxt = this.add.text(cx - 160, btnY, "◀ পূর্ববর্তী", { fontSize: "26px", fontFamily: "'Anek Bangla'", padding: { y: 6 }, color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        this.prevBtn.on('pointerdown', () => {
+            this.tweens.add({ targets: [this.prevBtn, this.prevTxt], scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.goToPrevStep() });
+        });
+
         // Next Button
-        this.nextBtn = this.add.rectangle(cx + 180, dialogY + dialogH - 45, 170, 60, 0x0066aa).setInteractive({ useHandCursor: true }).setStrokeStyle(3, 0xffffff);
-        this.nextTxt = this.add.text(cx + 180, dialogY + dialogH - 45, "পরবর্তী ▶", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        this.nextBtn = this.add.rectangle(cx + 160, btnY, 180, 60, 0x1a3b5c, 0.85).setInteractive({ useHandCursor: true }).setStrokeStyle(1, 0x3a5b7c);
+        this.nextTxt = this.add.text(cx + 160, btnY, "পরবর্তী ▶", { fontSize: "26px", fontFamily: "'Anek Bangla'", padding: { y: 6 }, color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
         this.nextBtn.on('pointerdown', () => {
             this.tweens.add({ targets: [this.nextBtn, this.nextTxt], scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.goToNextStep() });
         });
 
-        // Skip Button
-        this.skipBtn = this.add.rectangle(cx - 180, dialogY + dialogH - 45, 150, 60, 0xff3333, 0.8).setInteractive({ useHandCursor: true }).setStrokeStyle(3, 0xffffff);
-        this.skipTxt = this.add.text(cx - 180, dialogY + dialogH - 45, "Skip ✖", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        this.skipBtn.on('pointerdown', () => {
-            this.playSound('sfx_back', 0.6);
-            this.tweens.add({ targets: [this.skipBtn, this.skipTxt], scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.endTutorial() });
-        });
-
-        this.dialogContainer.add([this.dialogBg, this.instructionText, this.nextBtn, this.nextTxt, this.skipBtn, this.skipTxt]);
+        this.dialogContainer.add([this.dialogBg, this.stepCounter, this.skipTxtHit, this.instructionText, this.prevBtn, this.prevTxt, this.nextBtn, this.nextTxt]);
 
         // --- 6. CONTINUOUS WEAPON FIRING SYSTEM ---
         this.fireTimer = this.time.addEvent({
@@ -165,7 +187,6 @@ class InstructionScene extends Phaser.Scene {
             loop: true,
             callback: () => {
                 if (this.currentStep < 5 || this.currentStep > 7) return; 
-                if (!this.stepLoopActive) return;
 
                 const x = this.mockPlayer.x;
                 const y = this.mockPlayer.y - 60;
@@ -193,22 +214,21 @@ class InstructionScene extends Phaser.Scene {
             }
         });
 
-        // --- 7. STEPS LOGIC ---
+        // --- 7. STEPS LOGIC (Refined Text) ---
         this.steps = [
-            { text: "স্বাগতম! গেইম MCQ-তে আপনাকে স্বাগতম।\nকীভাবে খেলতে হয় চলুন শিখে নিই।", anim: this.animWelcome.bind(this) },
-            { text: "স্ক্রিনে আঙুল দিয়ে ড্র্যাগ করে স্পেসশিপটি\nডানে বা বামে সরাতে পারবেন।", anim: this.animMove.bind(this) },
-            { text: "শত্রু ধ্বংস হলে এরা ব্যাটারি ড্রপ করবে।\nব্যাটারি সংগ্রহ করলে চার্জ ১০০% হয়ে প্রশ্ন আসবে।", anim: this.animCombatAndBattery.bind(this) },
-            { text: "শত্রুর গুলিতে আপনার লাইফ কমে যাবে।\nতাই সাবধানে এড়িয়ে চলুন।", anim: this.animHit.bind(this) },
+            { text: "মহাশূন্যে আপনাকে স্বাগতম!\nকীভাবে খেলতে হয় চলুন একনজরে শিখে নিই।", anim: this.animWelcome.bind(this) },
+            { text: "স্ক্রিনে আঙুল দিয়ে ড্র্যাগ করে স্পেসশিপটি\nযেকোনো দিকে সরাতে পারবেন।", anim: this.animMove.bind(this) },
+            { text: "শত্রু ধ্বংস হলে এরা ব্যাটারি ড্রপ করবে।\nব্যাটারি সংগ্রহ করে চার্জ ১০০% করুন।", anim: this.animCombatAndBattery.bind(this) },
+            { text: "শত্রুর গুলিতে আপনার লাইফ কমে যাবে।\nতাই সাবধানে সেগুলো এড়িয়ে চলুন।", anim: this.animHit.bind(this) },
             { text: "শিল্ড (Shield) সংগ্রহ করলে আপনি\nএকটি আঘাত থেকে রক্ষা পাবেন।", anim: this.animShield.bind(this) },
-            { text: "সঠিক উত্তর দিলে স্পেসশিপ আপগ্রেড হবে\nএবং শক্তিশালী অস্ত্র পাবেন!", anim: this.animCorrect.bind(this) },
-            { text: "ভুল উত্তর দিলে স্পেসশিপ ডাউনগ্রেড হবে।\nতাই সাবধানে সঠিক উত্তর দিন।", anim: this.animWrong.bind(this) },
+            { text: "সঠিক উত্তর দিলে স্পেসশিপ আপগ্রেড হবে\nএবং শক্তিশালী অস্ত্র আনলক হবে!", anim: this.animCorrect.bind(this) },
+            { text: "ভুল উত্তর দিলে স্পেসশিপ ডাউনগ্রেড হবে।\nতাই মাথা ঠান্ডা রেখে সঠিক উত্তর দিন।", anim: this.animWrong.bind(this) },
             { text: "কঠিন প্রশ্নের ক্ষেত্রে 'Skip' ব্যবহার করে\nপ্রশ্নটি এড়িয়ে যেতে পারবেন।", anim: this.animSkip.bind(this) },
-            { text: "সবকিছু প্রস্তুত!\nএখন মহাশূন্যে পাড়ি দেওয়ার সময়। শুভকামনা!", anim: this.animEnd.bind(this) }
+            { text: "নতুনদের জন্য 'Beginner's Luck' চালু আছে!\nশুরুতে গেমটি সহজ মনে হলেও ধীরে ধীরে কঠিন হবে।", anim: this.animLuck.bind(this) },
+            { text: "সবকিছু প্রস্তুত! এখন মহাশূন্যে পাড়ি দেওয়ার সময়।\nশুভকামনা!", anim: this.animEnd.bind(this) }
         ];
 
         this.currentStep = 0;
-        this.combatLoopActive = false; 
-        this.stepLoopActive = false;
         this.loadStep();
     }
 
@@ -315,14 +335,41 @@ class InstructionScene extends Phaser.Scene {
         createLayer(25, 1.0, themeColors.starBase, 2, 0.8); 
     }
 
+    goToPrevStep() {
+        if (this.currentStep > 0) {
+            this.playSound('sfx_click', 0.5);
+            this.stepSequenceId++; // Invalidate previous animations entirely
+
+            this.tweens.killTweensOf([
+                this.mockPlayer, this.handPointer, this.mockEnemy, 
+                this.mockBatteryDrop, this.mockBullet, this.readyText, 
+                this.mockMcqContainer, this.mockShieldAura, this.skipTxtHit, 
+                this.mockSkipBtn,
+                ...this.mockHearts
+            ]); 
+            
+            this.mockOptions.forEach(opt => {
+                this.tweens.killTweensOf([opt.container, opt.bg, opt.txt]);
+            });
+
+            if (this.moveTween) this.moveTween.stop();
+
+            this.mockBulletsGroup.clear(true, true);
+            
+            this.currentStep--;
+            this.loadStep();
+        }
+    }
+
     goToNextStep() {
         this.playSound('sfx_click', 0.5);
-        
-        // Explicitly kill tweens to prevent answer buttons from drifting across steps
+        this.stepSequenceId++; // Invalidate previous animations entirely
+
         this.tweens.killTweensOf([
             this.mockPlayer, this.handPointer, this.mockEnemy, 
             this.mockBatteryDrop, this.mockBullet, this.readyText, 
-            this.mockMcqContainer, this.mockShieldAura, this.mockSkipBtn, 
+            this.mockMcqContainer, this.mockShieldAura, this.skipTxtHit, 
+            this.mockSkipBtn,
             ...this.mockHearts
         ]); 
         
@@ -332,8 +379,6 @@ class InstructionScene extends Phaser.Scene {
 
         if (this.moveTween) this.moveTween.stop();
 
-        this.combatLoopActive = false; 
-        this.stepLoopActive = false; 
         this.mockBulletsGroup.clear(true, true);
         
         if (this.currentStep < this.steps.length - 1) {
@@ -351,6 +396,8 @@ class InstructionScene extends Phaser.Scene {
         const cx = this.cameras.main.centerX;
         const h = this.cameras.main.height;
 
+        this.stepCounter.setText(`ধাপ ${this.currentStep + 1}/${this.steps.length}`);
+
         this.mockPlayer.setPosition(cx, h - 260).setTexture("player_lv1").setScale(0.9).clearTint();
         this.handPointer.setAlpha(0);
         this.mockEnemy.setAlpha(0).clearTint();
@@ -360,9 +407,11 @@ class InstructionScene extends Phaser.Scene {
         
         this.mockHearts.forEach(h => h.setAlpha(0).setScale(0.9).clearTint());
         this.mockShieldAura.setVisible(false);
-        this.mockQText.setText("মহাশূন্যে কিভাবে শত্রুকে ধ্বংস করবেন?");
+        
+        // Reset MCQ UI properly
+        this.mockQText.setAlpha(1).setText("মহাশূন্যে কিভাবে শত্রুকে ধ্বংস করবেন?");
+        this.mockSkipBtn.setAlpha(0.8).setScale(1);
 
-        // Strictly Show Battery UI *ONLY* on Step 3 (index 2)
         const showBattery = (this.currentStep === 2);
         if (this.batteryUI) {
             this.batteryUI.forEach(el => el.setVisible(showBattery));
@@ -375,9 +424,6 @@ class InstructionScene extends Phaser.Scene {
         this.mockMcqContainer.setScale(1);
         this.mockMcqContainer.y = 0;
         
-        // Hide Skip Button on the Panel unless demonstrating skip (Step 8 / index 7)
-        this.mockSkipBtn.setVisible(this.currentStep === 7);
-        
         this.mockOptions.forEach(opt => {
             opt.bg.setFillStyle(0x000510, 0.4).setStrokeStyle(3, 0xffffff, 0.15);
             opt.container.setScale(1);
@@ -385,12 +431,28 @@ class InstructionScene extends Phaser.Scene {
             opt.container.x = opt.originalX || opt.container.x;
         });
 
+        if (this.currentStep === 0) {
+            this.prevBtn.setVisible(false);
+            this.prevTxt.setVisible(false);
+            this.nextBtn.x = cx; 
+            this.nextTxt.x = cx;
+        } else {
+            this.prevBtn.setVisible(true);
+            this.prevTxt.setVisible(true);
+            this.prevBtn.x = cx - 160; 
+            this.prevTxt.x = cx - 160;
+            this.nextBtn.x = cx + 160; 
+            this.nextTxt.x = cx + 160;
+        }
+
         if (this.currentStep === this.steps.length - 1) {
             this.nextTxt.setText("শুরু করুন!");
-            this.nextBtn.setFillStyle(0x00cc44);
+            this.nextBtn.setFillStyle(0x1a5c3b, 0.85); // Flat green
+            this.nextBtn.setStrokeStyle(1, 0x3a7c5b);
         } else {
             this.nextTxt.setText("পরবর্তী ▶");
-            this.nextBtn.setFillStyle(0x0066aa);
+            this.nextBtn.setFillStyle(0x1a3b5c, 0.85); // Flat blue
+            this.nextBtn.setStrokeStyle(1, 0x3a5b7c);
         }
 
         this.dialogContainer.setScale(0.95);
@@ -400,12 +462,14 @@ class InstructionScene extends Phaser.Scene {
     }
 
     animWelcome() {
+        let seq = this.stepSequenceId;
         this.tweens.add({
             targets: this.mockPlayer, y: this.mockPlayer.y - 20, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
         });
     }
 
     animMove() {
+        let seq = this.stepSequenceId;
         const cx = this.cameras.main.centerX;
         this.handPointer.setPosition(cx, this.mockPlayer.y + 80).setAlpha(1);
         
@@ -416,6 +480,7 @@ class InstructionScene extends Phaser.Scene {
             duration: 4000,
             repeat: -1,
             onUpdate: () => {
+                if (seq !== this.stepSequenceId) return;
                 let offset = Math.sin(proxy.val) * 160;
                 this.mockPlayer.x = cx + offset;
                 this.handPointer.x = cx + offset;
@@ -424,14 +489,14 @@ class InstructionScene extends Phaser.Scene {
     }
 
     animCombatAndBattery() {
+        let seq = this.stepSequenceId;
         const cx = this.cameras.main.centerX;
-        this.combatLoopActive = true;
         this.mockPlayer.x = cx;
         this.updateBatteryVisuals(0);
         this.mockMcqContainer.setAlpha(0);
 
         const spawnEnemy = (texture, fillToPct, onCompletePhase) => {
-            if (!this.combatLoopActive || !this.scene.isActive()) return;
+            if (seq !== this.stepSequenceId || !this.scene.isActive()) return;
 
             this.mockEnemy.setTexture(texture).setPosition(cx, 200).setAlpha(1).setScale(1.5).clearTint();
             this.mockBullet.setTexture("bullet_default").setPosition(cx, this.mockPlayer.y - 60).setAlpha(1);
@@ -443,7 +508,7 @@ class InstructionScene extends Phaser.Scene {
                 y: this.mockEnemy.y,
                 duration: 350,
                 onComplete: () => {
-                    if (!this.combatLoopActive) return;
+                    if (seq !== this.stepSequenceId) return;
                     this.mockBullet.setAlpha(0);
                     this.playSound('sfx_explode', 0.5);
                     this.mockEnemy.setTint(0xff0000);
@@ -452,7 +517,7 @@ class InstructionScene extends Phaser.Scene {
                     this.tweens.add({
                         targets: this.mockEnemy, scaleX: 0, scaleY: 0, alpha: 0, duration: 300,
                         onComplete: () => {
-                            if (!this.combatLoopActive) return;
+                            if (seq !== this.stepSequenceId) return;
                             
                             let batTex = fillToPct === 50 ? "battery_green" : "battery_yellow";
                             this.mockBatteryDrop.setTexture(batTex).setAlpha(1).setScale(1.2);
@@ -463,19 +528,25 @@ class InstructionScene extends Phaser.Scene {
                                 duration: 800, 
                                 ease: 'Cubic.easeIn',
                                 onComplete: () => {
-                                    if (!this.combatLoopActive) return;
+                                    if (seq !== this.stepSequenceId) return;
                                     this.mockBatteryDrop.setAlpha(0);
                                     this.playSound('sfx_battery_collect', 0.5);
                                     
                                     this.mockPlayer.setTint(0x00ff00);
-                                    this.time.delayedCall(150, () => this.mockPlayer.clearTint());
+                                    this.time.delayedCall(150, () => {
+                                        if (seq === this.stepSequenceId) this.mockPlayer.clearTint();
+                                    });
 
                                     let startPct = fillToPct === 50 ? 0 : 50;
                                     let progressProxy = { val: startPct };
                                     this.tweens.add({
                                         targets: progressProxy, val: fillToPct, duration: 600, ease: 'Linear',
-                                        onUpdate: () => this.updateBatteryVisuals(progressProxy.val / 100),
-                                        onComplete: () => onCompletePhase()
+                                        onUpdate: () => {
+                                            if (seq === this.stepSequenceId) this.updateBatteryVisuals(progressProxy.val / 100);
+                                        },
+                                        onComplete: () => {
+                                            if (seq === this.stepSequenceId) onCompletePhase();
+                                        }
                                     });
                                 }
                             });
@@ -486,24 +557,21 @@ class InstructionScene extends Phaser.Scene {
         };
 
         const runKillLoop = () => {
-            if (!this.combatLoopActive) return;
+            if (seq !== this.stepSequenceId) return;
             this.updateBatteryVisuals(0);
             this.mockMcqContainer.setAlpha(0);
             this.readyText.setAlpha(0);
 
-            // Kill Enemy 1 (Common)
             spawnEnemy("enemy_common", 50, () => {
-                if (!this.combatLoopActive) return;
+                if (seq !== this.stepSequenceId) return;
                 
-                // Small delay before Enemy 2
                 this.time.delayedCall(600, () => {
-                    // Kill Enemy 2 (Rare)
+                    if (seq !== this.stepSequenceId) return;
                     spawnEnemy("enemy_rare", 100, () => {
-                        if (!this.combatLoopActive) return;
+                        if (seq !== this.stepSequenceId) return;
                         
                         this.playSound('sfx_q_ready', 0.6);
                         
-                        // Show MCQ Popup Immediately
                         this.mockMcqContainer.y = -500;
                         this.readyText.setAlpha(1);
                         this.readyText.setScale(1);
@@ -511,17 +579,17 @@ class InstructionScene extends Phaser.Scene {
                         this.tweens.add({
                             targets: this.mockMcqContainer, alpha: 1, y: 0, duration: 600, ease: 'Back.out',
                             onComplete: () => {
-                                if (!this.combatLoopActive) return;
+                                if (seq !== this.stepSequenceId) return;
                                 
-                                // Pulse the ready text
                                 this.tweens.add({
                                     targets: this.readyText, alpha: 0.4, scale: 1.05, duration: 500, yoyo: true, repeat: 3,
                                     onComplete: () => {
-                                        if (!this.combatLoopActive) return;
+                                        if (seq !== this.stepSequenceId) return;
                                         
                                         this.tweens.add({
                                             targets: this.mockMcqContainer, y: -500, alpha: 0, duration: 400, ease: 'Back.in',
                                             onComplete: () => {
+                                                if (seq !== this.stepSequenceId) return;
                                                 this.time.delayedCall(800, runKillLoop);
                                             }
                                         });
@@ -533,21 +601,19 @@ class InstructionScene extends Phaser.Scene {
                 });
             });
         };
-
         runKillLoop();
     }
 
     animHit() {
+        let seq = this.stepSequenceId;
         const cx = this.cameras.main.centerX;
-        this.stepLoopActive = true;
         this.mockPlayer.x = cx;
         
         const runLoop = () => {
-            if (!this.stepLoopActive || this.currentStep !== 3) return;
+            if (seq !== this.stepSequenceId) return;
             
             this.mockHearts.forEach((h) => h.setAlpha(1).setScale(0.9).clearTint());
             
-            // Enemy spawns and shoots an authentic enemy bullet
             this.mockEnemy.setTexture("enemy_common").setPosition(cx, 120).setAlpha(1).setScale(1.5).clearTint();
             this.mockBullet.setTexture("enemyBullet").clearTint().setAngle(0).setPosition(cx, 160).setAlpha(1).setScale(1.2);
             
@@ -557,7 +623,7 @@ class InstructionScene extends Phaser.Scene {
                 duration: 1000,
                 ease: 'Linear',
                 onComplete: () => {
-                    if (!this.stepLoopActive) return;
+                    if (seq !== this.stepSequenceId) return;
                     this.playSound('sfx_hit', 0.5);
                     this.createExplosion(this.mockPlayer.x, this.mockPlayer.y, 0xff0000);
                     this.mockBullet.setAlpha(0);
@@ -566,14 +632,18 @@ class InstructionScene extends Phaser.Scene {
                     this.mockPlayer.setTint(0xff0000);
                     this.tweens.add({
                         targets: this.mockPlayer, alpha: 0.3, duration: 150, yoyo: true, repeat: 3,
-                        onComplete: () => { if(this.mockPlayer) this.mockPlayer.clearTint().setAlpha(1); }
+                        onComplete: () => { 
+                            if(seq === this.stepSequenceId && this.mockPlayer) this.mockPlayer.clearTint().setAlpha(1); 
+                        }
                     });
                     
                     this.cameras.main.shake(200, 0.02);
                     
                     let lastHeart = this.mockHearts[2];
                     lastHeart.setTint(0xff0000);
-                    this.tweens.add({ targets: lastHeart, scale: 0, alpha: 0, duration: 300, onComplete: () => lastHeart.clearTint() });
+                    this.tweens.add({ targets: lastHeart, scale: 0, alpha: 0, duration: 300, onComplete: () => {
+                        if (seq === this.stepSequenceId) lastHeart.clearTint();
+                    }});
                     
                     this.time.delayedCall(2000, runLoop);
                 }
@@ -583,12 +653,12 @@ class InstructionScene extends Phaser.Scene {
     }
 
     animShield() {
+        let seq = this.stepSequenceId;
         const cx = this.cameras.main.centerX;
-        this.stepLoopActive = true;
         this.mockPlayer.x = cx;
         
         const runLoop = () => {
-            if (!this.stepLoopActive || this.currentStep !== 4) return;
+            if (seq !== this.stepSequenceId) return;
             
             this.mockShieldAura.setVisible(false);
             this.mockHearts.forEach((h) => h.setAlpha(1).setScale(0.9).clearTint());
@@ -600,7 +670,7 @@ class InstructionScene extends Phaser.Scene {
                 duration: 1200,
                 ease: 'Linear',
                 onComplete: () => {
-                    if (!this.stepLoopActive) return;
+                    if (seq !== this.stepSequenceId) return;
                     this.mockBatteryDrop.setAlpha(0);
                     this.playSound('sfx_shield_activate', 0.5);
                     
@@ -613,7 +683,6 @@ class InstructionScene extends Phaser.Scene {
                     this.mockShieldAura.strokePath();
                     this.mockShieldAura.fillPath();
                     
-                    // Enemy spawns and shoots an authentic enemy bullet hitting the shield
                     this.mockEnemy.setTexture("enemy_common").setPosition(cx, 120).setAlpha(1).setScale(1.5).clearTint();
                     this.mockBullet.setTexture("enemyBullet").clearTint().setAngle(0).setPosition(cx, 160).setAlpha(1).setScale(1.2);
                     
@@ -623,7 +692,7 @@ class InstructionScene extends Phaser.Scene {
                         duration: 800,
                         ease: 'Linear',
                         onComplete: () => {
-                            if (!this.stepLoopActive) return;
+                            if (seq !== this.stepSequenceId) return;
                             this.playSound('sfx_shield_break', 0.5);
                             this.mockBullet.setAlpha(0);
                             this.mockEnemy.setAlpha(0);
@@ -640,10 +709,10 @@ class InstructionScene extends Phaser.Scene {
     }
 
     animCorrect() {
-        this.stepLoopActive = true;
+        let seq = this.stepSequenceId;
         
         const runLoop = () => {
-            if (!this.stepLoopActive || this.currentStep !== 5) return;
+            if (seq !== this.stepSequenceId) return;
             
             this.mockShipLevel = 2;
             this.mockPlayer.setTexture("player_lv2").setScale(0.9);
@@ -659,18 +728,18 @@ class InstructionScene extends Phaser.Scene {
             });
 
             this.time.delayedCall(1500, () => {
-                if (!this.stepLoopActive) return;
+                if (seq !== this.stepSequenceId) return;
                 this.tweens.add({
                     targets: this.handPointer, alpha: 1, y: this.mockOptions[1].container.y + 10, duration: 400,
                     onComplete: () => {
-                        if (!this.stepLoopActive) return;
+                        if (seq !== this.stepSequenceId) return;
                         
                         this.playSound('sfx_q_correct', 0.6);
                         this.mockOptions[1].container.y += 5;
                         this.mockOptions[1].bg.setFillStyle(0x00ff00, 0.4);
 
                         this.time.delayedCall(1200, () => {
-                            if (!this.stepLoopActive) return;
+                            if (seq !== this.stepSequenceId) return;
                             this.tweens.add({ targets: this.mockMcqContainer, alpha: 0, duration: 300 });
                             this.handPointer.setAlpha(0);
                             
@@ -682,7 +751,7 @@ class InstructionScene extends Phaser.Scene {
                             this.tweens.add({
                                 targets: this.mockPlayer, scale: 1.5, duration: 300, yoyo: true, 
                                 onComplete: () => {
-                                    if(this.mockPlayer) this.mockPlayer.setScale(1.1);
+                                    if(seq === this.stepSequenceId && this.mockPlayer) this.mockPlayer.setScale(1.1);
                                 }
                             });
 
@@ -692,15 +761,14 @@ class InstructionScene extends Phaser.Scene {
                 });
             });
         };
-        
         runLoop();
     }
 
     animWrong() {
-        this.stepLoopActive = true;
+        let seq = this.stepSequenceId;
         
         const runLoop = () => {
-            if (!this.stepLoopActive || this.currentStep !== 6) return;
+            if (seq !== this.stepSequenceId) return;
             
             this.mockShipLevel = 3;
             this.mockPlayer.setTexture("player_lv3").setScale(1.1).clearTint();
@@ -716,11 +784,11 @@ class InstructionScene extends Phaser.Scene {
             });
 
             this.time.delayedCall(1500, () => {
-                if (!this.stepLoopActive) return;
+                if (seq !== this.stepSequenceId) return;
                 this.tweens.add({
                     targets: this.handPointer, alpha: 1, y: this.mockOptions[3].container.y + 10, duration: 400,
                     onComplete: () => {
-                        if (!this.stepLoopActive) return;
+                        if (seq !== this.stepSequenceId) return;
                         
                         this.playSound('sfx_q_wrong', 0.6);
                         this.mockOptions[3].container.y += 5;
@@ -729,7 +797,7 @@ class InstructionScene extends Phaser.Scene {
                         this.mockOptions[1].bg.setFillStyle(0x00ff00, 0.4);
 
                         this.time.delayedCall(1200, () => {
-                            if (!this.stepLoopActive) return;
+                            if (seq !== this.stepSequenceId) return;
                             this.tweens.add({ targets: this.mockMcqContainer, alpha: 0, duration: 300 });
                             this.handPointer.setAlpha(0);
                             
@@ -742,7 +810,7 @@ class InstructionScene extends Phaser.Scene {
                             this.tweens.add({
                                 targets: this.mockPlayer, scale: 0.8, duration: 200, yoyo: true, 
                                 onComplete: () => {
-                                    if(this.mockPlayer) {
+                                    if(seq === this.stepSequenceId && this.mockPlayer) {
                                         this.mockPlayer.setScale(0.9);
                                         this.mockPlayer.clearTint();
                                     }
@@ -755,59 +823,55 @@ class InstructionScene extends Phaser.Scene {
                 });
             });
         };
-
         runLoop();
     }
 
     animSkip() {
-        this.stepLoopActive = true;
+        let seq = this.stepSequenceId;
         
         const runLoop = () => {
-            if (!this.stepLoopActive || this.currentStep !== 7) return;
+            if (seq !== this.stepSequenceId) return;
             
             this.mockShipLevel = 2;
             this.mockPlayer.setTexture("player_lv2").setScale(0.9);
             this.mockMcqContainer.setAlpha(1);
             this.mockMcqContainer.y = 0;
             
-            this.mockSkipBtn.setAlpha(1);
-            this.handPointer.setPosition(this.mockSkipBtn.x - 40, this.mockSkipBtn.y + 40).setAlpha(0);
-            
+            this.handPointer.setPosition(this.mockSkipBtn.x - 30, this.mockSkipBtn.y + 60).setAlpha(0);
             this.mockQText.setText("মহাশূন্যে কিভাবে শত্রুকে ধ্বংস করবেন?");
             
             this.readyText.setAlpha(1).setScale(1);
             this.tweens.add({ targets: this.readyText, alpha: 0.4, scale: 1.05, duration: 500, yoyo: true, repeat: -1 });
             
             this.time.delayedCall(1200, () => {
-                if (!this.stepLoopActive) return;
+                if (seq !== this.stepSequenceId) return;
                 this.tweens.add({
                     targets: this.handPointer, alpha: 1, y: this.mockSkipBtn.y + 10, duration: 400,
                     onComplete: () => {
-                        if (!this.stepLoopActive) return;
+                        if (seq !== this.stepSequenceId) return;
                         
                         this.playSound('sfx_q_skip', 0.6);
-                        this.tweens.add({ targets: this.mockSkipBtn, scale: 1.1, duration: 100, yoyo: true });
+                        this.mockSkipBtn.setAlpha(0.4);
                         
-                        this.time.delayedCall(500, () => {
-                            if (!this.stepLoopActive) return;
+                        this.time.delayedCall(300, () => {
+                            if (seq !== this.stepSequenceId) return;
+                            this.mockSkipBtn.setAlpha(0.8);
                             
-                            // Swipe out old question
                             this.tweens.add({
                                 targets: this.mockMcqContainer, y: -20, alpha: 0, duration: 250, ease: 'Power2.easeIn',
                                 onComplete: () => {
-                                    if (!this.stepLoopActive) return;
+                                    if (seq !== this.stepSequenceId) return;
                                     
-                                    // Change text to simulate new question
                                     this.mockQText.setText("নতুন প্রশ্ন: উল্কা থেকে বাঁচতে কি করবেন?");
                                     this.mockMcqContainer.y = 20; 
                                     
-                                    // Swipe in new question
                                     this.tweens.add({
                                         targets: this.mockMcqContainer, y: 0, alpha: 1, duration: 350, ease: 'Cubic.easeOut',
                                         onComplete: () => {
+                                            if (seq !== this.stepSequenceId) return;
                                             this.handPointer.setAlpha(0);
                                             this.time.delayedCall(2000, () => {
-                                                if (!this.stepLoopActive) return;
+                                                if (seq !== this.stepSequenceId) return;
                                                 this.tweens.add({ targets: this.mockMcqContainer, y: -500, alpha: 0, duration: 400, ease: 'Back.in' });
                                                 this.time.delayedCall(1000, runLoop);
                                             });
@@ -823,7 +887,16 @@ class InstructionScene extends Phaser.Scene {
         runLoop();
     }
 
+    animLuck() {
+        let seq = this.stepSequenceId;
+        this.mockPlayer.setTexture("player_lv1");
+        this.tweens.add({
+            targets: this.mockPlayer, y: this.mockPlayer.y - 20, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+        });
+    }
+
     animEnd() {
+        let seq = this.stepSequenceId;
         this.mockPlayer.setTexture("player_lv4");
         this.tweens.add({
             targets: this.mockPlayer, y: this.mockPlayer.y - 30, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
@@ -831,8 +904,7 @@ class InstructionScene extends Phaser.Scene {
     }
 
     endTutorial() {
-        this.combatLoopActive = false;
-        this.stepLoopActive = false;
+        this.stepSequenceId++; // Clear all pending asyncs instantly
         if (this.cache.audio.exists('sfx_powerup')) this.sound.play('sfx_powerup', { volume: 0.6 });
         
         localStorage.setItem('tutorial_completed', 'true');

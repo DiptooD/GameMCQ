@@ -4,6 +4,12 @@ class GameScene extends GameBase {
     }
 
     create() {
+        // --- LOAD SETTING FOR BEGINNERS LUCK ---
+        if (typeof GameState.allowBeginnersLuck === 'undefined') {
+            let saved = localStorage.getItem('allowBeginnersLuck');
+            GameState.allowBeginnersLuck = saved !== null ? saved === 'true' : true;
+        }
+
         if (typeof GameState.gamesPlayed === 'undefined') GameState.gamesPlayed = 0;
         this.luckMods = this.getLuckModifiers();
 
@@ -171,9 +177,9 @@ class GameScene extends GameBase {
         this.updateGameSpeed();
         this.createBoosterUI();
         
-        if (this.luckMods.factor > 0) {
-            this.createBeginnersLuckUI();
-        }
+        // Setup Dynamic Beginners Luck UI
+        this.createBeginnersLuckUI();
+        this.lastDisplayedLuckPercent = -1; // -1 to trigger initial update check properly
 
         const menuBgm = this.sound.get('menubgm');
         if (menuBgm) menuBgm.stop();
@@ -502,23 +508,45 @@ class GameScene extends GameBase {
     }
 
     createBeginnersLuckUI() {
-        const startX = 60;
-        const buttonY = 1280;
-
-        const icon = this.add.text(startX, buttonY, "🍀", { fontSize: '42px',padding: { y: 10 } }).setOrigin(0.5);
-        const percent = Math.round(this.luckMods.factor * 100);
+        this.luckUIContainer = this.add.container(60, 1280).setDepth(2000);
         
-        const txt = this.add.text(startX + 30, buttonY, `Beginner's Luck (${percent}%)\nEasier start, but fewer debris drops!`, { 
-            fontSize: '20px', fontFamily: "'Anek Bangla'",padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
+        this.luckIcon = this.add.text(0, 0, "🍀", { fontSize: '42px', padding: { y: 10 } }).setOrigin(0.5);
+        this.luckTxt = this.add.text(30, 0, "", { 
+            fontSize: '20px', fontFamily: "'Anek Bangla'", padding: { y: 20 }, color: '#00ff00', fontStyle: 'bold', align: 'left',
             stroke: '#000000', strokeThickness: 1
         }).setOrigin(0, 0.5);
 
-        this.tweens.add({ targets: [icon, txt], alpha: 0.5, duration: 800, yoyo: true, repeat: -1 });
+        this.luckUIContainer.add([this.luckIcon, this.luckTxt]);
+        this.luckUIContainer.setAlpha(0);
+    }
 
-        this.time.delayedCall(20000, () => {
-            this.tweens.add({ targets: [icon, txt], alpha: 0, scale: 0, duration: 500, onComplete: () => {
-                icon.destroy(); txt.destroy();
-            }});
+    showBeginnersLuckUpdate(percent) {
+        if (!this.luckUIContainer) return;
+        
+        if (percent <= 0) {
+            this.luckTxt.setText(`Beginner's Luck (0%)\nNormal Mode Active!`);
+            this.luckTxt.setColor('#aaaaaa');
+        } else {
+            this.luckTxt.setText(`Beginner's Luck (${percent}%)\nEasier start, but fewer debris drops!`);
+            this.luckTxt.setColor('#00ff00');
+        }
+
+        this.tweens.killTweensOf(this.luckUIContainer);
+        this.luckUIContainer.setAlpha(1);
+
+        this.tweens.add({
+            targets: this.luckIcon,
+            scale: 1.2,
+            duration: 300,
+            yoyo: true,
+            repeat: 3
+        });
+
+        this.tweens.add({
+            targets: this.luckUIContainer,
+            alpha: 0,
+            delay: 4500,
+            duration: 1000
         });
     }
 
@@ -609,6 +637,17 @@ class GameScene extends GameBase {
 
     update(time, delta) {
         if (this.isResuming) return;
+        
+        if (this.luckUIContainer && !this.isResuming && !this.isAnimating) {
+            let currentPercent = Math.round(this.luckMods.factor * 100);
+            if (currentPercent !== this.lastDisplayedLuckPercent) {
+                // Ignore displaying 0% if it was always disabled (0%) since the start
+                if (this.lastDisplayedLuckPercent !== -1 || currentPercent > 0) {
+                    this.showBeginnersLuckUpdate(currentPercent);
+                }
+                this.lastDisplayedLuckPercent = currentPercent;
+            }
+        }
         
         const timeScale = this.time.timeScale || 1;
         const dtScale = Phaser.Math.Clamp(delta / 16.666, 0.1, 2.5); 

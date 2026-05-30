@@ -76,6 +76,7 @@ class MenuScene extends Phaser.Scene {
         this.createProfileAndSettings(); 
 
         const titleContainer = this.add.container(cx, cy - 420);
+        
         const titleText = this.add.text(0, 0, "গেইম MCQ", { 
             fontSize: "100px",
             fontFamily: "'Anek Bangla'", 
@@ -86,7 +87,17 @@ class MenuScene extends Phaser.Scene {
             strokeThickness: 10,
             shadow: { offsetX: 4, offsetY: 4, color: "#0044aa", blur: 15, stroke: true, fill: true }
         }).setOrigin(0.5);
-        titleContainer.add(titleText);
+
+        // --- NEW: Version Text added under the title ---
+        const versionText = this.add.text(180, 65, "v1.0.0", {
+            fontSize: "24px", 
+            fontFamily: "'Anek Bangla'", 
+            color: "#00c4c4", 
+            fontWeight: 600,
+            letterSpacing: 2
+        }).setOrigin(0.5);
+
+        titleContainer.add([titleText, versionText]);
 
         this.tweens.add({
             targets: titleContainer, y: titleContainer.y - 15, duration: 2500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
@@ -135,6 +146,87 @@ class MenuScene extends Phaser.Scene {
             GameState.showHistoryPopupOnLoad = false;
             this.showMatchHistoryPopup(); 
         }
+
+        // --- NEW: Call the background update check ---
+        this.checkForUpdates(cx, cy);
+    }
+
+    // --- NEW: Check for Updates Logic ---
+    checkForUpdates(cx, cy) {
+        const CURRENT_VERSION = "1.0.0";
+        const lastCheck = localStorage.getItem('last_update_check');
+        const today = new Date().toDateString();
+
+        // Only check once a day to save bandwidth and prevent spamming
+        if (lastCheck === today) return; 
+
+        // REPLACE THIS URL with your actual raw version.json GitHub URL
+        const versionUrl = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/version.json';
+
+        fetch(versionUrl)
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('last_update_check', today);
+                
+                // Compare versions. If server version is different, prompt the user
+                if (data.latest_version && data.latest_version !== CURRENT_VERSION) {
+                    this.showUpdatePopup(cx, cy, data.latest_version, data.release_notes);
+                }
+            })
+            .catch(err => {
+                console.log("Update check failed (Offline or invalid URL) - running normally.", err);
+            });
+    }
+
+    // --- NEW: Show Update UI Popup ---
+    showUpdatePopup(cx, cy, newVersion, notes) {
+        const w = this.cameras.main.width;
+        const h = this.cameras.main.height;
+        const overlay = this.add.rectangle(w/2, h/2, w, h, 0x000000, 0.8).setInteractive().setDepth(10001);
+        const container = this.add.container(cx, cy).setDepth(10002);
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 1);
+        bg.fillRoundedRect(-250, -170, 500, 340, 20);
+        bg.lineStyle(4, 0x00ff88, 1);
+        bg.strokeRoundedRect(-250, -170, 500, 340, 20);
+
+        const title = this.add.text(0, -120, "নতুন আপডেট এসেছে!", {
+            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#00ff88", fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        const desc = this.add.text(0, -30, `ভার্সন: ${newVersion}\n\n${notes || "নতুন ফিচার উপভোগ করুন।"}\nগেমটি আপডেট করতে নিচে ক্লিক করুন।`, {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
+        }).setOrigin(0.5);
+
+        // Close button (Not mandatory to update)
+        const closeBtn = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ff4444" }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        
+        closeBtn.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            overlay.destroy();
+            container.destroy();
+        });
+
+        // Download Button
+        const btnBg = this.add.graphics();
+        btnBg.fillStyle(0x00aa44, 1);
+        btnBg.fillRoundedRect(-140, 80, 280, 60, 30);
+        const downloadBtnTxt = this.add.text(0, 110, "ডাউনলোড করুন", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const downloadHit = this.add.rectangle(0, 110, 280, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        downloadHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            // _system tells Cordova to use the native device browser (Safari/Chrome), _blank as fallback for pure web
+            window.open("https://sites.google.com/view/gamemcq", "_system");
+        });
+
+        container.add([bg, title, desc, closeBtn, btnBg, downloadBtnTxt, downloadHit]);
+        
+        // Pop-in animation
+        container.setScale(0.8);
+        container.setAlpha(0);
+        this.tweens.add({ targets: container, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
     }
 
     showNotification(msg, type = 'info') {
@@ -469,7 +561,6 @@ class MenuScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
 
-        // UI SCALING: UI Sizes increased
         const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '50px'}).setOrigin(0.5);
 
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
@@ -507,7 +598,7 @@ class MenuScene extends Phaser.Scene {
 
         const setY = 115;
         const setW = 200;
-        const setH = 65; // SCALED
+        const setH = 65; 
         const setRadius = 25; 
 
         const setBg = this.add.graphics();
@@ -520,7 +611,6 @@ class MenuScene extends Phaser.Scene {
         };
         drawSettings(false);
 
-        // UI SCALING
         const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ সেটিংস", {
             fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
@@ -563,8 +653,8 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        const exitW = 210; // SCALED
-        const exitH = 65; // SCALED
+        const exitW = 210; 
+        const exitH = 65; 
         const exitX = startX + boxW - exitW; 
         const exitY = 115;
         const exitRadius = 25;
@@ -579,7 +669,6 @@ class MenuScene extends Phaser.Scene {
         };
         drawExit(false);
 
-        // UI SCALING
         const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
             fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
         }).setOrigin(0.5);
@@ -734,7 +823,6 @@ class MenuScene extends Phaser.Scene {
             return str.length > 25 ? str.substring(0, 23) + "..." : str;
         };
 
-        // UI SCALING
         const mainText = this.add.text(-width/2 + 25, 0, formatText(label, initialVal), { 
             fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 600, color: "#ffffff" 
         }).setOrigin(0, 0.5);
@@ -779,7 +867,6 @@ class MenuScene extends Phaser.Scene {
 
         let currentY = 0;
         options.forEach((opt, index) => {
-            // UI SCALING
             const optText = this.add.text(-width/2 + 25, currentY + itemHeight/2, opt, {
                 fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 500, color: "#b3d4ff" 
             }).setOrigin(0, 0.5);
@@ -1271,7 +1358,6 @@ class MenuScene extends Phaser.Scene {
         const createNavBtn = (cxOffset, emoji, label, emojiSize) => {
             const hitArea = this.add.rectangle(cxOffset, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
             
-            // UI SCALING
             const tText = this.add.text(0, 0, label, { 
                 fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif",padding: { y: 10 }, fontWeight: 700, color: "#b3d4ff" 
             }).setOrigin(0.5, 0.5);
@@ -1292,7 +1378,6 @@ class MenuScene extends Phaser.Scene {
             return { hitArea, tIcon, tText };
         };
 
-        // UI SCALING
         const shop = createNavBtn(-totalWidth/2 + btnWidth/2, "🛒", "শপ", "30px");
         shop.hitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
@@ -1629,7 +1714,6 @@ class MenuScene extends Phaser.Scene {
         GameState.currentQuestions = finalQuestions;
         GameState.gameMode = this.selectedMode;
 
-        // NEW: Check for Tutorial Completion
         if (localStorage.getItem('tutorial_completed') === 'true') {
             this.scene.start("GameScene");
             this.scene.launch("QuestionScene");

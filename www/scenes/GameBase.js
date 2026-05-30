@@ -11,20 +11,34 @@ class GameBase extends Phaser.Scene {
   }
 
   getLuckModifiers() {
-    let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
-    let luckFactor = Math.max(0, 5 - played) / 5; 
-
-    // Balanced modifiers - no longer overly OP, just a slight edge for new players
+    const scene = this; // Capture the current scene context
+    
     return {
-        factor: luckFactor,                  
-        speedMult: 1.0 - (0.25 * luckFactor), 
-        delayMult: 1.0 + (0.80 * luckFactor), 
-        batteryDropMult: 1.0 + (0.70 * luckFactor), 
-        batteryDropChance: 0.15 * luckFactor, 
-        hpMult: 1.0 - (0.25 * luckFactor), 
-        playerDamageMult: 1.0 + (0.30 * luckFactor), 
-        
-        debrisDropChance: 0.5 * (1.0 - (0.6 * luckFactor)) 
+        get factor() {
+            if (window.GameState && window.GameState.allowBeginnersLuck === false) return 0;
+            
+            let played = (window.GameState && window.GameState.gamesPlayed !== undefined) ? window.GameState.gamesPlayed : 0;
+            let progress = typeof scene.getGlobalProgress === 'function' ? scene.getGlobalProgress() : 0;
+            
+            if (played === 0) {
+                // 1st game: 100% (1.0) at progress 0, 0% at progress 15
+                return Math.max(0, 1.0 - (progress / 15));
+            } else if (played === 1) {
+                // 2nd game: 80% (0.8) at progress 0, 0% at progress 10
+                return Math.max(0, 0.8 - (progress * (0.8 / 10)));
+            } else if (played === 2) {
+                // 3rd game: 60% (0.6) at progress 0, 0% at progress 7
+                return Math.max(0, 0.6 - (progress * (0.6 / 7)));
+            }
+            return 0; // 4th game and beyond: 0%
+        },
+        get speedMult() { return 1.0 - (0.25 * this.factor); },
+        get delayMult() { return 1.0 + (0.80 * this.factor); },
+        get batteryDropMult() { return 1.0 + (0.70 * this.factor); },
+        get batteryDropChance() { return 0.15 * this.factor; },
+        get hpMult() { return 1.0 - (0.25 * this.factor); },
+        get playerDamageMult() { return 1.0 + (0.30 * this.factor); },
+        get debrisDropChance() { return 0.5 * (1.0 - (0.6 * this.factor)); }
     };
   }
   
@@ -550,7 +564,6 @@ class GameBase extends Phaser.Scene {
                 wave.x += Math.sin(this.time.now * 0.1) * 0.5;
                 const currentRadius = 80 * (wave.scale / 0.15);
 
-                // FIX: Eliminated the massive GC Leak. Iterate cleanly instead of spreading Arrays per frame.
                 const evaluateGroup = (group) => {
                     if (!group) return;
                     group.getChildren().forEach(target => {
