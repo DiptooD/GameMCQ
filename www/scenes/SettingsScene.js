@@ -5,6 +5,7 @@ class SettingsScene extends Phaser.Scene {
 
     init(data) {
         this.returnScene = (data && data.returnScene) ? data.returnScene : "MenuScene";
+        this.isCheckingUpdate = false;
     }
 
     create() {
@@ -120,18 +121,18 @@ class SettingsScene extends Phaser.Scene {
             this.container.add([txt, hitArea]);
         });
 
-        // Reset Settings Button
+        // Reset Settings Button (Shifted up to fit Update Button)
         const resetBtnBg = this.add.graphics();
         resetBtnBg.fillStyle(0x004422, 1);
-        resetBtnBg.fillRoundedRect(cx - 240, cy + 240, 480, 55, 15);
+        resetBtnBg.fillRoundedRect(cx - 240, cy + 220, 480, 55, 15);
         resetBtnBg.lineStyle(2, 0x00ff88, 1);
-        resetBtnBg.strokeRoundedRect(cx - 240, cy + 240, 480, 55, 15);
+        resetBtnBg.strokeRoundedRect(cx - 240, cy + 220, 480, 55, 15);
 
-        const resetBtnTxt = this.add.text(cx, cy + 267, "ডিফল্ট সেটিংসে ফিরুন", { 
+        const resetBtnTxt = this.add.text(cx, cy + 247, "ডিফল্ট সেটিংসে ফিরুন", { 
             fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaffaa', fontStyle: 'bold' ,padding: { y: 3 }
         }).setOrigin(0.5);
 
-        const resetHit = this.add.rectangle(cx, cy + 267, 480, 55).setInteractive({ useHandCursor: true });
+        const resetHit = this.add.rectangle(cx, cy + 247, 480, 55).setInteractive({ useHandCursor: true });
         resetHit.on('pointerdown', () => {
             this.playSound('sfx_powerup');
             this.musicAdj.setValue(5);
@@ -146,26 +147,159 @@ class SettingsScene extends Phaser.Scene {
             this.updateLiveGameUI();
         });
 
-        // Clear History Button
+        // Clear History Button (Shifted up to fit Update Button)
         const clearBtnBg = this.add.graphics();
         clearBtnBg.fillStyle(0x550000, 1);
-        clearBtnBg.fillRoundedRect(cx - 240, cy + 310, 480, 55, 15);
+        clearBtnBg.fillRoundedRect(cx - 240, cy + 285, 480, 55, 15);
         clearBtnBg.lineStyle(2, 0xff4444, 1);
-        clearBtnBg.strokeRoundedRect(cx - 240, cy + 310, 480, 55, 15);
+        clearBtnBg.strokeRoundedRect(cx - 240, cy + 285, 480, 55, 15);
 
-        const clearBtnTxt = this.add.text(cx, cy + 337, "হিস্ট্রি মুছুন", { 
+        const clearBtnTxt = this.add.text(cx, cy + 312, "হিস্ট্রি মুছুন", { 
             fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffaaaa', fontStyle: 'bold',padding: { y: 3} 
         }).setOrigin(0.5);
 
-        const clearHit = this.add.rectangle(cx, cy + 337, 480, 55).setInteractive({ useHandCursor: true });
+        const clearHit = this.add.rectangle(cx, cy + 312, 480, 55).setInteractive({ useHandCursor: true });
         clearHit.on('pointerdown', () => {
             this.playSound('sfx_warning');
             this.showClearHistoryWarning();
         });
+
+        // --- NEW: Check for Update Button ---
+        const updateBtnBg = this.add.graphics();
+        updateBtnBg.fillStyle(0x002244, 1);
+        updateBtnBg.fillRoundedRect(cx - 240, cy + 350, 480, 55, 15);
+        updateBtnBg.lineStyle(2, 0x0088ff, 1);
+        updateBtnBg.strokeRoundedRect(cx - 240, cy + 350, 480, 55, 15);
+
+        this.updateBtnTxt = this.add.text(cx, cy + 377, "আপডেট চেক করুন", { 
+            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaccff', fontStyle: 'bold', padding: { y: 3 }
+        }).setOrigin(0.5);
+
+        const updateHit = this.add.rectangle(cx, cy + 377, 480, 55).setInteractive({ useHandCursor: true });
+        updateHit.on('pointerdown', () => {
+            if (this.isCheckingUpdate) return;
+            this.playSound('sfx_click');
+            this.checkForUpdates(cx, cy);
+        });
         
-        this.container.add([resetBtnBg, resetBtnTxt, resetHit, clearBtnBg, clearBtnTxt, clearHit]);
+        // Add all UI elements to the container
+        this.container.add([
+            resetBtnBg, resetBtnTxt, resetHit, 
+            clearBtnBg, clearBtnTxt, clearHit,
+            updateBtnBg, this.updateBtnTxt, updateHit
+        ]);
         this.container.setAlpha(0);
         this.tweens.add({ targets: this.container, alpha: 1, duration: 200 });
+    }
+
+    // --- NEW: Update Check Logic ---
+    checkForUpdates(cx, cy) {
+        this.isCheckingUpdate = true;
+        const originalText = "আপডেট চেক করুন";
+        this.updateBtnTxt.setText("চেক করা হচ্ছে...");
+        
+        // Animated ellipsis timer
+        let dotCount = 0;
+        const loadTimer = this.time.addEvent({
+            delay: 400,
+            loop: true,
+            callback: () => {
+                dotCount = (dotCount + 1) % 4;
+                this.updateBtnTxt.setText("চেক করা হচ্ছে" + ".".repeat(dotCount));
+            }
+        });
+
+        const CURRENT_VERSION = "1.0.0";
+        // Add a timestamp query parameter to bypass cache
+        // MUST use backticks (`) for the template literal to execute!
+const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
+
+        // Artificial delay (1.5 seconds) for a proper loading feeling
+        this.time.delayedCall(1500, () => {
+            fetch(versionUrl)
+                .then(response => response.json())
+                .then(data => {
+                    loadTimer.remove();
+                    this.updateBtnTxt.setText(originalText);
+                    this.isCheckingUpdate = false;
+                    
+                    if (data.latest_version && data.latest_version !== CURRENT_VERSION) {
+                        this.showUpdatePopup(cx, cy, data.latest_version, data.release_notes);
+                    } else {
+                        this.showNotification("আপনার গেমটি সর্বশেষ ভার্সনে আপডেট করা আছে।", "success");
+                    }
+                })
+                .catch(err => {
+                    console.log("Update check failed", err);
+                    loadTimer.remove();
+                    this.updateBtnTxt.setText(originalText);
+                    this.isCheckingUpdate = false;
+                    this.showNotification("আপডেট চেক করা সম্ভব হয়নি! ইন্টারনেট কানেকশন চেক করুন।", "error");
+                });
+        });
+    }
+
+    // --- NEW: Show Update UI Popup ---
+    showUpdatePopup(cx, cy, newVersion, notes) {
+        const w = this.cameras.main.width;
+        const h = this.cameras.main.height;
+        const overlay = this.add.rectangle(w/2, h/2, w, h, 0x000000, 0.8).setInteractive().setDepth(10001);
+        const container = this.add.container(cx, cy).setDepth(10002);
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 1);
+        bg.fillRoundedRect(-250, -170, 500, 340, 20);
+        bg.lineStyle(4, 0x00ff88, 1);
+        bg.strokeRoundedRect(-250, -170, 500, 340, 20);
+
+        const title = this.add.text(0, -120, "নতুন আপডেট এসেছে!", {
+            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#00ff88", fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        const desc = this.add.text(0, -30, `ভার্সন: ${newVersion}\n\n${notes || "নতুন ফিচার উপভোগ করুন।"}\nগেমটি আপডেট করতে নিচে ক্লিক করুন।`, {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
+        }).setOrigin(0.5);
+
+        const closeBtn = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ff4444" }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        
+        closeBtn.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            overlay.destroy();
+            container.destroy();
+        });
+
+        const btnBg = this.add.graphics();
+        btnBg.fillStyle(0x00aa44, 1);
+        btnBg.fillRoundedRect(-140, 80, 280, 60, 30);
+        const downloadBtnTxt = this.add.text(0, 110, "ডাউনলোড করুন", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const downloadHit = this.add.rectangle(0, 110, 280, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        downloadHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            window.open("https://sites.google.com/view/gamemcq", "_system");
+        });
+
+        container.add([bg, title, desc, closeBtn, btnBg, downloadBtnTxt, downloadHit]);
+        
+        container.setScale(0.8);
+        container.setAlpha(0);
+        this.tweens.add({ targets: container, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
+    }
+
+    // --- NEW: Local Toast Notification System ---
+    showNotification(msg, type = 'info') {
+        const cx = this.cameras.main.centerX;
+        const cy = this.cameras.main.centerY;
+        
+        let bgColor = type === 'success' ? '#003300' : (type === 'error' ? '#330000' : '#001133');
+        let fgColor = type === 'success' ? '#00ff00' : (type === 'error' ? '#ff4444' : '#00aaff');
+        let icon = type === 'success' ? "✅ " : (type === 'error' ? "❌ " : "ℹ️ ");
+        
+        const toast = this.add.text(cx, cy + 200, icon + msg, { 
+            fontSize: '22px', fontFamily: "'Anek Bangla'", color: fgColor, backgroundColor: bgColor, padding: {x: 15, y: 10} 
+        }).setOrigin(0.5).setDepth(2000);
+        
+        this.tweens.add({ targets: toast, alpha: 0, delay: 2500, duration: 500, onComplete: () => toast.destroy() });
     }
 
     createSlider(yOffset, labelText, min, max, stepSize, currentVal, formatFn, callback) {
@@ -386,8 +520,7 @@ class SettingsScene extends Phaser.Scene {
             if (window.saveGame) window.saveGame();
 
             warningBox.destroy();
-            const toast = this.add.text(cx, cy + 200, "হিস্ট্রি সফলভাবে মুছে ফেলা হয়েছে!", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#00ff00', backgroundColor: '#003300', padding: {x: 15, y: 10} }).setOrigin(0.5);
-            this.tweens.add({ targets: toast, alpha: 0, delay: 1500, duration: 500, onComplete: () => toast.destroy() });
+            this.showNotification("হিস্ট্রি সফলভাবে মুছে ফেলা হয়েছে!", "success");
         });
 
         const noBg = this.add.rectangle(cx + 100, cy + 80, 160, 55, 0x004400).setStrokeStyle(2, 0x00ff00);

@@ -161,7 +161,9 @@ class MenuScene extends Phaser.Scene {
         if (lastCheck === today) return; 
 
         // REPLACE THIS URL with your actual raw version.json GitHub URL
-        const versionUrl = 'https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json';
+        // Add a timestamp query parameter to bypass cache
+        // MUST use backticks (`) for the template literal to execute!
+const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
 
         fetch(versionUrl)
             .then(response => response.json())
