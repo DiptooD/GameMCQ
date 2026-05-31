@@ -161,7 +161,7 @@ class MenuScene extends Phaser.Scene {
         if (lastCheck === today) return; 
 
         // REPLACE THIS URL with your actual raw version.json GitHub URL
-        const versionUrl = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/version.json';
+        const versionUrl = 'https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json';
 
         fetch(versionUrl)
             .then(response => response.json())
