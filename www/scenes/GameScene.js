@@ -1671,9 +1671,20 @@ class GameScene extends GameBase {
 
         const stage = GameState.bossStage;
         let bossTitle = "", bossHp = 1000, bossKey = "boss_lv1";
+
+        // Reset to default font size for the first two bosses
+        this.warningText.setFontSize('60px'); 
+
         if (stage === 0) { bossTitle = "প্রিলি দানব (১ম বস)"; bossHp = 1500; bossKey = "boss_lv1"; }
         else if (stage === 1) { bossTitle = "লিখিত লড়াকু (২য় বস)"; bossHp = 2500; bossKey = "boss_lv2"; }
-        else { bossTitle = "ভাইভা বিভীষিকা (সর্বশেষ বস)"; bossHp = 4000; bossKey = "boss_lv3"; }
+        else { 
+            bossTitle = "ভাইভা বিভীষিকা (সর্বশেষ বস)"; 
+            bossHp = 4000; 
+            bossKey = "boss_lv3"; 
+            
+            // Shrink the text so it fits on screen
+            this.warningText.setFontSize('54px'); 
+        }
 
         bossHp = Math.ceil(bossHp * this.luckMods.hpMult);
 
@@ -1741,6 +1752,106 @@ class GameScene extends GameBase {
         });
     }
 
+   fireBossLaser(stage) {
+        if (!this.boss || !this.boss.active) return;
+        
+        this.boss.isLaserInvulnerable = true;
+        this.boss.setTint(0xaaaaaa); 
+        
+        if (this.bossAttackTimer) this.bossAttackTimer.paused = true;
+
+        const isBoss3 = (stage >= 2);
+        const laserColor = isBoss3 ? 0x39ff14 : 0xff0000; 
+        const warningDuration = isBoss3 ? 1000 : 1500; 
+        const laserDuration = isBoss3 ? 2000 : 1500;
+        const laserWidth = isBoss3 ? 120 : 80; 
+
+        const prevVelocityX = this.boss.body.velocity.x;
+        if (!isBoss3) {
+            this.boss.setVelocityX(0); 
+        }
+
+        // Clear existing boss bullets
+        this.bossBullets.children.each(b => {
+            if (!b.isBossLaser && b.active) {
+                this.createExplosion(b.x, b.y, laserColor, 5);
+                b.destroy();
+            }
+        });
+
+        const warningRect = this.add.rectangle(this.boss.x, this.boss.y + 60, laserWidth, this.cameras.main.height, laserColor, 0.25).setOrigin(0.5, 0);
+        this.tweens.add({ targets: warningRect, alpha: 0.6, duration: 150, yoyo: true, repeat: -1 });
+
+        // --- WARNING PHASE TRACKING ---
+        let trackEvent = null;
+        if (isBoss3) {
+            trackEvent = this.time.addEvent({
+                delay: 20,
+                loop: true,
+                callback: () => {
+                    if (this.boss && this.boss.active) {
+                        // Reduced from 0.04 to 0.02 for a slower, heavier charge tracking
+                        this.boss.x = Phaser.Math.Linear(this.boss.x, this.player.x, 0.02);
+                        if (warningRect && warningRect.active) warningRect.x = this.boss.x;
+                    }
+                }
+            });
+        }
+
+        this.time.delayedCall(warningDuration, () => {
+            if (trackEvent) trackEvent.remove();
+            if (!this.boss || !this.boss.active) {
+                if (warningRect) warningRect.destroy();
+                return;
+            }
+
+            if (warningRect) warningRect.destroy();
+            this.playSFX('sfx_shockwave', 0.8, false); 
+            this.cameras.main.shake(laserDuration, 0.015);
+
+            const laser = this.add.rectangle(this.boss.x, this.boss.y + 60, laserWidth, this.cameras.main.height * 1.5, laserColor, 1).setOrigin(0.5, 0);
+            this.physics.add.existing(laser);
+            laser.body.setAllowGravity(false);
+            laser.body.setImmovable(true);
+            laser.isBossLaser = true; 
+            
+            this.bossBullets.add(laser);
+
+            // --- ACTIVE FIRING PHASE TRACKING ---
+            let fireTrackEvent = null;
+            if (isBoss3) {
+                fireTrackEvent = this.time.addEvent({
+                    delay: 20,
+                    loop: true,
+                    callback: () => {
+                        if (this.boss && this.boss.active) {
+                            // Creeps slowly toward the player during the beam duration (0.012 = very slow sweep)
+                            this.boss.x = Phaser.Math.Linear(this.boss.x, this.player.x, 0.012);
+                            if (laser && laser.active) laser.x = this.boss.x;
+                        }
+                    }
+                });
+            }
+
+            this.time.delayedCall(laserDuration, () => {
+                if (fireTrackEvent) fireTrackEvent.remove();
+                if (laser && laser.active) laser.destroy();
+                
+                if (this.boss && this.boss.active) {
+                    this.boss.isLaserInvulnerable = false;
+                    this.boss.clearTint();
+                    this.boss.setTint(0xff0000); 
+                    
+                    this.boss.setVelocityX(prevVelocityX);
+                    if (this.bossAttackTimer) this.bossAttackTimer.paused = false;
+                }
+            });
+        });
+    }
+
+
+
+
     fireBossLaser(stage) {
         if (!this.boss || !this.boss.active) return;
         
@@ -1759,6 +1870,16 @@ class GameScene extends GameBase {
         if (!isBoss3) {
             this.boss.setVelocityX(0); 
         }
+
+        // --- NEW: Clear existing boss bullets to give player a fair chance! ---
+        this.bossBullets.children.each(b => {
+            if (!b.isBossLaser && b.active) {
+                // Add a small visual pop where the bullets used to be
+                this.createExplosion(b.x, b.y, laserColor, 5);
+                b.destroy();
+            }
+        });
+        // ----------------------------------------------------------------------
 
         const warningRect = this.add.rectangle(this.boss.x, this.boss.y + 60, laserWidth, this.cameras.main.height, laserColor, 0.25).setOrigin(0.5, 0);
         this.tweens.add({ targets: warningRect, alpha: 0.6, duration: 150, yoyo: true, repeat: -1 });
@@ -1833,9 +1954,26 @@ class GameScene extends GameBase {
         this.bossBarBg.setVisible(false);
         this.bossBarFill.setVisible(false);
 
+        // --- NEW: Satisfying Screen Wipe for Enemy Bullets ---
+        this.bossBullets.children.each(b => {
+            if (b.active && !b.isBossLaser) {
+                // Creates a green pop for every bullet before it dies
+                this.createExplosion(b.x, b.y, 0x39ff14, 3); 
+            }
+        });
+        
+        // Clear all enemy hazards instantly
         this.bossBullets.clear(true, true);
         this.obstacles.clear(true, true);
         this.meteors.clear(true, true);
+        
+        // --- NEW: Clear player bullets so you don't instantly hit remnants! ---
+        this.bullets.clear(true, true);
+        this.sideBullets.clear(true, true);
+        this.specialWeapons.clear(true, true);
+        this.bossBullets.clear(true, true);
+        // ----------------------------------------------------------------------
+
         this.enemies.children.each(e => {
             if (e !== boss && !e.isBossRemnant) {
                 e.destroy();

@@ -28,9 +28,16 @@ class SettingsScene extends Phaser.Scene {
             fontSize: '44px', fontFamily: "'Anek Bangla'", color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        // UI SCALING
-        const closeHit = this.add.circle(cx + 230, cy - 350, 45).setInteractive({ useHandCursor: true });
-        const closeIcon = this.add.text(cx + 230, cy - 350, "✖", { fontSize: '40px', color: '#ff4444' }).setOrigin(0.5);
+        // UI SCALING & IMPROVED HITBOX (Rounded Square)
+        const closeX = cx + 230;
+        const closeY = cy - 350;
+        
+        const closeBg = this.add.graphics();
+        closeBg.fillStyle(0xff3333, 1);
+        closeBg.fillRoundedRect(closeX - 25, closeY - 25, 50, 50, 15);
+        
+        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: '32px', color: '#ffffff', fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(closeX, closeY, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
@@ -40,11 +47,12 @@ class SettingsScene extends Phaser.Scene {
             }
         });
 
-        this.container.add([this.overlay, this.bg, this.title, closeIcon, closeHit]);
+        this.container.add([this.overlay, this.bg, this.title, closeBg, closeIcon, closeHit]);
         
+        // --- Spaced Out UI Elements ---
         let musicVol = Math.round((GameState.musicVolume !== undefined ? GameState.musicVolume : 0.5) * 10);
         if (musicVol < 0) musicVol = 0; 
-        this.musicAdj = this.createSlider(-210, "মিউজিক ভলিউম:", 0, 10, 1, musicVol, (v) => v, (val) => {
+        this.musicAdj = this.createSlider(-240, "মিউজিক ভলিউম:", 0, 10, 1, musicVol, (v) => v, (val) => {
             GameState.musicVolume = val / 10;
             localStorage.setItem('settings_musicVol', GameState.musicVolume);
             this.updateLiveGameUI();
@@ -53,20 +61,20 @@ class SettingsScene extends Phaser.Scene {
         let sfxVol = Math.round((GameState.sfxVolume !== undefined ? GameState.sfxVolume : 1.0) * 5);
         if (sfxVol < 0) sfxVol = 0;
         if (sfxVol > 10) sfxVol = 10;
-        this.sfxAdj = this.createSlider(-120, "সাউন্ড ইফেক্ট:", 0, 10, 1, sfxVol, (v) => v, (val) => {
+        this.sfxAdj = this.createSlider(-160, "সাউন্ড ইফেক্ট:", 0, 10, 1, sfxVol, (v) => v, (val) => {
             GameState.sfxVolume = val / 5;
             localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
         });
         
         let qDelayLevel = GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15;
-        this.qDelayAdj = this.createSlider(-30, "মধ্যবর্তী বিলম্ব: (Inter-Question Delay):", 5, 40, 5, qDelayLevel, (v) => (v / 10).toFixed(1) + "s", (val) => {
+        this.qDelayAdj = this.createSlider(-80, "মধ্যবর্তী বিলম্ব: (Inter-Question Delay):", 5, 40, 5, qDelayLevel, (v) => (v / 10).toFixed(1) + "s", (val) => {
             GameState.qDelayLevel = val;
             localStorage.setItem('settings_qDelay', GameState.qDelayLevel);
         });
 
         let uiSize = parseInt(localStorage.getItem('settings_uiScaleLevel'));
         if (isNaN(uiSize)) uiSize = 0;
-        this.uiAdj = this.createStepper(50, "ডিসপ্লে জুম: (UI Zoom)", -5, 5, uiSize, (val) => {
+        this.uiAdj = this.createStepper(0, "ডিসপ্লে জুম: (UI Zoom)", -5, 5, uiSize, (val) => {
             localStorage.setItem('settings_uiScaleLevel', val);
             this.updateLiveGameUI();
         });
@@ -76,12 +84,12 @@ class SettingsScene extends Phaser.Scene {
         const qpOptions = ['right', 'hidden', 'left'];
         const qpLabels = ['ডান', 'বন্ধ', 'বাম'];
         
-        const qpLabel = this.add.text(cx, cy + 120, "কুইক প্যানেল পজিশন:", { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0.5);
+        const qpLabel = this.add.text(cx, cy + 75, "কুইক প্যানেল পজিশন:", { fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff' }).setOrigin(0.5);
         
         const segW = 480;
         const segH = 50;
         const segX = cx;
-        const segY = cy + 180;
+        const segY = cy + 125;
 
         const segBg = this.add.graphics();
         segBg.fillStyle(0x001022, 1);
@@ -121,19 +129,41 @@ class SettingsScene extends Phaser.Scene {
             this.container.add([txt, hitArea]);
         });
 
-        // Reset Settings Button (Shifted up to fit Update Button)
-        const resetBtnBg = this.add.graphics();
-        resetBtnBg.fillStyle(0x004422, 1);
-        resetBtnBg.fillRoundedRect(cx - 240, cy + 220, 480, 55, 15);
-        resetBtnBg.lineStyle(2, 0x00ff88, 1);
-        resetBtnBg.strokeRoundedRect(cx - 240, cy + 220, 480, 55, 15);
+        // --- IMPROVED ACTION BUTTONS (Reset, Clear, Update) ---
+        const createActionBtn = (yOffset, textStr, bgHex, borderHex, textHex, callback) => {
+            const btnContainer = this.add.container(cx, cy + yOffset);
+            
+            const btnBg = this.add.graphics();
+            
+            const drawBtn = (isHover) => {
+                btnBg.clear();
+                btnBg.fillStyle(bgHex, isHover ? 1 : 0.85);
+                btnBg.fillRoundedRect(-240, -27.5, 480, 55, 15);
+                btnBg.lineStyle(2, isHover ? '#ffffff' : borderHex, 1);
+                btnBg.strokeRoundedRect(-240, -27.5, 480, 55, 15);
+            };
+            drawBtn(false);
 
-        const resetBtnTxt = this.add.text(cx, cy + 247, "ডিফল্ট সেটিংসে ফিরুন", { 
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaffaa', fontStyle: 'bold' ,padding: { y: 3 }
-        }).setOrigin(0.5);
+            const btnTxt = this.add.text(0, 0, textStr, { 
+                fontSize: '24px', fontFamily: "'Anek Bangla'", color: textHex, fontStyle: 'bold', padding: { y: 3 }
+            }).setOrigin(0.5);
 
-        const resetHit = this.add.rectangle(cx, cy + 247, 480, 55).setInteractive({ useHandCursor: true });
-        resetHit.on('pointerdown', () => {
+            const hitArea = this.add.rectangle(0, 0, 480, 55).setInteractive({ useHandCursor: true });
+            
+            hitArea.on('pointerover', () => drawBtn(true));
+            hitArea.on('pointerout', () => drawBtn(false));
+            hitArea.on('pointerdown', () => {
+                this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 100, yoyo: true });
+                callback();
+            });
+
+            btnContainer.add([btnBg, btnTxt, hitArea]);
+            this.container.add(btnContainer);
+            
+            return { container: btnContainer, txt: btnTxt };
+        };
+
+        const resetBtn = createActionBtn(210, "🔄 ডিফল্ট সেটিংসে ফিরুন", 0x004422, 0x00ff88, '#ececec', () => {
             this.playSound('sfx_powerup');
             this.musicAdj.setValue(5);
             this.sfxAdj.setValue(5);
@@ -145,58 +175,32 @@ class SettingsScene extends Phaser.Scene {
             drawHighlight(0);
 
             this.updateLiveGameUI();
+            this.showNotification("সেটিংস রিসেট করা হয়েছে!", "success");
         });
 
-        // Clear History Button (Shifted up to fit Update Button)
-        const clearBtnBg = this.add.graphics();
-        clearBtnBg.fillStyle(0x550000, 1);
-        clearBtnBg.fillRoundedRect(cx - 240, cy + 285, 480, 55, 15);
-        clearBtnBg.lineStyle(2, 0xff4444, 1);
-        clearBtnBg.strokeRoundedRect(cx - 240, cy + 285, 480, 55, 15);
-
-        const clearBtnTxt = this.add.text(cx, cy + 312, "হিস্ট্রি মুছুন", { 
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffaaaa', fontStyle: 'bold',padding: { y: 3} 
-        }).setOrigin(0.5);
-
-        const clearHit = this.add.rectangle(cx, cy + 312, 480, 55).setInteractive({ useHandCursor: true });
-        clearHit.on('pointerdown', () => {
+        const clearBtn = createActionBtn(288, "🗑️ হিস্ট্রি মুছুন", 0x440000, 0xff4444, '#ececec', () => {
             this.playSound('sfx_warning');
             this.showClearHistoryWarning();
         });
 
-        // --- NEW: Check for Update Button ---
-        const updateBtnBg = this.add.graphics();
-        updateBtnBg.fillStyle(0x002244, 1);
-        updateBtnBg.fillRoundedRect(cx - 240, cy + 350, 480, 55, 15);
-        updateBtnBg.lineStyle(2, 0x0088ff, 1);
-        updateBtnBg.strokeRoundedRect(cx - 240, cy + 350, 480, 55, 15);
-
-        this.updateBtnTxt = this.add.text(cx, cy + 377, "আপডেট চেক করুন", { 
-            fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#aaccff', fontStyle: 'bold', padding: { y: 3 }
-        }).setOrigin(0.5);
-
-        const updateHit = this.add.rectangle(cx, cy + 377, 480, 55).setInteractive({ useHandCursor: true });
-        updateHit.on('pointerdown', () => {
+        const updateBtn = createActionBtn(365, "☁️ আপডেট চেক করুন", 0x002244, 0x0088ff, '#ececec', () => {
             if (this.isCheckingUpdate) return;
             this.playSound('sfx_click');
             this.checkForUpdates(cx, cy);
         });
+
+        // Save reference to the text object to alter its string dynamically
+        this.updateBtnTxt = updateBtn.txt; 
         
-        // Add all UI elements to the container
-        this.container.add([
-            resetBtnBg, resetBtnTxt, resetHit, 
-            clearBtnBg, clearBtnTxt, clearHit,
-            updateBtnBg, this.updateBtnTxt, updateHit
-        ]);
         this.container.setAlpha(0);
         this.tweens.add({ targets: this.container, alpha: 1, duration: 200 });
     }
 
-    // --- NEW: Update Check Logic ---
+    // --- Update Check Logic ---
     checkForUpdates(cx, cy) {
         this.isCheckingUpdate = true;
-        const originalText = "আপডেট চেক করুন";
-        this.updateBtnTxt.setText("চেক করা হচ্ছে...");
+        const originalText = "☁️ আপডেট চেক করুন";
+        this.updateBtnTxt.setText("☁️ চেক করা হচ্ছে...");
         
         // Animated ellipsis timer
         let dotCount = 0;
@@ -205,14 +209,13 @@ class SettingsScene extends Phaser.Scene {
             loop: true,
             callback: () => {
                 dotCount = (dotCount + 1) % 4;
-                this.updateBtnTxt.setText("চেক করা হচ্ছে" + ".".repeat(dotCount));
+                this.updateBtnTxt.setText("☁️ চেক করা হচ্ছে" + ".".repeat(dotCount));
             }
         });
 
         const CURRENT_VERSION = "1.0.0";
         // Add a timestamp query parameter to bypass cache
-        // MUST use backticks (`) for the template literal to execute!
-const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
+        const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
 
         // Artificial delay (1.5 seconds) for a proper loading feeling
         this.time.delayedCall(1500, () => {
@@ -239,7 +242,7 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
         });
     }
 
-    // --- NEW: Show Update UI Popup ---
+    // --- Show Update UI Popup ---
     showUpdatePopup(cx, cy, newVersion, notes) {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
@@ -260,9 +263,14 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
         }).setOrigin(0.5);
 
-        const closeBtn = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ff4444" }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        const closeBg = this.add.graphics();
+        closeBg.fillStyle(0xff3333, 1);
+        closeBg.fillRoundedRect(210 - 25, -130 - 25, 50, 50, 15);
+
+        const closeIcon = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(210, -130, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
         
-        closeBtn.on('pointerdown', () => {
+        closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             overlay.destroy();
             container.destroy();
@@ -279,14 +287,13 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             window.open("https://sites.google.com/view/gamemcq", "_system");
         });
 
-        container.add([bg, title, desc, closeBtn, btnBg, downloadBtnTxt, downloadHit]);
+        container.add([bg, title, desc, closeBg, closeIcon, closeHit, btnBg, downloadBtnTxt, downloadHit]);
         
         container.setScale(0.8);
         container.setAlpha(0);
         this.tweens.add({ targets: container, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
     }
 
-    // --- NEW: Local Toast Notification System ---
     showNotification(msg, type = 'info') {
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
@@ -334,7 +341,6 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
         const fill = this.add.graphics();
         let val = currentVal;
 
-        // UI SCALING: Increased touch zones for sliders
         const thumb = this.add.circle(0, sliderY, 20, 0xffffff);
         thumb.setStrokeStyle(4, 0x0066cc);
         const glow = this.add.circle(0, sliderY, 30, 0x00e1ff, 0.3);
@@ -410,7 +416,6 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
         
         let val = currentVal;
         
-        // UI SCALING
         const btnW = 70;
         const btnH = 50;
 
@@ -418,28 +423,51 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             fontSize: '26px', fontFamily: "'Anek Bangla'", color: '#00ffff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const minusBg = this.add.rectangle(cx + 40, cy + yOffset, btnW, btnH, 0x002244, 1).setStrokeStyle(2, 0x0066aa).setInteractive({useHandCursor: true});
+        // Improved Rounded Plus/Minus Buttons
+        const minusBg = this.add.graphics();
+        const drawMinus = (hover) => {
+            minusBg.clear();
+            minusBg.fillStyle(0x002244, hover ? 1 : 0.8);
+            minusBg.fillRoundedRect(cx + 40 - btnW/2, cy + yOffset - btnH/2, btnW, btnH, 12);
+            minusBg.lineStyle(2, hover ? 0x00aaff : 0x0066aa, 1);
+            minusBg.strokeRoundedRect(cx + 40 - btnW/2, cy + yOffset - btnH/2, btnW, btnH, 12);
+        };
+        drawMinus(false);
         const minusTxt = this.add.text(cx + 40, cy + yOffset, "-", { fontSize: '36px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
-        
-        const plusBg = this.add.rectangle(cx + 200, cy + yOffset, btnW, btnH, 0x002244, 1).setStrokeStyle(2, 0x0066aa).setInteractive({useHandCursor: true});
+        const minusHit = this.add.rectangle(cx + 40, cy + yOffset, btnW, btnH, 0, 0).setInteractive({useHandCursor: true});
+
+        const plusBg = this.add.graphics();
+        const drawPlus = (hover) => {
+            plusBg.clear();
+            plusBg.fillStyle(0x002244, hover ? 1 : 0.8);
+            plusBg.fillRoundedRect(cx + 200 - btnW/2, cy + yOffset - btnH/2, btnW, btnH, 12);
+            plusBg.lineStyle(2, hover ? 0x00aaff : 0x0066aa, 1);
+            plusBg.strokeRoundedRect(cx + 200 - btnW/2, cy + yOffset - btnH/2, btnW, btnH, 12);
+        };
+        drawPlus(false);
         const plusTxt = this.add.text(cx + 200, cy + yOffset, "+", { fontSize: '32px', color: '#ffffff', fontStyle: 'bold'}).setOrigin(0.5, 0.55);
+        const plusHit = this.add.rectangle(cx + 200, cy + yOffset, btnW, btnH, 0, 0).setInteractive({useHandCursor: true});
 
         const updateDisplay = () => {
             valText.setText(val === 0 ? "ডিফল্ট" : (val > 0 ? "+" + val : val));
             callback(val);
         };
 
-        minusBg.on('pointerdown', () => {
+        minusHit.on('pointerover', () => drawMinus(true));
+        minusHit.on('pointerout', () => drawMinus(false));
+        minusHit.on('pointerdown', () => {
             if (val > min) { val--; this.playSound('sfx_tick'); updateDisplay(); }
-            this.tweens.add({targets: minusBg, scale: 0.9, duration: 50, yoyo: true});
+            this.tweens.add({targets: minusTxt, scale: 0.8, duration: 50, yoyo: true});
         });
 
-        plusBg.on('pointerdown', () => {
+        plusHit.on('pointerover', () => drawPlus(true));
+        plusHit.on('pointerout', () => drawPlus(false));
+        plusHit.on('pointerdown', () => {
             if (val < max) { val++; this.playSound('sfx_tick'); updateDisplay(); }
-            this.tweens.add({targets: plusBg, scale: 0.9, duration: 50, yoyo: true});
+            this.tweens.add({targets: plusTxt, scale: 0.8, duration: 50, yoyo: true});
         });
 
-        this.container.add([label, minusBg, minusTxt, valText, plusBg, plusTxt]);
+        this.container.add([label, minusBg, minusTxt, minusHit, valText, plusBg, plusTxt, plusHit]);
 
         return {
             setValue: (newVal) => { val = newVal; updateDisplay(); }
@@ -509,9 +537,16 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ffffff', align: 'center', lineSpacing: 10 
         }).setOrigin(0.5);
 
-        const yesBg = this.add.rectangle(cx - 100, cy + 80, 160, 55, 0x880000).setStrokeStyle(2, 0xff4444);
-        const yesTxt = this.add.text(cx - 100, cy + 80, "হ্যাঁ", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
-        const yesHit = this.add.rectangle(cx - 100, cy + 80, 160, 55).setInteractive({ useHandCursor: true });
+        // Improved Rounded YES Button
+        const yesContainer = this.add.container(cx - 100, cy + 80);
+        const yesBg = this.add.graphics();
+        yesBg.fillStyle(0x880000, 1);
+        yesBg.fillRoundedRect(-80, -27.5, 160, 55, 15);
+        yesBg.lineStyle(2, 0xff4444, 1);
+        yesBg.strokeRoundedRect(-80, -27.5, 160, 55, 15);
+        const yesTxt = this.add.text(0, 0, "হ্যাঁ", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+        const yesHit = this.add.rectangle(0, 0, 160, 55).setInteractive({ useHandCursor: true });
+        yesContainer.add([yesBg, yesTxt, yesHit]);
 
         yesHit.on('pointerdown', () => {
             this.playSound('sfx_explode');
@@ -523,15 +558,22 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             this.showNotification("হিস্ট্রি সফলভাবে মুছে ফেলা হয়েছে!", "success");
         });
 
-        const noBg = this.add.rectangle(cx + 100, cy + 80, 160, 55, 0x004400).setStrokeStyle(2, 0x00ff00);
-        const noTxt = this.add.text(cx + 100, cy + 80, "না", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
-        const noHit = this.add.rectangle(cx + 100, cy + 80, 160, 55).setInteractive({ useHandCursor: true });
+        // Improved Rounded NO Button
+        const noContainer = this.add.container(cx + 100, cy + 80);
+        const noBg = this.add.graphics();
+        noBg.fillStyle(0x004400, 1);
+        noBg.fillRoundedRect(-80, -27.5, 160, 55, 15);
+        noBg.lineStyle(2, 0x00ff00, 1);
+        noBg.strokeRoundedRect(-80, -27.5, 160, 55, 15);
+        const noTxt = this.add.text(0, 0, "না", { fontSize: '24px', fontFamily: "'Anek Bangla'", color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
+        const noHit = this.add.rectangle(0, 0, 160, 55).setInteractive({ useHandCursor: true });
+        noContainer.add([noBg, noTxt, noHit]);
 
         noHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             warningBox.destroy();
         });
 
-        warningBox.add([overlay, bg, alertTxt, yesBg, yesTxt, yesHit, noBg, noTxt, noHit]);
+        warningBox.add([overlay, bg, alertTxt, yesContainer, noContainer]);
     }
 }

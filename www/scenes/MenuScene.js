@@ -160,10 +160,8 @@ class MenuScene extends Phaser.Scene {
         // Only check once a day to save bandwidth and prevent spamming
         if (lastCheck === today) return; 
 
-        // REPLACE THIS URL with your actual raw version.json GitHub URL
         // Add a timestamp query parameter to bypass cache
-        // MUST use backticks (`) for the template literal to execute!
-const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
+        const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
 
         fetch(versionUrl)
             .then(response => response.json())
@@ -201,10 +199,15 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
         }).setOrigin(0.5);
 
-        // Close button (Not mandatory to update)
-        const closeBtn = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ff4444" }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        // Close button (Not mandatory to update) with rounded square styling
+        const closeBg = this.add.graphics();
+        closeBg.fillStyle(0xff3333, 1);
+        closeBg.fillRoundedRect(210 - 25, -130 - 25, 50, 50, 15);
         
-        closeBtn.on('pointerdown', () => {
+        const closeIcon = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(210, -130, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             overlay.destroy();
             container.destroy();
@@ -223,7 +226,7 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             window.open("https://sites.google.com/view/gamemcq", "_system");
         });
 
-        container.add([bg, title, desc, closeBtn, btnBg, downloadBtnTxt, downloadHit]);
+        container.add([bg, title, desc, closeBg, closeIcon, closeHit, btnBg, downloadBtnTxt, downloadHit]);
         
         // Pop-in animation
         container.setScale(0.8);
@@ -318,9 +321,15 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
         }).setOrigin(0.5);
 
-        const closeBtn = this.add.text(210, -120, "✖", { fontSize: "30px", color: "#ff4444" }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        // Improved close button styling with rounded square
+        const closeBg = this.add.graphics();
+        closeBg.fillStyle(0xff3333, 1);
+        closeBg.fillRoundedRect(210 - 25, -120 - 25, 50, 50, 15);
+
+        const closeIcon = this.add.text(210, -120, "✖", { fontSize: "30px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(210, -120, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
         
-        closeBtn.on('pointerdown', () => {
+        closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             localStorage.setItem('google_prompt_seen', 'true');
             overlay.destroy();
@@ -352,7 +361,7 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             }
         });
 
-        container.add([bg, title, desc, closeBtn, btnBg, connectBtnTxt, connectHit]);
+        container.add([bg, title, desc, closeBg, closeIcon, closeHit, btnBg, connectBtnTxt, connectHit]);
     }
 
     update(time, delta) {
@@ -1452,8 +1461,16 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             fontSize: '40px', fontFamily: "'Anek Bangla'",padding: { y: 5 }, color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        const closeHit = this.add.circle(panelW/2 - 40, -panelH/2 + 50, 30).setInteractive({ useHandCursor: true });
-        const closeIcon = this.add.text(panelW/2 - 40, -panelH/2 + 50, "✖", { fontSize: '35px', color: '#ff4444' }).setOrigin(0.5);
+        // Improved close button styling with rounded square
+        const closeX = panelW/2 - 40;
+        const closeY = -panelH/2 + 50;
+        
+        const closeBg = this.add.graphics();
+        closeBg.fillStyle(0xff3333, 1);
+        closeBg.fillRoundedRect(closeX - 25, closeY - 25, 50, 50, 15);
+        
+        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: '32px', color: '#ffffff', fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(closeX, closeY, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
         
         let cleanup = () => {
             this.isHistoryPopupOpen = false;
@@ -1467,7 +1484,7 @@ const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/versi
             cleanup();
         });
 
-        popup.add([overlay, bg, title, closeIcon, closeHit]);
+        popup.add([overlay, bg, title, closeBg, closeIcon, closeHit]);
 
         const listStartY = -panelH/2 + 100;
         const listHeight = panelH - 120;
