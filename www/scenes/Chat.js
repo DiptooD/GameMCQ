@@ -8,11 +8,11 @@ Object.assign(MenuScene.prototype, {
         
         this.isChatOpen = false;
         
-        // 1. Mobile Friendly Layout Dimensions
+        // 1. Mobile Friendly Layout Dimensions (Updated for more height and bottom padding)
         this.chatW = w - 40; 
-        this.chatH = h * 0.78; 
+        this.chatH = h * 0.86; // Increased height
         this.chatX = 20;
-        this.chatYVisible = h - this.chatH - 20; 
+        this.chatYVisible = h - this.chatH - 60; // Increased padding from bottom
         this.chatYHidden = h + 200; 
 
         // 2. Fullscreen Blocker Overlay 
@@ -49,13 +49,16 @@ Object.assign(MenuScene.prototype, {
 
         this.chatContainer.add([panelBg, panelBorders, title, headerDiv, closeBtnBg, closeIcon, closeHit]);
 
+        // Dynamically calculate scroll height based on new window dimensions
+        this.chatScrollZoneHeight = this.chatH - 210;
+
         // 4. Message List Scrollable Container
         this.msgListContainer = this.add.container(0, 105);
         this.chatContainer.add(this.msgListContainer);
 
         this.chatMaskShape = this.make.graphics();
         this.chatMaskShape.fillStyle(0xffffff);
-        this.chatMaskShape.fillRect(this.chatX + 10, this.chatYVisible + 105, this.chatW - 20, this.chatH - 240); 
+        this.chatMaskShape.fillRect(this.chatX + 10, this.chatYVisible + 105, this.chatW - 20, this.chatScrollZoneHeight); 
         this.chatMaskShape.y = this.chatYHidden - this.chatYVisible; 
         this.msgListContainer.setMask(this.chatMaskShape.createGeometryMask());
 
@@ -64,7 +67,6 @@ Object.assign(MenuScene.prototype, {
         const inputY = this.chatH - 75; 
 
         if (isConnected) {
-            // Emojis are supported out of the box via the HTML input!
             const inputHTML = `<input type="text" id="chatInput" autocomplete="off" placeholder="এখানে লিখুন..." style="width: ${this.chatW - 180}px; padding: 20px 22px; font-family: 'Anek Bangla', sans-serif; font-size: 26px; border-radius: 20px; border: 3px solid #0066aa; outline: none; background: #051025; color: #fff;">`;
                 
             this.chatInput = this.add.dom(this.chatW / 2 - 50, inputY).createFromHTML(inputHTML);
@@ -113,13 +115,13 @@ Object.assign(MenuScene.prototype, {
         toggleHit.on('pointerdown', () => this.toggleChatWindow());
         this.chatToggleBtn.add([toggleBg, toggleIcon, toggleHit]);
 
-        // 7. Smooth Scroll UI & Gestures
+        // 7. Smooth Scroll UI & Gestures (Fixed thumb origin and bounds mapping)
         this.chatMaxScroll = 0;
-        const scrollZoneHeight = this.chatH - 240;
         
-        // Muted Scrollbar
-        this.chatScrollbarBg = this.add.rectangle(this.chatW - 12, 105 + scrollZoneHeight / 2, 8, scrollZoneHeight, 0x000000, 0.2);
-        this.chatScrollbarThumb = this.add.rectangle(this.chatW - 12, 105, 8, 50, 0x666666, 0.6).setOrigin(0.5, 0.5);
+        // Muted Scrollbar Track
+        this.chatScrollbarBg = this.add.rectangle(this.chatW - 12, 105 + this.chatScrollZoneHeight / 2, 8, this.chatScrollZoneHeight, 0x000000, 0.2);
+        // Fixed Scrollbar Thumb positioning using setOrigin(0.5, 0)
+        this.chatScrollbarThumb = this.add.rectangle(this.chatW - 12, 105, 8, 50, 0x666666, 0.6).setOrigin(0.5, 0);
         this.chatContainer.add([this.chatScrollbarBg, this.chatScrollbarThumb]);
 
         this.updateChatScrollbar = () => {
@@ -132,15 +134,15 @@ Object.assign(MenuScene.prototype, {
             this.chatScrollbarBg.setVisible(true);
 
             const scrollRatio = Phaser.Math.Clamp((105 - this.msgListContainer.y) / this.chatMaxScroll, 0, 1);
-            const thumbHeight = Math.max(40, (scrollZoneHeight / (this.chatMaxScroll + scrollZoneHeight)) * scrollZoneHeight);
+            const thumbHeight = Math.max(40, (this.chatScrollZoneHeight / (this.chatMaxScroll + this.chatScrollZoneHeight)) * this.chatScrollZoneHeight);
             
             this.chatScrollbarThumb.height = thumbHeight;
-            const thumbMinY = 105 + thumbHeight / 2;
-            const thumbMaxY = 105 + scrollZoneHeight - thumbHeight / 2;
+            const thumbMinY = 105; 
+            const thumbMaxY = 105 + this.chatScrollZoneHeight - thumbHeight;
             this.chatScrollbarThumb.y = thumbMinY + scrollRatio * (thumbMaxY - thumbMinY);
         };
 
-        const scrollZone = this.add.zone(this.chatW / 2, 105 + scrollZoneHeight / 2, this.chatW, scrollZoneHeight).setInteractive();
+        const scrollZone = this.add.zone(this.chatW / 2, 105 + this.chatScrollZoneHeight / 2, this.chatW, this.chatScrollZoneHeight).setInteractive();
         this.chatContainer.add(scrollZone);
 
         let dragStartY = 0, containerStartY = 0, isDraggingChat = false, lastDragY = 0, chatVelocity = 0;
@@ -358,7 +360,7 @@ Object.assign(MenuScene.prototype, {
 
             regularMessages.forEach(msg => renderMessage(msg, false));
 
-            const visibleHeight = this.chatH - 240;
+            const visibleHeight = this.chatScrollZoneHeight;
             this.chatMaxScroll = Math.max(0, currentY - visibleHeight);
 
             // Snap smoothly to most recent chat on any new update!
