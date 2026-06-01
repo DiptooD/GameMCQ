@@ -7,12 +7,15 @@ Object.assign(MenuScene.prototype, {
         const h = this.cameras.main.height;
         
         this.isChatOpen = false;
+        this.lastSeenTime = Date.now();
+        this.dividerRendered = false;
+        this.replyData = null;
         
-        // 1. Mobile Friendly Layout Dimensions (Updated for more height and bottom padding)
+        // 1. Mobile Friendly Layout Dimensions
         this.chatW = w - 40; 
-        this.chatH = h * 0.86; // Increased height
+        this.chatH = h * 0.86; 
         this.chatX = 20;
-        this.chatYVisible = h - this.chatH - 60; // Increased padding from bottom
+        this.chatYVisible = h - this.chatH - 60; 
         this.chatYHidden = h + 200; 
 
         // 2. Fullscreen Blocker Overlay 
@@ -28,7 +31,8 @@ Object.assign(MenuScene.prototype, {
         // 3. Main Chat Panel Container
         this.chatContainer = this.add.container(this.chatX, this.chatYHidden).setDepth(9000).setVisible(false);
         
-        const panelBg = this.add.rectangle(this.chatW / 2, this.chatH / 2, this.chatW, this.chatH, 0x000c22, 0.98).setInteractive();
+        // Increased Transparency (0.85)
+        const panelBg = this.add.rectangle(this.chatW / 2, this.chatH / 2, this.chatW, this.chatH, 0x000c22, 0.75).setInteractive();
         
         const panelBorders = this.add.graphics();
         panelBorders.lineStyle(4, 0x0066aa, 1);
@@ -49,7 +53,6 @@ Object.assign(MenuScene.prototype, {
 
         this.chatContainer.add([panelBg, panelBorders, title, headerDiv, closeBtnBg, closeIcon, closeHit]);
 
-        // Dynamically calculate scroll height based on new window dimensions
         this.chatScrollZoneHeight = this.chatH - 210;
 
         // 4. Message List Scrollable Container
@@ -62,9 +65,25 @@ Object.assign(MenuScene.prototype, {
         this.chatMaskShape.y = this.chatYHidden - this.chatYVisible; 
         this.msgListContainer.setMask(this.chatMaskShape.createGeometryMask());
 
-        // 5. Dynamic Input Area
+        // 5. Dynamic Input Area & Reply UI
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const inputY = this.chatH - 75; 
+
+        // Reply Interface Setup
+        this.replyUI = this.add.container(this.chatW / 2 - 50, inputY - 60).setVisible(false);
+        const replyBg = this.add.graphics();
+        replyBg.fillStyle(0x003366, 0.95);
+        replyBg.fillRoundedRect(- (this.chatW - 180)/2, -20, this.chatW - 180, 40, 10);
+        this.replyTxt = this.add.text(- (this.chatW - 180)/2 + 15, 0, "", { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00ffff" }).setOrigin(0, 0.5);
+        const replyCancel = this.add.text((this.chatW - 180)/2 - 25, 0, "✖", { fontSize: "22px", color: "#ff4444", fontStyle: "bold" }).setOrigin(0.5).setInteractive({useHandCursor:true});
+        
+        this.cancelReply = () => {
+            this.replyData = null;
+            this.replyUI.setVisible(false);
+        };
+        replyCancel.on('pointerdown', () => this.cancelReply());
+        this.replyUI.add([replyBg, this.replyTxt, replyCancel]);
+        this.chatContainer.add(this.replyUI);
 
         if (isConnected) {
             const inputHTML = `<input type="text" id="chatInput" autocomplete="off" placeholder="এখানে লিখুন..." style="width: ${this.chatW - 180}px; padding: 20px 22px; font-family: 'Anek Bangla', sans-serif; font-size: 26px; border-radius: 20px; border: 3px solid #0066aa; outline: none; background: #051025; color: #fff;">`;
@@ -90,13 +109,14 @@ Object.assign(MenuScene.prototype, {
                 });
             }
         } else {
-            const promptTxt = this.add.text(this.chatW / 2, inputY - 45, "চ্যাট করতে Google লগইন করুন", { fontSize: "30px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" }).setOrigin(0.5);
+            // Shifted Login UI upwards
+            const promptTxt = this.add.text(this.chatW / 2, inputY - 70, "চ্যাট করতে Google লগইন করুন", { fontSize: "30px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" }).setOrigin(0.5);
             
             const loginBg = this.add.graphics();
             loginBg.fillStyle(0x0066aa, 1);
-            loginBg.fillRoundedRect(this.chatW / 2 - 160, inputY - 10, 320, 75, 30);
-            const loginTxt = this.add.text(this.chatW / 2, inputY + 27.5, "Connect (Google)", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-            const loginHit = this.add.rectangle(this.chatW / 2, inputY + 27.5, 320, 75, 0x000000, 0).setInteractive({useHandCursor: true});
+            loginBg.fillRoundedRect(this.chatW / 2 - 160, inputY - 18, 320, 75, 30);
+            const loginTxt = this.add.text(this.chatW / 2, inputY + 18, "Connect (Google)", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+            const loginHit = this.add.rectangle(this.chatW / 2, inputY + 18, 320, 75, 0x000000, 0).setInteractive({useHandCursor: true});
 
             loginHit.on('pointerdown', () => {
                 this.playSound('sfx_click');
@@ -106,21 +126,30 @@ Object.assign(MenuScene.prototype, {
             this.chatContainer.add([promptTxt, loginBg, loginTxt, loginHit]);
         }
 
-        // 6. Global Floating Trigger Button
-        this.chatToggleBtn = this.add.container(w - 70, h / 2 + 50).setDepth(9001);
-        const toggleBg = this.add.circle(0, 0, 55, 0x002255, 0.9).setStrokeStyle(4, 0x00ffff);
-        const toggleIcon = this.add.text(0, 0, "💬", { fontSize: "50px" }).setOrigin(0.5);
-        const toggleHit = this.add.circle(0, 0, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        // 6. Global Floating Trigger Button (Rounded Square & Fixed Position)
+        this.chatToggleBtn = this.add.container(w - 50, h / 6 + 200).setDepth(9001);
+        
+        const toggleBg = this.add.graphics();
+        toggleBg.fillStyle(0x002255, 0.95);
+        toggleBg.fillRoundedRect(-35, -35, 70, 70, 18);
+        toggleBg.lineStyle(3, 0x00ffff, 1);
+        toggleBg.strokeRoundedRect(-35, -35, 70, 70, 18);
+        
+        const toggleIcon = this.add.text(0, 0, "💬", { fontSize: "36px" }).setOrigin(0.5);
+        const toggleHit = this.add.rectangle(0, 0, 80, 80, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        // Unread Notifications Badge
+        this.unreadBadgeBg = this.add.circle(28, -28, 16, 0xff3333).setVisible(false);
+        this.unreadBadgeBg.setStrokeStyle(2, 0xffffff);
+        this.unreadBadgeTxt = this.add.text(28, -28, "0", { fontSize: "16px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5).setVisible(false);
         
         toggleHit.on('pointerdown', () => this.toggleChatWindow());
-        this.chatToggleBtn.add([toggleBg, toggleIcon, toggleHit]);
+        this.chatToggleBtn.add([toggleBg, toggleIcon, toggleHit, this.unreadBadgeBg, this.unreadBadgeTxt]);
 
-        // 7. Smooth Scroll UI & Gestures (Fixed thumb origin and bounds mapping)
+        // 7. Smooth Scroll UI & Gestures
         this.chatMaxScroll = 0;
         
-        // Muted Scrollbar Track
         this.chatScrollbarBg = this.add.rectangle(this.chatW - 12, 105 + this.chatScrollZoneHeight / 2, 8, this.chatScrollZoneHeight, 0x000000, 0.2);
-        // Fixed Scrollbar Thumb positioning using setOrigin(0.5, 0)
         this.chatScrollbarThumb = this.add.rectangle(this.chatW - 12, 105, 8, 50, 0x666666, 0.6).setOrigin(0.5, 0);
         this.chatContainer.add([this.chatScrollbarBg, this.chatScrollbarThumb]);
 
@@ -207,10 +236,16 @@ Object.assign(MenuScene.prototype, {
 
         if (this.isChatOpen) {
             this.chatContainer.setVisible(true);
+            this.unreadBadgeBg.setVisible(false);
+            this.unreadBadgeTxt.setVisible(false);
             
             // Snap to most recent chat every time it's opened!
             this.msgListContainer.y = 105 - this.chatMaxScroll;
             this.updateChatScrollbar();
+        } else {
+            // Close event: Reset last seen time and divider flag to track future chats
+            this.lastSeenTime = Date.now();
+            this.dividerRendered = false;
         }
 
         this.tweens.add({
@@ -262,6 +297,75 @@ Object.assign(MenuScene.prototype, {
         return filtered;
     },
 
+    initiateReply(msg) {
+        this.replyData = { id: msg.id, n: msg.n, text: msg.text };
+        let formattedText = msg.text.length > 20 ? msg.text.substring(0, 20) + "..." : msg.text;
+        this.replyTxt.setText(`Replying to ${msg.n}: ${formattedText}`);
+        this.replyUI.setVisible(true);
+        if (this.chatInput) {
+            const htmlElement = this.chatInput.getChildByID('chatInput');
+            if (htmlElement) htmlElement.focus();
+        }
+    },
+
+    reactToMessage(msgId, emoji) {
+        const uid = window.FirebaseAuth.currentUser.uid;
+        if (!uid) return;
+        const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msgId);
+        window.FirebaseTools.updateDoc(docRef, {
+            [`reactions.${uid}`]: emoji
+        });
+    },
+
+    showChatActionMenu(msg, x, y) {
+        if (this.chatActionPopup) this.chatActionPopup.destroy();
+        this.playSound('sfx_tick', 0.5);
+        
+        let localX = Phaser.Math.Clamp(x - this.chatX, 160, this.chatW - 160);
+        let localY = y - (this.isChatOpen ? this.chatYVisible : this.chatYHidden) - 70;
+        
+        this.chatActionPopup = this.add.container(localX, localY).setDepth(9999);
+        
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001a33, 0.98);
+        bg.fillRoundedRect(-160, -65, 320, 130, 20);
+        bg.lineStyle(3, 0x00ffff, 1);
+        bg.strokeRoundedRect(-160, -65, 320, 130, 20);
+        
+        // Emojis
+        const emojis = ['👍', '❤️', '😂', '😮', '😢'];
+        emojis.forEach((emoji, i) => {
+            const emTxt = this.add.text(-120 + (i * 60), -30, emoji, { fontSize: "32px" }).setOrigin(0.5).setInteractive({useHandCursor:true});
+            emTxt.on('pointerdown', () => {
+                this.reactToMessage(msg.id, emoji);
+                this.chatActionPopup.destroy();
+            });
+            this.chatActionPopup.add(emTxt);
+        });
+        
+        // Reply Button
+        const repBg = this.add.graphics();
+        repBg.fillStyle(0x0055aa, 1);
+        repBg.fillRoundedRect(-135, 10, 270, 40, 12);
+        const repHit = this.add.rectangle(0, 30, 270, 40, 0, 0).setInteractive({useHandCursor:true});
+        const repTxt = this.add.text(0, 30, "Reply", { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#fff", fontStyle: "bold" }).setOrigin(0.5);
+        
+        repHit.on('pointerdown', () => {
+            this.initiateReply(msg);
+            this.chatActionPopup.destroy();
+        });
+        
+        this.chatActionPopup.add([bg, repBg, repTxt, repHit]);
+        this.chatContainer.add(this.chatActionPopup);
+        
+        // Auto-close overlay
+        this.time.delayedCall(100, () => {
+            this.input.once('pointerdown', () => {
+                if (this.chatActionPopup) this.chatActionPopup.destroy();
+            });
+        });
+    },
+
     listenToGlobalChat() {
         if (!window.FirebaseDB || !window.FirebaseTools) return;
         
@@ -282,6 +386,7 @@ Object.assign(MenuScene.prototype, {
             }
 
             let currentY = 15;
+            let unreadCalc = 0;
             const isAdmin = GameState.profile && GameState.profile.role === 'admin';
             const currentUserUid = (window.FirebaseAuth && window.FirebaseAuth.currentUser) ? window.FirebaseAuth.currentUser.uid : null;
 
@@ -291,7 +396,24 @@ Object.assign(MenuScene.prototype, {
             const renderMessage = (msg, isPinned) => {
                 const isMe = currentUserUid && (msg.uid === currentUserUid);
                 
-                // Formatted to: Name • Lvl 5
+                let msgTime = msg.timestamp ? (msg.timestamp.toMillis ? msg.timestamp.toMillis() : Date.now()) : Date.now();
+                
+                // Track Unread
+                if (!isPinned && msgTime > this.lastSeenTime) unreadCalc++;
+
+                // New Chats Divider Injection
+                if (this.isChatOpen && msgTime > this.lastSeenTime && !this.dividerRendered && !isPinned) {
+                    this.dividerRendered = true;
+                    const divCont = this.add.container(this.chatW / 2, currentY + 15);
+                    const divLine = this.add.rectangle(0, 0, this.chatW - 100, 2, 0xff3333, 0.7);
+                    const divTxt = this.add.text(0, 0, "---- নতুন মেসেজ ----", { 
+                        fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ff3333", backgroundColor: "#000c22", padding: {x: 10} 
+                    }).setOrigin(0.5);
+                    divCont.add([divLine, divTxt]);
+                    this.msgListContainer.add(divCont);
+                    currentY += 40;
+                }
+
                 const levelText = msg.lvl ? ` • Lvl ${msg.lvl}` : "";
                 const nameStr = (isPinned ? "📌 " : "") + (msg.n || "Guest") + levelText;
                 
@@ -300,46 +422,100 @@ Object.assign(MenuScene.prototype, {
                 else if (isMe) nameColor = "#00ffff"; 
                 else nameColor = this.getDeterministicColor(msg.uid);
                 
-                const bubbleMaxWidth = this.chatW * 0.78;
+                const bubbleMaxWidth = this.chatW * 0.75;
                 
+                let extraHeight = 0;
+                let replyTxtObj = null;
+                
+                // Handle Replying Display
+                if (msg.replyTo) {
+                    extraHeight = 35;
+                    let replySnippet = msg.replyTo.text.length > 25 ? msg.replyTo.text.substring(0, 25) + "..." : msg.replyTo.text;
+                    let alignmentOffset = isMe ? -23 : 23;
+                    
+                    replyTxtObj = this.add.text(0, currentY + 42, `➥ ${msg.replyTo.n}: ${replySnippet}`, { 
+                        fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#aaddff", fontStyle: "italic", 
+                        backgroundColor: "#000000aa", padding: {x: 8, y: 4}
+                    });
+                }
+
                 const msgTxt = this.add.text(0, 0, msg.text, { 
                     fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", color: "#ffffff", wordWrap: { width: bubbleMaxWidth - 46 } 
                 });
 
-                const bubbleW = Math.max(msgTxt.width + 46, 150);
-                const bubbleH = msgTxt.height + 36;
+                const bubbleW = Math.max(msgTxt.width + 46, (replyTxtObj ? replyTxtObj.width + 20 : 150));
+                const bubbleH = msgTxt.height + 36 + extraHeight;
                 let startX = isMe ? (this.chatW - bubbleW - 25) : 25;
 
                 const nameTxt = this.add.text(0, 0, nameStr, { 
-                    fontSize: "24px", fontFamily: "'Anek Bangla'", color: nameColor, fontStyle: "bold" 
+                    fontSize: "22px", fontFamily: "'Anek Bangla'", color: nameColor, fontStyle: "bold" 
                 });
                 nameTxt.setPosition(isMe ? (this.chatW - nameTxt.width - 30) : 30, currentY);
 
                 const bubbleBg = this.add.graphics();
                 if (isMe) {
                     bubbleBg.fillStyle(0x004c99, 1); 
-                    bubbleBg.fillRoundedRect(startX, currentY + 36, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
+                    bubbleBg.fillRoundedRect(startX, currentY + 32, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
                 } else {
                     bubbleBg.fillStyle(0x223344, 1); 
-                    bubbleBg.fillRoundedRect(startX, currentY + 36, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
+                    bubbleBg.fillRoundedRect(startX, currentY + 32, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
                 }
 
-                msgTxt.setPosition(startX + 23, currentY + 54);
+                // Adjust Content Positioning based on Ownership
+                if (replyTxtObj) replyTxtObj.setPosition(isMe ? startX + bubbleW - replyTxtObj.width - 15 : startX + 15, currentY + 40);
+                msgTxt.setPosition(isMe ? startX + bubbleW - msgTxt.width - 23 : startX + 23, currentY + 50 + extraHeight);
 
                 const timeStr = this.timeAgo(msg.timestamp);
                 const timeTxt = this.add.text(0, 0, timeStr, { 
-                    fontSize: "18px", fontFamily: "Arial", color: "#aaaaaa" 
+                    fontSize: "16px", fontFamily: "Arial", color: "#aaaaaa" 
                 });
-                timeTxt.setPosition(isMe ? (this.chatW - timeTxt.width - 30) : 30, currentY + 36 + bubbleH + 6);
+                timeTxt.setPosition(isMe ? (this.chatW - timeTxt.width - 30) : 30, currentY + 32 + bubbleH + 6);
 
                 this.msgListContainer.add([nameTxt, bubbleBg, msgTxt, timeTxt]);
+                if (replyTxtObj) this.msgListContainer.add(replyTxtObj);
+
+                // Tap and Hold Events for Reactions/Replies
+                const interactHit = this.add.rectangle(startX + bubbleW/2, currentY + 32 + bubbleH/2, bubbleW, bubbleH, 0, 0).setInteractive({useHandCursor:true});
+                let pressTimer;
+                interactHit.on('pointerdown', (pointer) => {
+                    pressTimer = this.time.delayedCall(450, () => this.showChatActionMenu(msg, pointer.x, pointer.y));
+                });
+                interactHit.on('pointerup', () => { if(pressTimer) pressTimer.remove(); });
+                interactHit.on('pointermove', () => { if(pressTimer) pressTimer.remove(); });
+                interactHit.on('pointerout', () => { if(pressTimer) pressTimer.remove(); });
+                this.msgListContainer.add(interactHit);
+
+                // Handle Reactions Rendering
+                let reactionSpace = 0;
+                if (msg.reactions) {
+                    let counts = {};
+                    Object.values(msg.reactions).forEach(e => counts[e] = (counts[e] || 0) + 1);
+                    
+                    let rxX = isMe ? startX + bubbleW - 65 : startX + 15;
+                    let rxY = currentY + 32 + bubbleH - 12; // Snug against bottom of bubble
+                    
+                    const sortedReactions = Object.keys(counts);
+                    sortedReactions.forEach((e) => {
+                        const badgeBg = this.add.graphics();
+                        badgeBg.fillStyle(0x001122, 1);
+                        badgeBg.fillRoundedRect(rxX, rxY, 50, 26, 13);
+                        badgeBg.lineStyle(1.5, 0x00aaff, 1);
+                        badgeBg.strokeRoundedRect(rxX, rxY, 50, 26, 13);
+                        
+                        const badgeTxt = this.add.text(rxX + 25, rxY + 13, `${e} ${counts[e]}`, { fontSize: "16px", color: "#fff" }).setOrigin(0.5);
+                        this.msgListContainer.add([badgeBg, badgeTxt]);
+                        rxX += isMe ? -55 : 55; // Expand inwards based on ownership
+                    });
+                    
+                    if (sortedReactions.length > 0) reactionSpace = 25; 
+                }
 
                 if (isAdmin) {
                     const adminX = isMe ? (startX - 90) : (startX + bubbleW + 30);
-                    const delBtn = this.add.text(adminX, currentY + 50, "🗑️", { fontSize: "30px" }).setOrigin(0.5).setInteractive({useHandCursor: true});
+                    const delBtn = this.add.text(adminX, currentY + 50, "🗑️", { fontSize: "28px" }).setOrigin(0.5).setInteractive({useHandCursor: true});
                     delBtn.on('pointerdown', () => window.FirebaseTools.deleteDoc(window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id)));
                     
-                    const pinBtn = this.add.text(adminX + 55, currentY + 50, isPinned ? "❌" : "📌", { fontSize: "30px" }).setOrigin(0.5).setInteractive({useHandCursor: true});
+                    const pinBtn = this.add.text(adminX + 50, currentY + 50, isPinned ? "❌" : "📌", { fontSize: "28px" }).setOrigin(0.5).setInteractive({useHandCursor: true});
                     pinBtn.on('pointerdown', () => {
                         const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id);
                         window.FirebaseTools.updateDoc(docRef, { pinned: !isPinned });
@@ -347,7 +523,7 @@ Object.assign(MenuScene.prototype, {
                     this.msgListContainer.add([delBtn, pinBtn]);
                 }
 
-                currentY += bubbleH + 90; 
+                currentY += bubbleH + reactionSpace + 40; 
             };
 
             pinnedMessages.forEach(msg => renderMessage(msg, true));
@@ -363,7 +539,15 @@ Object.assign(MenuScene.prototype, {
             const visibleHeight = this.chatScrollZoneHeight;
             this.chatMaxScroll = Math.max(0, currentY - visibleHeight);
 
-            // Snap smoothly to most recent chat on any new update!
+            // Update Notification Badge if Chat is Closed
+            if (!this.isChatOpen && unreadCalc > 0) {
+                let badgeText = unreadCalc > 9 ? "9+" : unreadCalc.toString();
+                this.unreadBadgeTxt.setText(badgeText);
+                this.unreadBadgeBg.setVisible(true);
+                this.unreadBadgeTxt.setVisible(true);
+            }
+
+            // Snap smoothly to most recent chat on any new update
             this.tweens.add({
                 targets: this.msgListContainer,
                 y: 105 - this.chatMaxScroll,
@@ -389,16 +573,23 @@ Object.assign(MenuScene.prototype, {
 
         const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
         
-        window.FirebaseTools.addDoc(chatRef, {
+        let payload = {
             uid: window.FirebaseAuth.currentUser.uid,
             n: playerName,
             lvl: playerLvl, 
             text: text,
             timestamp: window.FirebaseTools.serverTimestamp(),
             pinned: false
-        });
+        };
+
+        if (this.replyData) {
+            payload.replyTo = this.replyData;
+        }
+        
+        window.FirebaseTools.addDoc(chatRef, payload);
 
         htmlElement.value = ""; 
+        if (this.replyData) this.cancelReply(); // Clear reply UI after sending
     },
 
     cleanUpOldChats(oldDocs) {
