@@ -306,25 +306,107 @@ Object.assign(MenuScene.prototype, {
         }
 
         // 6. Global Floating Trigger Button
-        this.chatToggleBtn = this.add.container(w - 50, h / 6 + 200).setDepth(9001);
-        
-        const toggleBg = this.add.graphics();
-        toggleBg.fillStyle(0x002255, 0.95);
-        toggleBg.fillRoundedRect(-35, -35, 70, 70, 18);
-        toggleBg.lineStyle(3, 0x00ffff, 1);
-        toggleBg.strokeRoundedRect(-35, -35, 70, 70, 18);
-        
-        const toggleIcon = this.add.text(0, 0, "💬", { fontSize: "36px" }).setOrigin(0.5);
-        const toggleHit = this.add.rectangle(0, 0, 80, 80, 0x000000, 0).setInteractive({ useHandCursor: true });
-        
-        this.unreadBadgeBg = this.add.circle(28, -28, 16, 0xff3333).setVisible(false);
-        this.unreadBadgeBg.setStrokeStyle(2, 0xffffff);
-        this.unreadBadgeTxt = this.add.text(28, -28, "0", { fontSize: "16px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5).setVisible(false);
-        
-        toggleHit.on('pointerdown', () => this.toggleChatWindow());
-        this.chatToggleBtn.add([toggleBg, toggleIcon, toggleHit, this.unreadBadgeBg, this.unreadBadgeTxt]);
-
+        this.createChatToggleButton(w - 50, h / 6 + 250);
         this.listenToGlobalChat();
+    },
+
+    createChatToggleButton(x, y) {
+        // Create a main container for the button and badge
+        this.chatToggleContainer = this.add.container(x, y).setDepth(9000);
+
+        // 1. Soft Drop Shadow (Bigger rounded square)
+        const shadow = this.add.graphics();
+        shadow.fillStyle(0x000000, 0.7);
+        shadow.fillRoundedRect(-36, -36, 80, 80, 20); 
+
+        // 2. Professional Gradient Base (Bigger rounded square)
+        const bg = this.add.graphics();
+        const drawBase = (isHovered) => {
+            bg.clear();
+            if (isHovered) {
+                bg.fillGradientStyle(0x1e293b, 0x1e293b, 0x334155, 0x334155, 1); 
+                bg.lineStyle(2, 0x475569, 1);
+            } else {
+                bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 1); 
+                bg.lineStyle(2, 0x334155, 1);
+            }
+            bg.fillRoundedRect(-40, -40, 80, 80, 20);
+            bg.strokeRoundedRect(-40, -40, 80, 80, 20);
+        };
+        drawBase(false);
+
+        // 3. Crisp Icon (Bigger Font)
+        const icon = this.add.text(0, 0, "💬", { 
+            fontSize: "50px", 
+            fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif' 
+        }).setOrigin(0.5) .setAlpha(0.85);
+        icon.clearTint();
+
+        // 4. Interactive Hit Area
+        const hitArea = this.add.rectangle(0, 0, 80, 80, 0, 0).setInteractive({ useHandCursor: true });
+
+        // 5. Polished Animations
+        hitArea.on('pointerover', () => {
+            drawBase(true);
+            this.tweens.add({ targets: this.chatToggleContainer, scale: 1.1, duration: 200, ease: 'Back.out' });
+        });
+
+        hitArea.on('pointerout', () => {
+            drawBase(false);
+            this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 200, ease: 'Power2' });
+        });
+
+        hitArea.on('pointerdown', () => {
+            if (this.playSound) this.playSound('sfx_tick', 0.5); 
+            
+            // "Squish" bounce effect on click
+            this.tweens.add({
+                targets: this.chatToggleContainer,
+                scale: 0.85,
+                yoyo: true,
+                duration: 100,
+                ease: 'Sine.easeInOut',
+                onComplete: () => {
+                    this.toggleChatWindow(); 
+                }
+            });
+        });
+
+        // 6. The Unread Badge (Repositioned to the top right of the square)
+        this.unreadBadgeBg = this.add.graphics();
+        this.unreadBadgeBg.fillStyle(0xef4444, 1); 
+        this.unreadBadgeBg.fillCircle(32, -32, 16); 
+        this.unreadBadgeBg.lineStyle(2, 0x0f172a, 1); 
+        this.unreadBadgeBg.strokeCircle(32, -32, 16);
+        
+        this.unreadBadgeTxt = this.add.text(32, -32, "0", {
+            fontSize: "16px", 
+            fontFamily: "Arial", 
+            color: "#ffffff", 
+            fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        this.unreadBadgeBg.setVisible(false);
+        this.unreadBadgeTxt.setVisible(false);
+
+        this.chatToggleContainer.add([
+            shadow, 
+            bg, 
+            icon, 
+            hitArea, 
+            this.unreadBadgeBg, 
+            this.unreadBadgeTxt
+        ]);
+        
+        // Entrance Animation
+        this.chatToggleContainer.setScale(0);
+        this.tweens.add({
+            targets: this.chatToggleContainer,
+            scale: 1,
+            duration: 400,
+            delay: 200, 
+            ease: 'Back.out'
+        });
     },
 
     toggleChatWindow() {
@@ -335,6 +417,8 @@ Object.assign(MenuScene.prototype, {
         this.chatBlocker.setVisible(this.isChatOpen);
 
         if (this.isChatOpen) {
+            this.chatToggleContainer.setVisible(false); // HIDE BUTTON
+            
             this.chatKeyboardOffset = 0;
             if (this.bottomUIContainer) this.bottomUIContainer.y = 0;
             
@@ -344,9 +428,16 @@ Object.assign(MenuScene.prototype, {
             
             this.msgListContainer.y = 125 - this.chatMaxScroll;
             this.updateChatScrollbar();
+            
+            this.lastUnreadCount = 0; // Reset unread count state
         } else {
             this.lastSeenTime = Date.now();
             this.dividerRendered = false;
+            
+            // SHOW BUTTON AND POP IT IN
+            this.chatToggleContainer.setVisible(true);
+            this.chatToggleContainer.setScale(0);
+            this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 300, ease: 'Back.out' });
         }
 
         this.tweens.add({
@@ -631,7 +722,7 @@ Object.assign(MenuScene.prototype, {
                     const divCont = this.add.container(this.chatW / 2, currentY + 15);
                     const divLine = this.add.rectangle(0, 0, this.chatW - 100, 2, 0xff3333, 0.7);
                     const divTxt = this.add.text(0, 0, "---- নতুন মেসেজ ----", { 
-                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ff3333", backgroundColor: "#000c22", padding: {x: 12} 
+                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#c5c5c5", backgroundColor: "#000c22", padding: {x: 12} 
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
                     this.msgListContainer.add(divCont);
@@ -772,6 +863,19 @@ Object.assign(MenuScene.prototype, {
                 this.unreadBadgeTxt.setText(badgeText);
                 this.unreadBadgeBg.setVisible(true);
                 this.unreadBadgeTxt.setVisible(true);
+
+                // Pulse the button when the unread count goes up
+                if (this.lastUnreadCount === undefined) this.lastUnreadCount = 0;
+                if (unreadCalc > this.lastUnreadCount) {
+                    this.tweens.add({
+                        targets: this.chatToggleContainer,
+                        scale: 1.15,
+                        yoyo: true,
+                        duration: 250,
+                        ease: 'Sine.easeInOut'
+                    });
+                }
+                this.lastUnreadCount = unreadCalc;
             }
 
             // --- SMART SCROLL LOGIC APPLICATION ---
