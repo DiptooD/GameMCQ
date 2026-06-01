@@ -49,15 +49,20 @@ class MenuScene extends Phaser.Scene {
             this.sound.get('bg_music').stop();
         }
 
+        // FIX: Handle AudioContext properly to eliminate console warnings
         let menuMusic = this.sound.get('menubgm');
         if (!menuMusic) {
             menuMusic = this.sound.add('menubgm', { loop: true, volume: window.GameState.musicVolume });
-            menuMusic.play();
         } else {
             menuMusic.setVolume(window.GameState.musicVolume);
-            if (!menuMusic.isPlaying) {
-                menuMusic.play();
-            }
+        }
+
+        if (this.sound.context.state === 'suspended') {
+            this.input.once('pointerdown', () => {
+                if (!menuMusic.isPlaying) menuMusic.play();
+            });
+        } else {
+            if (!menuMusic.isPlaying) menuMusic.play();
         }
 
         const manifest = this.cache.json.get('bank_directory');
@@ -88,7 +93,6 @@ class MenuScene extends Phaser.Scene {
             shadow: { offsetX: 4, offsetY: 4, color: "#0044aa", blur: 15, stroke: true, fill: true }
         }).setOrigin(0.5);
 
-        // --- NEW: Version Text added under the title ---
         const versionText = this.add.text(180, 65, "v1.0.0", {
             fontSize: "24px", 
             fontFamily: "'Anek Bangla'", 
@@ -127,11 +131,10 @@ class MenuScene extends Phaser.Scene {
         const startY = panelY + 270;
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
-        // --- NEW: Leaderboard Accordion Placement ---
+        // Leaderboard Accordion Placement
         const boardY = startY + 95;
         this.leaderboard = new LeaderboardAccordion(this, cx, boardY, UI_WIDTH + 60);
 
-        // --- UPDATED: Pushed InfoBox down slightly to make room ---
         const tipsY = boardY + 95;
         this.createInfoBox(cx, tipsY, UI_WIDTH + 60);
 
@@ -152,7 +155,6 @@ class MenuScene extends Phaser.Scene {
             this.showMatchHistoryPopup(); 
         }
 
-        // --- NEW: Call the background update check ---
         this.checkForUpdates(cx, cy);
     }
 

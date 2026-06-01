@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <title>Game MCQ</title>
   
-  <!-- UPDATED CSP: Added https://raw.githubusercontent.com to connect-src -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; frame-src 'self' https://gamemcq.firebaseapp.com https://accounts.google.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://raw.githubusercontent.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; frame-src 'self' https://gamemcq.firebaseapp.com https://accounts.google.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.firebaseio.com https://*.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://raw.githubusercontent.com https://*.gstatic.com;">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   
@@ -27,7 +26,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-    // --- UPDATED: Imported collection, query, orderBy, limit, getDocs ---
     import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -45,10 +43,7 @@
     window.FirebaseAuth.useDeviceLanguage(); 
     window.FirebaseDB = getFirestore(app);
     
-    // --- UPDATED: Exported the new querying tools ---
     window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs };
-
-    // ... (Keep your existing window.connectToCloud, window.signInWithGoogle, and window.syncAfterLogin exactly as they were) ...
 
     window.connectToCloud = function() {
         return new Promise((resolve) => {
@@ -109,7 +104,6 @@
             }
 
             try {
-                // NATIVE CORDOVA APP AUTHENTICATION
                 if (window.cordova && window.plugins && window.plugins.googleplus) {
                     window.plugins.googleplus.login(
                         {
@@ -142,9 +136,7 @@
                             reject(new Error(JSON.stringify(msg)));
                         }
                     );
-                } 
-                // WEB BROWSER AUTHENTICATION FALLBACK
-                else {
+                } else {
                     const provider = new window.FirebaseTools.GoogleAuthProvider();
                     const result = await window.FirebaseTools.signInWithPopup(window.FirebaseAuth, provider);
                     
@@ -189,7 +181,14 @@
     };
   </script>
 
-  <script src="cordova.js"></script> 
+  <script>
+    if (window.cordova || navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+        var script = document.createElement('script');
+        script.src = 'cordova.js';
+        document.head.appendChild(script);
+    }
+  </script>
+
 </head>
 <body>
   
@@ -249,11 +248,12 @@
             await loadScript('js/phaser.min.js');
         }
 
+        // FIX: Added scenes/ path to LeaderboardAccordion.js
         const scripts = [
             "game.js",
             "scenes/LoadingScene.js",
             "scenes/PlayerProfileScene.js",
-            "scenes/LeaderboardAccordion.js",
+            "scenes/LeaderboardAccordion.js", 
             "scenes/MenuScene.js",
             "scenes/SettingsScene.js",
             "scenes/ReadingScene.js",
