@@ -410,14 +410,14 @@ Object.assign(MenuScene.prototype, {
     },
 
     toggleChatWindow() {
-        this.playSound('sfx_click');
+        if (this.playSound) this.playSound('sfx_click');
         this.isChatOpen = !this.isChatOpen;
         
         const targetY = this.isChatOpen ? this.chatYVisible : this.chatYHidden;
         this.chatBlocker.setVisible(this.isChatOpen);
 
         if (this.isChatOpen) {
-            this.chatToggleContainer.setVisible(false); // HIDE BUTTON
+            this.chatToggleContainer.setVisible(false); // Hide FAB
             
             this.chatKeyboardOffset = 0;
             if (this.bottomUIContainer) this.bottomUIContainer.y = 0;
@@ -429,15 +429,19 @@ Object.assign(MenuScene.prototype, {
             this.msgListContainer.y = 125 - this.chatMaxScroll;
             this.updateChatScrollbar();
             
-            this.lastUnreadCount = 0; // Reset unread count state
+            this.lastUnreadCount = 0; 
         } else {
+            // Update last seen time immediately upon closing
             this.lastSeenTime = Date.now();
             this.dividerRendered = false;
             
-            // SHOW BUTTON AND POP IT IN
+            // Show FAB
             this.chatToggleContainer.setVisible(true);
             this.chatToggleContainer.setScale(0);
             this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 300, ease: 'Back.out' });
+            
+            // BUG FIX: Re-render the chat in the background to wipe the old "নতুন মেসেজ" divider 
+            if (this.refreshChatUI) this.refreshChatUI();
         }
 
         this.tweens.add({
@@ -672,39 +676,25 @@ Object.assign(MenuScene.prototype, {
         const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
         const q = window.FirebaseTools.query(chatRef, window.FirebaseTools.orderBy("timestamp", "desc"), window.FirebaseTools.limit(105));
         
-        // NEW: Track the very first time the chat loads so it snaps to the bottom initially
         let isFirstLoad = true;
+        this.chatDataCache = []; // We now cache messages so we can re-render them at will
 
-        this.chatUnsubscribe = window.FirebaseTools.onSnapshot(q, (snapshot) => {
-            
-            // --- SMART SCROLL LOCK: Capture scroll position before wiping messages ---
+        // Refactored UI rendering into a callable function
+        this.refreshChatUI = () => {
             const prevTopY = 125 - this.chatKeyboardOffset;
             const prevBottomY = prevTopY - (this.chatMaxScroll || 0);
-            
-            // Check if the user is currently looking at the newest messages (allowing 50px of wiggle room)
-            // Note: msgListContainer.y goes into negatives as you scroll down
             const isAtBottom = this.msgListContainer.y <= prevBottomY + 50;
-            // -------------------------------------------------------------------------
 
             this.msgListContainer.removeAll(true);
-            let messages = [];
-            snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
-
-            messages.reverse();
-
-            if (messages.length > 100) {
-                const toDelete = messages.slice(0, messages.length - 100);
-                this.cleanUpOldChats(toDelete);
-                messages = messages.slice(messages.length - 100);
-            }
-
             let currentY = 20;
             let unreadCalc = 0;
+            this.dividerRendered = false; 
+            
             const isAdmin = GameState.profile && GameState.profile.role === 'admin';
             const currentUserUid = (window.FirebaseAuth && window.FirebaseAuth.currentUser) ? window.FirebaseAuth.currentUser.uid : null;
 
-            const pinnedMessages = messages.filter(m => m.pinned);
-            const regularMessages = messages.filter(m => !m.pinned);
+            const pinnedMessages = this.chatDataCache.filter(m => m.pinned);
+            const regularMessages = this.chatDataCache.filter(m => !m.pinned);
 
             let lastSenderUid = null;
             let lastMessageWasPinned = false;
@@ -715,14 +705,15 @@ Object.assign(MenuScene.prototype, {
                 
                 if (!isPinned && msgTime > this.lastSeenTime) unreadCalc++;
 
-                if (this.isChatOpen && msgTime > this.lastSeenTime && !this.dividerRendered && !isPinned) {
+                // BUG FIX: Removed this.isChatOpen requirement. It now draws even if closed.
+                if (msgTime > this.lastSeenTime && !this.dividerRendered && !isPinned) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
                     
                     const divCont = this.add.container(this.chatW / 2, currentY + 15);
                     const divLine = this.add.rectangle(0, 0, this.chatW - 100, 2, 0xff3333, 0.7);
                     const divTxt = this.add.text(0, 0, "---- নতুন মেসেজ ----", { 
-                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#c5c5c5", backgroundColor: "#000c22", padding: {x: 12} 
+                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ff3333", backgroundColor: "#000c22", padding: {x: 12} 
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
                     this.msgListContainer.add(divCont);
@@ -858,32 +849,24 @@ Object.assign(MenuScene.prototype, {
             const visibleHeight = this.chatScrollZoneHeight;
             this.chatMaxScroll = Math.max(0, currentY - visibleHeight);
 
+            // New Badge Logic
             if (!this.isChatOpen && unreadCalc > 0) {
                 let badgeText = unreadCalc > 9 ? "9+" : unreadCalc.toString();
                 this.unreadBadgeTxt.setText(badgeText);
                 this.unreadBadgeBg.setVisible(true);
                 this.unreadBadgeTxt.setVisible(true);
 
-                // Pulse the button when the unread count goes up
                 if (this.lastUnreadCount === undefined) this.lastUnreadCount = 0;
                 if (unreadCalc > this.lastUnreadCount) {
-                    this.tweens.add({
-                        targets: this.chatToggleContainer,
-                        scale: 1.15,
-                        yoyo: true,
-                        duration: 250,
-                        ease: 'Sine.easeInOut'
-                    });
+                    this.tweens.add({ targets: this.chatToggleContainer, scale: 1.15, yoyo: true, duration: 250, ease: 'Sine.easeInOut' });
                 }
                 this.lastUnreadCount = unreadCalc;
             }
 
-            // --- SMART SCROLL LOGIC APPLICATION ---
             const topY = 125 - this.chatKeyboardOffset;
             const newBottomY = topY - this.chatMaxScroll;
 
             if (isFirstLoad || isAtBottom) {
-                // If they just opened the chat, OR they were already at the bottom waiting for new messages, snap to bottom
                 this.tweens.add({
                     targets: this.msgListContainer,
                     y: newBottomY,
@@ -892,14 +875,26 @@ Object.assign(MenuScene.prototype, {
                     onUpdate: () => this.updateChatScrollbar()
                 });
             } else {
-                // If they were scrolled up reading older messages, DO NOT SNAP. 
-                // Keep them exactly where they are, just clamp it so they don't scroll out of bounds.
                 this.msgListContainer.y = Phaser.Math.Clamp(this.msgListContainer.y, newBottomY, topY);
                 this.updateChatScrollbar();
             }
-            
-            // Turn off the first load flag after the first run
             isFirstLoad = false;
+        };
+
+        // Snapshot now simply fetches data and calls the render function
+        this.chatUnsubscribe = window.FirebaseTools.onSnapshot(q, (snapshot) => {
+            let messages = [];
+            snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
+            messages.reverse();
+
+            if (messages.length > 100) {
+                const toDelete = messages.slice(0, messages.length - 100);
+                this.cleanUpOldChats(toDelete);
+                messages = messages.slice(messages.length - 100);
+            }
+
+            this.chatDataCache = messages;
+            this.refreshChatUI();
         });
     },
 
