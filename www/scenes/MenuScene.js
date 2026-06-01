@@ -124,13 +124,13 @@ class MenuScene extends Phaser.Scene {
         const panelY = cy + 40;
         this.createSettingsPanel(cx, panelY, UI_WIDTH, manifest);
 
-        const startY = panelY + 270;
+        const startY = panelY + 260;
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
-        const tipsY = startY + 165;
+        const tipsY = startY + 160; // Slightly moved up to fit the new tabbed layout
         this.createInfoBox(cx, tipsY, UI_WIDTH + 60);
 
-        this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90); 
+        this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90);
         
         this.input.on('pointerdown', (pointer, gameObjects) => {
             if (gameObjects.length === 0) {
@@ -1247,111 +1247,200 @@ class MenuScene extends Phaser.Scene {
     }
 
     createInfoBox(x, y, width) {
-        const height = 110; 
+        // 1. Increased height to accommodate larger, mobile-friendly fonts
+        const height = 160; 
         const container = this.add.container(x, y);
 
+        // 2. Subtle Background (Less noticeable UI)
         const bg = this.add.graphics();
-        bg.fillStyle(0x001122, 0.4); 
-        bg.fillRoundedRect(-width/2, -height/2, width, height, 15);
+        bg.fillStyle(0x000815, 0.45); // Lower opacity, darker base
+        bg.fillRoundedRect(-width/2, -height/2, width, height, 16);
+        bg.lineStyle(1.5, 0x003355, 0.3); // Very subtle border instead of harsh neon
+        bg.strokeRoundedRect(-width/2, -height/2, width, height, 16);
 
-        this.normalTips = [
-            "💡 টিপস: বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
-            "💡 টিপস: বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
-            "💡 টিপস: কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন 초।",
-            "💡 টিপস: স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
-            "💡 টিপস: গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
-            "💡 টিপস: গেমের মাঝপথে বিরতি নিতে চাইলে স্ক্রিনের ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",
-            "💡 টিপস: 'Fire Shield' বুস্টার ব্যবহার করলে আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
-            "💡 টিপস: সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
-            "💡 টিপস: ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।"
-        ];
-
-        this.revisionTips = [
-            "💡 রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে।",
-            "💡 রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে শাহ, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
-        ];
-
-        const getActiveTips = () => this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
+        // Tab System Setup
+        const tabW = width / 3;
+        const tabY = -height/2 + 25;
         
-        let currentTipIndex = Phaser.Math.Between(0, getActiveTips().length - 1);
-        let currentMissionIndex = 0;
-        let isShowingTips = true; 
+        // 3. Subtle Tab Highlight
+        // 3. Subtle Tab Highlight
+        const highlightBg = this.add.graphics();
+        highlightBg.fillStyle(0xffffff, 0.05);
+        
+        // Calculate the height of the highlight box
+        const highlightHeight = 44; 
+        
+        // Draw the highlight perfectly centered on the tabY position
+        // tabY defines the vertical center of the text. 
+        // We subtract half the highlight height to center the box vertically.
+        highlightBg.fillRoundedRect(
+            -tabW/2 + 5, 
+            tabY - (highlightHeight / 2), 
+            tabW - 10, 
+            highlightHeight, 
+            12
+        );
+        
+        container.add([bg, highlightBg]);
 
-        this.infoText = this.add.text(0, -5, getActiveTips()[currentTipIndex], {
-            fontSize: "21px",
-            fontFamily: "'Anek Bangla'",
-            color: "#aaccff",
-            align: "center",
-            padding: { x: 10, y: 10 },
-            wordWrap: { width: width - 30 },
-            lineSpacing: 10
-        }).setOrigin(0.5);
+        const tabs = [
+            { id: "top", label: "🏆 টপ", xOffset: -tabW },
+            { id: "tips", label: "💡 টিপস", xOffset: 0 },
+            { id: "mission", label: "🎯 মিশন", xOffset: tabW }
+        ];
 
-        const dot1 = this.add.circle(-15, 40, 4, 0x00ffff, 0.5);
-        const dot2 = this.add.circle(15, 40, 4, 0x00ffff, 0.5);
+        // Shifted containers down slightly to balance the taller box
+        this.infoContainers = {
+            top: this.add.container(0, 25),
+            tips: this.add.container(0, 25),
+            mission: this.add.container(0, 25)
+        };
+        
+        // Subtle Divider line beneath tabs
+        const div = this.add.rectangle(0, -height/2 + 50, width - 40, 1.5, 0x004488, 0.3);
+        container.add(div);
 
-        const hitArea = this.add.rectangle(0, 0, width, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        let currentTab = "tips";
+        highlightBg.x = 0; // Default starts at Tips
 
-        container.add([bg, this.infoText, dot1, dot2, hitArea]);
-
-        const fetchMissionText = () => {
-            let missions = GameState.dailyMissions || [];
-            if (missions.length === 0) return "🎯 কোনো দৈনিক মিশন নেই";
+        tabs.forEach(tab => {
+            const btnHit = this.add.rectangle(tab.xOffset, tabY, tabW, 45, 0x000000, 0).setInteractive({ useHandCursor: true });
             
-            let m = missions[currentMissionIndex];
-            let status = m.completed ? "✅ সম্পন্ন" : `(${m.progress}/${m.target})`;
-            return `🎯 দৈনিক মিশন:\n${m.desc} ${status}`;
-        };
+            // Larger Tab Fonts with shadows
+            const txt = this.add.text(tab.xOffset, tabY, tab.label, {
+                fontSize: "25px", 
+                fontFamily: "'Anek Bangla'", 
+                color: tab.id === currentTab ? "#dddddd" : "#6c89a7", 
+                fontStyle: "bold",
+                shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 3, fill: true }
+            }).setOrigin(0.5);
+            
+            tab.textObj = txt;
+            
+            btnHit.on('pointerdown', () => {
+                this.playSound('sfx_tick', 0.5);
+                currentTab = tab.id;
+                
+                // Smooth highlight slide
+                this.tweens.add({ targets: highlightBg, x: tab.xOffset, duration: 250, ease: 'Cubic.out' });
+                tabs.forEach(t => t.textObj.setColor(t.id === currentTab ? "#dddddd" : "#6c89a7"));
+                
+                // Toggle Visibility
+                Object.keys(this.infoContainers).forEach(k => {
+                    this.infoContainers[k].setVisible(k === currentTab);
+                });
 
-        const toggleView = () => {
-            isShowingTips = !isShowingTips;
-            this.tweens.add({
-                targets: this.infoText, alpha: 0, duration: 150,
-                onComplete: () => {
-                    if (isShowingTips) {
-                        this.infoText.setText(getActiveTips()[currentTipIndex]);
-                        this.infoText.setColor("#aaccff");
-                        dot1.setAlpha(1);
-                        dot2.setAlpha(0.3);
-                    } else {
-                        currentMissionIndex = 0; 
-                        this.infoText.setText(fetchMissionText());
-                        this.infoText.setColor("#ffdd44"); 
-                        dot1.setAlpha(0.3);
-                        dot2.setAlpha(1);
-                    }
-                    this.tweens.add({ targets: this.infoText, alpha: 1, duration: 150 });
-                }
+                // Reset Auto-Cycle Timer when switching tabs
+                if (this.tipTimerEvent) this.tipTimerEvent.reset({ delay: 5000, loop: true, callback: this.cycleTip });
             });
-        };
-
-        hitArea.on('pointerdown', () => {
-            this.playSound('sfx_tick');
-            if (this.tipTimerEvent) this.tipTimerEvent.reset({ delay: 5000, loop: true, callback: this.cycleTip });
-            toggleView();
+            
+            container.add([txt, btnHit]);
+            container.add(this.infoContainers[tab.id]);
+        });
+        
+        // Initialize Default Tab Visibility
+        Object.keys(this.infoContainers).forEach(k => {
+            this.infoContainers[k].setVisible(k === currentTab);
         });
 
+        // --- CONTENT 1: TIPS ---
+        this.normalTips = [
+            "বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
+            "বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
+            "কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
+            "স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
+            "গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
+            "গেমের মাঝপথে বিরতি নিতে ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",
+            "'Fire Shield' বুস্টার ব্যবহার করলে আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
+            "সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
+            "ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।"
+        ];
+        this.revisionTips = [
+            "রিভিশন মোড: এখানে শুধুমাত্র আপনার আগে খেলা প্রশ্নগুলোই আসবে।",
+            "রিভিশন মোড: এই মোডে নতুন কোনো প্রশ্ন আসবে না, তাই আত্মবিশ্বাসের সাথে উত্তর দিন।"
+        ];
+        
+        let currentTipIndex = Phaser.Math.Between(0, this.normalTips.length - 1);
+        
+        // 4. Larger Font, better word-wrap margins, and text shadows for legibility
+        this.tipTextObj = this.add.text(0, 0, "", {
+            fontSize: "25px", 
+            fontFamily: "'Anek Bangla'", 
+            color: "#e0f0ff", 
+            align: "center", 
+            wordWrap: { width: width - 40 }, 
+            lineSpacing: 6,
+            shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
+        }).setOrigin(0.5);
+        this.infoContainers.tips.add(this.tipTextObj);
+
+        // --- CONTENT 2: MISSION ---
+        let currentMissionIndex = 0;
+        this.missionTextObj = this.add.text(0, 0, "", {
+            fontSize: "25px", 
+            fontFamily: "'Anek Bangla'", 
+            color: "#ffea88", 
+            align: "center", 
+            wordWrap: { width: width - 40 }, 
+            lineSpacing: 6,
+            shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
+        }).setOrigin(0.5);
+        this.infoContainers.mission.add(this.missionTextObj);
+
+        // --- CONTENT 3: TOP (Leaderboard) ---
+        if (typeof Leaderboard !== 'undefined') {
+            // Increased height slightly to match new container proportions
+            const lb = new Leaderboard(this, 0, 0, width - 20, 110);
+            this.infoContainers.top.add(lb);
+        }
+
+        // --- TIMER & CYCLE LOGIC ---
         this.cycleTip = () => {
-            this.tweens.add({
-                targets: this.infoText, alpha: 0, duration: 300,
-                onComplete: () => {
-                    if (isShowingTips) {
-                        let tips = getActiveTips();
-                        currentTipIndex = (currentTipIndex + 1) % tips.length;
-                        this.infoText.setText(tips[currentTipIndex]);
-                    } else {
-                        let missions = GameState.dailyMissions || [];
-                        if (missions.length > 0) {
-                            currentMissionIndex = (currentMissionIndex + 1) % missions.length;
-                        }
-                        this.infoText.setText(fetchMissionText());
+            if (currentTab === "tips") {
+                const activeTips = this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
+                currentTipIndex = (currentTipIndex + 1) % activeTips.length;
+                this.tweens.add({
+                    targets: this.tipTextObj, alpha: 0, y: 10, duration: 250, ease: 'Cubic.easeIn',
+                    onComplete: () => {
+                        this.tipTextObj.setText(activeTips[currentTipIndex]);
+                        this.tipTextObj.y = -10; // Reset for slide-up effect
+                        this.tweens.add({ targets: this.tipTextObj, alpha: 1, y: 0, duration: 350, ease: 'Cubic.easeOut' });
                     }
-                    this.tweens.add({ targets: this.infoText, alpha: 1, duration: 300 });
+                });
+            } else if (currentTab === "mission") {
+                let missions = GameState.dailyMissions || [];
+                if (missions.length > 0) {
+                    currentMissionIndex = (currentMissionIndex + 1) % missions.length;
+                    let m = missions[currentMissionIndex];
+                    let status = m.completed ? "✅ সম্পন্ন" : `⏳ (${m.progress}/${m.target})`;
+                    this.tweens.add({
+                        targets: this.missionTextObj, alpha: 0, y: 10, duration: 250, ease: 'Cubic.easeIn',
+                        onComplete: () => {
+                            this.missionTextObj.setText(`🎯 ${m.desc}\n${status}`);
+                            this.missionTextObj.y = -10;
+                            this.tweens.add({ targets: this.missionTextObj, alpha: 1, y: 0, duration: 350, ease: 'Cubic.easeOut' });
+                        }
+                    });
                 }
-            });
+            }
         };
 
-        this.tipTimerEvent = this.time.addEvent({ delay: 5000, loop: true, callback: this.cycleTip });
+        // Inject initial data
+        const initTips = this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
+        this.tipTextObj.setText(initTips[currentTipIndex]);
+        
+        let missionsInit = GameState.dailyMissions || [];
+        if(missionsInit.length > 0) {
+            let m = missionsInit[0];
+            let status = m.completed ? "✅ সম্পন্ন" : `⏳ (${m.progress}/${m.target})`;
+            this.missionTextObj.setText(`🎯 ${m.desc}\n${status}`);
+        } else {
+            this.missionTextObj.setText("🎯 কোনো দৈনিক মিশন নেই");
+        }
+
+        // Auto-cycle event
+        if (this.tipTimerEvent) this.tipTimerEvent.remove();
+        this.tipTimerEvent = this.time.addEvent({ delay: 6000, loop: true, callback: this.cycleTip });
     }
 
     createBottomMenu(cx, y, totalWidth, height) {
@@ -1370,7 +1459,7 @@ class MenuScene extends Phaser.Scene {
             const hitArea = this.add.rectangle(cxOffset, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
             
             const tText = this.add.text(0, 0, label, { 
-                fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif",padding: { y: 10 }, fontWeight: 700, color: "#b3d4ff" 
+                fontSize: "25px", fontFamily: "'Anek Bangla', sans-serif",padding: { y: 10 }, fontWeight: 700, color: "#b3d4ff" 
             }).setOrigin(0.5, 0.5);
             
             const tIcon = this.add.text(0, 0, emoji, { fontSize: emojiSize }).setOrigin(0.5, 0.5);
