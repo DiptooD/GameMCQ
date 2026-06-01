@@ -27,7 +27,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    // --- UPDATED: Imported collection, query, orderBy, limit, getDocs ---
+    import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCT-5xo5GAmbloUaYIweUm81QQvz8uWgGM",
@@ -44,7 +45,10 @@
     window.FirebaseAuth.useDeviceLanguage(); 
     window.FirebaseDB = getFirestore(app);
     
-    window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc };
+    // --- UPDATED: Exported the new querying tools ---
+    window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs };
+
+    // ... (Keep your existing window.connectToCloud, window.signInWithGoogle, and window.syncAfterLogin exactly as they were) ...
 
     window.connectToCloud = function() {
         return new Promise((resolve) => {
@@ -249,6 +253,7 @@
             "game.js",
             "scenes/LoadingScene.js",
             "scenes/PlayerProfileScene.js",
+            "scenes/LeaderboardAccordion.js",
             "scenes/MenuScene.js",
             "scenes/SettingsScene.js",
             "scenes/ReadingScene.js",

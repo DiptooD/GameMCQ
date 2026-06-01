@@ -127,7 +127,12 @@ class MenuScene extends Phaser.Scene {
         const startY = panelY + 270;
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
-        const tipsY = startY + 165;
+        // --- NEW: Leaderboard Accordion Placement ---
+        const boardY = startY + 95;
+        this.leaderboard = new LeaderboardAccordion(this, cx, boardY, UI_WIDTH + 60);
+
+        // --- UPDATED: Pushed InfoBox down slightly to make room ---
+        const tipsY = boardY + 95;
         this.createInfoBox(cx, tipsY, UI_WIDTH + 60);
 
         this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90); 
