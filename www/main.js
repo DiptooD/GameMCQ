@@ -5,6 +5,9 @@ const gameHeight = gameWidth * screenRatio;
 const config = {
   type: Phaser.AUTO,
   backgroundColor: "#000000",
+// ADD THESE TWO LINES:
+  parent: document.body,
+  dom: { createContainer: true },
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

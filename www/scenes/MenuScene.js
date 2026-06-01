@@ -149,6 +149,7 @@ class MenuScene extends Phaser.Scene {
 
         // --- NEW: Call the background update check ---
         this.checkForUpdates(cx, cy);
+        this.createGlobalChat();
     }
 
     // --- NEW: Check for Updates Logic ---
