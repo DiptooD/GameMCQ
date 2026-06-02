@@ -753,7 +753,7 @@ Object.assign(MenuScene.prototype, {
                     fontSize: "16px", fontFamily: "Arial", color: "#aaaaaa" 
                 });
 
-                let topPadding = isConsecutive ? 5 : 35;
+                let topPadding = isConsecutive ? 5 : 45;
                 const bubY = currentY + topPadding; 
 
                 if (!isConsecutive) {
