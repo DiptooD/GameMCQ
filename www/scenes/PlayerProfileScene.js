@@ -31,6 +31,29 @@ class PlayerProfileScene extends Phaser.Scene {
             GameState.gamesPlayed = 0;
         }
 
+        // 👉 NEW: Check if already connected on scene load to sync name & give unclaimed bonus
+        const currentlyConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
+        if (currentlyConnected) {
+            let user = window.FirebaseAuth.currentUser;
+            if (user && user.displayName) {
+                let currentName = GameState.profile.n;
+                if (!currentName || currentName === "GUEST" || currentName === "নাম লিখুন") {
+                    let googleName = user.displayName.split(" ")[0].substring(0, 8).toUpperCase();
+                    if(googleName.length > 0) {
+                        GameState.profile.n = googleName;
+                        if (window.saveGame) window.saveGame();
+                    }
+                }
+            }
+            
+            // Show popup if they are connected but haven't claimed the bonus yet
+            if (!GameState.profile.googleBonusClaimed) {
+                this.time.delayedCall(1000, () => {
+                    this.showGoogleBonusPopup();
+                });
+            }
+        }
+
         this.lvlData = window.getLevelData();
         this.rankData = window.getRankData(this.lvlData.level);
 
@@ -64,6 +87,56 @@ class PlayerProfileScene extends Phaser.Scene {
         this.createIdentitySection(cx, 345, panelW, 300);
         this.createStatsSection(cx, 755, panelW, 450);
         this.createMasterySection(cx, 1205, panelW, 380);
+    }
+
+    // 👉 NEW: The Bonus Popup UI
+    showGoogleBonusPopup() {
+        const cxScreen = this.cameras.main.width / 2;
+        const cyScreen = this.cameras.main.height / 2;
+        
+        const overlay = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x000000, 0.85).setOrigin(0).setInteractive().setDepth(9999);
+        const popup = this.add.container(cxScreen, cyScreen).setDepth(10000);
+        
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 1);
+        bg.fillRoundedRect(-290, -190, 580, 380, 24); 
+        bg.lineStyle(4, 0x00ff88, 1);
+        bg.strokeRoundedRect(-290, -190, 580, 380, 24);
+        
+        const title = this.add.text(0, -130, "Connect Bonus!", { fontSize: "42px", fontFamily: "'Anek Bangla'", color: "#00ff88", fontStyle: "bold" }).setOrigin(0.5);
+        const desc = this.add.text(0, -45, "গুগল অ্যাকাউন্ট যুক্ত করার জন্য ধন্যবাদ!\nআপনার প্রথম লগইন পুরস্কার সংগ্রহ করুন:", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8 }).setOrigin(0.5);
+        
+        const rewardTxt = this.add.text(0, 35, "🎁 200 Debris   &   🔑 5 Keys", { fontSize: "32px", fontFamily: "Arial", color: "#ffd700", fontStyle: "bold", stroke: "#000000", strokeThickness: 4 }).setOrigin(0.5);
+
+        const claimBtn = this.add.text(0, 120, "Claim Bonus", { fontSize: "34px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: 'bold', backgroundColor: "#00aa44", padding: {x: 50, y: 15} }).setOrigin(0.5).setInteractive({useHandCursor: true});
+        
+        claimBtn.on('pointerdown', () => {
+            this.playSound('sfx_powerup');
+            
+            // Give Rewards
+            GameState.debris = (GameState.debris || 0) + 200;
+            GameState.keys = (GameState.keys || 0) + 5;
+            GameState.profile.googleBonusClaimed = true; // Mark as claimed forever
+            
+            if (window.saveCurrency) window.saveCurrency();
+            if (window.saveGame) window.saveGame();
+            
+            this.showNotification("Bonus Claimed Successfully!", "success");
+            
+            // Animate popup closing
+            this.tweens.add({
+                targets: popup, scale: 0.8, alpha: 0, duration: 250, ease: 'Power2',
+                onComplete: () => {
+                    overlay.destroy();
+                    popup.destroy();
+                }
+            });
+        });
+        
+        popup.add([bg, title, desc, rewardTxt, claimBtn]);
+        
+        popup.setScale(0);
+        this.tweens.add({ targets: popup, scale: 1, duration: 400, ease: 'Back.easeOut' });
     }
 
     showNotification(msg, type = 'info') {
@@ -153,7 +226,7 @@ class PlayerProfileScene extends Phaser.Scene {
         }
     }
 
-createIdentitySection(x, y, w, h) {
+    createIdentitySection(x, y, w, h) {
         const container = this.add.container(x, y + 40).setAlpha(0);
         this.drawGlassPanel(container, 0, 0, w, h);
 
@@ -327,6 +400,7 @@ createIdentitySection(x, y, w, h) {
             popup.add([bg, warnTitle, desc, cancelBtn, confirmBtn]);
         };
 
+        // 👉 NEW: Trigger Google API and give Name & Bonus
         this.connHitArea.on('pointerdown', () => {
             this.playSound('sfx_click');
             const currentlyConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
@@ -339,7 +413,30 @@ createIdentitySection(x, y, w, h) {
                     if (res && res.then) {
                         res.then(() => {
                             this.showNotification("Google Account Connected!\nCloud sync active.", "success");
+                            
+                            // Check if the current name is default, empty, or "GUEST"
+                            let user = window.FirebaseAuth.currentUser;
+                            if (user && user.displayName) {
+                                let currentName = GameState.profile.n;
+                                if (!currentName || currentName === "GUEST" || currentName === "নাম লিখুন") {
+                                    let googleName = user.displayName.split(" ")[0].substring(0, 8).toUpperCase();
+                                    if(googleName.length > 0) {
+                                        GameState.profile.n = googleName;
+                                        nameTxt.setText(GameState.profile.n);
+                                        if (window.saveGame) window.saveGame();
+                                    }
+                                }
+                            }
+
                             this.updateConnectionUI(true);
+
+                            // Trigger the Connect Bonus Popup
+                            if (!GameState.profile.googleBonusClaimed) {
+                                this.time.delayedCall(500, () => {
+                                    this.showGoogleBonusPopup();
+                                });
+                            }
+                            
                         }).catch(() => {
                             this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
                         });
@@ -461,7 +558,7 @@ createIdentitySection(x, y, w, h) {
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 200 });
     }
 
-createMasterySection(x, y, w, h) {
+    createMasterySection(x, y, w, h) {
         const container = this.add.container(x, y + 40).setAlpha(0);
         
         // Draw the background panel boundaries
@@ -588,7 +685,7 @@ createMasterySection(x, y, w, h) {
         container.add(graphics);
     }
 
-createTopUI(w) {
+    createTopUI(w) {
         const backContainer = this.add.container(100, 65);
         
         const backBg = this.add.graphics();

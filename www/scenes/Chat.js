@@ -9,25 +9,24 @@ Object.assign(MenuScene.prototype, {
         this.isChatOpen = false;
         this.lastSeenTime = Date.now();
         this.dividerRendered = false;
-        // --- NEW: Fetch the timestamp from Firebase ---
+        
+        // Fetch the timestamp from Firebase
         if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
             const uid = window.FirebaseAuth.currentUser.uid;
-            
-            // Assuming your player data is stored in a "users" collection. 
-            // Change "users" if your collection is named something else (e.g., "players")
             const userRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
             
             window.FirebaseTools.getDoc(userRef).then(docSnap => {
                 if (docSnap.exists() && docSnap.data().chatLastSeenTime) {
                     this.lastSeenTime = docSnap.data().chatLastSeenTime;
-               if (this.refreshChatUI) {
+                    if (this.refreshChatUI) {
                         this.refreshChatUI();
                     }
                 }
             }).catch(e => console.log("Chat DB Load Error:", e));
         }
+        
         this.replyData = null;
-        this.chatKeyboardOffset = 0; // Tracks if the keyboard is open
+        this.chatKeyboardOffset = 0; 
         
         // 1. Mobile Friendly Layout Dimensions
         this.chatW = w - 30; 
@@ -227,7 +226,6 @@ Object.assign(MenuScene.prototype, {
 
         scrollZone.on('pointerup', stopChatDrag);
         scrollZone.on('pointerout', stopChatDrag);
-
         scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
             this.tweens.killTweensOf(this.msgListContainer);
             let topY = 125 - this.chatKeyboardOffset;
@@ -264,13 +262,17 @@ Object.assign(MenuScene.prototype, {
         this.replyUI.add([replyBg, this.replyTxt, replyCancel]);
         this.bottomUIContainer.add(this.replyUI);
 
+        // 👉 FIX: UI Elements grouped for easy offline toggling
+        this.chatSendElements = [];
+        this.chatLoginElements = [];
+
         if (isConnected) {
             const inputHTML = `<input type="text" id="chatInput" autocomplete="off" maxlength="200" placeholder="এখানে লিখুন..." style="box-sizing: border-box; width: ${this.chatW - 130}px; height: 65px; padding: 0 20px; font-family: 'Anek Bangla', sans-serif; font-size: 26px; border-radius: 20px; border: 2px solid #0066aa; outline: none; background: #051025; color: #fff;">`;
                 
             this.chatInput = this.add.dom(20 + (this.chatW - 130)/2, inputY).createFromHTML(inputHTML);
             this.bottomUIContainer.add(this.chatInput);
             
-            // THE FIX: Directly hide the Phaser wrapper node injected into the body
+            // Start hidden until chat opens
             if (this.chatInput.node) {
                 this.chatInput.node.style.display = 'none';
             }
@@ -283,7 +285,9 @@ Object.assign(MenuScene.prototype, {
             const sendHit = this.add.rectangle(this.chatW - 60, inputY, 80, 65, 0, 0).setInteractive({useHandCursor: true});
             
             sendHit.on('pointerdown', () => this.sendChatMessage());
-            this.bottomUIContainer.add([sendBtnBg, sendBtnTxt, sendHit]);
+            
+            this.chatSendElements = [sendBtnBg, sendBtnTxt, sendHit];
+            this.bottomUIContainer.add(this.chatSendElements);
             
             const htmlElement = this.chatInput.getChildByID('chatInput');
             if (htmlElement) {
@@ -296,7 +300,6 @@ Object.assign(MenuScene.prototype, {
                 htmlElement.addEventListener('focus', () => {
                     const shiftDist = h * 0.35; 
                     this.chatKeyboardOffset = shiftDist;
-                    
                     this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
                     this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDist, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
                 });
@@ -318,12 +321,53 @@ Object.assign(MenuScene.prototype, {
             const loginHit = this.add.rectangle(this.chatW / 2, inputY, 350, 70, 0x000000, 0).setInteractive({useHandCursor: true});
 
             loginHit.on('pointerdown', () => {
+                if (!navigator.onLine) {
+                    if (this.showNotification) this.showNotification("Connection lost. Cannot connect.", "error");
+                    return;
+                }
                 this.playSound('sfx_click');
                 if (window.signInWithGoogle) window.signInWithGoogle().then(() => this.scene.restart());
             });
 
-            this.bottomUIContainer.add([promptTxt, loginBg, loginTxt, loginHit]);
+            this.chatLoginElements = [promptTxt, loginBg, loginTxt, loginHit];
+            this.bottomUIContainer.add(this.chatLoginElements);
         }
+
+        // 👉 FIX: Offline Status Message UI
+        this.offlinePromptGroup = this.add.container(0, 0).setVisible(false);
+        const offlineTxt = this.add.text(this.chatW / 2, inputY, "Connection Lost. Chat unavailable.", { 
+            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ff4444", fontStyle: "bold" 
+        }).setOrigin(0.5);
+        this.offlinePromptGroup.add(offlineTxt);
+        this.bottomUIContainer.add(this.offlinePromptGroup);
+
+        // 👉 FIX: Network State Manager handles hiding inputs when offline
+        this.updateChatNetworkState = () => {
+            const isOnline = navigator.onLine;
+            this.offlinePromptGroup.setVisible(!isOnline);
+            
+            if (!isOnline) {
+                if (this.chatInput && this.chatInput.node) this.chatInput.node.style.display = 'none';
+                this.chatSendElements.forEach(e => e.setVisible(false));
+                this.chatLoginElements.forEach(e => e.setVisible(false));
+                if (this.replyData) this.cancelReply();
+            } else {
+                if (this.isChatOpen && this.chatInput && this.chatInput.node) this.chatInput.node.style.display = 'block';
+                this.chatSendElements.forEach(e => e.setVisible(true));
+                this.chatLoginElements.forEach(e => e.setVisible(true));
+            }
+        };
+
+        // Attach listeners safely to avoid memory leaks on scene restart
+        if (this.chatOnlineListener) window.removeEventListener('online', this.chatOnlineListener);
+        if (this.chatOfflineListener) window.removeEventListener('offline', this.chatOfflineListener);
+        this.chatOnlineListener = () => this.updateChatNetworkState();
+        this.chatOfflineListener = () => this.updateChatNetworkState();
+        
+        window.addEventListener('online', this.chatOnlineListener);
+        window.addEventListener('offline', this.chatOfflineListener);
+        
+        this.updateChatNetworkState();
 
         // 6. Global Floating Trigger Button
         this.createChatToggleButton(w - 60, h / 6 + 250);
@@ -386,12 +430,10 @@ Object.assign(MenuScene.prototype, {
 
         this.unreadBadgeBg = this.add.graphics();
         this.unreadBadgeBg.fillStyle(0xef4444, 1); 
-        // INCREASED: Circle radius from 16 to 22, and adjusted center slightly to look balanced
         this.unreadBadgeBg.fillCircle(34, -34, 18); 
         this.unreadBadgeBg.lineStyle(2.5, 0x0f172a, 1); 
         this.unreadBadgeBg.strokeCircle(34, -34, 18);
         
-        // INCREASED: Font size from 16px to 24px
         this.unreadBadgeTxt = this.add.text(34, -34, "0", {
             fontSize: "26px", 
             fontFamily: "Arial", 
@@ -431,8 +473,8 @@ Object.assign(MenuScene.prototype, {
             
             this.chatContainer.setVisible(true);
             
-            // THE FIX: Unhide the wrapper div when chat opens
-            if (this.chatInput && this.chatInput.node) {
+            // 👉 FIX: Only show input HTML when online
+            if (this.chatInput && this.chatInput.node && navigator.onLine) {
                 this.chatInput.node.style.display = 'block'; 
             }
             
@@ -446,18 +488,15 @@ Object.assign(MenuScene.prototype, {
         } else {
             this.lastSeenTime = Date.now();
             this.dividerRendered = false;
-            // --- NEW: Save the timestamp to Firebase ---
-            if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
+            
+            if (window.FirebaseAuth && window.FirebaseAuth.currentUser && navigator.onLine) {
                 const uid = window.FirebaseAuth.currentUser.uid;
                 const userRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
-                
-                // Using { merge: true } ensures we only update this one specific field 
-                // and don't accidentally overwrite the rest of their player profile.
                 window.FirebaseTools.setDoc(userRef, { 
                     chatLastSeenTime: this.lastSeenTime 
                 }, { merge: true }).catch(e => console.log("Chat DB Save Error:", e));
             }
-            // -------------------------------------------
+            
             this.chatToggleContainer.setVisible(true);
             this.chatToggleContainer.setScale(0);
             this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 300, ease: 'Back.out' });
@@ -473,7 +512,6 @@ Object.assign(MenuScene.prototype, {
             onComplete: () => {
                 if (!this.isChatOpen) {
                     this.chatContainer.setVisible(false);
-                    // THE FIX: Hide the wrapper div again when chat finishes closing
                     if (this.chatInput && this.chatInput.node) {
                         this.chatInput.node.style.display = 'none';
                     }
@@ -531,6 +569,11 @@ Object.assign(MenuScene.prototype, {
     },
 
     reactToMessage(msgId, emoji) {
+        // 👉 FIX: Prevent offline reaction queues
+        if (!navigator.onLine) {
+            if (this.showNotification) this.showNotification("Connection lost.", "error");
+            return; 
+        }
         if (!window.FirebaseAuth || !window.FirebaseAuth.currentUser) return;
         
         const uid = window.FirebaseAuth.currentUser.uid;
@@ -773,12 +816,11 @@ Object.assign(MenuScene.prototype, {
 
                 if (!isConsecutive) {
                     const nameTxt = this.add.text(35, currentY, nameStr, { 
-                        fontSize: "26px", // INCREASED: from 24px
+                        fontSize: "26px", 
                         fontFamily: "'Anek Bangla'", 
                         color: nameColorHexStr, 
                         fontStyle: "bold",
                         padding: { y: 4 },
-                        // ADDED: Stroke and shadow for pop
                         stroke: "#000000",
                         strokeThickness: 4,
                         shadow: { offsetX: 2, offsetY: 2, color: '#000000', blur: 4, fill: true }
@@ -790,25 +832,24 @@ Object.assign(MenuScene.prototype, {
                 const timeWidth = timeTxt.width;
                 const bubbleW = Math.max(msgTxt.width + 40, (replyTxtObj ? replyTxtObj.width + 40 : 120), timeWidth + 40);
                 const hasReactions = msg.reactions && Object.keys(msg.reactions).length > 0;
-const extraReactionPadding = hasReactions ? 25 : 0; // Expand the bubble downward if reactions exist
+                const extraReactionPadding = hasReactions ? 25 : 0; 
 
-const bubbleH = msgTxt.height + 50 + extraHeight + extraReactionPadding;
-let startX = isMe ? (this.chatW - bubbleW - 25) : 25;
+                const bubbleH = msgTxt.height + 50 + extraHeight + extraReactionPadding;
+                let startX = isMe ? (this.chatW - bubbleW - 25) : 25;
 
-const bubbleBg = this.add.graphics();
-bubbleBg.fillStyle(bubBgHex, 0.95);
+                const bubbleBg = this.add.graphics();
+                bubbleBg.fillStyle(bubBgHex, 0.95);
 
-if (isMe) {
-    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
-} else {
-    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
-}
+                if (isMe) {
+                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
+                } else {
+                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
+                }
 
-if (replyTxtObj) replyTxtObj.setPosition(startX + 20, bubY + 10);
-msgTxt.setPosition(startX + 20, bubY + 15 + extraHeight);
+                if (replyTxtObj) replyTxtObj.setPosition(startX + 20, bubY + 10);
+                msgTxt.setPosition(startX + 20, bubY + 15 + extraHeight);
 
-// Keep the timestamp above the extra bottom padding so it stays clear of the reactions
-timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
+                timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
 
                 this.msgListContainer.add([bubbleBg, msgTxt, timeTxt]);
                 if (replyTxtObj) this.msgListContainer.add(replyTxtObj);
@@ -831,12 +872,10 @@ timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - ext
                         const badgeBg = this.add.graphics();
                         badgeBg.fillStyle(0x001122, 1);
                         
-                        // INCREASED: Background size from 70x34 to 90x42
                         badgeBg.fillRoundedRect(rxX, rxY, 90, 42, 21);
                         badgeBg.lineStyle(1.5, 0x00aaff, 1);
                         badgeBg.strokeRoundedRect(rxX, rxY, 90, 42, 21);
                         
-                        // INCREASED: Font size from 22px to 28px and shifted text center
                         const badgeTxt = this.add.text(rxX + 45, rxY + 21, `${e} ${counts[e]}`, { 
                             fontSize: "28px", 
                             fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
@@ -844,19 +883,25 @@ timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - ext
                         }).setOrigin(0.5);
 
                         this.msgListContainer.add([badgeBg, badgeTxt]);
-                        rxX += 95; // INCREASED: Spacing to accommodate wider badge
+                        rxX += 95; 
                     });
                     
-                    if (sortedReactions.length > 0) reactionSpace = 55; // INCREASED: Vertical padding 
+                    if (sortedReactions.length > 0) reactionSpace = 55; 
                 }
 
                 if (isAdmin) {
                     const adminX = isMe ? (startX - 40) : (startX + bubbleW + 40);
+                    
+                    // 👉 FIX: Added offline blocks for Admin Deletes/Pins
                     const delBtn = this.add.text(adminX, bubY + bubbleH/2 + 20, "🗑️", { fontSize: "28px" }).setOrigin(0.5).setInteractive({useHandCursor: true});
-                    delBtn.on('pointerdown', () => window.FirebaseTools.deleteDoc(window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id)));
+                    delBtn.on('pointerdown', () => {
+                        if (!navigator.onLine) { if (this.showNotification) this.showNotification("Cannot delete offline.", "error"); return; }
+                        window.FirebaseTools.deleteDoc(window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id));
+                    });
                     
                     const pinBtn = this.add.text(adminX, bubY + bubbleH/2 - 20, isPinned ? "❌" : "📌", { fontSize: "28px" }).setOrigin(0.5).setInteractive({useHandCursor: true});
                     pinBtn.on('pointerdown', () => {
+                        if (!navigator.onLine) { if (this.showNotification) this.showNotification("Cannot pin offline.", "error"); return; }
                         const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id);
                         window.FirebaseTools.updateDoc(docRef, { pinned: !isPinned });
                     });
@@ -917,8 +962,9 @@ timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - ext
             messages.reverse();
 
             if (messages.length > 100) {
+                // 👉 FIX: Added proper Admin check for Auto-cleanup
                 const isAdmin = GameState.profile && GameState.profile.role === 'admin';
-                if (isAdmin) {
+                if (isAdmin && navigator.onLine) {
                     const toDelete = messages.slice(0, messages.length - 100);
                     this.cleanUpOldChats(toDelete);
                 }
@@ -931,6 +977,12 @@ timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - ext
     },
 
     sendChatMessage() {
+        // 👉 FIX: Prevent offline message queues
+        if (!navigator.onLine) {
+            if (this.showNotification) this.showNotification("Connection lost. Cannot send message.", "error");
+            return;
+        }
+
         const htmlElement = this.chatInput.getChildByID('chatInput');
         if (!htmlElement) return;
 
@@ -965,6 +1017,9 @@ timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - ext
     },
 
     cleanUpOldChats(oldDocs) {
+        // 👉 FIX: Block offline auto-deletions
+        if (!navigator.onLine) return; 
+        
         oldDocs.forEach(doc => {
             const oldDocRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", doc.id);
             window.FirebaseTools.deleteDoc(oldDocRef).catch(e => console.log("Chat auto-cleanup issue:", e));
