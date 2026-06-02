@@ -2342,6 +2342,11 @@ class GameScene extends GameBase {
     }
 
     handlePlayerDeath() {
+        // --- ADD THIS GUARD ---
+        if (this.isDead) return;
+        this.isDead = true;
+        // ----------------------
+
         this.playSFX('sfx_explode', 0.8, false);
         this.player.setVisible(false);
         this.player.body.enable = false;
@@ -2755,12 +2760,23 @@ class GameScene extends GameBase {
         GameState.lives = 3;
         this.gamePaused = false;
         this.hasRevived = true;
+        
+        // --- ADD THESE RESET FLAGS ---
+        this.isDead = false;
+        this.isAnimating = false;
+        this.isResuming = false;
+        // -----------------------------
+
         this.reviveMenu.destroy();
 
         const qScene = this.scene.get("QuestionScene");
         if (qScene) {
             this.scene.resume("QuestionScene");
             this.scene.setVisible(true, "QuestionScene");
+            
+            // --- ADD THIS TO UNLOCK QUESTIONS ---
+            qScene.isProcessing = false;
+            // ------------------------------------
         }
 
         this.time.paused = false;
@@ -2778,6 +2794,8 @@ class GameScene extends GameBase {
                 }
             }
         });
+        
+        // This will now successfully execute because isAnimating is false
         this.startCountdown();
     }
 

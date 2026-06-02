@@ -297,18 +297,56 @@ Object.assign(MenuScene.prototype, {
                     if (event.key === 'Enter') this.sendChatMessage();
                 });
 
-                htmlElement.addEventListener('focus', () => {
-                    const shiftDist = h * 0.35; 
+                let baseHeight = window.innerHeight;
+                let lastShiftDist = 0;
+
+                const handleViewportChange = () => {
+                    if (!window.visualViewport) return;
+                    
+                    // 1. Calculate exact native pixels the keyboard takes up
+                    const currentViewportHeight = window.visualViewport.height;
+                    const keyboardHeightPx = Math.max(0, baseHeight - currentViewportHeight);
+                    
+                    // 2. Convert to Phaser scale coordinates
+                    const scaleFactor = this.scale.gameSize.height / baseHeight;
+                    const shiftDist = keyboardHeightPx * scaleFactor;
+
+                    // 3. Find the difference to animate smoothly if keyboard height changes mid-type
+                    const shiftDelta = shiftDist - lastShiftDist;
+                    lastShiftDist = shiftDist;
                     this.chatKeyboardOffset = shiftDist;
-                    this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
-                    this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDist, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+
+                    this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 150, ease: 'Cubic.easeOut' });
+                    this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDelta, duration: 150, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+                };
+
+                htmlElement.addEventListener('focus', () => {
+                    baseHeight = window.innerHeight;
+                    lastShiftDist = 0;
+                    
+                    if (window.visualViewport) {
+                        window.visualViewport.addEventListener('resize', handleViewportChange);
+                        window.visualViewport.addEventListener('scroll', handleViewportChange);
+                        handleViewportChange();
+                    } else {
+                        // Fallback for older browsers
+                        const shiftDist = h * 0.45;
+                        this.chatKeyboardOffset = shiftDist;
+                        this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
+                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDist, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+                    }
                 });
 
                 htmlElement.addEventListener('blur', () => {
+                    if (window.visualViewport) {
+                        window.visualViewport.removeEventListener('resize', handleViewportChange);
+                        window.visualViewport.removeEventListener('scroll', handleViewportChange);
+                    }
                     if (this.isChatOpen) {
-                        this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
-                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y + this.chatKeyboardOffset, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+                        this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 200, ease: 'Cubic.easeOut' });
+                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y + this.chatKeyboardOffset, duration: 200, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
                         this.chatKeyboardOffset = 0;
+                        lastShiftDist = 0;
                     }
                 });
             }
