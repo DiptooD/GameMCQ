@@ -9,6 +9,23 @@ Object.assign(MenuScene.prototype, {
         this.isChatOpen = false;
         this.lastSeenTime = Date.now();
         this.dividerRendered = false;
+        // --- NEW: Fetch the timestamp from Firebase ---
+        if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
+            const uid = window.FirebaseAuth.currentUser.uid;
+            
+            // Assuming your player data is stored in a "users" collection. 
+            // Change "users" if your collection is named something else (e.g., "players")
+            const userRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
+            
+            window.FirebaseTools.getDoc(userRef).then(docSnap => {
+                if (docSnap.exists() && docSnap.data().chatLastSeenTime) {
+                    this.lastSeenTime = docSnap.data().chatLastSeenTime;
+               if (this.refreshChatUI) {
+                        this.refreshChatUI();
+                    }
+                }
+            }).catch(e => console.log("Chat DB Load Error:", e));
+        }
         this.replyData = null;
         this.chatKeyboardOffset = 0; // Tracks if the keyboard is open
         
@@ -40,8 +57,8 @@ Object.assign(MenuScene.prototype, {
         panelBorders.lineStyle(4, 0x0066aa, 1);
         panelBorders.strokeRoundedRect(0, 0, this.chatW, this.chatH, 24);
         
-        const title = this.add.text(this.chatW / 2, 55, "গ্লোবাল চ্যাট", {
-            fontSize: "46px", fontFamily: "'Anek Bangla'", color: "#00e1ff", fontStyle: "bold"
+        const title = this.add.text(this.chatW / 2, 55, "গ্লোবাল CHAT", {
+            fontSize: "46px", fontFamily: "'Anek Bangla'", color: "#00e1ff", padding: { y: 4 }, fontStyle: "bold"
         }).setOrigin(0.5);
         
         const headerDiv = this.add.rectangle(this.chatW / 2, 115, this.chatW - 40, 4, 0x0066aa, 0.5);
@@ -309,7 +326,7 @@ Object.assign(MenuScene.prototype, {
         }
 
         // 6. Global Floating Trigger Button
-        this.createChatToggleButton(w - 50, h / 6 + 250);
+        this.createChatToggleButton(w - 60, h / 6 + 250);
         this.listenToGlobalChat();
     },
 
@@ -318,7 +335,7 @@ Object.assign(MenuScene.prototype, {
 
         const shadow = this.add.graphics();
         shadow.fillStyle(0x000000, 0.7);
-        shadow.fillRoundedRect(-36, -36, 80, 80, 20); 
+        shadow.fillRoundedRect(-36, -36, 180, 80, 20); 
 
         const bg = this.add.graphics();
         const drawBase = (isHovered) => {
@@ -330,15 +347,15 @@ Object.assign(MenuScene.prototype, {
                 bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 1); 
                 bg.lineStyle(2, 0x334155, 1);
             }
-            bg.fillRoundedRect(-40, -40, 80, 80, 20);
-            bg.strokeRoundedRect(-40, -40, 80, 80, 20);
+            bg.fillRoundedRect(-40, -40, 180, 80, 20);
+            bg.strokeRoundedRect(-40, -40, 180, 80, 20);
         };
         drawBase(false);
 
-        const icon = this.add.text(0, 0, "💬", { 
-            fontSize: "50px", 
+        const icon = this.add.text(2, 3, "💬", { 
+            fontSize: "54px", 
             fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif' 
-        }).setOrigin(0.5) .setAlpha(0.85);
+        }).setOrigin(0.5) .setAlpha(0.80);
         icon.clearTint();
 
         const hitArea = this.add.rectangle(0, 0, 80, 80, 0, 0).setInteractive({ useHandCursor: true });
@@ -369,12 +386,14 @@ Object.assign(MenuScene.prototype, {
 
         this.unreadBadgeBg = this.add.graphics();
         this.unreadBadgeBg.fillStyle(0xef4444, 1); 
-        this.unreadBadgeBg.fillCircle(32, -32, 16); 
-        this.unreadBadgeBg.lineStyle(2, 0x0f172a, 1); 
-        this.unreadBadgeBg.strokeCircle(32, -32, 16);
+        // INCREASED: Circle radius from 16 to 22, and adjusted center slightly to look balanced
+        this.unreadBadgeBg.fillCircle(34, -34, 18); 
+        this.unreadBadgeBg.lineStyle(2.5, 0x0f172a, 1); 
+        this.unreadBadgeBg.strokeCircle(34, -34, 18);
         
-        this.unreadBadgeTxt = this.add.text(32, -32, "0", {
-            fontSize: "16px", 
+        // INCREASED: Font size from 16px to 24px
+        this.unreadBadgeTxt = this.add.text(34, -34, "0", {
+            fontSize: "26px", 
             fontFamily: "Arial", 
             color: "#ffffff", 
             fontStyle: "bold"
@@ -427,7 +446,18 @@ Object.assign(MenuScene.prototype, {
         } else {
             this.lastSeenTime = Date.now();
             this.dividerRendered = false;
-            
+            // --- NEW: Save the timestamp to Firebase ---
+            if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
+                const uid = window.FirebaseAuth.currentUser.uid;
+                const userRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
+                
+                // Using { merge: true } ensures we only update this one specific field 
+                // and don't accidentally overwrite the rest of their player profile.
+                window.FirebaseTools.setDoc(userRef, { 
+                    chatLastSeenTime: this.lastSeenTime 
+                }, { merge: true }).catch(e => console.log("Chat DB Save Error:", e));
+            }
+            // -------------------------------------------
             this.chatToggleContainer.setVisible(true);
             this.chatToggleContainer.setScale(0);
             this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 300, ease: 'Back.out' });
@@ -714,7 +744,7 @@ Object.assign(MenuScene.prototype, {
                 const darkenFac = isMe ? 0.35 : 0.15; 
                 const bubBgHex = Phaser.Display.Color.GetColor(baseCol.r * darkenFac, baseCol.g * darkenFac, baseCol.b * darkenFac);
 
-                const levelText = msg.lvl ? ` • Lvl ${msg.lvl}` : "";
+                const levelText = msg.lvl ? `  [Lvl ${msg.lvl}]` : "";
                 const nameStr = (isPinned ? "📌 " : "") + (msg.n || "Guest") + levelText;
                 
                 const bubbleMaxWidth = this.chatW * 0.82;
@@ -743,7 +773,15 @@ Object.assign(MenuScene.prototype, {
 
                 if (!isConsecutive) {
                     const nameTxt = this.add.text(35, currentY, nameStr, { 
-                        fontSize: "24px", fontFamily: "'Anek Bangla'", color: nameColorHexStr, fontStyle: "bold" 
+                        fontSize: "26px", // INCREASED: from 24px
+                        fontFamily: "'Anek Bangla'", 
+                        color: nameColorHexStr, 
+                        fontStyle: "bold",
+                        padding: { y: 4 },
+                        // ADDED: Stroke and shadow for pop
+                        stroke: "#000000",
+                        strokeThickness: 4,
+                        shadow: { offsetX: 2, offsetY: 2, color: '#000000', blur: 4, fill: true }
                     });
                     if (isMe) nameTxt.x = this.chatW - nameTxt.width - 35;
                     this.msgListContainer.add(nameTxt);
@@ -751,21 +789,26 @@ Object.assign(MenuScene.prototype, {
 
                 const timeWidth = timeTxt.width;
                 const bubbleW = Math.max(msgTxt.width + 40, (replyTxtObj ? replyTxtObj.width + 40 : 120), timeWidth + 40);
-                const bubbleH = msgTxt.height + 50 + extraHeight;
-                let startX = isMe ? (this.chatW - bubbleW - 25) : 25;
+                const hasReactions = msg.reactions && Object.keys(msg.reactions).length > 0;
+const extraReactionPadding = hasReactions ? 25 : 0; // Expand the bubble downward if reactions exist
 
-                const bubbleBg = this.add.graphics();
-                bubbleBg.fillStyle(bubBgHex, 0.95);
-                
-                if (isMe) {
-                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
-                } else {
-                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
-                }
+const bubbleH = msgTxt.height + 50 + extraHeight + extraReactionPadding;
+let startX = isMe ? (this.chatW - bubbleW - 25) : 25;
 
-                if (replyTxtObj) replyTxtObj.setPosition(startX + 20, bubY + 10);
-                msgTxt.setPosition(startX + 20, bubY + 15 + extraHeight);
-                timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22);
+const bubbleBg = this.add.graphics();
+bubbleBg.fillStyle(bubBgHex, 0.95);
+
+if (isMe) {
+    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
+} else {
+    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
+}
+
+if (replyTxtObj) replyTxtObj.setPosition(startX + 20, bubY + 10);
+msgTxt.setPosition(startX + 20, bubY + 15 + extraHeight);
+
+// Keep the timestamp above the extra bottom padding so it stays clear of the reactions
+timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
 
                 this.msgListContainer.add([bubbleBg, msgTxt, timeTxt]);
                 if (replyTxtObj) this.msgListContainer.add(replyTxtObj);
@@ -787,21 +830,24 @@ Object.assign(MenuScene.prototype, {
                     sortedReactions.forEach((e) => {
                         const badgeBg = this.add.graphics();
                         badgeBg.fillStyle(0x001122, 1);
-                        badgeBg.fillRoundedRect(rxX, rxY, 70, 34, 17);
-                        badgeBg.lineStyle(1.5, 0x00aaff, 1);
-                        badgeBg.strokeRoundedRect(rxX, rxY, 70, 34, 17);
                         
-                        const badgeTxt = this.add.text(rxX + 35, rxY + 17, `${e} ${counts[e]}`, { 
-                            fontSize: "22px", 
+                        // INCREASED: Background size from 70x34 to 90x42
+                        badgeBg.fillRoundedRect(rxX, rxY, 90, 42, 21);
+                        badgeBg.lineStyle(1.5, 0x00aaff, 1);
+                        badgeBg.strokeRoundedRect(rxX, rxY, 90, 42, 21);
+                        
+                        // INCREASED: Font size from 22px to 28px and shifted text center
+                        const badgeTxt = this.add.text(rxX + 45, rxY + 21, `${e} ${counts[e]}`, { 
+                            fontSize: "28px", 
                             fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
                             color: "#ffffff" 
                         }).setOrigin(0.5);
 
                         this.msgListContainer.add([badgeBg, badgeTxt]);
-                        rxX += 75; 
+                        rxX += 95; // INCREASED: Spacing to accommodate wider badge
                     });
                     
-                    if (sortedReactions.length > 0) reactionSpace = 25; 
+                    if (sortedReactions.length > 0) reactionSpace = 55; // INCREASED: Vertical padding 
                 }
 
                 if (isAdmin) {
@@ -871,8 +917,11 @@ Object.assign(MenuScene.prototype, {
             messages.reverse();
 
             if (messages.length > 100) {
-                const toDelete = messages.slice(0, messages.length - 100);
-                this.cleanUpOldChats(toDelete);
+                const isAdmin = GameState.profile && GameState.profile.role === 'admin';
+                if (isAdmin) {
+                    const toDelete = messages.slice(0, messages.length - 100);
+                    this.cleanUpOldChats(toDelete);
+                }
                 messages = messages.slice(messages.length - 100);
             }
 
