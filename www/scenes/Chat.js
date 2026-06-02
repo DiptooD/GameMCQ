@@ -222,11 +222,10 @@ Object.assign(MenuScene.prototype, {
         });
 
 
-        // 5. Dynamic Input Area & Reply UI (Placed in its own container to shift up!)
+        // 5. Dynamic Input Area & Reply UI
         this.bottomUIContainer = this.add.container(0, 0);
         this.chatContainer.add(this.bottomUIContainer);
 
-        // A dark backing to hide scrolled messages behind the input field when sliding up
         const bottomBg = this.add.rectangle(this.chatW / 2, this.chatH - 53, this.chatW - 8, 85, 0x000c22, 0.85);
         this.bottomUIContainer.add(bottomBg);
 
@@ -253,6 +252,11 @@ Object.assign(MenuScene.prototype, {
                 
             this.chatInput = this.add.dom(20 + (this.chatW - 130)/2, inputY).createFromHTML(inputHTML);
             this.bottomUIContainer.add(this.chatInput);
+            
+            // THE FIX: Directly hide the Phaser wrapper node injected into the body
+            if (this.chatInput.node) {
+                this.chatInput.node.style.display = 'none';
+            }
 
             // Send Button
             const sendBtnBg = this.add.graphics();
@@ -272,7 +276,6 @@ Object.assign(MenuScene.prototype, {
                     if (event.key === 'Enter') this.sendChatMessage();
                 });
 
-                // KEYBOARD SHIFT BEHAVIOR (Only shifts the input and messages up, leaves container static)
                 htmlElement.addEventListener('focus', () => {
                     const shiftDist = h * 0.35; 
                     this.chatKeyboardOffset = shiftDist;
@@ -311,15 +314,12 @@ Object.assign(MenuScene.prototype, {
     },
 
     createChatToggleButton(x, y) {
-        // Create a main container for the button and badge
         this.chatToggleContainer = this.add.container(x, y).setDepth(9000);
 
-        // 1. Soft Drop Shadow (Bigger rounded square)
         const shadow = this.add.graphics();
         shadow.fillStyle(0x000000, 0.7);
         shadow.fillRoundedRect(-36, -36, 80, 80, 20); 
 
-        // 2. Professional Gradient Base (Bigger rounded square)
         const bg = this.add.graphics();
         const drawBase = (isHovered) => {
             bg.clear();
@@ -335,17 +335,14 @@ Object.assign(MenuScene.prototype, {
         };
         drawBase(false);
 
-        // 3. Crisp Icon (Bigger Font)
         const icon = this.add.text(0, 0, "💬", { 
             fontSize: "50px", 
             fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif' 
         }).setOrigin(0.5) .setAlpha(0.85);
         icon.clearTint();
 
-        // 4. Interactive Hit Area
         const hitArea = this.add.rectangle(0, 0, 80, 80, 0, 0).setInteractive({ useHandCursor: true });
 
-        // 5. Polished Animations
         hitArea.on('pointerover', () => {
             drawBase(true);
             this.tweens.add({ targets: this.chatToggleContainer, scale: 1.1, duration: 200, ease: 'Back.out' });
@@ -358,8 +355,6 @@ Object.assign(MenuScene.prototype, {
 
         hitArea.on('pointerdown', () => {
             if (this.playSound) this.playSound('sfx_tick', 0.5); 
-            
-            // "Squish" bounce effect on click
             this.tweens.add({
                 targets: this.chatToggleContainer,
                 scale: 0.85,
@@ -372,7 +367,6 @@ Object.assign(MenuScene.prototype, {
             });
         });
 
-        // 6. The Unread Badge (Repositioned to the top right of the square)
         this.unreadBadgeBg = this.add.graphics();
         this.unreadBadgeBg.fillStyle(0xef4444, 1); 
         this.unreadBadgeBg.fillCircle(32, -32, 16); 
@@ -390,15 +384,9 @@ Object.assign(MenuScene.prototype, {
         this.unreadBadgeTxt.setVisible(false);
 
         this.chatToggleContainer.add([
-            shadow, 
-            bg, 
-            icon, 
-            hitArea, 
-            this.unreadBadgeBg, 
-            this.unreadBadgeTxt
+            shadow, bg, icon, hitArea, this.unreadBadgeBg, this.unreadBadgeTxt
         ]);
         
-        // Entrance Animation
         this.chatToggleContainer.setScale(0);
         this.tweens.add({
             targets: this.chatToggleContainer,
@@ -417,12 +405,18 @@ Object.assign(MenuScene.prototype, {
         this.chatBlocker.setVisible(this.isChatOpen);
 
         if (this.isChatOpen) {
-            this.chatToggleContainer.setVisible(false); // Hide FAB
+            this.chatToggleContainer.setVisible(false); 
             
             this.chatKeyboardOffset = 0;
             if (this.bottomUIContainer) this.bottomUIContainer.y = 0;
             
             this.chatContainer.setVisible(true);
+            
+            // THE FIX: Unhide the wrapper div when chat opens
+            if (this.chatInput && this.chatInput.node) {
+                this.chatInput.node.style.display = 'block'; 
+            }
+            
             this.unreadBadgeBg.setVisible(false);
             this.unreadBadgeTxt.setVisible(false);
             
@@ -431,16 +425,13 @@ Object.assign(MenuScene.prototype, {
             
             this.lastUnreadCount = 0; 
         } else {
-            // Update last seen time immediately upon closing
             this.lastSeenTime = Date.now();
             this.dividerRendered = false;
             
-            // Show FAB
             this.chatToggleContainer.setVisible(true);
             this.chatToggleContainer.setScale(0);
             this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 300, ease: 'Back.out' });
             
-            // BUG FIX: Re-render the chat in the background to wipe the old "নতুন মেসেজ" divider 
             if (this.refreshChatUI) this.refreshChatUI();
         }
 
@@ -450,7 +441,13 @@ Object.assign(MenuScene.prototype, {
             duration: 350,
             ease: 'Cubic.easeOut',
             onComplete: () => {
-                if (!this.isChatOpen) this.chatContainer.setVisible(false);
+                if (!this.isChatOpen) {
+                    this.chatContainer.setVisible(false);
+                    // THE FIX: Hide the wrapper div again when chat finishes closing
+                    if (this.chatInput && this.chatInput.node) {
+                        this.chatInput.node.style.display = 'none';
+                    }
+                }
             }
         });
 
@@ -519,7 +516,6 @@ Object.assign(MenuScene.prototype, {
 
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         
-        // Slightly wider to fit the much bigger emojis and buttons
         const menuW = 360; 
         const menuH = isConnected ? 150 : 90;
         const halfW = menuW / 2;
@@ -551,20 +547,18 @@ Object.assign(MenuScene.prototype, {
             this.chatActionPopup.add(warnTxt);
 
         } else {
-            // ROW 1: MASSIVE EMOJIS
             const emojis = ['👍', '❤️', '😂', '😮', '😢'];
             const startX = -130;
             const spacing = 65;
 
             emojis.forEach((emoji, i) => {
                 const emTxt = this.add.text(startX + (i * spacing), -35, emoji, { 
-                    fontSize: "38px", // BUMPED UP FROM 26px
+                    fontSize: "38px", 
                     fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif'
                 }).setOrigin(0.5).setInteractive({useHandCursor: true});
                 
                 emTxt.clearTint(); 
                 
-                // Adjusted hover height for the larger text
                 emTxt.on('pointerover', () => this.tweens.add({ targets: emTxt, scale: 1.25, y: -45, duration: 250, ease: 'Back.out' }));
                 emTxt.on('pointerout', () => this.tweens.add({ targets: emTxt, scale: 1, y: -35, duration: 200, ease: 'Power2' }));
                 
@@ -576,25 +570,21 @@ Object.assign(MenuScene.prototype, {
                 this.chatActionPopup.add(emTxt);
             });
 
-            // Subtle Divider
             const divider = this.add.rectangle(0, 10, menuW - 40, 1, 0xffffff, 0.08);
             this.chatActionPopup.add(divider);
 
-            // ROW 2: LARGE ACTION BUTTONS
             const btnY = 45;
 
-            // --- BIG REPLY BUTTON ---
             const repBg = this.add.graphics();
             const drawRepBg = (hover) => {
                 repBg.clear();
                 if (hover) {
                     repBg.fillStyle(0x334155, 0.8);
-                    repBg.fillRoundedRect(-170, btnY - 24, 160, 48, 12); // Larger Hitbox
+                    repBg.fillRoundedRect(-170, btnY - 24, 160, 48, 12); 
                 }
             };
             drawRepBg(false);
 
-            // Increased Font Sizes for Icon and Text
             const repIcon = this.add.text(-125, btnY, "↩️", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
             repIcon.clearTint();
             const repTxt = this.add.text(-100, btnY, "Reply", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
@@ -607,18 +597,16 @@ Object.assign(MenuScene.prototype, {
                 this.closeActionMenu();
             });
 
-            // --- BIG COPY BUTTON ---
             const copyBg = this.add.graphics();
             const drawCopyBg = (hover) => {
                 copyBg.clear();
                 if (hover) {
                     copyBg.fillStyle(0x334155, 0.8);
-                    copyBg.fillRoundedRect(10, btnY - 24, 160, 48, 12); // Larger Hitbox
+                    copyBg.fillRoundedRect(10, btnY - 24, 160, 48, 12); 
                 }
             };
             drawCopyBg(false);
 
-            // Increased Font Sizes for Icon and Text
             const copyIcon = this.add.text(45, btnY, "📋", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
             copyIcon.clearTint();
             const copyTxt = this.add.text(70, btnY, "Copy", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
@@ -649,7 +637,6 @@ Object.assign(MenuScene.prototype, {
             this.chatActionPopup.add([repBg, repIcon, repTxt, repHit, copyBg, copyIcon, copyTxt, copyHit]);
         }
 
-        // Smooth pop-in
         this.chatActionPopup.setScale(0.8);
         this.chatActionPopup.setAlpha(0);
         this.tweens.add({ targets: this.chatActionPopup, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
@@ -677,9 +664,8 @@ Object.assign(MenuScene.prototype, {
         const q = window.FirebaseTools.query(chatRef, window.FirebaseTools.orderBy("timestamp", "desc"), window.FirebaseTools.limit(105));
         
         let isFirstLoad = true;
-        this.chatDataCache = []; // We now cache messages so we can re-render them at will
+        this.chatDataCache = []; 
 
-        // Refactored UI rendering into a callable function
         this.refreshChatUI = () => {
             const prevTopY = 125 - this.chatKeyboardOffset;
             const prevBottomY = prevTopY - (this.chatMaxScroll || 0);
@@ -705,7 +691,6 @@ Object.assign(MenuScene.prototype, {
                 
                 if (!isPinned && msgTime > this.lastSeenTime) unreadCalc++;
 
-                // BUG FIX: Removed this.isChatOpen requirement. It now draws even if closed.
                 if (msgTime > this.lastSeenTime && !this.dividerRendered && !isPinned) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
@@ -849,7 +834,6 @@ Object.assign(MenuScene.prototype, {
             const visibleHeight = this.chatScrollZoneHeight;
             this.chatMaxScroll = Math.max(0, currentY - visibleHeight);
 
-            // New Badge Logic
             if (!this.isChatOpen && unreadCalc > 0) {
                 let badgeText = unreadCalc > 9 ? "9+" : unreadCalc.toString();
                 this.unreadBadgeTxt.setText(badgeText);
@@ -881,7 +865,6 @@ Object.assign(MenuScene.prototype, {
             isFirstLoad = false;
         };
 
-        // Snapshot now simply fetches data and calls the render function
         this.chatUnsubscribe = window.FirebaseTools.onSnapshot(q, (snapshot) => {
             let messages = [];
             snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
