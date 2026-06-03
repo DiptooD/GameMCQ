@@ -647,6 +647,7 @@ class MenuScene extends Phaser.Scene {
         const boxW = 270;
         const boxH = 60; 
 
+        // --- CURRENCY BOX ---
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 0.8);
         bg.fillRoundedRect(startX, startY, boxW, boxH, 30); 
@@ -665,63 +666,45 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // --- EXIT BUTTON ---
-        const exitW = 210; 
-        const exitH = 65; 
-        const exitX = startX + boxW - exitW; // This equals 480
-        const exitY = 115;
-        const exitRadius = 25;
+        // --- COMBINED SHARE & EXIT BUTTON ---
+        const combW = 260; 
+        const combH = 65; 
+        const combX = startX + boxW - combW; // Aligns perfectly with the right edge of the currency box
+        const combY = 115;
+        const combRadius = 25;
 
-        const exitBg = this.add.graphics();
-        const drawExit = (hover) => {
-            exitBg.clear();
-            exitBg.fillStyle(0x0a101a, hover ? 1 : 0.9); 
-            exitBg.fillRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
-            exitBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
-            exitBg.strokeRoundedRect(exitX, exitY, exitW, exitH, exitRadius);
+        const combBg = this.add.graphics();
+        const drawCombBg = (hoverColor = null) => {
+            combBg.clear();
+            combBg.fillStyle(0x0a101a, 0.9); 
+            combBg.fillRoundedRect(combX, combY, combW, combH, combRadius);
+            combBg.lineStyle(1, hoverColor || 0x334455, hoverColor ? 0.8 : 0.4); 
+            combBg.strokeRoundedRect(combX, combY, combW, combH, combRadius);
         };
-        drawExit(false);
+        drawCombBg(); // Draw initial state
 
-        const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
-            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
+        // Divider Line
+        this.add.rectangle(combX + 80, combY + combH/2, 2, 40, 0x334455, 0.6);
+
+        // --- 1. SHARE SECTION (Left 80px) ---
+        const shareIcon = this.add.text(combX + 40, combY + combH/2, "🔗", {
+            fontSize: '30px', padding: { y: 2 }
         }).setOrigin(0.5);
 
-        const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});
-        exitHit.on('pointerover', () => { drawExit(true); exitText.setColor('#ffaaaa'); });
-        exitHit.on('pointerout', () => { drawExit(false); exitText.setColor('#ff4444'); });
-        exitHit.on('pointerdown', () => {
-            this.playSound('sfx_back');
-            this.tweens.add({ targets: [exitText], scale: 0.95, duration: 50, yoyo: true });
-            if (navigator.app && navigator.app.exitApp) {
-                navigator.app.exitApp();
-            }
-        });
-
-        // --- SHARE ICON BUTTON ---
-        const shareSize = 65;
-        const shareX = exitX - shareSize - 15; // Placed 15px to the left of the Exit button
-        const shareY = 115;
-        const shareRadius = 20; // Slightly rounder for a square icon look
+        const shareHit = this.add.rectangle(combX + 40, combY + combH/2, 80, combH, 0x000000, 0).setInteractive({useHandCursor: true});
         
         let canShare = true;
 
-        const shareBg = this.add.graphics();
-        const drawShare = (hover) => {
-            shareBg.clear();
-            shareBg.fillStyle(0x0a101a, hover ? 1 : 0.9); 
-            shareBg.fillRoundedRect(shareX, shareY, shareSize, shareSize, shareRadius);
-            shareBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
-            shareBg.strokeRoundedRect(shareX, shareY, shareSize, shareSize, shareRadius);
-        };
-        drawShare(false);
-
-        const shareIcon = this.add.text(shareX + shareSize/2, shareY + shareSize/2, "🔗", {
-            fontSize: '32px', padding: { y: 3 }
-        }).setOrigin(0.5);
-
-        const shareHit = this.add.rectangle(shareX + shareSize/2, shareY + shareSize/2, shareSize, shareSize, 0x000000, 0).setInteractive({useHandCursor: true});
-        shareHit.on('pointerover', () => { drawShare(true); shareIcon.setScale(1.1); });
-        shareHit.on('pointerout', () => { drawShare(false); shareIcon.setScale(1); });
+        shareHit.on('pointerover', () => { 
+            shareIcon.setScale(1.15); 
+            drawCombBg(0x00e1ff); // Cyan highlight
+        });
+        
+        shareHit.on('pointerout', () => { 
+            shareIcon.setScale(1); 
+            drawCombBg(); 
+        });
+        
         shareHit.on('pointerdown', () => {
             if (!canShare) return;
             canShare = false;
@@ -745,10 +728,32 @@ class MenuScene extends Phaser.Scene {
                 });
             }
 
-            // Unlock after 2.5 seconds
-            this.time.delayedCall(2500, () => {
-                canShare = true;
-            });
+            this.time.delayedCall(2500, () => { canShare = true; });
+        });
+
+        // --- 2. EXIT SECTION (Right 180px) ---
+        const exitText = this.add.text(combX + 80 + 90, combY + combH/2, "✖ বাহির", {
+            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
+        }).setOrigin(0.5);
+
+        const exitHit = this.add.rectangle(combX + 80 + 90, combY + combH/2, 180, combH, 0x000000, 0).setInteractive({useHandCursor: true});
+        
+        exitHit.on('pointerover', () => { 
+            exitText.setColor('#ffaaaa'); 
+            drawCombBg(0xff4444); // Red highlight
+        });
+        
+        exitHit.on('pointerout', () => { 
+            exitText.setColor('#ff2e2e'); 
+            drawCombBg(); 
+        });
+        
+        exitHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            this.tweens.add({ targets: [exitText], scale: 0.95, duration: 50, yoyo: true });
+            if (navigator.app && navigator.app.exitApp) {
+                navigator.app.exitApp();
+            }
         });
     }
 
