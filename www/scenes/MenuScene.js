@@ -665,7 +665,6 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // --- EXIT BUTTON ---
         const exitW = 210; 
         const exitH = 65; 
         const exitX = startX + boxW - exitW; 
@@ -683,7 +682,7 @@ class MenuScene extends Phaser.Scene {
         drawExit(false);
 
         const exitText = this.add.text(exitX + exitW/2, exitY + exitH/2, "✖ বাহির", {
-            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
+            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const exitHit = this.add.rectangle(exitX + exitW/2, exitY + exitH/2, exitW, exitH, 0x000000, 0).setInteractive({useHandCursor: true});
@@ -694,53 +693,6 @@ class MenuScene extends Phaser.Scene {
             this.tweens.add({ targets: [exitText], scale: 0.95, duration: 50, yoyo: true });
             if (navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
-            }
-        });
-
-        // --- NEW: SHARE BUTTON ---
-        const shareW = 200;
-        const shareH = 65;
-        const shareX = exitX - shareW - 20; // Positioned 20px to the left of the Exit button
-        const shareY = 115;
-        const shareRadius = 25;
-
-        const shareBg = this.add.graphics();
-        const drawShare = (hover) => {
-            shareBg.clear();
-            shareBg.fillStyle(0x0a101a, hover ? 1 : 0.9); 
-            shareBg.fillRoundedRect(shareX, shareY, shareW, shareH, shareRadius);
-            shareBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
-            shareBg.strokeRoundedRect(shareX, shareY, shareW, shareH, shareRadius);
-        };
-        drawShare(false);
-
-        const shareText = this.add.text(shareX + shareW/2, shareY + shareH/2, "🔗 শেয়ার", {
-            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#00e1ff', fontStyle: 'bold' 
-        }).setOrigin(0.5);
-
-        const shareHit = this.add.rectangle(shareX + shareW/2, shareY + shareH/2, shareW, shareH, 0x000000, 0).setInteractive({useHandCursor: true});
-        shareHit.on('pointerover', () => { drawShare(true); shareText.setColor('#ffffff'); });
-        shareHit.on('pointerout', () => { drawShare(false); shareText.setColor('#00e1ff'); });
-        shareHit.on('pointerdown', () => {
-            this.playSound('sfx_click');
-            this.tweens.add({ targets: [shareText], scale: 0.95, duration: 50, yoyo: true });
-            
-            const shareData = {
-                title: 'গেইম MCQ',
-                text: 'খেলতে খেলতে সাধারণ জ্ঞান যাচাই করুন গেইম MCQ-তে!',
-                url: 'https://sites.google.com/view/gamemcq'
-            };
-
-            // Trigger native share popup
-            if (navigator.share) {
-                navigator.share(shareData).catch(err => console.log("Share cancelled", err));
-            } else {
-                // Fallback for browsers/environments that don't support native share
-                navigator.clipboard.writeText(shareData.url).then(() => {
-                    this.showNotification("লিংক কপি করা হয়েছে!", "success");
-                }).catch(() => {
-                    window.open(shareData.url, '_blank');
-                });
             }
         });
     }
