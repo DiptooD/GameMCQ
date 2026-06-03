@@ -1019,7 +1019,7 @@ Object.assign(MenuScene.prototype, {
                 }
 
                 const msgTxt = this.add.text(0, 0, displayMsgText, { 
-                    fontSize: "30px", fontFamily: "'Anek Bangla', sans-serif", color: displayMsgColor, wordWrap: { width: bubbleMaxWidth - 40, useAdvancedWrap: true }, fontStyle: msg.isDeleted ? "italic" : "normal"
+                    fontSize: "30px", fontFamily: "'Anek Bangla', sans-serif", color: displayMsgColor, wordWrap: { width: bubbleMaxWidth - 40, useAdvancedWrap: true }, fontStyle: msg.isDeleted ? "italic" : "normal", lineSpacing: 10
                 });
 
                 const timeStr = this.timeAgo(msg.timestamp);
