@@ -164,10 +164,15 @@ Object.assign(MenuScene.prototype, {
         let scrollYTracker = [];
         let hitStartX = 0, hitStartY = 0, hitStartTime = 0;
 
+        // --- NEW: Long Press Variables ---
+        let longPressTimer = null;
+        let hasLongPressed = false;
+
         scrollZone.on('pointerdown', (pointer) => {
             dragStartY = pointer.y;
             containerStartY = this.msgListContainer.y;
             isDraggingChat = true;
+            hasLongPressed = false; // Reset on new touch
             scrollYTracker = [{y: pointer.y, time: this.time.now}];
             
             this.tweens.killTweensOf(this.msgListContainer);
@@ -175,37 +180,27 @@ Object.assign(MenuScene.prototype, {
             hitStartX = pointer.x;
             hitStartY = pointer.y;
             hitStartTime = this.time.now;
-        });
 
-        scrollZone.on('pointermove', (pointer) => {
-            if (pointer.isDown && isDraggingChat) {
-                let dynamicTopOffset = 125 + this.currentPinnedHeight;
-                let topY = dynamicTopOffset - this.chatKeyboardOffset;
-                let bottomY = topY - this.chatMaxScroll;
-                let newY = containerStartY + (pointer.y - dragStartY);
-
-                if (newY > topY) {
-                    newY = topY + (newY - topY) * 0.35;
-                } else if (newY < bottomY) {
-                    newY = bottomY + (newY - bottomY) * 0.35;
-                }
-
-                this.msgListContainer.y = newY;
-                scrollYTracker.push({y: pointer.y, time: this.time.now});
-                if (scrollYTracker.length > 5) scrollYTracker.shift();
-                
-                this.updateChatScrollbar();
+            // Clear any existing timer
+            if (longPressTimer) {
+                longPressTimer.remove();
+                longPressTimer = null;
             }
-        });
 
-        const stopChatDrag = (pointer) => {
-            if (isDraggingChat) {
-                isDraggingChat = false;
-                
+            // Start 400ms Long Press Timer
+            longPressTimer = this.time.delayedCall(400, () => {
                 let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
-                let timeElapsed = this.time.now - hitStartTime;
                 
-                if (dist < 15 && timeElapsed < 350) {
+                // If finger hasn't moved much, trigger the long press!
+                if (dist < 15 && isDraggingChat) {
+                    hasLongPressed = true;
+                    isDraggingChat = false; // Stop scrolling logic
+
+                    // Optional: Give a subtle haptic vibration on mobile
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(40); 
+                    }
+
                     let localX = pointer.x - this.chatContainer.x;
                     let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
                     
@@ -228,12 +223,93 @@ Object.assign(MenuScene.prototype, {
                         }
                     }
                 }
+            });
+        });
 
+        scrollZone.on('pointermove', (pointer) => {
+            if (pointer.isDown && isDraggingChat) {
+                // If the user drags their finger more than 15 pixels, cancel the long-press
+                let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
+                if (dist > 15 && longPressTimer) {
+                    longPressTimer.remove();
+                    longPressTimer = null;
+                }
+
+                let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                let topY = dynamicTopOffset - this.chatKeyboardOffset;
+                let bottomY = topY - this.chatMaxScroll;
+                let newY = containerStartY + (pointer.y - dragStartY);
+
+                if (newY > topY) {
+                    newY = topY + (newY - topY) * 0.35;
+                } else if (newY < bottomY) {
+                    newY = bottomY + (newY - bottomY) * 0.35;
+                }
+
+                this.msgListContainer.y = newY;
+                scrollYTracker.push({y: pointer.y, time: this.time.now});
+                if (scrollYTracker.length > 5) scrollYTracker.shift();
+                
+                this.updateChatScrollbar();
+            }
+        });
+
+        const stopChatDrag = (pointer) => {
+            // Always clean up the timer when finger lifts
+            if (longPressTimer) {
+                longPressTimer.remove();
+                longPressTimer = null;
+            }
+
+            // If we already opened the menu via long-press, do nothing else
+            if (hasLongPressed) {
+                hasLongPressed = false;
+                return;
+            }
+
+            if (isDraggingChat) {
+                isDraggingChat = false;
+                
+                let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
+                let timeElapsed = this.time.now - hitStartTime;
+                
+                // Allow quick-tap ONLY for retrying errors now.
+                // Standard messages no longer react to short taps.
+                if (dist < 15 && timeElapsed < 350) {
+                    let localX = pointer.x - this.chatContainer.x;
+                    let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
+                    
+                    for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
+                        let child = this.msgListContainer.list[i];
+                        if (child.isInteractHit && child.isError) {
+                            let left = child.x - child.width/2;
+                            let right = child.x + child.width/2;
+                            let top = child.y - child.height/2;
+                            let bottom = child.y + child.height/2;
+                            
+                            if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
+                                this.retrySendMessage(child.msgData.id);
+                                return; 
+                            }
+                        }
+                    }
+                }
+
+                // --- Momentum Scrolling Physics ---
+                // --- Momentum Scrolling Physics ---
                 let velocity = 0;
                 if (scrollYTracker.length > 1) {
-                    let first = scrollYTracker[0], last = scrollYTracker[scrollYTracker.length - 1];
-                    let dt = last.time - first.time, dy = last.y - first.y;
-                    if (dt > 0 && dt < 150) { velocity = dy / dt; }
+                    let last = scrollYTracker[scrollYTracker.length - 1];
+                    let timeSinceLastMove = this.time.now - last.time;
+                    
+                    // NEW: Only apply momentum if you release within 100ms of moving
+                    if (timeSinceLastMove < 100) {
+                        let first = scrollYTracker[0];
+                        let dt = last.time - first.time, dy = last.y - first.y;
+                        if (dt > 0 && dt < 150) { 
+                            velocity = dy / dt; 
+                        }
+                    }
                 }
 
                 let targetY = this.msgListContainer.y;
@@ -241,7 +317,7 @@ Object.assign(MenuScene.prototype, {
                 let easeType = 'Quart.easeOut';
 
                 if (Math.abs(velocity) > 0.2) {
-                    let amplitude = velocity * 800; 
+                    let amplitude = velocity * 650; 
                     targetY += amplitude;
                     duration = Math.min(Math.abs(amplitude) * 1.5, 1200);
                 }
@@ -274,6 +350,7 @@ Object.assign(MenuScene.prototype, {
 
         scrollZone.on('pointerup', stopChatDrag);
         scrollZone.on('pointerout', stopChatDrag);
+        
         scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
             this.tweens.killTweensOf(this.msgListContainer);
             let dynamicTopOffset = 125 + this.currentPinnedHeight;
@@ -1072,34 +1149,39 @@ Object.assign(MenuScene.prototype, {
                 const yCenter = pinnedY + bannerHeight / 2;
                 
                 const pBg = this.add.graphics();
-                pBg.fillStyle(0x0f172a, 0.95); 
-                pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
-                pBg.lineStyle(2, 0xffd700, 0.8); 
-                pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                
+                // --- NEW: Modern Drawing Helper ---
+                const drawPinnedBg = (isHovered) => {
+                    pBg.clear();
+                    
+                    // Main Background (Dark Slate)
+                    pBg.fillStyle(isHovered ? 0x1E293B : 0x0F172A, 0.95); 
+                    pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 8);
+                    
+                    // Subtle Border (Flat, not shiny)
+                    pBg.lineStyle(1.5, isHovered ? 0x475569 : 0x334155, 1);
+                    pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 8);
+
+                    // Modern Blue Accent Line on the left edge
+                    pBg.fillStyle(0x3B82F6, 1);
+                    pBg.fillRoundedRect(10, pinnedY, 5, bannerHeight, { tl: 8, bl: 8, tr: 0, br: 0 });
+                };
+                
+                drawPinnedBg(false);
                 
                 const shortText = msg.text.length > 35 ? msg.text.substring(0, 35) + "..." : msg.text;
-                const pTxt = this.add.text(20, yCenter, `📌 ${msg.n}: ${shortText}`, {
-                    fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", color: "#ffd700", fontStyle: "bold"
+                
+                // Shifted text slightly to the right (x: 28) to make room for the blue accent line
+                // Changed text color to a crisp off-white (#F8FAFC)
+                const pTxt = this.add.text(28, yCenter, `📌 ${msg.n}: ${shortText}`, {
+                    fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", color: "#F8FAFC", fontStyle: "bold"
                 }).setOrigin(0, 0.5);
                 
                 const pHit = this.add.rectangle(this.chatW/2, yCenter, this.chatW - 20, bannerHeight, 0, 0)
                     .setInteractive({useHandCursor: true});
                 
-                pHit.on('pointerover', () => {
-                    pBg.clear();
-                    pBg.fillStyle(0x1e293b, 1);
-                    pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
-                    pBg.lineStyle(2, 0xffea00, 1); 
-                    pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
-                });
-                
-                pHit.on('pointerout', () => {
-                    pBg.clear();
-                    pBg.fillStyle(0x0f172a, 0.95);
-                    pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
-                    pBg.lineStyle(2, 0xffd700, 0.8);
-                    pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
-                });
+                pHit.on('pointerover', () => drawPinnedBg(true));
+                pHit.on('pointerout', () => drawPinnedBg(false));
 
                 pHit.on('pointerdown', (pointer) => {
                     pointer.event.stopPropagation();
