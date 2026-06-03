@@ -34,7 +34,7 @@ Object.assign(MenuScene.prototype, {
         const buffer = 400; 
 
         this.msgListContainer.each(child => {
-            // 🚀 THE FIX: Check our custom tag first. If it's a generic element, fallback to .y
+            // Check our custom tag first. If it's a generic element, fallback to .y
             const checkY = child.trueY !== undefined ? child.trueY : child.y;
 
             if (checkY < visibleTop - buffer || checkY > visibleBottom + buffer) {
@@ -611,17 +611,12 @@ Object.assign(MenuScene.prototype, {
         const targetY = this.isChatOpen ? this.chatYVisible : this.chatYHidden;
         this.chatBlocker.setVisible(this.isChatOpen);
 
-        // ==========================================
-        // 🚀 THE GPU FIX (FAKE FREEZE)
-        // Hide heavy elements to free up rendering power.
-        // ==========================================
         const showBackground = !this.isChatOpen;
         
         if (this.scrollingBg) this.scrollingBg.setVisible(showBackground);
         if (this.backgroundLayers) {
             this.backgroundLayers.forEach(layer => {
                 if (layer.group) {
-                    // BUG FIX: Phaser Groups do not have setVisible, we must iterate their children
                     layer.group.children.iterate(child => {
                         if (child) child.setVisible(showBackground);
                     });
@@ -631,7 +626,6 @@ Object.assign(MenuScene.prototype, {
         
         if (this.hangarContainer) this.hangarContainer.setVisible(showBackground);
         if (this.titleBird) this.titleBird.setVisible(showBackground);
-        // ==========================================
 
         if (this.isChatOpen) {
             this.updateChatNetworkState(); 
@@ -1134,21 +1128,10 @@ Object.assign(MenuScene.prototype, {
                 
                 if (msgTime > this.lastSeenTime && !msg.isLocalOnly) unreadCalc++;
 
-                let topPadding = isConsecutive ? 5 : 45;
-                const bubY = startY + topPadding; 
-
-                // 🚀 THE CULLING FIX: Tag every item with its real vertical position
-                const addItems = (items) => {
-                    let arr = Array.isArray(items) ? items : [items];
-                    arr.forEach(item => {
-                        item.trueY = bubY; 
-                        targetContainer.add(item);
-                    });
-                };
-
+                // 1. Divider Logic FIRST
                 if (msgTime > this.lastSeenTime && !this.dividerRendered && !msg.isLocalOnly) {
                     this.dividerRendered = true;
-                    lastSenderUid = null; 
+                    lastSenderUid = null; // Breaks consecutiveness intentionally
                     
                     const divCont = this.add.container(this.chatW / 2, startY + 15);
                     const divLine = this.add.rectangle(0, 0, this.chatW - 100, 2, 0xff3333, 0.7);
@@ -1157,14 +1140,28 @@ Object.assign(MenuScene.prototype, {
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
                     
-                    divCont.trueY = startY + 15; // Tag the divider container too
+                    divCont.trueY = startY + 15; // Tag the divider container
                     targetContainer.add(divCont);
                     startY += 50;
                 }
 
+                // 2. Consecutiveness Check
                 const isConsecutive = (lastSenderUid === msg.uid) && (lastMessageWasPinned === isPinned);
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
+
+                // 3. Coordinate Calculation
+                let topPadding = isConsecutive ? 5 : 45;
+                const bubY = startY + topPadding; 
+
+                // 4. Culling Helper Definition
+                const addItems = (items) => {
+                    let arr = Array.isArray(items) ? items : [items];
+                    arr.forEach(item => {
+                        item.trueY = bubY; 
+                        targetContainer.add(item);
+                    });
+                };
 
                 let displayMsgText = msg.text;
                 let displayMsgColor = "#ffffff";
@@ -1217,7 +1214,7 @@ Object.assign(MenuScene.prototype, {
 
                     let nameX = isMe ? this.chatW - nameTxt.width - 35 : 35;
                     nameTxt.x = nameX;
-                    addItems(nameTxt); // Using Helper
+                    addItems(nameTxt); 
 
                     if (msg.lvl) {
                         const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
@@ -1236,7 +1233,7 @@ Object.assign(MenuScene.prototype, {
                         lvlBg.strokeRoundedRect(badgeX - lvlW/2, badgeY - lvlH/2, lvlW, lvlH, 6);
         
                         lvlTxt.setPosition(badgeX, badgeY);
-                        addItems([lvlBg, lvlTxt]); // Using Helper
+                        addItems([lvlBg, lvlTxt]); 
                     }
                 }
 
@@ -1279,8 +1276,8 @@ Object.assign(MenuScene.prototype, {
 
                 timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
 
-                addItems([bubbleBg, msgTxt, timeTxt]); // Using Helper
-                if (replyTxtObj) addItems(replyTxtObj); // Using Helper
+                addItems([bubbleBg, msgTxt, timeTxt]); 
+                if (replyTxtObj) addItems(replyTxtObj); 
 
                 let isError = false;
                 let isSending = false;
@@ -1297,14 +1294,14 @@ Object.assign(MenuScene.prototype, {
                         shadow: { offsetX: 1, offsetY: 1, color: '#000000', blur: 2, fill: true }
                     }).setOrigin(1, 0);
                     
-                    addItems(errTxt); // Using Helper
+                    addItems(errTxt); 
                     finalBubbleH += 30; 
                 } else if (isSending) {
                     const sendTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 5, "Sending...", {
                         fontSize: "18px", fontFamily: "'Anek Bangla', Arial", color: "#aaaaaa", fontStyle: "italic"
                     }).setOrigin(1, 0);
                     
-                    addItems(sendTxt); // Using Helper
+                    addItems(sendTxt); 
                     finalBubbleH += 30;
                 }
 
@@ -1313,7 +1310,7 @@ Object.assign(MenuScene.prototype, {
                     interactHit.isInteractHit = true;
                     interactHit.msgData = msg;
                     interactHit.isError = isError;
-                    addItems(interactHit); // Using Helper
+                    addItems(interactHit); 
                 }
 
                 let reactionSpace = 0;
@@ -1336,7 +1333,7 @@ Object.assign(MenuScene.prototype, {
                             color: "#ffffff" 
                         }).setOrigin(0.5);
 
-                        addItems([badgeBg, badgeTxt]); // Using Helper
+                        addItems([badgeBg, badgeTxt]); 
                         rxX += 95; 
                     });
                     
