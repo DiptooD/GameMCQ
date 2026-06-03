@@ -386,13 +386,20 @@ class PlayerProfileScene extends Phaser.Scene {
             
             confirmBtn.on('pointerdown', () => {
                 this.playSound('sfx_click');
-                if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
+                
+                // Use the new global sign out that clears both Firebase AND the Native Google SDK
+                if (window.signOutGoogle) {
+                    window.signOutGoogle().then(() => {
+                        this.updateConnectionUI(false);
+                        this.showNotification("লগ আউট সফল হয়েছে।", "success"); // Logged out successfully
+                    });
+                } else if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
+                    // Fallback just in case
                     window.FirebaseAuth.signOut().then(() => {
                         this.updateConnectionUI(false);
                     });
-                } else {
-                    this.updateConnectionUI(false); 
                 }
+                
                 overlay.destroy();
                 popup.destroy();
             });

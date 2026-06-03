@@ -69,10 +69,7 @@ Object.assign(MenuScene.prototype, {
         const inputY = this.chatH - 55; 
         this.chatScrollZoneHeight = inputY - 45 - 125;
 
-        // Pinned container explicitly separated to "Float" on top
-        this.pinnedContainer = this.add.container(0, 125);
-        this.chatContainer.add(this.pinnedContainer);
-
+        // Message List Container
         this.msgListContainer = this.add.container(0, 125);
         this.chatContainer.add(this.msgListContainer);
 
@@ -113,8 +110,13 @@ Object.assign(MenuScene.prototype, {
             this.chatScrollbarThumb.y = thumbMinY + scrollRatio * (thumbMaxY - thumbMinY);
         };
 
+        // Scroll Zone explicitly added BEFORE Pinned Container so Pinned Clicks take priority
         const scrollZone = this.add.zone(this.chatW / 2, 125 + this.chatScrollZoneHeight / 2, this.chatW, this.chatScrollZoneHeight).setInteractive();
         this.chatContainer.add(scrollZone);
+
+        // Pinned container explicitly layered ON TOP of the scroll zone
+        this.pinnedContainer = this.add.container(0, 125);
+        this.chatContainer.add(this.pinnedContainer);
 
         let dragStartY = 0;
         let containerStartY = 0;
@@ -155,9 +157,7 @@ Object.assign(MenuScene.prototype, {
                     return false;
                 };
 
-                // Check msg list first, then pinned list
-                if (checkInteract(this.msgListContainer)) return;
-                checkInteract(this.pinnedContainer);
+                checkInteract(this.msgListContainer);
             });
         });
 
@@ -247,6 +247,7 @@ Object.assign(MenuScene.prototype, {
             this.updateChatScrollbar();
         });
 
+        // Bottom UI Container
         this.bottomUIContainer = this.add.container(0, 0);
         this.chatContainer.add(this.bottomUIContainer);
 
@@ -362,7 +363,7 @@ Object.assign(MenuScene.prototype, {
                     if (this.showNotification) this.showNotification("Connection lost. Cannot connect.", "error");
                     return;
                 }
-                this.playSound('sfx_click');
+                if (this.playSound) this.playSound('sfx_click');
                 if (window.signInWithGoogle) window.signInWithGoogle().then(() => this.scene.restart());
             });
 
@@ -611,11 +612,10 @@ Object.assign(MenuScene.prototype, {
         const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id);
         
         let updates = {};
-        // Check if the current reaction by this user is exactly what they just clicked
         if (msg.reactions && msg.reactions[uid] === emoji) {
-            updates[`reactions.${uid}`] = null; // Toggle off reaction
+            updates[`reactions.${uid}`] = null; 
         } else {
-            updates[`reactions.${uid}`] = emoji; // Update/Add reaction
+            updates[`reactions.${uid}`] = emoji; 
         }
 
         window.FirebaseTools.updateDoc(docRef, updates);
@@ -623,7 +623,7 @@ Object.assign(MenuScene.prototype, {
 
     showChatActionMenu(msg, x, y) {
         if (this.chatActionPopup) this.chatActionPopup.destroy();
-        this.playSound('sfx_tick', 0.5);
+        if (this.playSound) this.playSound('sfx_tick', 0.5);
 
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const isAdmin = GameState.profile && GameState.profile.role === 'admin';
@@ -733,7 +733,7 @@ Object.assign(MenuScene.prototype, {
             copyHit.on('pointerover', () => { drawCopyBg(true); copyTxt.setColor('#ffffff'); });
             copyHit.on('pointerout', () => { drawCopyBg(false); copyTxt.setColor('#cbd5e1'); });
             copyHit.on('pointerdown', () => {
-                this.playSound('sfx_tick', 0.5);
+                if (this.playSound) this.playSound('sfx_tick', 0.5);
                 
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(msg.text).catch(() => {});
@@ -803,7 +803,6 @@ Object.assign(MenuScene.prototype, {
                 delHit.on('pointerdown', () => {
                     if (!navigator.onLine) { if (this.showNotification) this.showNotification("Cannot delete offline.", "error"); return; }
                     const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id);
-                    // Updating to deleted status and immediately removing pin flag
                     window.FirebaseTools.updateDoc(docRef, { isDeleted: true, pinned: false });
                     this.closeActionMenu();
                 });
@@ -841,6 +840,48 @@ Object.assign(MenuScene.prototype, {
         let isFirstLoad = true;
         this.chatDataCache = []; 
 
+        // Function triggered when player clicks a pinned chat banner
+        this.scrollToChat = (msgId) => {
+            if (!this.msgYMap || !this.msgYMap[msgId]) return;
+            if (this.playSound) this.playSound('sfx_click');
+            
+            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let topY = dynamicTopOffset - this.chatKeyboardOffset;
+            let bottomY = topY - this.chatMaxScroll;
+            
+            let targetMsgY = this.msgYMap[msgId].y;
+            let targetContainerY = topY - targetMsgY + 20; 
+            
+            targetContainerY = Phaser.Math.Clamp(targetContainerY, bottomY, topY);
+            
+            this.tweens.killTweensOf(this.msgListContainer);
+            this.tweens.add({
+                targets: this.msgListContainer,
+                y: targetContainerY,
+                duration: 450,
+                ease: 'Cubic.easeOut',
+                onUpdate: () => this.updateChatScrollbar()
+            });
+
+            // Visual flash overlay to highlight the jumped-to chat message
+            let highlight = this.add.rectangle(
+                this.chatW / 2, 
+                targetMsgY + this.msgYMap[msgId].h / 2, 
+                this.chatW - 20, 
+                this.msgYMap[msgId].h + 16, 
+                0xffffff, 0.35 // Increased visibility slightly
+            );
+            this.msgListContainer.add(highlight);
+            
+            this.tweens.add({
+                targets: highlight,
+                alpha: 0,
+                duration: 1500,
+                delay: 400,
+                onComplete: () => highlight.destroy()
+            });
+        };
+
         this.refreshChatUI = () => {
             const dynamicPrevTopOffset = 125 + this.currentPinnedHeight;
             const prevTopY = dynamicPrevTopOffset - this.chatKeyboardOffset;
@@ -855,22 +896,80 @@ Object.assign(MenuScene.prototype, {
             let unreadCalc = 0;
             this.dividerRendered = false; 
             
+            this.msgYMap = {}; 
+
             const currentUserUid = (window.FirebaseAuth && window.FirebaseAuth.currentUser) ? window.FirebaseAuth.currentUser.uid : null;
 
             const pinnedMessages = this.chatDataCache.filter(m => m.pinned);
-            const regularMessages = this.chatDataCache.filter(m => !m.pinned);
+            const allMessages = this.chatDataCache; 
 
             let lastSenderUid = null;
             let lastMessageWasPinned = false;
 
-            // Base rendering method adapted for either standard scroll list OR floating top pinned
-            const renderMessage = (msg, isPinned, targetContainer, startY) => {
+            // 1. Render Thicker Clickable Banners for Pins
+            pinnedMessages.forEach(msg => {
+                const bannerHeight = 60; // Thicker banner
+                const yCenter = pinnedY + bannerHeight / 2;
+                
+                const pBg = this.add.graphics();
+                pBg.fillStyle(0x0f172a, 0.95); 
+                pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                pBg.lineStyle(2, 0xffd700, 0.8); 
+                pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                
+                const shortText = msg.text.length > 35 ? msg.text.substring(0, 35) + "..." : msg.text;
+                const pTxt = this.add.text(20, yCenter, `📌 ${msg.n}: ${shortText}`, {
+                    fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", color: "#ffd700", fontStyle: "bold"
+                }).setOrigin(0, 0.5);
+                
+                const pHit = this.add.rectangle(this.chatW/2, yCenter, this.chatW - 20, bannerHeight, 0, 0)
+                    .setInteractive({useHandCursor: true});
+                
+                // Add hover visual feedback
+                pHit.on('pointerover', () => {
+                    pBg.clear();
+                    pBg.fillStyle(0x1e293b, 1);
+                    pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                    pBg.lineStyle(2, 0xffea00, 1); 
+                    pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                });
+                
+                pHit.on('pointerout', () => {
+                    pBg.clear();
+                    pBg.fillStyle(0x0f172a, 0.95);
+                    pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                    pBg.lineStyle(2, 0xffd700, 0.8);
+                    pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 10);
+                });
+
+                pHit.on('pointerdown', (pointer) => {
+                    // Prevent this click from leaking into the scroll-zone dragging logic
+                    pointer.event.stopPropagation();
+                    this.scrollToChat(msg.id);
+                });
+                
+                this.pinnedContainer.add([pBg, pTxt, pHit]);
+                pinnedY += bannerHeight + 8; // Spacer
+            });
+            
+            // Adjust current pinned height and container mask offsets
+            this.currentPinnedHeight = pinnedY > 0 ? pinnedY + 10 : 0;
+            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
+
+            this.chatMaskShape.clear();
+            this.chatMaskShape.fillStyle(0xffffff);
+            this.chatMaskShape.fillRect(this.chatX + 10, this.chatYVisible + dynamicTopOffset, this.chatW - 20, dynamicScrollZoneHeight);
+
+            // 2. Base standard chat bubble logic (now applying to ALL messages inside the list)
+            const renderMessage = (msg, targetContainer, startY) => {
                 const isMe = currentUserUid && (msg.uid === currentUserUid);
+                const isPinned = msg.pinned; 
                 let msgTime = msg.timestamp ? (msg.timestamp.toMillis ? msg.timestamp.toMillis() : Date.now()) : Date.now();
                 
-                if (!isPinned && msgTime > this.lastSeenTime) unreadCalc++;
+                if (msgTime > this.lastSeenTime) unreadCalc++;
 
-                if (msgTime > this.lastSeenTime && !this.dividerRendered && !isPinned) {
+                if (msgTime > this.lastSeenTime && !this.dividerRendered) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
                     
@@ -884,7 +983,7 @@ Object.assign(MenuScene.prototype, {
                     startY += 50;
                 }
 
-                const isConsecutive = !isPinned && (lastSenderUid === msg.uid) && !lastMessageWasPinned;
+                const isConsecutive = (lastSenderUid === msg.uid) && (lastMessageWasPinned === isPinned);
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
 
@@ -983,7 +1082,6 @@ Object.assign(MenuScene.prototype, {
                 targetContainer.add([bubbleBg, msgTxt, timeTxt]);
                 if (replyTxtObj) targetContainer.add(replyTxtObj);
 
-                // Disable UI Interactions entirely for deleted messages
                 if (!msg.isDeleted) {
                     const interactHit = this.add.rectangle(startX + bubbleW/2, bubY + bubbleH/2, bubbleW, bubbleH, 0, 0);
                     interactHit.isInteractHit = true;
@@ -1018,33 +1116,16 @@ Object.assign(MenuScene.prototype, {
                     reactionSpace = 55; 
                 }
 
+                // Store exact rendered position of each bubble for triggers
+                this.msgYMap[msg.id] = { y: bubY, h: bubbleH };
+
                 return bubY + bubbleH + reactionSpace + 15; 
             };
 
-            // 1. Render Pinned items into Independent Floating Container first
-            pinnedMessages.forEach(msg => {
-                pinnedY = renderMessage(msg, true, this.pinnedContainer, pinnedY);
-            });
-
-            if (pinnedMessages.length > 0) {
-                const divider = this.add.rectangle(this.chatW / 2, pinnedY + 5, this.chatW - 60, 2, 0x0066aa, 0.8);
-                this.pinnedContainer.add(divider);
-                pinnedY += 15;
-            }
-            
-            // Adjust mask dynamically relative to current pins
-            this.currentPinnedHeight = pinnedY;
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
-            let dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
-
-            this.chatMaskShape.clear();
-            this.chatMaskShape.fillStyle(0xffffff);
-            this.chatMaskShape.fillRect(this.chatX + 10, this.chatYVisible + dynamicTopOffset, this.chatW - 20, dynamicScrollZoneHeight);
-
-            // 2. Render normal scrollable messages
+            // 3. Render all normal scrollable messages
             lastSenderUid = null;
-            regularMessages.forEach(msg => {
-                currentY = renderMessage(msg, false, this.msgListContainer, currentY);
+            allMessages.forEach(msg => {
+                currentY = renderMessage(msg, this.msgListContainer, currentY);
             });
 
             const visibleHeight = dynamicScrollZoneHeight;

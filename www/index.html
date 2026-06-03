@@ -177,6 +177,26 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
             console.error("Error syncing after login", e);
         }
     };
+    // --- ADD THIS NEW LOGOUT FUNCTION ---
+    window.signOutGoogle = function() {
+        return new Promise((resolve, reject) => {
+            if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
+                window.FirebaseAuth.signOut().then(() => {
+                    // Force the native Android Google SDK to forget the account
+                    if (window.cordova && window.plugins && window.plugins.googleplus) {
+                        window.plugins.googleplus.disconnect(
+                            function (msg) { resolve(); },
+                            function (err) { resolve(); } // Resolve anyway so the UI updates
+                        );
+                    } else {
+                        resolve(); // Web fallback
+                    }
+                }).catch(reject);
+            } else {
+                resolve();
+            }
+        });
+    };
   </script>
 
   <script>
