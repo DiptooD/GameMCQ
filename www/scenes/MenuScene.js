@@ -19,6 +19,7 @@ class MenuScene extends Phaser.Scene {
         this.isHistoryPopupOpen = false;
         
         this.activeNotification = null;
+        this.isChatOpen = false; // Initialize chat state early for the update loop
     }
 
     create() {
@@ -127,7 +128,7 @@ class MenuScene extends Phaser.Scene {
         const startY = panelY + 260;
         this.createStartButton(cx, startY, UI_WIDTH + 60, 100); 
 
-        const tipsY = startY + 160; // Slightly moved up to fit the new tabbed layout
+        const tipsY = startY + 160; 
         this.createInfoBox(cx, tipsY, UI_WIDTH + 60);
 
         this.createBottomMenu(cx, this.cameras.main.height - 110, UI_WIDTH + 100, 90);
@@ -676,7 +677,7 @@ class MenuScene extends Phaser.Scene {
         const combX = startX + boxW - combW; 
         const combY = 115;
         const combRadius = 25;
-        const pillBgColor = 0x0a101a; // Stored as a variable to use inside the icon for the "hollow" effect
+        const pillBgColor = 0x0a101a; 
 
         const combBg = this.add.graphics();
         const drawCombBg = (hoverColor = null) => {
@@ -688,7 +689,6 @@ class MenuScene extends Phaser.Scene {
         };
         drawCombBg(); 
 
-        // Divider Line
         this.add.rectangle(combX + 80, combY + combH/2, 2, 40, 0x334455, 0.6);
 
         // --- 1. PREMIUM SHARE SECTION (Left 80px) ---
@@ -699,7 +699,6 @@ class MenuScene extends Phaser.Scene {
             shareIcon.clear();
             const mainColor = hover ? 0xffffff : 0x00e1ff;
 
-            // Increased line thickness and spread
             shareIcon.lineStyle(3.2, mainColor, 1);
             shareIcon.beginPath();
             shareIcon.moveTo(-11, 0);
@@ -708,13 +707,11 @@ class MenuScene extends Phaser.Scene {
             shareIcon.lineTo(11, 12.5);
             shareIcon.strokePath();
 
-            // Larger outer circles
             shareIcon.fillStyle(mainColor, 1);
             shareIcon.fillCircle(-11, 0, 6.2);
             shareIcon.fillCircle(11, -12.5, 6.2);
             shareIcon.fillCircle(11, 12.5, 6.2);
 
-            // Adjusted hollow cutouts
             shareIcon.fillStyle(pillBgColor, 1); 
             shareIcon.fillCircle(-11, 0, 2.8);
             shareIcon.fillCircle(11, -12.5, 2.8);
@@ -1341,32 +1338,21 @@ class MenuScene extends Phaser.Scene {
     }
 
     createInfoBox(x, y, width) {
-        // 1. Increased height to accommodate larger, mobile-friendly fonts
         const height = 160; 
         const container = this.add.container(x, y);
 
-        // 2. Subtle Background (Less noticeable UI)
         const bg = this.add.graphics();
-        bg.fillStyle(0x000815, 0.45); // Lower opacity, darker base
+        bg.fillStyle(0x000815, 0.45); 
         bg.fillRoundedRect(-width/2, -height/2, width, height, 16);
-        bg.lineStyle(1.5, 0x003355, 0.3); // Very subtle border instead of harsh neon
+        bg.lineStyle(1.5, 0x003355, 0.3); 
         bg.strokeRoundedRect(-width/2, -height/2, width, height, 16);
 
-        // Tab System Setup
         const tabW = width / 3;
         const tabY = -height/2 + 25;
         
-        // 3. Subtle Tab Highlight
-        // 3. Subtle Tab Highlight
         const highlightBg = this.add.graphics();
         highlightBg.fillStyle(0xffffff, 0.05);
-        
-        // Calculate the height of the highlight box
         const highlightHeight = 44; 
-        
-        // Draw the highlight perfectly centered on the tabY position
-        // tabY defines the vertical center of the text. 
-        // We subtract half the highlight height to center the box vertically.
         highlightBg.fillRoundedRect(
             -tabW/2 + 5, 
             tabY - (highlightHeight / 2), 
@@ -1383,24 +1369,21 @@ class MenuScene extends Phaser.Scene {
             { id: "mission", label: "🎯 মিশন", xOffset: tabW }
         ];
 
-        // Shifted containers down slightly to balance the taller box
         this.infoContainers = {
             top: this.add.container(0, 25),
             tips: this.add.container(0, 25),
             mission: this.add.container(0, 25)
         };
         
-        // Subtle Divider line beneath tabs
         const div = this.add.rectangle(0, -height/2 + 50, width - 40, 1.5, 0x004488, 0.3);
         container.add(div);
 
         let currentTab = "tips";
-        highlightBg.x = 0; // Default starts at Tips
+        highlightBg.x = 0; 
 
         tabs.forEach(tab => {
             const btnHit = this.add.rectangle(tab.xOffset, tabY, tabW, 45, 0x000000, 0).setInteractive({ useHandCursor: true });
             
-            // Larger Tab Fonts with shadows
             const txt = this.add.text(tab.xOffset, tabY, tab.label, {
                 fontSize: "25px", 
                 fontFamily: "'Anek Bangla'", 
@@ -1415,16 +1398,13 @@ class MenuScene extends Phaser.Scene {
                 this.playSound('sfx_tick', 0.5);
                 currentTab = tab.id;
                 
-                // Smooth highlight slide
                 this.tweens.add({ targets: highlightBg, x: tab.xOffset, duration: 250, ease: 'Cubic.out' });
                 tabs.forEach(t => t.textObj.setColor(t.id === currentTab ? "#dddddd" : "#6c89a7"));
                 
-                // Toggle Visibility
                 Object.keys(this.infoContainers).forEach(k => {
                     this.infoContainers[k].setVisible(k === currentTab);
                 });
 
-                // Reset Auto-Cycle Timer when switching tabs
                 if (this.tipTimerEvent) this.tipTimerEvent.reset({ delay: 5000, loop: true, callback: this.cycleTip });
             });
             
@@ -1432,7 +1412,6 @@ class MenuScene extends Phaser.Scene {
             container.add(this.infoContainers[tab.id]);
         });
         
-        // Initialize Default Tab Visibility
         Object.keys(this.infoContainers).forEach(k => {
             this.infoContainers[k].setVisible(k === currentTab);
         });
@@ -1456,7 +1435,6 @@ class MenuScene extends Phaser.Scene {
         
         let currentTipIndex = Phaser.Math.Between(0, this.normalTips.length - 1);
         
-        // 4. Larger Font, better word-wrap margins, and text shadows for legibility
         this.tipTextObj = this.add.text(0, 0, "", {
             fontSize: "25px", 
             fontFamily: "'Anek Bangla'", 
@@ -1483,7 +1461,6 @@ class MenuScene extends Phaser.Scene {
 
         // --- CONTENT 3: TOP (Leaderboard) ---
         if (typeof Leaderboard !== 'undefined') {
-            // Increased height slightly to match new container proportions
             const lb = new Leaderboard(this, 0, 0, width - 20, 110);
             this.infoContainers.top.add(lb);
         }
@@ -1497,7 +1474,7 @@ class MenuScene extends Phaser.Scene {
                     targets: this.tipTextObj, alpha: 0, y: 10, duration: 250, ease: 'Cubic.easeIn',
                     onComplete: () => {
                         this.tipTextObj.setText(activeTips[currentTipIndex]);
-                        this.tipTextObj.y = -10; // Reset for slide-up effect
+                        this.tipTextObj.y = -10; 
                         this.tweens.add({ targets: this.tipTextObj, alpha: 1, y: 0, duration: 350, ease: 'Cubic.easeOut' });
                     }
                 });
@@ -1519,7 +1496,6 @@ class MenuScene extends Phaser.Scene {
             }
         };
 
-        // Inject initial data
         const initTips = this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
         this.tipTextObj.setText(initTips[currentTipIndex]);
         
@@ -1532,7 +1508,6 @@ class MenuScene extends Phaser.Scene {
             this.missionTextObj.setText("🎯 কোনো দৈনিক মিশন নেই");
         }
 
-        // Auto-cycle event
         if (this.tipTimerEvent) this.tipTimerEvent.remove();
         this.tipTimerEvent = this.time.addEvent({ delay: 6000, loop: true, callback: this.cycleTip });
     }
@@ -1644,7 +1619,6 @@ class MenuScene extends Phaser.Scene {
             fontSize: '40px', fontFamily: "'Anek Bangla'",padding: { y: 5 }, color: '#00e1ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
-        // Improved close button styling with rounded square
         const closeX = panelW/2 - 40;
         const closeY = -panelH/2 + 50;
         

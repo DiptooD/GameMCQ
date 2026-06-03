@@ -1197,21 +1197,26 @@ toggleChatWindow() {
                 let topPadding = isConsecutive ? 5 : 45;
                 const bubY = startY + topPadding; 
 
+                // 🚀 1. ADD THIS HELPER: It tags every item with its real vertical position
+                const addItems = (items) => {
+                    let arr = Array.isArray(items) ? items : [items];
+                    arr.forEach(item => {
+                        item.trueY = bubY; // Tag it for the culler!
+                        targetContainer.add(item);
+                    });
+                };
+
                 // --- NEW: UI Styling for Name and Level Badge ---
                 if (!isConsecutive) {
                     const nameTxt = this.add.text(0, bubY - 30, (isPinned ? "📌 " : "") + (msg.n || "Guest"), { 
-                        fontSize: "26px", 
-                        fontFamily: "'Anek Bangla'", 
-                        color: nameColorHexStr, 
-                        fontStyle: "bold",
-                        stroke: "#000c22", // Strong stroke to stand out
-                        strokeThickness: 5,
-                        shadow: { offsetX: 1, offsetY: 2, color: '#000000', blur: 3, fill: true }
+                        // ... your text styles ...
                     }).setOrigin(0, 0.5);
 
                     let nameX = isMe ? this.chatW - nameTxt.width - 35 : 35;
                     nameTxt.x = nameX;
-                    targetContainer.add(nameTxt);
+                    
+                    // 🚀 2. USE HELPER INSTEAD OF targetContainer.add()
+                    addItems(nameTxt);
 
                     // Separate, distinct pill-shaped Level Badge
                     if (msg.lvl) {
@@ -1231,7 +1236,8 @@ toggleChatWindow() {
                         lvlBg.strokeRoundedRect(badgeX - lvlW/2, badgeY - lvlH/2, lvlW, lvlH, 6);
         
                         lvlTxt.setPosition(badgeX, badgeY);
-                        targetContainer.add([lvlBg, lvlTxt]);
+                        // 🚀 3. USE HELPER INSTEAD OF targetContainer.add()
+                        addItems([lvlBg, lvlTxt]);
                     }
                 }
 
@@ -1276,8 +1282,9 @@ toggleChatWindow() {
 
                 timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
 
-                targetContainer.add([bubbleBg, msgTxt, timeTxt]);
-                if (replyTxtObj) targetContainer.add(replyTxtObj);
+                // 🚀 3. USE HELPER INSTEAD OF targetContainer.add()
+                addItems([bubbleBg, msgTxt, timeTxt]);
+                if (replyTxtObj) addItems(replyTxtObj);
 
                 let isError = false;
                 let isSending = false;
