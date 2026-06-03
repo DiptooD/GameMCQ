@@ -333,6 +333,10 @@ Object.assign(MenuScene.prototype, {
             this.bottomUIContainer.add(this.chatSendElements);
             
             const htmlElement = this.chatInput.getChildByID('chatInput');
+            
+            // ==========================================
+            // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
+            // ==========================================
             if (htmlElement) {
                 htmlElement.addEventListener('keydown', (e) => e.stopPropagation());
                 htmlElement.addEventListener('keypress', (event) => {
@@ -343,78 +347,71 @@ Object.assign(MenuScene.prototype, {
                     }
                 });
 
-                let maxBaseHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-                let lastShiftDist = 0;
-
-                const handleViewportChange = () => {
-                    let currentHeight = window.innerHeight;
-                    let offsetTop = 0;
-
-                    if (window.visualViewport) {
-                        currentHeight = window.visualViewport.height;
-                        offsetTop = window.visualViewport.offsetTop; 
-                    }
-
-                    if (currentHeight > maxBaseHeight && offsetTop === 0) {
-                        maxBaseHeight = currentHeight;
-                    }
-
-                    let keyboardPx = Math.max(0, maxBaseHeight - currentHeight);
-                    let neededShiftPx = Math.max(0, keyboardPx - offsetTop);
-
-                    const domCanvasHeight = this.sys.game.canvas.clientHeight || maxBaseHeight;
-                    const gameResHeight = this.cameras.main.height;
-                    const scaleRatio = gameResHeight / domCanvasHeight;
-
-                    let shiftDist = neededShiftPx * scaleRatio;
-                    shiftDist = Phaser.Math.Clamp(shiftDist, 0, gameResHeight * 0.6);
-
-                    const shiftDelta = shiftDist - lastShiftDist;
-                    lastShiftDist = shiftDist;
-                    this.chatKeyboardOffset = shiftDist;
-
-                    this.tweens.killTweensOf(this.bottomUIContainer);
-                    this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 100, ease: 'Sine.easeOut' });
-
-                    this.tweens.killTweensOf(this.msgListContainer);
-                    this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDelta, duration: 100, ease: 'Sine.easeOut', onUpdate: () => this.updateChatScrollbar() });
-                };
+                // Grab the physical screen height before the keyboard opens
+                const baseWindowHeight = window.innerHeight || document.documentElement.clientHeight;
 
                 htmlElement.addEventListener('focus', () => {
-                    let currentVH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-                    if (currentVH > maxBaseHeight) maxBaseHeight = currentVH;
+                    // Force the browser to natively scroll the input into view. 
+                    // This helps fix issues where inputs get clipped completely.
+                    setTimeout(() => {
+                        htmlElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 200);
 
-                    if (window.visualViewport) {
-                        window.visualViewport.addEventListener('resize', handleViewportChange);
-                        window.visualViewport.addEventListener('scroll', handleViewportChange);
-                        setTimeout(handleViewportChange, 50);
-                    } else {
-                        const shiftDist = this.cameras.main.height * 0.45;
+                    // Wait for the slow mobile keyboard animation to finish (usually 300-350ms)
+                    setTimeout(() => {
+                        let currentHeight = window.innerHeight || document.documentElement.clientHeight;
+                        let shiftDist = 0;
+
+                        // Check if the window physically shrunk (Android usually does this)
+                        if (currentHeight < baseWindowHeight - 50) {
+                            let diff = baseWindowHeight - currentHeight;
+                            let scale = this.cameras.main.height / baseWindowHeight;
+                            shiftDist = diff * scale;
+                        } else {
+                            // The window didn't shrink. The keyboard just overlaid the screen (iOS usually does this).
+                            // Safely shift the UI up by 40% of the game height to guarantee it clears the keyboard.
+                            shiftDist = this.cameras.main.height * 0.40;
+                        }
+
+                        // Ensure we don't accidentally shift it completely off the top edge
+                        shiftDist = Phaser.Math.Clamp(shiftDist, 100, this.cameras.main.height * 0.55);
                         this.chatKeyboardOffset = shiftDist;
-                        lastShiftDist = shiftDist;
-                        
+
+                        // Shift UI up
                         this.tweens.killTweensOf(this.bottomUIContainer);
                         this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
-                        
+
+                        // Shift Messages up so they don't get hidden behind the raised UI
                         this.tweens.killTweensOf(this.msgListContainer);
-                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDist, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
-                    }
+                        this.tweens.add({
+                            targets: this.msgListContainer,
+                            y: this.msgListContainer.y - shiftDist,
+                            duration: 250,
+                            ease: 'Cubic.easeOut',
+                            onUpdate: () => this.updateChatScrollbar()
+                        });
+                    }, 350); 
                 });
 
                 htmlElement.addEventListener('blur', () => {
-                    if (window.visualViewport) {
-                        window.visualViewport.removeEventListener('resize', handleViewportChange);
-                        window.visualViewport.removeEventListener('scroll', handleViewportChange);
-                    }
                     if (this.isChatOpen) {
+                        // Return UI to normal
                         this.tweens.killTweensOf(this.bottomUIContainer);
                         this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
 
                         this.tweens.killTweensOf(this.msgListContainer);
-                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y + this.chatKeyboardOffset, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
-                        
+                        this.tweens.add({
+                            targets: this.msgListContainer,
+                            y: this.msgListContainer.y + this.chatKeyboardOffset,
+                            duration: 250,
+                            ease: 'Cubic.easeOut',
+                            onUpdate: () => this.updateChatScrollbar()
+                        });
+
                         this.chatKeyboardOffset = 0;
-                        lastShiftDist = 0;
+                        
+                        // Just in case the browser scrolled natively, gently return it to the top
+                        setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 100);
                     }
                 });
             }
@@ -1128,10 +1125,9 @@ Object.assign(MenuScene.prototype, {
                 
                 if (msgTime > this.lastSeenTime && !msg.isLocalOnly) unreadCalc++;
 
-                // 1. Divider Logic FIRST
                 if (msgTime > this.lastSeenTime && !this.dividerRendered && !msg.isLocalOnly) {
                     this.dividerRendered = true;
-                    lastSenderUid = null; // Breaks consecutiveness intentionally
+                    lastSenderUid = null; 
                     
                     const divCont = this.add.container(this.chatW / 2, startY + 15);
                     const divLine = this.add.rectangle(0, 0, this.chatW - 100, 2, 0xff3333, 0.7);
@@ -1140,21 +1136,18 @@ Object.assign(MenuScene.prototype, {
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
                     
-                    divCont.trueY = startY + 15; // Tag the divider container
+                    divCont.trueY = startY + 15; 
                     targetContainer.add(divCont);
                     startY += 50;
                 }
 
-                // 2. Consecutiveness Check
                 const isConsecutive = (lastSenderUid === msg.uid) && (lastMessageWasPinned === isPinned);
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
 
-                // 3. Coordinate Calculation
                 let topPadding = isConsecutive ? 5 : 45;
                 const bubY = startY + topPadding; 
 
-                // 4. Culling Helper Definition
                 const addItems = (items) => {
                     let arr = Array.isArray(items) ? items : [items];
                     arr.forEach(item => {
@@ -1200,7 +1193,6 @@ Object.assign(MenuScene.prototype, {
                     fontSize: "16px", fontFamily: "Arial", color: "#aaaaaa" 
                 });
 
-                // UI Styling for Name and Level Badge
                 if (!isConsecutive) {
                     const nameTxt = this.add.text(0, bubY - 30, (isPinned ? "📌 " : "") + (msg.n || "Guest"), { 
                         fontSize: "26px", 
