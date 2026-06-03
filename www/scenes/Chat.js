@@ -23,30 +23,27 @@ Object.assign(MenuScene.prototype, {
         });
     },
 
-
     cullChatMessages() {
         if (!this.msgListContainer || !this.isChatOpen) return;
 
-        // Calculate the visible boundaries of the chat box
         const dynamicTopOffset = 125 + this.currentPinnedHeight;
         const visibleTop = dynamicTopOffset - this.msgListContainer.y; 
         const visibleBottom = visibleTop + this.chatScrollZoneHeight;
         
-        // Add a buffer so messages render just before scrolling onto the screen
-        const buffer = 250; 
+        // Increased buffer so tall messages don't disappear before fully scrolling off
+        const buffer = 400; 
 
-        // Loop through everything in the chat list
         this.msgListContainer.each(child => {
-            // If the object is too high or too low, hide it completely
-            if (child.y < visibleTop - buffer || child.y > visibleBottom + buffer) {
+            // 🚀 THE FIX: Check our custom tag first. If it's a generic element, fallback to .y
+            const checkY = child.trueY !== undefined ? child.trueY : child.y;
+
+            if (checkY < visibleTop - buffer || checkY > visibleBottom + buffer) {
                 child.setVisible(false);
             } else {
                 child.setVisible(true);
             }
         });
     },
-
-
 
     createGlobalChat() {
         const w = this.cameras.main.width;
@@ -80,7 +77,6 @@ Object.assign(MenuScene.prototype, {
         this.chatYVisible = (h - this.chatH) / 2; 
         this.chatYHidden = h + 300; 
 
-        // Dim background blocker
         this.chatBlocker = this.add.rectangle(w / 2, h / 2, w, h, 0x000000, 0.75)
             .setDepth(8999).setVisible(false).setInteractive();
             
@@ -162,7 +158,6 @@ Object.assign(MenuScene.prototype, {
         this.pinnedContainer = this.add.container(0, 125);
         this.chatContainer.add(this.pinnedContainer);
 
-        // --- NEW DRAG AND TAP LOGIC ---
         let dragStartY = 0;
         let containerStartY = 0;
         let isDraggingChat = false;
@@ -189,7 +184,6 @@ Object.assign(MenuScene.prototype, {
                 let bottomY = topY - this.chatMaxScroll;
                 let newY = containerStartY + (pointer.y - dragStartY);
 
-                // Rubber-band resistance
                 if (newY > topY) {
                     newY = topY + (newY - topY) * 0.35;
                 } else if (newY < bottomY) {
@@ -208,7 +202,6 @@ Object.assign(MenuScene.prototype, {
             if (isDraggingChat) {
                 isDraggingChat = false;
                 
-                // 1. Detect if it was a quick tap (for Retrying or Menu)
                 let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
                 let timeElapsed = this.time.now - hitStartTime;
                 
@@ -216,7 +209,6 @@ Object.assign(MenuScene.prototype, {
                     let localX = pointer.x - this.chatContainer.x;
                     let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
                     
-                    // Iterate backwards to hit the top elements first
                     for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
                         let child = this.msgListContainer.list[i];
                         if (child.isInteractHit) {
@@ -231,13 +223,12 @@ Object.assign(MenuScene.prototype, {
                                 } else {
                                     this.showChatActionMenu(child.msgData, pointer.x, pointer.y);
                                 }
-                                return; // Exit successfully, no inertia scroll needed
+                                return; 
                             }
                         }
                     }
                 }
 
-                // 2. Inertia Scrolling calculation
                 let velocity = 0;
                 if (scrollYTracker.length > 1) {
                     let first = scrollYTracker[0], last = scrollYTracker[scrollYTracker.length - 1];
@@ -250,7 +241,7 @@ Object.assign(MenuScene.prototype, {
                 let easeType = 'Quart.easeOut';
 
                 if (Math.abs(velocity) > 0.2) {
-                    let amplitude = velocity * 800; // Increased momentum
+                    let amplitude = velocity * 800; 
                     targetY += amplitude;
                     duration = Math.min(Math.abs(amplitude) * 1.5, 1200);
                 }
@@ -613,7 +604,7 @@ Object.assign(MenuScene.prototype, {
         this.chatToggleContainer.setScale(1);
     },
 
-toggleChatWindow() {
+    toggleChatWindow() {
         if (this.playSound) this.playSound('sfx_click');
         this.isChatOpen = !this.isChatOpen;
         
@@ -629,11 +620,15 @@ toggleChatWindow() {
         if (this.scrollingBg) this.scrollingBg.setVisible(showBackground);
         if (this.backgroundLayers) {
             this.backgroundLayers.forEach(layer => {
-                if (layer.group) layer.group.setVisible(showBackground);
+                if (layer.group) {
+                    // BUG FIX: Phaser Groups do not have setVisible, we must iterate their children
+                    layer.group.children.iterate(child => {
+                        if (child) child.setVisible(showBackground);
+                    });
+                }
             });
         }
         
-        // Hide the big UI elements behind the chat blocker
         if (this.hangarContainer) this.hangarContainer.setVisible(showBackground);
         if (this.titleBird) this.titleBird.setVisible(showBackground);
         // ==========================================
@@ -1139,6 +1134,18 @@ toggleChatWindow() {
                 
                 if (msgTime > this.lastSeenTime && !msg.isLocalOnly) unreadCalc++;
 
+                let topPadding = isConsecutive ? 5 : 45;
+                const bubY = startY + topPadding; 
+
+                // 🚀 THE CULLING FIX: Tag every item with its real vertical position
+                const addItems = (items) => {
+                    let arr = Array.isArray(items) ? items : [items];
+                    arr.forEach(item => {
+                        item.trueY = bubY; 
+                        targetContainer.add(item);
+                    });
+                };
+
                 if (msgTime > this.lastSeenTime && !this.dividerRendered && !msg.isLocalOnly) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
@@ -1149,6 +1156,8 @@ toggleChatWindow() {
                         fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ff3333", backgroundColor: "#000c22", padding: {x: 12} 
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
+                    
+                    divCont.trueY = startY + 15; // Tag the divider container too
                     targetContainer.add(divCont);
                     startY += 50;
                 }
@@ -1194,31 +1203,22 @@ toggleChatWindow() {
                     fontSize: "16px", fontFamily: "Arial", color: "#aaaaaa" 
                 });
 
-                let topPadding = isConsecutive ? 5 : 45;
-                const bubY = startY + topPadding; 
-
-                // 🚀 1. ADD THIS HELPER: It tags every item with its real vertical position
-                const addItems = (items) => {
-                    let arr = Array.isArray(items) ? items : [items];
-                    arr.forEach(item => {
-                        item.trueY = bubY; // Tag it for the culler!
-                        targetContainer.add(item);
-                    });
-                };
-
-                // --- NEW: UI Styling for Name and Level Badge ---
+                // UI Styling for Name and Level Badge
                 if (!isConsecutive) {
                     const nameTxt = this.add.text(0, bubY - 30, (isPinned ? "📌 " : "") + (msg.n || "Guest"), { 
-                        // ... your text styles ...
+                        fontSize: "26px", 
+                        fontFamily: "'Anek Bangla'", 
+                        color: nameColorHexStr, 
+                        fontStyle: "bold",
+                        stroke: "#000c22", 
+                        strokeThickness: 5,
+                        shadow: { offsetX: 1, offsetY: 2, color: '#000000', blur: 3, fill: true }
                     }).setOrigin(0, 0.5);
 
                     let nameX = isMe ? this.chatW - nameTxt.width - 35 : 35;
                     nameTxt.x = nameX;
-                    
-                    // 🚀 2. USE HELPER INSTEAD OF targetContainer.add()
-                    addItems(nameTxt);
+                    addItems(nameTxt); // Using Helper
 
-                    // Separate, distinct pill-shaped Level Badge
                     if (msg.lvl) {
                         const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
                             fontSize: "14px", fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
@@ -1236,8 +1236,7 @@ toggleChatWindow() {
                         lvlBg.strokeRoundedRect(badgeX - lvlW/2, badgeY - lvlH/2, lvlW, lvlH, 6);
         
                         lvlTxt.setPosition(badgeX, badgeY);
-                        // 🚀 3. USE HELPER INSTEAD OF targetContainer.add()
-                        addItems([lvlBg, lvlTxt]);
+                        addItems([lvlBg, lvlTxt]); // Using Helper
                     }
                 }
 
@@ -1264,11 +1263,9 @@ toggleChatWindow() {
                 const bubbleBg = this.add.graphics();
                 bubbleBg.fillStyle(bubBgHex, 0.95);
                 
-                // Slightly brighter stroke to make bubbles pop out from background
                 const strokeColor = Phaser.Display.Color.GetColor(baseCol.r * 0.6, baseCol.g * 0.6, baseCol.b * 0.6);
                 bubbleBg.lineStyle(2, strokeColor, 0.8);
 
-                // Asymmetrical bubbling aesthetics
                 if (isMe) {
                     bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 18, br: 4 });
                     bubbleBg.strokeRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 18, br: 4 });
@@ -1282,9 +1279,8 @@ toggleChatWindow() {
 
                 timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
 
-                // 🚀 3. USE HELPER INSTEAD OF targetContainer.add()
-                addItems([bubbleBg, msgTxt, timeTxt]);
-                if (replyTxtObj) addItems(replyTxtObj);
+                addItems([bubbleBg, msgTxt, timeTxt]); // Using Helper
+                if (replyTxtObj) addItems(replyTxtObj); // Using Helper
 
                 let isError = false;
                 let isSending = false;
@@ -1301,24 +1297,23 @@ toggleChatWindow() {
                         shadow: { offsetX: 1, offsetY: 1, color: '#000000', blur: 2, fill: true }
                     }).setOrigin(1, 0);
                     
-                    targetContainer.add(errTxt);
+                    addItems(errTxt); // Using Helper
                     finalBubbleH += 30; 
                 } else if (isSending) {
                     const sendTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 5, "Sending...", {
                         fontSize: "18px", fontFamily: "'Anek Bangla', Arial", color: "#aaaaaa", fontStyle: "italic"
                     }).setOrigin(1, 0);
                     
-                    targetContainer.add(sendTxt);
+                    addItems(sendTxt); // Using Helper
                     finalBubbleH += 30;
                 }
 
-                // Prevent interaction ONLY on currently sending messages so Tap-To-Retry works
                 if (!msg.isDeleted && !isSending) {
                     const interactHit = this.add.rectangle(startX + bubbleW/2, bubY + bubbleH/2, bubbleW, bubbleH, 0, 0);
                     interactHit.isInteractHit = true;
                     interactHit.msgData = msg;
                     interactHit.isError = isError;
-                    targetContainer.add(interactHit);
+                    addItems(interactHit); // Using Helper
                 }
 
                 let reactionSpace = 0;
@@ -1341,7 +1336,7 @@ toggleChatWindow() {
                             color: "#ffffff" 
                         }).setOrigin(0.5);
 
-                        targetContainer.add([badgeBg, badgeTxt]);
+                        addItems([badgeBg, badgeTxt]); // Using Helper
                         rxX += 95; 
                     });
                     
