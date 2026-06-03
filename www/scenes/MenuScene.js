@@ -666,43 +666,72 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // --- COMBINED SHARE & EXIT BUTTON ---
+        // --- COMBINED SHARE & EXIT CONTAINER ---
         const combW = 260; 
         const combH = 65; 
-        const combX = startX + boxW - combW; // Aligns perfectly with the right edge of the currency box
+        const combX = startX + boxW - combW; 
         const combY = 115;
         const combRadius = 25;
+        const pillBgColor = 0x0a101a; // Stored as a variable to use inside the icon for the "hollow" effect
 
         const combBg = this.add.graphics();
         const drawCombBg = (hoverColor = null) => {
             combBg.clear();
-            combBg.fillStyle(0x0a101a, 0.9); 
+            combBg.fillStyle(pillBgColor, 0.9); 
             combBg.fillRoundedRect(combX, combY, combW, combH, combRadius);
             combBg.lineStyle(1, hoverColor || 0x334455, hoverColor ? 0.8 : 0.4); 
             combBg.strokeRoundedRect(combX, combY, combW, combH, combRadius);
         };
-        drawCombBg(); // Draw initial state
+        drawCombBg(); 
 
         // Divider Line
         this.add.rectangle(combX + 80, combY + combH/2, 2, 40, 0x334455, 0.6);
 
-        // --- 1. SHARE SECTION (Left 80px) ---
-        const shareIcon = this.add.text(combX + 40, combY + combH/2, "🔗", {
-            fontSize: '30px', padding: { y: 2 }
-        }).setOrigin(0.5);
+        // --- 1. PREMIUM SHARE SECTION (Left 80px) ---
+        const shareIcon = this.add.graphics();
+        shareIcon.setPosition(combX + 40, combY + combH/2);
+
+        const drawShareIcon = (hover) => {
+            shareIcon.clear();
+            const mainColor = hover ? 0xffffff : 0x00e1ff;
+
+            // Increased line thickness and spread
+            shareIcon.lineStyle(3.2, mainColor, 1);
+            shareIcon.beginPath();
+            shareIcon.moveTo(-11, 0);
+            shareIcon.lineTo(11, -12.5);
+            shareIcon.moveTo(-11, 0);
+            shareIcon.lineTo(11, 12.5);
+            shareIcon.strokePath();
+
+            // Larger outer circles
+            shareIcon.fillStyle(mainColor, 1);
+            shareIcon.fillCircle(-11, 0, 6.2);
+            shareIcon.fillCircle(11, -12.5, 6.2);
+            shareIcon.fillCircle(11, 12.5, 6.2);
+
+            // Adjusted hollow cutouts
+            shareIcon.fillStyle(pillBgColor, 1); 
+            shareIcon.fillCircle(-11, 0, 2.8);
+            shareIcon.fillCircle(11, -12.5, 2.8);
+            shareIcon.fillCircle(11, 12.5, 2.8);
+        };
+        drawShareIcon(false);
 
         const shareHit = this.add.rectangle(combX + 40, combY + combH/2, 80, combH, 0x000000, 0).setInteractive({useHandCursor: true});
         
         let canShare = true;
 
         shareHit.on('pointerover', () => { 
-            shareIcon.setScale(1.15); 
-            drawCombBg(0x00e1ff); // Cyan highlight
+            drawShareIcon(true);
+            drawCombBg(0x00e1ff); 
+            this.tweens.add({ targets: shareIcon, scale: 1.15, duration: 100, overwrite: true });
         });
         
         shareHit.on('pointerout', () => { 
-            shareIcon.setScale(1); 
+            drawShareIcon(false);
             drawCombBg(); 
+            this.tweens.add({ targets: shareIcon, scale: 1, duration: 100, overwrite: true });
         });
         
         shareHit.on('pointerdown', () => {
@@ -710,7 +739,7 @@ class MenuScene extends Phaser.Scene {
             canShare = false;
 
             this.playSound('sfx_click');
-            this.tweens.add({ targets: [shareIcon], scale: 0.8, duration: 50, yoyo: true });
+            this.tweens.add({ targets: shareIcon, scale: 0.85, duration: 50, yoyo: true });
             
             const shareData = {
                 title: 'গেইম MCQ',
@@ -733,14 +762,14 @@ class MenuScene extends Phaser.Scene {
 
         // --- 2. EXIT SECTION (Right 180px) ---
         const exitText = this.add.text(combX + 80 + 90, combY + combH/2, "✖ বাহির", {
-            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#ff2e2e', fontStyle: 'bold' 
+            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#fd3a3a', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const exitHit = this.add.rectangle(combX + 80 + 90, combY + combH/2, 180, combH, 0x000000, 0).setInteractive({useHandCursor: true});
         
         exitHit.on('pointerover', () => { 
             exitText.setColor('#ffaaaa'); 
-            drawCombBg(0xff4444); // Red highlight
+            drawCombBg(0xff4444); 
         });
         
         exitHit.on('pointerout', () => { 
