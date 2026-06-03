@@ -196,10 +196,12 @@ class DeathScene extends Phaser.Scene {
         shareHit.on('pointerover', () => { if (!isProcessing) drawShareBg(true); });
         shareHit.on('pointerout', () => { if (!isProcessing) drawShareBg(false); });
 
-        shareHit.on('pointerdown', () => {
+        shareHit.on('pointerdown', async () => {
             if (isProcessing) return;
 
-            if (!navigator.onLine) {
+            // --- NEW: Real connection check ---
+            const isReallyOnline = await window.checkRealConnection();
+            if (!isReallyOnline) {
                 this.showToast("ইন্টারনেট সংযোগ নেই! 🌐", true);
                 return;
             }

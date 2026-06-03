@@ -2,6 +2,26 @@ window.saveCurrency = function() {
     window.saveGame();
     console.log("Currency/Boosters Saved");
 };
+window.checkRealConnection = function() {
+    return new Promise((resolve) => {
+        if (!navigator.onLine) {
+            resolve(false);
+            return;
+        }
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), 3500); // Fast 3.5s timeout
+        
+        fetch('https://www.gstatic.com/generate_204?rand=' + Date.now(), { 
+            method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: controller.signal 
+        }).then(() => {
+            clearTimeout(id);
+            resolve(true);
+        }).catch(() => {
+            clearTimeout(id);
+            resolve(false);
+        });
+    });
+};
 
 window.saveGame = function() {
     try {

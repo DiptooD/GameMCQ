@@ -25,6 +25,13 @@ class Leaderboard extends Phaser.GameObjects.Container {
             return;
         }
 
+        // --- NEW: Fast fail for fake-online scenarios ---
+        const isOnline = await window.checkRealConnection();
+        if (!isOnline) {
+            this.loadingText.setText("অফলাইন মোড");
+            return;
+        }
+
         try {
             // Target the 'players' collection, order by profile.xp descending, limit to top 3
             const usersRef = window.FirebaseTools.collection(window.FirebaseDB, "players");

@@ -2,6 +2,30 @@
 // Attaches Chat functions directly to MenuScene so it shares the Scene context
 Object.assign(MenuScene.prototype, {
 
+    // --- NEW: Robust Real Network Check ---
+    // navigator.onLine just checks if connected to a router/network, not the actual internet. 
+    // This performs a tiny, cache-busting fetch to Google's 204 endpoint to verify real connectivity.
+    checkRealConnection() {
+        return new Promise((resolve) => {
+            if (!navigator.onLine) {
+                resolve(false);
+                return;
+            }
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), 3500); // 3.5s timeout for fast fail
+            
+            fetch('https://www.gstatic.com/generate_204?rand=' + Date.now(), { 
+                method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: controller.signal 
+            }).then(() => {
+                clearTimeout(id);
+                resolve(true);
+            }).catch(() => {
+                clearTimeout(id);
+                resolve(false);
+            });
+        });
+    },
+
     createGlobalChat() {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
@@ -9,6 +33,9 @@ Object.assign(MenuScene.prototype, {
         this.isChatOpen = false;
         this.lastSeenTime = Date.now();
         this.dividerRendered = false;
+        
+        // Track local message statuses (sending, sent, error)
+        this.trackedMessages = this.trackedMessages || {};
         
         if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
             const uid = window.FirebaseAuth.currentUser.uid;
@@ -406,8 +433,20 @@ Object.assign(MenuScene.prototype, {
         this.offlinePromptGroup.add(offlineTxt);
         this.bottomUIContainer.add(this.offlinePromptGroup);
 
-        this.updateChatNetworkState = () => {
-            const isOnline = navigator.onLine;
+        // Splitting into async checker and synchronous applier to prevent UI blocking
+        this.updateChatNetworkState = async () => {
+            let isOnline = navigator.onLine;
+            // Quick fail if navigator knows we are offline
+            if (!isOnline) {
+                this._applyNetworkState(false);
+                return;
+            }
+            // Verify real internet connectivity
+            isOnline = await this.checkRealConnection();
+            this._applyNetworkState(isOnline);
+        };
+        
+        this._applyNetworkState = (isOnline) => {
             if (this.offlinePromptGroup) this.offlinePromptGroup.setVisible(!isOnline);
             
             if (!isOnline) {
@@ -421,7 +460,6 @@ Object.assign(MenuScene.prototype, {
                 if (this.chatLoginElements) this.chatLoginElements.forEach(e => e.setVisible(true));
             }
             
-            // Fix: Forcefully ensure the chat toggle button exists and is visible if the network state alters while chat is closed
             if (this.chatToggleContainer && !this.isChatOpen) {
                 this.chatToggleContainer.setVisible(true);
                 this.chatToggleContainer.setScale(1);
@@ -441,7 +479,6 @@ Object.assign(MenuScene.prototype, {
         this.listenToGlobalChat();
     },
 
-    // Displays an inline error popup under the chat
     showChatError(msg) {
         if (this.chatErrBanner) {
             this.tweens.killTweensOf(this.chatErrBanner);
@@ -554,7 +591,6 @@ Object.assign(MenuScene.prototype, {
             shadow, bg, icon, hitArea, this.unreadBadgeBg, this.unreadBadgeTxt
         ]);
         
-        // Fix: Force button visibility to 1 immediately to prevent tween stalling issues on offline/lag
         this.chatToggleContainer.setScale(1);
     },
 
@@ -566,6 +602,8 @@ Object.assign(MenuScene.prototype, {
         this.chatBlocker.setVisible(this.isChatOpen);
 
         if (this.isChatOpen) {
+            this.updateChatNetworkState(); // Validate real connection dynamically on open
+
             this.chatToggleContainer.setVisible(false); 
             
             this.chatKeyboardOffset = 0;
@@ -667,8 +705,9 @@ Object.assign(MenuScene.prototype, {
         }
     },
 
-    reactToMessage(msg, emoji) {
-        if (!navigator.onLine) {
+    async reactToMessage(msg, emoji) {
+        const isReallyOnline = await this.checkRealConnection();
+        if (!isReallyOnline) {
             if (this.showNotification) this.showNotification("Connection lost.", "error");
             this.showChatError("Offline: Cannot react right now!");
             return; 
@@ -846,8 +885,9 @@ Object.assign(MenuScene.prototype, {
 
                 pinHit.on('pointerover', () => { drawPinBg(true); pinTxt.setColor('#ffffff'); });
                 pinHit.on('pointerout', () => { drawPinBg(false); pinTxt.setColor('#cbd5e1'); });
-                pinHit.on('pointerdown', () => {
-                    if (!navigator.onLine) { 
+                pinHit.on('pointerdown', async () => {
+                    const isReallyOnline = await this.checkRealConnection();
+                    if (!isReallyOnline) { 
                         if (this.showNotification) this.showNotification("Cannot pin offline.", "error"); 
                         this.showChatError("Offline: Cannot pin message.");
                         return; 
@@ -874,8 +914,9 @@ Object.assign(MenuScene.prototype, {
 
                 delHit.on('pointerover', () => { drawDelBg(true); delTxt.setColor('#ef4444'); });
                 delHit.on('pointerout', () => { drawDelBg(false); delTxt.setColor('#f87171'); });
-                delHit.on('pointerdown', () => {
-                    if (!navigator.onLine) { 
+                delHit.on('pointerdown', async () => {
+                    const isReallyOnline = await this.checkRealConnection();
+                    if (!isReallyOnline) { 
                         if (this.showNotification) this.showNotification("Cannot delete offline.", "error"); 
                         this.showChatError("Offline: Cannot delete message.");
                         return; 
@@ -977,7 +1018,31 @@ Object.assign(MenuScene.prototype, {
             const currentUserUid = (window.FirebaseAuth && window.FirebaseAuth.currentUser) ? window.FirebaseAuth.currentUser.uid : null;
 
             const pinnedMessages = this.chatDataCache.filter(m => m.pinned);
-            const allMessages = this.chatDataCache; 
+            
+            // --- Merge tracked local messages that are sending or have failed ---
+            let allMessages = [...this.chatDataCache];
+            if (this.trackedMessages) {
+                Object.keys(this.trackedMessages).forEach(msgId => {
+                    const tm = this.trackedMessages[msgId];
+                    const exists = allMessages.find(m => m.id === msgId);
+                    if (!exists && (tm.status === 'error' || tm.status === 'sending')) {
+                        allMessages.push({
+                            id: msgId,
+                            ...tm.payload,
+                            isLocalOnly: true,
+                            timestamp: { toMillis: () => tm.time } // Mocking timestamp for safe sorting
+                        });
+                    }
+                });
+            }
+
+            // Secure chronological sorting to protect against Firebase field value tokens
+            const getTime = (msg) => {
+                if (msg.isLocalOnly) return this.trackedMessages[msg.id].time;
+                if (msg.timestamp && typeof msg.timestamp.toMillis === 'function') return msg.timestamp.toMillis();
+                return Date.now(); 
+            };
+            allMessages.sort((a, b) => getTime(a) - getTime(b));
 
             let lastSenderUid = null;
             let lastMessageWasPinned = false;
@@ -1036,11 +1101,11 @@ Object.assign(MenuScene.prototype, {
             const renderMessage = (msg, targetContainer, startY) => {
                 const isMe = currentUserUid && (msg.uid === currentUserUid);
                 const isPinned = msg.pinned; 
-                let msgTime = msg.timestamp ? (msg.timestamp.toMillis ? msg.timestamp.toMillis() : Date.now()) : Date.now();
+                let msgTime = msg.timestamp ? (typeof msg.timestamp.toMillis === 'function' ? msg.timestamp.toMillis() : Date.now()) : Date.now();
                 
-                if (msgTime > this.lastSeenTime) unreadCalc++;
+                if (msgTime > this.lastSeenTime && !msg.isLocalOnly) unreadCalc++;
 
-                if (msgTime > this.lastSeenTime && !this.dividerRendered) {
+                if (msgTime > this.lastSeenTime && !this.dividerRendered && !msg.isLocalOnly) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
                     
@@ -1133,7 +1198,7 @@ Object.assign(MenuScene.prototype, {
                     }
                 }
 
-                const bubbleH = msgTxt.height + 50 + extraHeight + extraReactionPadding;
+                let bubbleH = msgTxt.height + 50 + extraHeight + extraReactionPadding;
                 let startX = isMe ? (this.chatW - bubbleW - 25) : 25;
 
                 const bubbleBg = this.add.graphics();
@@ -1153,7 +1218,40 @@ Object.assign(MenuScene.prototype, {
                 targetContainer.add([bubbleBg, msgTxt, timeTxt]);
                 if (replyTxtObj) targetContainer.add(replyTxtObj);
 
-                if (!msg.isDeleted) {
+                // --- NEW: Error & Pending UI indicators ---
+                let isError = false;
+                let isSending = false;
+                if (this.trackedMessages && this.trackedMessages[msg.id]) {
+                    if (this.trackedMessages[msg.id].status === 'error') isError = true;
+                    if (this.trackedMessages[msg.id].status === 'sending') isSending = true;
+                }
+                
+                let finalBubbleH = bubbleH;
+
+                if (isError) {
+                    const errTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 5, "⚠️ Failed to send. Tap to retry.", {
+                        fontSize: "20px", fontFamily: "'Anek Bangla', Arial", color: "#ff4444", fontStyle: "bold",
+                        shadow: { offsetX: 1, offsetY: 1, color: '#000000', blur: 2, fill: true }
+                    }).setOrigin(1, 0).setInteractive({useHandCursor: true});
+                    
+                    errTxt.on('pointerdown', () => {
+                        if (this.playSound) this.playSound('sfx_click');
+                        this.retrySendMessage(msg.id);
+                    });
+                    
+                    targetContainer.add(errTxt);
+                    finalBubbleH += 30; // Reserve vertical space for the text
+                } else if (isSending) {
+                    const sendTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 5, "Sending...", {
+                        fontSize: "18px", fontFamily: "'Anek Bangla', Arial", color: "#aaaaaa", fontStyle: "italic"
+                    }).setOrigin(1, 0);
+                    
+                    targetContainer.add(sendTxt);
+                    finalBubbleH += 30;
+                }
+
+                // Prevent interaction on unsent/failed messages
+                if (!msg.isDeleted && !isError && !isSending) {
                     const interactHit = this.add.rectangle(startX + bubbleW/2, bubY + bubbleH/2, bubbleW, bubbleH, 0, 0);
                     interactHit.isInteractHit = true;
                     interactHit.msgData = msg;
@@ -1187,9 +1285,9 @@ Object.assign(MenuScene.prototype, {
                     reactionSpace = 55; 
                 }
 
-                this.msgYMap[msg.id] = { y: bubY, h: bubbleH };
+                this.msgYMap[msg.id] = { y: bubY, h: finalBubbleH };
 
-                return bubY + bubbleH + reactionSpace + 15; 
+                return bubY + finalBubbleH + reactionSpace + 15; 
             };
 
             lastSenderUid = null;
@@ -1252,13 +1350,8 @@ Object.assign(MenuScene.prototype, {
         });
     },
 
-    sendChatMessage() {
-        if (!navigator.onLine) {
-            if (this.showNotification) this.showNotification("Connection lost. Cannot send message.", "error");
-            this.showChatError("Offline: Message failed to send!");
-            return;
-        }
-
+    // --- NEW: Safe Network send + Timeout tracking ---
+    async sendChatMessage() {
         const htmlElement = this.chatInput.getChildByID('chatInput');
         if (!htmlElement) return;
 
@@ -1270,8 +1363,11 @@ Object.assign(MenuScene.prototype, {
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
         const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
 
+        // Pre-generate ID for targeted local tracking
         const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
-        
+        const newDocRef = window.FirebaseTools.doc(chatRef);
+        const msgId = newDocRef.id;
+
         let payload = {
             uid: window.FirebaseAuth.currentUser.uid,
             n: playerName,
@@ -1284,16 +1380,84 @@ Object.assign(MenuScene.prototype, {
         if (this.replyData) {
             payload.replyTo = this.replyData;
         }
-        
-        // Add robust error capture here
-        window.FirebaseTools.addDoc(chatRef, payload).catch(err => {
-            console.error("Chat send failed:", err);
-            this.showChatError("Error: Failed to send message!");
-        });
+
+        // 1. Instantly show it locally as "Sending..."
+        this.trackedMessages = this.trackedMessages || {};
+        this.trackedMessages[msgId] = { status: 'sending', payload: payload, time: Date.now() };
 
         htmlElement.value = ""; 
         htmlElement.blur();
         if (this.replyData) this.cancelReply();
+
+        this.refreshChatUI();
+        this.scrollToChat(msgId);
+
+        // 2. Perform Real Connection Ping
+        const isReallyOnline = await this.checkRealConnection();
+        if (!isReallyOnline) {
+            this.trackedMessages[msgId].status = 'error';
+            this.refreshChatUI();
+            this.showChatError("Offline: Message failed to send.");
+            return;
+        }
+
+        // 3. Dispatch to Firebase with Timeout Fallback
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 6000));
+        
+        try {
+            await Promise.race([
+                window.FirebaseTools.setDoc(newDocRef, payload),
+                timeoutPromise
+            ]);
+            // On Success, mark it delivered. Firebase onSnapshot overrides this anyway, making it smooth.
+            this.trackedMessages[msgId].status = 'sent';
+            this.refreshChatUI();
+        } catch (err) {
+            console.error("Chat send failed or timed out:", err);
+            this.trackedMessages[msgId].status = 'error';
+            this.refreshChatUI();
+        }
+    },
+
+    // --- NEW: Retry failed messages functionality ---
+    async retrySendMessage(msgId) {
+        if (!this.trackedMessages || !this.trackedMessages[msgId]) return;
+        
+        // Reset state to Sending and bring to bottom
+        this.trackedMessages[msgId].status = 'sending';
+        this.trackedMessages[msgId].time = Date.now(); 
+        this.refreshChatUI();
+        this.scrollToChat(msgId);
+        
+        // Ensure connectivity
+        const isReallyOnline = await this.checkRealConnection();
+        if (!isReallyOnline) {
+            this.trackedMessages[msgId].status = 'error';
+            this.refreshChatUI();
+            this.showChatError("Still offline! Please check your connection.");
+            return;
+        }
+
+        const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
+        const docRef = window.FirebaseTools.doc(chatRef, msgId);
+        const payload = this.trackedMessages[msgId].payload;
+        payload.timestamp = window.FirebaseTools.serverTimestamp(); // Fresh server stamp
+
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 6000));
+
+        try {
+            await Promise.race([
+                window.FirebaseTools.setDoc(docRef, payload),
+                timeoutPromise
+            ]);
+            this.trackedMessages[msgId].status = 'sent';
+            this.refreshChatUI();
+        } catch (err) {
+            console.error("Chat retry failed:", err);
+            this.trackedMessages[msgId].status = 'error';
+            this.refreshChatUI();
+            this.showChatError("Retry failed. Server issue or poor connection.");
+        }
     },
 
     cleanUpOldChats(oldDocs) {
@@ -1307,7 +1471,7 @@ Object.assign(MenuScene.prototype, {
 
     timeAgo(firebaseTimestamp) {
         if (!firebaseTimestamp) return "just now";
-        const date = firebaseTimestamp.toDate ? firebaseTimestamp.toDate() : new Date(firebaseTimestamp);
+        const date = typeof firebaseTimestamp.toMillis === 'function' ? firebaseTimestamp.toMillis() : new Date(firebaseTimestamp);
         const seconds = Math.floor((new Date() - date) / 1000);
 
         if (seconds < 60) return "just now";
