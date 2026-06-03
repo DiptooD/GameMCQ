@@ -665,9 +665,10 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
+        // --- EXIT BUTTON ---
         const exitW = 210; 
         const exitH = 65; 
-        const exitX = startX + boxW - exitW; 
+        const exitX = startX + boxW - exitW; // This equals 480
         const exitY = 115;
         const exitRadius = 25;
 
@@ -694,6 +695,60 @@ class MenuScene extends Phaser.Scene {
             if (navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
             }
+        });
+
+        // --- SHARE ICON BUTTON ---
+        const shareSize = 65;
+        const shareX = exitX - shareSize - 15; // Placed 15px to the left of the Exit button
+        const shareY = 115;
+        const shareRadius = 20; // Slightly rounder for a square icon look
+        
+        let canShare = true;
+
+        const shareBg = this.add.graphics();
+        const drawShare = (hover) => {
+            shareBg.clear();
+            shareBg.fillStyle(0x0a101a, hover ? 1 : 0.9); 
+            shareBg.fillRoundedRect(shareX, shareY, shareSize, shareSize, shareRadius);
+            shareBg.lineStyle(1, 0x334455, hover ? 0.8 : 0.4); 
+            shareBg.strokeRoundedRect(shareX, shareY, shareSize, shareSize, shareRadius);
+        };
+        drawShare(false);
+
+        const shareIcon = this.add.text(shareX + shareSize/2, shareY + shareSize/2, "🔗", {
+            fontSize: '32px', padding: { y: 3 }
+        }).setOrigin(0.5);
+
+        const shareHit = this.add.rectangle(shareX + shareSize/2, shareY + shareSize/2, shareSize, shareSize, 0x000000, 0).setInteractive({useHandCursor: true});
+        shareHit.on('pointerover', () => { drawShare(true); shareIcon.setScale(1.1); });
+        shareHit.on('pointerout', () => { drawShare(false); shareIcon.setScale(1); });
+        shareHit.on('pointerdown', () => {
+            if (!canShare) return;
+            canShare = false;
+
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: [shareIcon], scale: 0.8, duration: 50, yoyo: true });
+            
+            const shareData = {
+                title: 'গেইম MCQ',
+                text: 'খেলতে খেলতে সাধারণ জ্ঞান যাচাই করুন গেইম MCQ-তে!',
+                url: 'https://sites.google.com/view/gamemcq'
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.log("Share cancelled", err));
+            } else {
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    this.showNotification("লিংক কপি করা হয়েছে!", "success");
+                }).catch(() => {
+                    window.open(shareData.url, '_blank');
+                });
+            }
+
+            // Unlock after 2.5 seconds
+            this.time.delayedCall(2500, () => {
+                canShare = true;
+            });
         });
     }
 
