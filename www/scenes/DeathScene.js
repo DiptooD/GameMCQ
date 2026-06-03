@@ -139,13 +139,6 @@ class DeathScene extends Phaser.Scene {
       shadow: { offsetX: 4, offsetY: 4, color: "#0044aa", blur: 12, stroke: true, fill: true }
     }).setOrigin(0.5);
 
-    // --- NEW: SHARE TO CHAT BUTTON ---
-    // Right-aligned button in the header section, visible if questions were played
-    if (totalQs > 0) {
-        this.createShareButton(w - 60, titleY, percentText, safeCorrect, safeWrong, safeSkipped, totalQs);
-    }
-    // ---------------------------------
-
     if (isViewingHistory) {
         this.add.text(cx, titleY + 60, GameState.viewingHistoryMatch.date, {
             fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#aaaaaa"
@@ -155,6 +148,97 @@ class DeathScene extends Phaser.Scene {
             fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold",
             stroke: "#000000", strokeThickness: 4
         }).setOrigin(0.5);
+    }
+
+    // --- NEW: SHARE TO CHAT BUTTON ---
+    if (totalQs > 0) {
+        const shareBtnX = w - 50;
+        const shareBtnY = titleY;
+
+        const shareBg = this.add.graphics();
+        const drawShareBg = (hover, disabled = false) => {
+            shareBg.clear();
+            if (disabled) {
+                shareBg.fillStyle(0x1e293b, 0.9);
+                shareBg.lineStyle(2, 0x475569, 1);
+            } else if (hover) {
+                shareBg.fillStyle(0x0088ff, 1);
+                shareBg.lineStyle(2, 0xffffff, 1);
+            } else {
+                shareBg.fillStyle(0x0f172a, 0.9);
+                shareBg.lineStyle(2, 0x334155, 1);
+            }
+            shareBg.fillRoundedRect(shareBtnX - 30, shareBtnY - 30, 60, 60, 15);
+            shareBg.strokeRoundedRect(shareBtnX - 30, shareBtnY - 30, 60, 60, 15);
+        };
+        drawShareBg(false);
+
+        const shareIcon = this.add.text(shareBtnX, shareBtnY, "📤", { fontSize: "28px" }).setOrigin(0.5);
+        const shareHit = this.add.rectangle(shareBtnX, shareBtnY, 60, 60, 0, 0).setInteractive({ useHandCursor: true });
+
+        let hasShared = false;
+
+        shareHit.on('pointerover', () => { if (!hasShared) drawShareBg(true); });
+        shareHit.on('pointerout', () => { if (!hasShared) drawShareBg(false); });
+
+        shareHit.on('pointerdown', () => {
+            if (hasShared) return;
+
+            if (!navigator.onLine) {
+                this.showToast("ইন্টারনেট সংযোগ নেই! 🌐");
+                return;
+            }
+
+            if (!window.FirebaseAuth || !window.FirebaseAuth.currentUser) {
+                this.showToast("রেজাল্ট শেয়ার করতে আগে লগইন করুন!");
+                return;
+            }
+
+            this.playSound('sfx_click', 0.8);
+
+            // Mini pie chart text generation
+            const blocksCount = 10;
+            const cBlocks = Math.round((safeCorrect / totalQs) * blocksCount);
+            const wBlocks = Math.round((safeWrong / totalQs) * blocksCount);
+            let sBlocks = blocksCount - cBlocks - wBlocks;
+            if (sBlocks < 0) sBlocks = 0; // Fallback math clamp
+
+            const visualBar = "🟩".repeat(cBlocks) + "🟥".repeat(wBlocks) + "🟨".repeat(sBlocks);
+            const shareText = `📊 আমার রেজাল্ট: ${percentText}%\n${visualBar}\nমোট: ${totalQs} | সঠিক: ${safeCorrect} | ভুল: ${safeWrong}`;
+
+            const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
+            const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
+
+            if (window.FirebaseTools && window.FirebaseDB) {
+                const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
+                
+                let payload = {
+                    uid: window.FirebaseAuth.currentUser.uid,
+                    n: playerName,
+                    lvl: playerLvl,
+                    text: shareText,
+                    timestamp: window.FirebaseTools.serverTimestamp(),
+                    pinned: false
+                };
+
+                window.FirebaseTools.addDoc(chatRef, payload).then(() => {
+                    this.showToast("রেজাল্ট চ্যাটে শেয়ার করা হয়েছে! 💬");
+                }).catch(e => {
+                    console.error("Share failed", e);
+                    this.showToast("শেয়ার ব্যর্থ হয়েছে!");
+                    hasShared = false;
+                    drawShareBg(false);
+                    shareIcon.setAlpha(1);
+                });
+
+                hasShared = true;
+                drawShareBg(false, true);
+                shareIcon.setAlpha(0.5);
+                this.tweens.add({ targets: [shareBg, shareIcon], scale: 0.9, yoyo: true, duration: 100 });
+            } else {
+                this.showToast("সার্ভার সমস্যা, পরে চেষ্টা করুন।");
+            }
+        });
     }
 
     const panelY = 190; 
@@ -367,98 +451,6 @@ class DeathScene extends Phaser.Scene {
         });
     }
   }
-
-  // --- NEW METHODS FOR SHARE BUTTON ---
-
-  createShareButton(x, y, percentText, correct, wrong, skipped, totalQs) {
-      const btnContainer = this.add.container(x, y).setDepth(20);
-
-      const bg = this.add.graphics();
-      bg.fillStyle(0x002244, 0.9);
-      bg.fillRoundedRect(-30, -30, 60, 60, 16);
-      bg.lineStyle(2, 0x00aaff, 1);
-      bg.strokeRoundedRect(-30, -30, 60, 60, 16);
-
-      const icon = this.add.text(0, 0, "📤", { fontSize: "32px", fontFamily: '"Segoe UI Emoji"' }).setOrigin(0.5);
-
-      const hitArea = this.add.rectangle(0, 0, 60, 60, 0, 0).setInteractive({ useHandCursor: true });
-
-      btnContainer.add([bg, icon, hitArea]);
-
-      hitArea.on('pointerover', () => {
-          bg.clear();
-          bg.fillStyle(0x0055aa, 1);
-          bg.fillRoundedRect(-30, -30, 60, 60, 16);
-          bg.lineStyle(2, 0x00ffff, 1);
-          bg.strokeRoundedRect(-30, -30, 60, 60, 16);
-          this.tweens.add({ targets: btnContainer, scale: 1.15, duration: 150 });
-      });
-
-      hitArea.on('pointerout', () => {
-          bg.clear();
-          bg.fillStyle(0x002244, 0.9);
-          bg.fillRoundedRect(-30, -30, 60, 60, 16);
-          bg.lineStyle(2, 0x00aaff, 1);
-          bg.strokeRoundedRect(-30, -30, 60, 60, 16);
-          this.tweens.add({ targets: btnContainer, scale: 1, duration: 150 });
-      });
-
-      hitArea.on('pointerdown', () => {
-          this.playSound('sfx_click');
-          this.shareToChat(percentText, correct, wrong, skipped, totalQs);
-      });
-  }
-
-  shareToChat(percent, correct, wrong, skipped, totalQs) {
-      if (!navigator.onLine) {
-          this.showToast("Connection offline. Cannot share.");
-          return;
-      }
-
-      if (!window.FirebaseAuth || !window.FirebaseAuth.currentUser) {
-          this.showToast("লগইন করে চ্যাট করুন (Login required)");
-          return;
-      }
-
-      // 60-Second Cooldown Logic
-      const now = Date.now();
-      const COOLDOWN_MS = 60000; 
-      if (window.GameState.lastShareTime && now - window.GameState.lastShareTime < COOLDOWN_MS) {
-          const leftSec = Math.ceil((COOLDOWN_MS - (now - window.GameState.lastShareTime)) / 1000);
-          this.showToast(`Please wait ${leftSec}s before sharing again.`);
-          return;
-      }
-
-      window.GameState.lastShareTime = now;
-
-      const uid = window.FirebaseAuth.currentUser.uid;
-      const playerName = (window.GameState.profile && window.GameState.profile.n) ? window.GameState.profile.n : "Guest";
-      const playerLvl = window.getLevelData ? window.getLevelData().level : ((window.GameState.profile && window.GameState.profile.level) ? window.GameState.profile.level : 1);
-
-      // Generate a text-based representation of the pie chart
-      const correctBlocks = Math.round(percent / 10);
-      const wrongBlocks = 10 - correctBlocks;
-      const bar = "🟩".repeat(correctBlocks) + "🟥".repeat(wrongBlocks);
-
-      const text = `📊 Match Result: ${percent}%\n${bar}\n✅ Correct: ${correct} | ❌ Wrong: ${wrong} | ⏭ Skipped: ${skipped}`;
-
-      const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
-      
-      window.FirebaseTools.addDoc(chatRef, {
-          uid: uid,
-          n: playerName,
-          lvl: playerLvl,
-          text: text,
-          timestamp: window.FirebaseTools.serverTimestamp(),
-          pinned: false
-      }).then(() => {
-          this.showToast("Successfully posted to Global Chat!");
-      }).catch((e) => {
-          console.error("Chat Post Error:", e);
-          this.showToast("Failed to share result.");
-      });
-  }
-  // ------------------------------------
 
   restartGameWithLogic() {
       const savedBank = localStorage.getItem('saved_bankKey') || "all";
