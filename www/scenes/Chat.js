@@ -300,39 +300,79 @@ Object.assign(MenuScene.prototype, {
                 htmlElement.addEventListener('keydown', (e) => e.stopPropagation());
                 htmlElement.addEventListener('keypress', (event) => {
                     event.stopPropagation();
-                    if (event.key === 'Enter') this.sendChatMessage();
+                    if (event.key === 'Enter') {
+                        this.sendChatMessage();
+                        htmlElement.blur(); // Automatically dismiss keyboard on send
+                    }
                 });
 
-                let baseHeight = window.innerHeight;
+                // Dynamically track the max screen height before the keyboard opens
+                let maxBaseHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
                 let lastShiftDist = 0;
 
                 const handleViewportChange = () => {
-                    if (!window.visualViewport) return;
+                    let currentHeight = window.innerHeight;
+                    let offsetTop = 0;
+
+                    if (window.visualViewport) {
+                        currentHeight = window.visualViewport.height;
+                        // offsetTop tells us if the browser automatically pushed the page up
+                        offsetTop = window.visualViewport.offsetTop; 
+                    }
+
+                    // Keep track of the true fullscreen height
+                    if (currentHeight > maxBaseHeight && offsetTop === 0) {
+                        maxBaseHeight = currentHeight;
+                    }
+
+                    // Calculate how much the keyboard obscured
+                    let keyboardPx = Math.max(0, maxBaseHeight - currentHeight);
                     
-                    const currentViewportHeight = window.visualViewport.height;
-                    const keyboardHeightPx = Math.max(0, baseHeight - currentViewportHeight);
-                    const scaleFactor = this.scale.gameSize.height / baseHeight;
-                    const shiftDist = keyboardHeightPx * scaleFactor;
+                    // Subtract offsetTop to prevent "double shifting" if iOS already pushed the page up natively
+                    let neededShiftPx = Math.max(0, keyboardPx - offsetTop);
+
+                    // Convert raw DOM pixels to Phaser's internal game coordinates safely
+                    const domCanvasHeight = this.sys.game.canvas.clientHeight || maxBaseHeight;
+                    const gameResHeight = this.cameras.main.height;
+                    const scaleRatio = gameResHeight / domCanvasHeight;
+
+                    let shiftDist = neededShiftPx * scaleRatio;
+                    
+                    // Cap the shift so it never pushes the UI completely off the screen
+                    shiftDist = Phaser.Math.Clamp(shiftDist, 0, gameResHeight * 0.6);
+
                     const shiftDelta = shiftDist - lastShiftDist;
                     lastShiftDist = shiftDist;
                     this.chatKeyboardOffset = shiftDist;
 
-                    this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 150, ease: 'Cubic.easeOut' });
-                    this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDelta, duration: 150, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+                    // Kill previous tweens to prevent jittering when resize fires rapidly
+                    this.tweens.killTweensOf(this.bottomUIContainer);
+                    this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 100, ease: 'Sine.easeOut' });
+
+                    this.tweens.killTweensOf(this.msgListContainer);
+                    this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDelta, duration: 100, ease: 'Sine.easeOut', onUpdate: () => this.updateChatScrollbar() });
                 };
 
                 htmlElement.addEventListener('focus', () => {
-                    baseHeight = window.innerHeight;
-                    lastShiftDist = 0;
-                    
+                    // Update base height just in case the phone orientation changed before focusing
+                    let currentVH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                    if (currentVH > maxBaseHeight) maxBaseHeight = currentVH;
+
                     if (window.visualViewport) {
                         window.visualViewport.addEventListener('resize', handleViewportChange);
                         window.visualViewport.addEventListener('scroll', handleViewportChange);
-                        handleViewportChange();
+                        // Delay the check slightly so the mobile keyboard has time to start animating
+                        setTimeout(handleViewportChange, 50);
                     } else {
-                        const shiftDist = h * 0.45;
+                        // Fallback for older browsers that don't support visualViewport
+                        const shiftDist = this.cameras.main.height * 0.45;
                         this.chatKeyboardOffset = shiftDist;
+                        lastShiftDist = shiftDist;
+                        
+                        this.tweens.killTweensOf(this.bottomUIContainer);
                         this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
+                        
+                        this.tweens.killTweensOf(this.msgListContainer);
                         this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y - shiftDist, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
                     }
                 });
@@ -343,8 +383,13 @@ Object.assign(MenuScene.prototype, {
                         window.visualViewport.removeEventListener('scroll', handleViewportChange);
                     }
                     if (this.isChatOpen) {
-                        this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 200, ease: 'Cubic.easeOut' });
-                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y + this.chatKeyboardOffset, duration: 200, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+                        // Smoothly return everything back to normal when keyboard closes
+                        this.tweens.killTweensOf(this.bottomUIContainer);
+                        this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
+
+                        this.tweens.killTweensOf(this.msgListContainer);
+                        this.tweens.add({ targets: this.msgListContainer, y: this.msgListContainer.y + this.chatKeyboardOffset, duration: 250, ease: 'Cubic.easeOut', onUpdate: () => this.updateChatScrollbar() });
+                        
                         this.chatKeyboardOffset = 0;
                         lastShiftDist = 0;
                     }
