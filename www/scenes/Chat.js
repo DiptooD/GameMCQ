@@ -2,9 +2,6 @@
 // Attaches Chat functions directly to MenuScene so it shares the Scene context
 Object.assign(MenuScene.prototype, {
 
-    // --- NEW: Robust Real Network Check ---
-    // navigator.onLine just checks if connected to a router/network, not the actual internet. 
-    // This performs a tiny, cache-busting fetch to Google's 204 endpoint to verify real connectivity.
     checkRealConnection() {
         return new Promise((resolve) => {
             if (!navigator.onLine) {
@@ -12,7 +9,7 @@ Object.assign(MenuScene.prototype, {
                 return;
             }
             const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), 3500); // 3.5s timeout for fast fail
+            const id = setTimeout(() => controller.abort(), 3500); 
             
             fetch('https://www.gstatic.com/generate_204?rand=' + Date.now(), { 
                 method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: controller.signal 
@@ -33,8 +30,6 @@ Object.assign(MenuScene.prototype, {
         this.isChatOpen = false;
         this.lastSeenTime = Date.now();
         this.dividerRendered = false;
-        
-        // Track local message statuses (sending, sent, error)
         this.trackedMessages = this.trackedMessages || {};
         
         if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
@@ -44,9 +39,7 @@ Object.assign(MenuScene.prototype, {
             window.FirebaseTools.getDoc(userRef).then(docSnap => {
                 if (docSnap.exists() && docSnap.data().chatLastSeenTime) {
                     this.lastSeenTime = docSnap.data().chatLastSeenTime;
-                    if (this.refreshChatUI) {
-                        this.refreshChatUI();
-                    }
+                    if (this.refreshChatUI) this.refreshChatUI();
                 }
             }).catch(e => console.log("Chat DB Load Error:", e));
         }
@@ -62,7 +55,8 @@ Object.assign(MenuScene.prototype, {
         this.chatYVisible = (h - this.chatH) / 2; 
         this.chatYHidden = h + 300; 
 
-        this.chatBlocker = this.add.rectangle(w / 2, h / 2, w, h, 0x000000, 0.65)
+        // Dim background blocker
+        this.chatBlocker = this.add.rectangle(w / 2, h / 2, w, h, 0x000000, 0.75)
             .setDepth(8999).setVisible(false).setInteractive();
             
         this.chatBlocker.on('pointerdown', () => {
@@ -71,7 +65,7 @@ Object.assign(MenuScene.prototype, {
 
         this.chatContainer = this.add.container(this.chatX, this.chatYHidden).setDepth(9000).setVisible(false);
         
-        const panelBg = this.add.rectangle(this.chatW / 2, this.chatH / 2, this.chatW, this.chatH, 0x000c22, 0.85).setInteractive();
+        const panelBg = this.add.rectangle(this.chatW / 2, this.chatH / 2, this.chatW, this.chatH, 0x000c22, 0.95).setInteractive();
         
         const panelBorders = this.add.graphics();
         panelBorders.lineStyle(4, 0x0066aa, 1);
@@ -96,7 +90,6 @@ Object.assign(MenuScene.prototype, {
         const inputY = this.chatH - 55; 
         this.chatScrollZoneHeight = inputY - 45 - 125;
 
-        // Message List Container
         this.msgListContainer = this.add.container(0, 125);
         this.chatContainer.add(this.msgListContainer);
 
@@ -143,60 +136,34 @@ Object.assign(MenuScene.prototype, {
         this.pinnedContainer = this.add.container(0, 125);
         this.chatContainer.add(this.pinnedContainer);
 
+        // --- NEW DRAG AND TAP LOGIC ---
         let dragStartY = 0;
         let containerStartY = 0;
         let isDraggingChat = false;
         let scrollYTracker = [];
-        let pressTimer = null;
-        let hitStartX = 0, hitStartY = 0;
+        let hitStartX = 0, hitStartY = 0, hitStartTime = 0;
 
         scrollZone.on('pointerdown', (pointer) => {
             dragStartY = pointer.y;
             containerStartY = this.msgListContainer.y;
             isDraggingChat = true;
             scrollYTracker = [{y: pointer.y, time: this.time.now}];
+            
             this.tweens.killTweensOf(this.msgListContainer);
 
             hitStartX = pointer.x;
             hitStartY = pointer.y;
-            if (pressTimer) { pressTimer.remove(); }
-            
-            pressTimer = this.time.delayedCall(400, () => {
-                if (!isDraggingChat) return;
-                
-                const checkInteract = (container) => {
-                    let localX = pointer.x - this.chatContainer.x;
-                    let localY = pointer.y - this.chatContainer.y - container.y;
-                    for (let i = 0; i < container.list.length; i++) {
-                        let child = container.list[i];
-                        if (child.isInteractHit) {
-                            let left = child.x - child.width/2, right = child.x + child.width/2;
-                            let top = child.y - child.height/2, bottom = child.y + child.height/2;
-                            if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
-                                this.showChatActionMenu(child.msgData, pointer.x, pointer.y);
-                                isDraggingChat = false;
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                };
-
-                checkInteract(this.msgListContainer);
-            });
+            hitStartTime = this.time.now;
         });
 
         scrollZone.on('pointermove', (pointer) => {
-            if (pressTimer && Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y) > 10) {
-                pressTimer.remove(); pressTimer = null;
-            }
-
             if (pointer.isDown && isDraggingChat) {
                 let dynamicTopOffset = 125 + this.currentPinnedHeight;
                 let topY = dynamicTopOffset - this.chatKeyboardOffset;
                 let bottomY = topY - this.chatMaxScroll;
                 let newY = containerStartY + (pointer.y - dragStartY);
 
+                // Rubber-band resistance
                 if (newY > topY) {
                     newY = topY + (newY - topY) * 0.35;
                 } else if (newY < bottomY) {
@@ -211,12 +178,41 @@ Object.assign(MenuScene.prototype, {
             }
         });
 
-        const stopChatDrag = () => {
-            if (pressTimer) { pressTimer.remove(); pressTimer = null; }
+        const stopChatDrag = (pointer) => {
             if (isDraggingChat) {
                 isDraggingChat = false;
-                let velocity = 0;
                 
+                // 1. Detect if it was a quick tap (for Retrying or Menu)
+                let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
+                let timeElapsed = this.time.now - hitStartTime;
+                
+                if (dist < 15 && timeElapsed < 350) {
+                    let localX = pointer.x - this.chatContainer.x;
+                    let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
+                    
+                    // Iterate backwards to hit the top elements first
+                    for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
+                        let child = this.msgListContainer.list[i];
+                        if (child.isInteractHit) {
+                            let left = child.x - child.width/2;
+                            let right = child.x + child.width/2;
+                            let top = child.y - child.height/2;
+                            let bottom = child.y + child.height/2;
+                            
+                            if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
+                                if (child.isError) {
+                                    this.retrySendMessage(child.msgData.id);
+                                } else {
+                                    this.showChatActionMenu(child.msgData, pointer.x, pointer.y);
+                                }
+                                return; // Exit successfully, no inertia scroll needed
+                            }
+                        }
+                    }
+                }
+
+                // 2. Inertia Scrolling calculation
+                let velocity = 0;
                 if (scrollYTracker.length > 1) {
                     let first = scrollYTracker[0], last = scrollYTracker[scrollYTracker.length - 1];
                     let dt = last.time - first.time, dy = last.y - first.y;
@@ -228,7 +224,7 @@ Object.assign(MenuScene.prototype, {
                 let easeType = 'Quart.easeOut';
 
                 if (Math.abs(velocity) > 0.2) {
-                    let amplitude = velocity * 600; 
+                    let amplitude = velocity * 800; // Increased momentum
                     targetY += amplitude;
                     duration = Math.min(Math.abs(amplitude) * 1.5, 1200);
                 }
@@ -433,15 +429,12 @@ Object.assign(MenuScene.prototype, {
         this.offlinePromptGroup.add(offlineTxt);
         this.bottomUIContainer.add(this.offlinePromptGroup);
 
-        // Splitting into async checker and synchronous applier to prevent UI blocking
         this.updateChatNetworkState = async () => {
             let isOnline = navigator.onLine;
-            // Quick fail if navigator knows we are offline
             if (!isOnline) {
                 this._applyNetworkState(false);
                 return;
             }
-            // Verify real internet connectivity
             isOnline = await this.checkRealConnection();
             this._applyNetworkState(isOnline);
         };
@@ -602,8 +595,7 @@ Object.assign(MenuScene.prototype, {
         this.chatBlocker.setVisible(this.isChatOpen);
 
         if (this.isChatOpen) {
-            this.updateChatNetworkState(); // Validate real connection dynamically on open
-
+            this.updateChatNetworkState(); 
             this.chatToggleContainer.setVisible(false); 
             
             this.chatKeyboardOffset = 0;
@@ -1019,7 +1011,6 @@ Object.assign(MenuScene.prototype, {
 
             const pinnedMessages = this.chatDataCache.filter(m => m.pinned);
             
-            // --- Merge tracked local messages that are sending or have failed ---
             let allMessages = [...this.chatDataCache];
             if (this.trackedMessages) {
                 Object.keys(this.trackedMessages).forEach(msgId => {
@@ -1030,13 +1021,12 @@ Object.assign(MenuScene.prototype, {
                             id: msgId,
                             ...tm.payload,
                             isLocalOnly: true,
-                            timestamp: { toMillis: () => tm.time } // Mocking timestamp for safe sorting
+                            timestamp: { toMillis: () => tm.time } 
                         });
                     }
                 });
             }
 
-            // Secure chronological sorting to protect against Firebase field value tokens
             const getTime = (msg) => {
                 if (msg.isLocalOnly) return this.trackedMessages[msg.id].time;
                 if (msg.timestamp && typeof msg.timestamp.toMillis === 'function') return msg.timestamp.toMillis();
@@ -1139,9 +1129,6 @@ Object.assign(MenuScene.prototype, {
                     bubBgHex = Phaser.Display.Color.GetColor(baseCol.r * darkenFac, baseCol.g * darkenFac, baseCol.b * darkenFac);
                 }
 
-                const levelText = msg.lvl ? `  [Lvl ${msg.lvl}]` : "";
-                const nameStr = (isPinned ? "📌 " : "") + (msg.n || "Guest") + levelText;
-                
                 const bubbleMaxWidth = this.chatW * 0.82;
                 let extraHeight = (msg.replyTo && !msg.isDeleted) ? 42 : 0;
                 let replyTxtObj = null;
@@ -1166,19 +1153,42 @@ Object.assign(MenuScene.prototype, {
                 let topPadding = isConsecutive ? 5 : 45;
                 const bubY = startY + topPadding; 
 
+                // --- NEW: UI Styling for Name and Level Badge ---
                 if (!isConsecutive) {
-                    const nameTxt = this.add.text(35, bubY - 30, nameStr, { 
+                    const nameTxt = this.add.text(0, bubY - 30, (isPinned ? "📌 " : "") + (msg.n || "Guest"), { 
                         fontSize: "26px", 
                         fontFamily: "'Anek Bangla'", 
                         color: nameColorHexStr, 
                         fontStyle: "bold",
-                        padding: { y: 4 },
-                        stroke: "#000000",
-                        strokeThickness: 4,
-                        shadow: { offsetX: 2, offsetY: 2, color: '#000000', blur: 4, fill: true }
-                    });
-                    if (isMe) nameTxt.x = this.chatW - nameTxt.width - 35;
+                        stroke: "#000c22", // Strong stroke to stand out
+                        strokeThickness: 5,
+                        shadow: { offsetX: 1, offsetY: 2, color: '#000000', blur: 3, fill: true }
+                    }).setOrigin(0, 0.5);
+
+                    let nameX = isMe ? this.chatW - nameTxt.width - 35 : 35;
+                    nameTxt.x = nameX;
                     targetContainer.add(nameTxt);
+
+                    // Separate, distinct pill-shaped Level Badge
+                    if (msg.lvl) {
+                        const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
+                            fontSize: "14px", fontFamily: "Arial", color: "#ffffff", fontStyle: "bold"
+                        }).setOrigin(0.5);
+                        
+                        const lvlW = lvlTxt.width + 14;
+                        const lvlH = 22;
+                        const badgeX = isMe ? nameX - lvlW/2 - 10 : nameX + nameTxt.width + lvlW/2 + 10;
+                        const badgeY = bubY - 30 + 2; 
+        
+                        const lvlBg = this.add.graphics();
+                        lvlBg.fillStyle(0x0a1a3a, 0.9);
+                        lvlBg.fillRoundedRect(badgeX - lvlW/2, badgeY - lvlH/2, lvlW, lvlH, 6);
+                        lvlBg.lineStyle(1.5, 0x0088ff, 1);
+                        lvlBg.strokeRoundedRect(badgeX - lvlW/2, badgeY - lvlH/2, lvlW, lvlH, 6);
+        
+                        lvlTxt.setPosition(badgeX, badgeY);
+                        targetContainer.add([lvlBg, lvlTxt]);
+                    }
                 }
 
                 const timeWidth = timeTxt.width;
@@ -1203,11 +1213,18 @@ Object.assign(MenuScene.prototype, {
 
                 const bubbleBg = this.add.graphics();
                 bubbleBg.fillStyle(bubBgHex, 0.95);
+                
+                // Slightly brighter stroke to make bubbles pop out from background
+                const strokeColor = Phaser.Display.Color.GetColor(baseCol.r * 0.6, baseCol.g * 0.6, baseCol.b * 0.6);
+                bubbleBg.lineStyle(2, strokeColor, 0.8);
 
+                // Asymmetrical bubbling aesthetics
                 if (isMe) {
-                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 22, br: 0 });
+                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 18, br: 4 });
+                    bubbleBg.strokeRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 18, br: 4 });
                 } else {
-                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 22, tr: 22, bl: 0, br: 22 });
+                    bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 4, br: 18 });
+                    bubbleBg.strokeRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 4, br: 18 });
                 }
 
                 if (replyTxtObj) replyTxtObj.setPosition(startX + 20, bubY + 10);
@@ -1218,7 +1235,6 @@ Object.assign(MenuScene.prototype, {
                 targetContainer.add([bubbleBg, msgTxt, timeTxt]);
                 if (replyTxtObj) targetContainer.add(replyTxtObj);
 
-                // --- NEW: Error & Pending UI indicators ---
                 let isError = false;
                 let isSending = false;
                 if (this.trackedMessages && this.trackedMessages[msg.id]) {
@@ -1232,15 +1248,10 @@ Object.assign(MenuScene.prototype, {
                     const errTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 5, "⚠️ Failed to send. Tap to retry.", {
                         fontSize: "20px", fontFamily: "'Anek Bangla', Arial", color: "#ff4444", fontStyle: "bold",
                         shadow: { offsetX: 1, offsetY: 1, color: '#000000', blur: 2, fill: true }
-                    }).setOrigin(1, 0).setInteractive({useHandCursor: true});
-                    
-                    errTxt.on('pointerdown', () => {
-                        if (this.playSound) this.playSound('sfx_click');
-                        this.retrySendMessage(msg.id);
-                    });
+                    }).setOrigin(1, 0);
                     
                     targetContainer.add(errTxt);
-                    finalBubbleH += 30; // Reserve vertical space for the text
+                    finalBubbleH += 30; 
                 } else if (isSending) {
                     const sendTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 5, "Sending...", {
                         fontSize: "18px", fontFamily: "'Anek Bangla', Arial", color: "#aaaaaa", fontStyle: "italic"
@@ -1250,11 +1261,12 @@ Object.assign(MenuScene.prototype, {
                     finalBubbleH += 30;
                 }
 
-                // Prevent interaction on unsent/failed messages
-                if (!msg.isDeleted && !isError && !isSending) {
+                // Prevent interaction ONLY on currently sending messages so Tap-To-Retry works
+                if (!msg.isDeleted && !isSending) {
                     const interactHit = this.add.rectangle(startX + bubbleW/2, bubY + bubbleH/2, bubbleW, bubbleH, 0, 0);
                     interactHit.isInteractHit = true;
                     interactHit.msgData = msg;
+                    interactHit.isError = isError;
                     targetContainer.add(interactHit);
                 }
 
@@ -1350,7 +1362,6 @@ Object.assign(MenuScene.prototype, {
         });
     },
 
-    // --- NEW: Safe Network send + Timeout tracking ---
     async sendChatMessage() {
         const htmlElement = this.chatInput.getChildByID('chatInput');
         if (!htmlElement) return;
@@ -1363,7 +1374,6 @@ Object.assign(MenuScene.prototype, {
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
         const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
 
-        // Pre-generate ID for targeted local tracking
         const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
         const newDocRef = window.FirebaseTools.doc(chatRef);
         const msgId = newDocRef.id;
@@ -1381,7 +1391,6 @@ Object.assign(MenuScene.prototype, {
             payload.replyTo = this.replyData;
         }
 
-        // 1. Instantly show it locally as "Sending..."
         this.trackedMessages = this.trackedMessages || {};
         this.trackedMessages[msgId] = { status: 'sending', payload: payload, time: Date.now() };
 
@@ -1392,7 +1401,6 @@ Object.assign(MenuScene.prototype, {
         this.refreshChatUI();
         this.scrollToChat(msgId);
 
-        // 2. Perform Real Connection Ping
         const isReallyOnline = await this.checkRealConnection();
         if (!isReallyOnline) {
             this.trackedMessages[msgId].status = 'error';
@@ -1401,7 +1409,6 @@ Object.assign(MenuScene.prototype, {
             return;
         }
 
-        // 3. Dispatch to Firebase with Timeout Fallback
         const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 6000));
         
         try {
@@ -1409,7 +1416,6 @@ Object.assign(MenuScene.prototype, {
                 window.FirebaseTools.setDoc(newDocRef, payload),
                 timeoutPromise
             ]);
-            // On Success, mark it delivered. Firebase onSnapshot overrides this anyway, making it smooth.
             this.trackedMessages[msgId].status = 'sent';
             this.refreshChatUI();
         } catch (err) {
@@ -1419,17 +1425,14 @@ Object.assign(MenuScene.prototype, {
         }
     },
 
-    // --- NEW: Retry failed messages functionality ---
     async retrySendMessage(msgId) {
         if (!this.trackedMessages || !this.trackedMessages[msgId]) return;
         
-        // Reset state to Sending and bring to bottom
         this.trackedMessages[msgId].status = 'sending';
         this.trackedMessages[msgId].time = Date.now(); 
         this.refreshChatUI();
         this.scrollToChat(msgId);
         
-        // Ensure connectivity
         const isReallyOnline = await this.checkRealConnection();
         if (!isReallyOnline) {
             this.trackedMessages[msgId].status = 'error';
@@ -1441,7 +1444,7 @@ Object.assign(MenuScene.prototype, {
         const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
         const docRef = window.FirebaseTools.doc(chatRef, msgId);
         const payload = this.trackedMessages[msgId].payload;
-        payload.timestamp = window.FirebaseTools.serverTimestamp(); // Fresh server stamp
+        payload.timestamp = window.FirebaseTools.serverTimestamp(); 
 
         const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 6000));
 
@@ -1482,5 +1485,4 @@ Object.assign(MenuScene.prototype, {
         const days = Math.floor(hours / 24);
         return `${days} day ago`;
     }
-
 });

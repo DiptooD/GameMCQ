@@ -366,6 +366,9 @@ class MenuScene extends Phaser.Scene {
     }
 
     update(time, delta) {
+        // ADD THIS ONE LINE RIGHT AT THE TOP:
+        if (this.isChatOpen) return;
+        
         const safeTimeScale = Phaser.Math.Clamp(delta / 16.66, 0.1, 2.5);
 
         if (this.scrollingBg) {
