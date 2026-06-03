@@ -16,15 +16,16 @@ class DeathScene extends Phaser.Scene {
     }
   }
 
-  showToast(msg) {
+  showToast(msg, isError = false) {
       if (typeof window.showToast === 'function') {
           window.showToast(msg);
           return;
       }
-      // UI SCALING
+      
+      const bgColor = isError ? 'rgba(200, 0, 0, 0.95)' : 'rgba(0, 102, 170, 0.95)';
       const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
           fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
-          backgroundColor: 'rgba(200, 0, 0, 0.95)', padding: {x: 24, y: 16}
+          backgroundColor: bgColor, padding: {x: 24, y: 16}
       }).setOrigin(0.5).setDepth(5000).setAlpha(0);
       
       this.tweens.add({ targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() });
@@ -176,32 +177,62 @@ class DeathScene extends Phaser.Scene {
         const shareIcon = this.add.text(shareBtnX, shareBtnY, "📤", { fontSize: "28px" }).setOrigin(0.5);
         const shareHit = this.add.rectangle(shareBtnX, shareBtnY, 60, 60, 0, 0).setInteractive({ useHandCursor: true });
 
-        let hasShared = false;
+        let isProcessing = false;
 
-        shareHit.on('pointerover', () => { if (!hasShared) drawShareBg(true); });
-        shareHit.on('pointerout', () => { if (!hasShared) drawShareBg(false); });
+        shareHit.on('pointerover', () => { if (!isProcessing) drawShareBg(true); });
+        shareHit.on('pointerout', () => { if (!isProcessing) drawShareBg(false); });
 
         shareHit.on('pointerdown', () => {
-            if (hasShared) return;
+            if (isProcessing) return;
 
+            // Connection Checks
             if (!navigator.onLine) {
-                this.showToast("ইন্টারনেট সংযোগ নেই! 🌐");
+                this.showToast("ইন্টারনেট সংযোগ নেই! 🌐", true);
                 return;
             }
 
             if (!window.FirebaseAuth || !window.FirebaseAuth.currentUser) {
-                this.showToast("রেজাল্ট শেয়ার করতে আগে লগইন করুন!");
+                this.showToast("রেজাল্ট শেয়ার করতে আগে লগইন করুন!", true);
+                return;
+            }
+
+            // Spam Prevention Checks (60 Second Cooldown)
+            const now = Date.now();
+            const cooldownMs = 60000; 
+            const lastShareTime = window.GameState.lastChatShareTime || 0;
+
+            if (now - lastShareTime < cooldownMs) {
+                const remainingSec = Math.ceil((cooldownMs - (now - lastShareTime)) / 1000);
+                this.showToast(`দয়া করে ${remainingSec} সেকেন্ড অপেক্ষা করুন! ⏳`, true);
                 return;
             }
 
             this.playSound('sfx_click', 0.8);
+            isProcessing = true;
+            drawShareBg(false, true);
+            shareIcon.setAlpha(0.5);
 
-            // Mini pie chart text generation
+            // Mini pie chart exact rounding allocation to exactly 10 blocks
             const blocksCount = 10;
-            const cBlocks = Math.round((safeCorrect / totalQs) * blocksCount);
-            const wBlocks = Math.round((safeWrong / totalQs) * blocksCount);
-            let sBlocks = blocksCount - cBlocks - wBlocks;
-            if (sBlocks < 0) sBlocks = 0; // Fallback math clamp
+            let cBlocks = Math.floor((safeCorrect / totalQs) * blocksCount);
+            let wBlocks = Math.floor((safeWrong / totalQs) * blocksCount);
+            let sBlocks = Math.floor((safeSkipped / totalQs) * blocksCount);
+            
+            let remainder = blocksCount - (cBlocks + wBlocks + sBlocks);
+            
+            // Distribute remaining blocks to the largest fractions to keep it perfectly at 10
+            let fractions = [
+                { key: 'c', val: (safeCorrect / totalQs) * blocksCount - cBlocks },
+                { key: 'w', val: (safeWrong / totalQs) * blocksCount - wBlocks },
+                { key: 's', val: (safeSkipped / totalQs) * blocksCount - sBlocks }
+            ];
+            fractions.sort((a, b) => b.val - a.val);
+            
+            for (let i = 0; i < remainder; i++) {
+                if (fractions[i].key === 'c') cBlocks++;
+                else if (fractions[i].key === 'w') wBlocks++;
+                else if (fractions[i].key === 's') sBlocks++;
+            }
 
             const visualBar = "🟩".repeat(cBlocks) + "🟥".repeat(wBlocks) + "🟨".repeat(sBlocks);
             const shareText = `📊 আমার রেজাল্ট: ${percentText}%\n${visualBar}\nমোট: ${totalQs} | সঠিক: ${safeCorrect} | ভুল: ${safeWrong}`;
@@ -222,21 +253,26 @@ class DeathScene extends Phaser.Scene {
                 };
 
                 window.FirebaseTools.addDoc(chatRef, payload).then(() => {
-                    this.showToast("রেজাল্ট চ্যাটে শেয়ার করা হয়েছে! 💬");
+                    window.GameState.lastChatShareTime = Date.now(); // Register successful share time
+                    this.showToast("রেজাল্ট চ্যাটে শেয়ার করা হয়েছে! 💬", false);
+                    
+                    // Button stays disabled indicating success for this context lifetime
+                    this.tweens.add({ targets: [shareBg, shareIcon], scale: 0.9, yoyo: true, duration: 100 });
                 }).catch(e => {
                     console.error("Share failed", e);
-                    this.showToast("শেয়ার ব্যর্থ হয়েছে!");
-                    hasShared = false;
+                    this.showToast("শেয়ার ব্যর্থ হয়েছে!", true);
+                    
+                    // Reset to allow the user to try again on failure
+                    isProcessing = false;
                     drawShareBg(false);
                     shareIcon.setAlpha(1);
                 });
 
-                hasShared = true;
-                drawShareBg(false, true);
-                shareIcon.setAlpha(0.5);
-                this.tweens.add({ targets: [shareBg, shareIcon], scale: 0.9, yoyo: true, duration: 100 });
             } else {
-                this.showToast("সার্ভার সমস্যা, পরে চেষ্টা করুন।");
+                this.showToast("সার্ভার সমস্যা, পরে চেষ্টা করুন।", true);
+                isProcessing = false;
+                drawShareBg(false);
+                shareIcon.setAlpha(1);
             }
         });
     }
