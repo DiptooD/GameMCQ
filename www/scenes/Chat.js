@@ -1146,33 +1146,36 @@ Object.assign(MenuScene.prototype, {
 
             pinnedMessages.forEach(msg => {
                 const bannerHeight = 60;
-                const yCenter = pinnedY + bannerHeight / 2;
+                
+                // 1. CREATE A LOCAL SNAPSHOT OF THIS SPECIFIC PIN'S Y POSITION
+                const currentYPos = pinnedY; 
+                
+                // 2. USE THE SNAPSHOT FOR THE CENTER CALCULATION
+                const yCenter = currentYPos + bannerHeight / 2;
                 
                 const pBg = this.add.graphics();
                 
-                // --- NEW: Modern Drawing Helper ---
                 const drawPinnedBg = (isHovered) => {
                     pBg.clear();
                     
                     // Main Background (Dark Slate)
                     pBg.fillStyle(isHovered ? 0x1E293B : 0x0F172A, 0.95); 
-                    pBg.fillRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 8);
+                    // 3. USE 'currentYPos' INSTEAD OF 'pinnedY' EVERYWHERE BELOW
+                    pBg.fillRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 8);
                     
                     // Subtle Border (Flat, not shiny)
                     pBg.lineStyle(1.5, isHovered ? 0x475569 : 0x334155, 1);
-                    pBg.strokeRoundedRect(10, pinnedY, this.chatW - 20, bannerHeight, 8);
+                    pBg.strokeRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 8);
 
                     // Modern Blue Accent Line on the left edge
                     pBg.fillStyle(0x3B82F6, 1);
-                    pBg.fillRoundedRect(10, pinnedY, 5, bannerHeight, { tl: 8, bl: 8, tr: 0, br: 0 });
+                    pBg.fillRoundedRect(10, currentYPos, 5, bannerHeight, { tl: 8, bl: 8, tr: 0, br: 0 });
                 };
                 
                 drawPinnedBg(false);
                 
                 const shortText = msg.text.length > 35 ? msg.text.substring(0, 35) + "..." : msg.text;
                 
-                // Shifted text slightly to the right (x: 28) to make room for the blue accent line
-                // Changed text color to a crisp off-white (#F8FAFC)
                 const pTxt = this.add.text(28, yCenter, `📌 ${msg.n}: ${shortText}`, {
                     fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", color: "#F8FAFC", fontStyle: "bold"
                 }).setOrigin(0, 0.5);
@@ -1189,11 +1192,12 @@ Object.assign(MenuScene.prototype, {
                 });
                 
                 this.pinnedContainer.add([pBg, pTxt, pHit]);
+                
+                // 4. THIS CONTINUES TO INCREMENT FOR THE NEXT LOOP ITERATION
                 pinnedY += bannerHeight + 8; 
-            });
-            
+            });            
             this.currentPinnedHeight = pinnedY > 0 ? pinnedY + 10 : 0;
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let dynamicTopOffset = 100 + this.currentPinnedHeight;
             let dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
 
             this.chatMaskShape.clear();
@@ -1242,7 +1246,7 @@ Object.assign(MenuScene.prototype, {
                 let displayMsgColor = "#ffffff";
                 let bubBgHex;
 
-                const nameColorHexStr = isPinned ? "#ffd700" : (isMe ? "#00ffff" : this.getDeterministicColor(msg.uid));
+                const nameColorHexStr = isPinned ? "#ff0000" : (isMe ? "#00ffff" : this.getDeterministicColor(msg.uid));
                 const baseCol = Phaser.Display.Color.HexStringToColor(nameColorHexStr);
                 const darkenFac = isMe ? 0.35 : 0.15; 
                 
