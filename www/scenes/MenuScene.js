@@ -739,7 +739,8 @@ class MenuScene extends Phaser.Scene {
             this.tweens.add({ targets: shareIcon, scale: 1, duration: 100, overwrite: true });
         });
         
-        shareHit.on('pointerdown', () => {
+        // FIX: Must use 'pointerup' instead of 'pointerdown' for native browser APIs
+        shareHit.on('pointerup', () => {
             if (!canShare) return;
             canShare = false;
 
@@ -752,14 +753,34 @@ class MenuScene extends Phaser.Scene {
                 url: 'https://sites.google.com/view/gamemcq'
             };
 
-            if (navigator.share) {
+            // 1. Cordova Native Share (If packaged as an APK/AAB)
+            if (window.plugins && window.plugins.socialsharing) {
+                window.plugins.socialsharing.shareWithOptions(
+                    {
+                        message: shareData.text,
+                        subject: shareData.title,
+                        url: shareData.url
+                    },
+                    (result) => { console.log("Share success", result); },
+                    (err) => { console.log("Share failed", err); }
+                );
+            } 
+            // 2. Modern Web Share API (Mobile Browsers / PWA)
+            else if (navigator.share) {
                 navigator.share(shareData).catch(err => console.log("Share cancelled", err));
-            } else {
-                navigator.clipboard.writeText(shareData.url).then(() => {
-                    this.showNotification("লিংক কপি করা হয়েছে!", "success");
-                }).catch(() => {
-                    window.open(shareData.url, '_blank');
-                });
+            } 
+            // 3. Desktop / Unsupported Fallback
+            else {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareData.url).then(() => {
+                        this.showNotification("লিংক কপি করা হয়েছে!", "success");
+                    }).catch(() => {
+                        window.open(shareData.url, '_blank');
+                    });
+                } else {
+                    // Absolute fallback if clipboard API is also blocked
+                    window.prompt("কপি করতে নিচের লিংকটি সিলেক্ট করুন:", shareData.url);
+                }
             }
 
             this.time.delayedCall(2500, () => { canShare = true; });
