@@ -200,6 +200,7 @@ window.GameState = {
     totalCorrectNeeded: 10, 
     bossStage: 0, 
     bossActive: false,
+    isEndlessMode: false,
     
     freeSkips: 10,
     rewardSkips: storedRewardSkips,
@@ -325,6 +326,7 @@ window.resetGameState = function () {
     GameState.fiftyFiftyOptionsToHide = [];
     GameState.bossStage = 0;
     GameState.bossActive = false;
+    GameState.isEndlessMode = false;
     GameState.sessionHistory = [];
     
     GameState.freeSkips = 10;

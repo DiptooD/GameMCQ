@@ -3,9 +3,10 @@ class DeathScene extends Phaser.Scene {
     super("DeathScene");
   }
 
-  init() {
+  init(data) {
       this.matchSaved = false; 
       this.backgroundLayers = [];
+      this.deathReason = (data && data.reason) ? data.reason : "death_normal";
   }
 
   playSound(key, baseVolume = 1.0) {
@@ -117,10 +118,22 @@ class DeathScene extends Phaser.Scene {
     this.add.rectangle(cx, 160, w, 3, 0x0066aa, 0.5); 
 
     const titleY = isViewingHistory ? 70 : 85;
-    const titleText = isViewingHistory ? "ম্যাচ ডিটেইলস" : "গেম ওভার"; 
     
+    let titleText = "গেইম ওভার";
+    let titleFontSize = "72px";
+
+    if (isViewingHistory) {
+        titleText = "ম্যাচ ডিটেইলস";
+    } else if (this.deathReason === "void_quit") {
+        titleText = "গেইম পরিসমাপ্ত";
+        titleFontSize = "64px";
+    } else if (this.deathReason === "death_endless" || GameState.isEndlessMode) {
+        titleText = "গেইম ওভার (Endless)";
+        titleFontSize = "54px";
+    }
+
     this.add.text(cx, titleY, titleText, {
-      fontSize: "72px", 
+      fontSize: titleFontSize, 
       fontFamily: "'Anek Bangla'", color: "#00e1ff", 
       fontStyle: "bold", stroke: "#000000", strokeThickness: 8,
       shadow: { offsetX: 4, offsetY: 4, color: "#0044aa", blur: 12, stroke: true, fill: true }

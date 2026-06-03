@@ -2000,6 +2000,7 @@ class GameScene extends GameBase {
         
         if (GameState.bossStage === 2) {
             this.isAnimating = true;
+            GameState.gameCompleted = true;
             this.physics.pause();
             this.playSFX('sfx_boss_win', 1.0, false);
 
@@ -2217,6 +2218,7 @@ class GameScene extends GameBase {
             this.tweens.add({ targets: voidBtnContainer, scale: 0.9, duration: 50, yoyo: true, onComplete: () => {
                 this.time.paused = false;
                 this.gamePaused = false;
+                GameState.isEndlessMode = true; 
                 this.voidChoiceMenu.destroy();
                 
                 if (this.darkOverlay) this.darkOverlay.destroy();
@@ -2306,7 +2308,7 @@ class GameScene extends GameBase {
                 
                 if (this.darkOverlay) this.darkOverlay.destroy();
                 
-                this.finalizeGameOver();
+                this.finalizeGameOver("void_quit"); 
             }});
         });
         endHitArea.on('pointerover', () => { this.playSFX('sfx_tick', 0.2); drawEndBtn(true); endTxt.setColor("#ffffff"); });
@@ -2342,10 +2344,8 @@ class GameScene extends GameBase {
     }
 
     handlePlayerDeath() {
-        // --- ADD THIS GUARD ---
         if (this.isDead) return;
         this.isDead = true;
-        // ----------------------
 
         this.playSFX('sfx_explode', 0.8, false);
         this.player.setVisible(false);
@@ -2364,12 +2364,12 @@ class GameScene extends GameBase {
             if (!this.hasRevived) {
                 this.showReviveMenu();
             } else {
-                this.finalizeGameOver();
+                this.finalizeGameOver(GameState.isEndlessMode ? "death_endless" : "death_normal");
             }
         });
     }
 
-    finalizeGameOver() {
+    finalizeGameOver(reason = "death_normal") {
         const bgMusic = this.sound.get('bg_music');
         if (bgMusic) bgMusic.stop();
 
@@ -2385,7 +2385,7 @@ class GameScene extends GameBase {
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
             this.physics.world.timeScale = 1;
             this.scene.stop("QuestionScene");
-            this.scene.start("DeathScene");
+            this.scene.start("DeathScene", { reason: reason });
         });
     }
 
@@ -2804,7 +2804,7 @@ class GameScene extends GameBase {
         this.time.paused = false;
         this.gamePaused = false;
         this.reviveMenu.destroy();
-        this.finalizeGameOver();
+        this.finalizeGameOver(GameState.isEndlessMode ? "death_endless" : "death_normal");
     }
 
     startBossCombatLoop(stage) {

@@ -175,7 +175,7 @@ class PauseScene extends Phaser.Scene {
     this.createModernButton(cx, panelY + 675, "খেলা শেষ করুন", false, () => {
         this.scene.stop("GameScene");
         this.scene.stop("QuestionScene");
-        this.scene.start("DeathScene"); 
+        this.scene.start("DeathScene", { reason: GameState.isEndlessMode ? "death_endless" : "death_normal" }); 
     });
 
     // UI SCALING: Increased touch zones and icons
