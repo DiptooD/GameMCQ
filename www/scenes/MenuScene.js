@@ -311,25 +311,28 @@ class MenuScene extends Phaser.Scene {
 
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 1);
-        bg.fillRoundedRect(-250, -160, 500, 320, 20);
+        // Increased box size: 560x380 (was 500x320)
+        bg.fillRoundedRect(-280, -190, 560, 380, 24);
         bg.lineStyle(4, 0x00ffff, 1);
-        bg.strokeRoundedRect(-250, -160, 500, 320, 20);
+        bg.strokeRoundedRect(-280, -190, 560, 380, 24);
 
-        const title = this.add.text(0, -110, "Cloud Save", {
-            fontSize: "40px", fontFamily: "'Anek Bangla'", color: "#00ffff", fontStyle: "bold"
+        // Larger Title Text (48px)
+        const title = this.add.text(0, -130, "Cloud Save", {
+            fontSize: "48px", fontFamily: "'Anek Bangla'", color: "#00ffff", fontStyle: "bold"
         }).setOrigin(0.5);
 
-        const desc = this.add.text(0, -25, "আপনার Google অ্যাকাউন্টের সাহায্যে গেমের\nপ্রোফাইল কানেক্ট করুন। এতে আপনার গেমের\nসব প্রগ্রেস ক্লাউডে নিরাপদে সেভ থাকবে!", {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
+        // Larger Description Text (26px) with slightly more line spacing
+        const desc = this.add.text(0, -10, "আপনার Google অ্যাকাউন্টের সাহায্যে গেমের\nপ্রোফাইল কানেক্ট করুন। এতে আপনার গেমের\nসব প্রগ্রেস ক্লাউডে নিরাপদে সেভ থাকবে!", {
+            fontSize: "27px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 12
         }).setOrigin(0.5);
 
-        // Improved close button styling with rounded square
+        // Much larger and easier to tap Close Button (65x65)
         const closeBg = this.add.graphics();
         closeBg.fillStyle(0xff3333, 1);
-        closeBg.fillRoundedRect(210 - 25, -120 - 25, 50, 50, 15);
+        closeBg.fillRoundedRect(235 - 32.5, -145 - 32.5, 65, 65, 18);
 
-        const closeIcon = this.add.text(210, -120, "✖", { fontSize: "30px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        const closeHit = this.add.rectangle(210, -120, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(235, -142, "✖", { fontSize: "38px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(235, -130, 65, 65, 0x000000, 0).setInteractive({ useHandCursor: true });
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
@@ -338,11 +341,12 @@ class MenuScene extends Phaser.Scene {
             container.destroy();
         });
 
+        // Larger Connect Button (280x70)
         const btnBg = this.add.graphics();
         btnBg.fillStyle(0x0066aa, 1);
-        btnBg.fillRoundedRect(-120, 70, 240, 60, 30);
-        const connectBtnTxt = this.add.text(0, 100, "Connect Google", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        const connectHit = this.add.rectangle(0, 100, 240, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        btnBg.fillRoundedRect(-140, 85, 280, 70, 35);
+        const connectBtnTxt = this.add.text(0, 120, "Connect Google", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const connectHit = this.add.rectangle(0, 120, 280, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         connectHit.on('pointerdown', () => {
             this.playSound('sfx_click');
