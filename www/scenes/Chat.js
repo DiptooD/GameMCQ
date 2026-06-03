@@ -23,6 +23,31 @@ Object.assign(MenuScene.prototype, {
         });
     },
 
+
+    cullChatMessages() {
+        if (!this.msgListContainer || !this.isChatOpen) return;
+
+        // Calculate the visible boundaries of the chat box
+        const dynamicTopOffset = 125 + this.currentPinnedHeight;
+        const visibleTop = dynamicTopOffset - this.msgListContainer.y; 
+        const visibleBottom = visibleTop + this.chatScrollZoneHeight;
+        
+        // Add a buffer so messages render just before scrolling onto the screen
+        const buffer = 250; 
+
+        // Loop through everything in the chat list
+        this.msgListContainer.each(child => {
+            // If the object is too high or too low, hide it completely
+            if (child.y < visibleTop - buffer || child.y > visibleBottom + buffer) {
+                child.setVisible(false);
+            } else {
+                child.setVisible(true);
+            }
+        });
+    },
+
+
+
     createGlobalChat() {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
@@ -128,6 +153,7 @@ Object.assign(MenuScene.prototype, {
             const thumbMinY = dynamicTopOffset; 
             const thumbMaxY = dynamicTopOffset + dynamicScrollZoneHeight - thumbHeight;
             this.chatScrollbarThumb.y = thumbMinY + scrollRatio * (thumbMaxY - thumbMinY);
+            this.cullChatMessages();
         };
 
         const scrollZone = this.add.zone(this.chatW / 2, 125 + this.chatScrollZoneHeight / 2, this.chatW, this.chatScrollZoneHeight).setInteractive();
@@ -587,12 +613,30 @@ Object.assign(MenuScene.prototype, {
         this.chatToggleContainer.setScale(1);
     },
 
-    toggleChatWindow() {
+toggleChatWindow() {
         if (this.playSound) this.playSound('sfx_click');
         this.isChatOpen = !this.isChatOpen;
         
         const targetY = this.isChatOpen ? this.chatYVisible : this.chatYHidden;
         this.chatBlocker.setVisible(this.isChatOpen);
+
+        // ==========================================
+        // 🚀 THE GPU FIX (FAKE FREEZE)
+        // Hide heavy elements to free up rendering power.
+        // ==========================================
+        const showBackground = !this.isChatOpen;
+        
+        if (this.scrollingBg) this.scrollingBg.setVisible(showBackground);
+        if (this.backgroundLayers) {
+            this.backgroundLayers.forEach(layer => {
+                if (layer.group) layer.group.setVisible(showBackground);
+            });
+        }
+        
+        // Hide the big UI elements behind the chat blocker
+        if (this.hangarContainer) this.hangarContainer.setVisible(showBackground);
+        if (this.titleBird) this.titleBird.setVisible(showBackground);
+        // ==========================================
 
         if (this.isChatOpen) {
             this.updateChatNetworkState(); 

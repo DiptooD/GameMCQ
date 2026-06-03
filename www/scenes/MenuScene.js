@@ -366,33 +366,34 @@ class MenuScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // ADD THIS ONE LINE RIGHT AT THE TOP:
-        if (this.isChatOpen) return;
-        
         const safeTimeScale = Phaser.Math.Clamp(delta / 16.66, 0.1, 2.5);
 
-        if (this.scrollingBg) {
-            this.scrollingBg.tilePositionY -= 0.6 * safeTimeScale;
-        }
+        // 🚀 THE CPU FIX: Only calculate background movement if chat is CLOSED
+        if (!this.isChatOpen) {
+            if (this.scrollingBg) {
+                this.scrollingBg.tilePositionY -= 0.6 * safeTimeScale;
+            }
 
-        if (this.backgroundLayers) {
-            this.backgroundLayers.forEach(layer => {
-                layer.group.children.iterate(star => {
-                    if (star) {
-                        star.y += layer.speed * safeTimeScale;
-                        if (star.y > this.cameras.main.height) {
-                            star.y = -10;
-                            star.x = Phaser.Math.Between(0, 720);
+            if (this.backgroundLayers) {
+                this.backgroundLayers.forEach(layer => {
+                    layer.group.children.iterate(star => {
+                        if (star) {
+                            star.y += layer.speed * safeTimeScale;
+                            if (star.y > this.cameras.main.height) {
+                                star.y = -10;
+                                star.x = Phaser.Math.Between(0, 720);
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
+
+            if (this.reactorRing) {
+                this.reactorRing.rotation += 0.015 * safeTimeScale;
+            }
         }
 
-        if (this.reactorRing) {
-            this.reactorRing.rotation += 0.015 * safeTimeScale;
-        }
-
+        // Leave history scroll and other essential logic outside the check so it always works!
         if (this.historyScrollData && this.historyScrollState) {
             let { contentContainer, listStartY, minScroll } = this.historyScrollData;
             
