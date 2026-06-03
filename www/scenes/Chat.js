@@ -1224,7 +1224,8 @@ Object.assign(MenuScene.prototype, {
         if (!navigator.onLine) return; 
         
         oldDocs.forEach(doc => {
-            const oldDocRef = window.FirebaseTools.doc(window.FirebaseTools.doc(window.FirebaseDB, "global_chat", doc.id));
+            // FIX: Removed the nested .doc() call to resolve the invalid document reference Firebase Error
+            const oldDocRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", doc.id);
             window.FirebaseTools.deleteDoc(oldDocRef).catch(e => console.log("Chat auto-cleanup issue:", e));
         });
     },
