@@ -110,11 +110,9 @@ Object.assign(MenuScene.prototype, {
             this.chatScrollbarThumb.y = thumbMinY + scrollRatio * (thumbMaxY - thumbMinY);
         };
 
-        // Scroll Zone explicitly added BEFORE Pinned Container so Pinned Clicks take priority
         const scrollZone = this.add.zone(this.chatW / 2, 125 + this.chatScrollZoneHeight / 2, this.chatW, this.chatScrollZoneHeight).setInteractive();
         this.chatContainer.add(scrollZone);
 
-        // Pinned container explicitly layered ON TOP of the scroll zone
         this.pinnedContainer = this.add.container(0, 125);
         this.chatContainer.add(this.pinnedContainer);
 
@@ -247,7 +245,6 @@ Object.assign(MenuScene.prototype, {
             this.updateChatScrollbar();
         });
 
-        // Bottom UI Container
         this.bottomUIContainer = this.add.container(0, 0);
         this.chatContainer.add(this.bottomUIContainer);
 
@@ -302,11 +299,10 @@ Object.assign(MenuScene.prototype, {
                     event.stopPropagation();
                     if (event.key === 'Enter') {
                         this.sendChatMessage();
-                        htmlElement.blur(); // Automatically dismiss keyboard on send
+                        htmlElement.blur(); 
                     }
                 });
 
-                // Dynamically track the max screen height before the keyboard opens
                 let maxBaseHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
                 let lastShiftDist = 0;
 
@@ -316,36 +312,27 @@ Object.assign(MenuScene.prototype, {
 
                     if (window.visualViewport) {
                         currentHeight = window.visualViewport.height;
-                        // offsetTop tells us if the browser automatically pushed the page up
                         offsetTop = window.visualViewport.offsetTop; 
                     }
 
-                    // Keep track of the true fullscreen height
                     if (currentHeight > maxBaseHeight && offsetTop === 0) {
                         maxBaseHeight = currentHeight;
                     }
 
-                    // Calculate how much the keyboard obscured
                     let keyboardPx = Math.max(0, maxBaseHeight - currentHeight);
-                    
-                    // Subtract offsetTop to prevent "double shifting" if iOS already pushed the page up natively
                     let neededShiftPx = Math.max(0, keyboardPx - offsetTop);
 
-                    // Convert raw DOM pixels to Phaser's internal game coordinates safely
                     const domCanvasHeight = this.sys.game.canvas.clientHeight || maxBaseHeight;
                     const gameResHeight = this.cameras.main.height;
                     const scaleRatio = gameResHeight / domCanvasHeight;
 
                     let shiftDist = neededShiftPx * scaleRatio;
-                    
-                    // Cap the shift so it never pushes the UI completely off the screen
                     shiftDist = Phaser.Math.Clamp(shiftDist, 0, gameResHeight * 0.6);
 
                     const shiftDelta = shiftDist - lastShiftDist;
                     lastShiftDist = shiftDist;
                     this.chatKeyboardOffset = shiftDist;
 
-                    // Kill previous tweens to prevent jittering when resize fires rapidly
                     this.tweens.killTweensOf(this.bottomUIContainer);
                     this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 100, ease: 'Sine.easeOut' });
 
@@ -354,17 +341,14 @@ Object.assign(MenuScene.prototype, {
                 };
 
                 htmlElement.addEventListener('focus', () => {
-                    // Update base height just in case the phone orientation changed before focusing
                     let currentVH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
                     if (currentVH > maxBaseHeight) maxBaseHeight = currentVH;
 
                     if (window.visualViewport) {
                         window.visualViewport.addEventListener('resize', handleViewportChange);
                         window.visualViewport.addEventListener('scroll', handleViewportChange);
-                        // Delay the check slightly so the mobile keyboard has time to start animating
                         setTimeout(handleViewportChange, 50);
                     } else {
-                        // Fallback for older browsers that don't support visualViewport
                         const shiftDist = this.cameras.main.height * 0.45;
                         this.chatKeyboardOffset = shiftDist;
                         lastShiftDist = shiftDist;
@@ -383,7 +367,6 @@ Object.assign(MenuScene.prototype, {
                         window.visualViewport.removeEventListener('scroll', handleViewportChange);
                     }
                     if (this.isChatOpen) {
-                        // Smoothly return everything back to normal when keyboard closes
                         this.tweens.killTweensOf(this.bottomUIContainer);
                         this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
 
@@ -425,17 +408,23 @@ Object.assign(MenuScene.prototype, {
 
         this.updateChatNetworkState = () => {
             const isOnline = navigator.onLine;
-            this.offlinePromptGroup.setVisible(!isOnline);
+            if (this.offlinePromptGroup) this.offlinePromptGroup.setVisible(!isOnline);
             
             if (!isOnline) {
                 if (this.chatInput && this.chatInput.node) this.chatInput.node.style.display = 'none';
-                this.chatSendElements.forEach(e => e.setVisible(false));
-                this.chatLoginElements.forEach(e => e.setVisible(false));
+                if (this.chatSendElements) this.chatSendElements.forEach(e => e.setVisible(false));
+                if (this.chatLoginElements) this.chatLoginElements.forEach(e => e.setVisible(false));
                 if (this.replyData) this.cancelReply();
             } else {
                 if (this.isChatOpen && this.chatInput && this.chatInput.node) this.chatInput.node.style.display = 'block';
-                this.chatSendElements.forEach(e => e.setVisible(true));
-                this.chatLoginElements.forEach(e => e.setVisible(true));
+                if (this.chatSendElements) this.chatSendElements.forEach(e => e.setVisible(true));
+                if (this.chatLoginElements) this.chatLoginElements.forEach(e => e.setVisible(true));
+            }
+            
+            // Fix: Forcefully ensure the chat toggle button exists and is visible if the network state alters while chat is closed
+            if (this.chatToggleContainer && !this.isChatOpen) {
+                this.chatToggleContainer.setVisible(true);
+                this.chatToggleContainer.setScale(1);
             }
         };
 
@@ -450,6 +439,45 @@ Object.assign(MenuScene.prototype, {
         this.updateChatNetworkState();
         this.createChatToggleButton(w - 60, h / 6 + 250);
         this.listenToGlobalChat();
+    },
+
+    // Displays an inline error popup under the chat
+    showChatError(msg) {
+        if (this.chatErrBanner) {
+            this.tweens.killTweensOf(this.chatErrBanner);
+            this.chatErrBanner.destroy();
+        }
+
+        const yPos = this.chatH - 110;
+        this.chatErrBanner = this.add.container(this.chatW / 2, yPos).setDepth(9999);
+
+        const bg = this.add.graphics();
+        bg.fillStyle(0xff3333, 0.95);
+        bg.fillRoundedRect(-180, -22.5, 360, 45, 12);
+        bg.lineStyle(2, 0xffaaaa, 1);
+        bg.strokeRoundedRect(-180, -22.5, 360, 45, 12);
+
+        const txt = this.add.text(0, 0, msg, {
+            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        this.chatErrBanner.add([bg, txt]);
+        if (this.chatContainer) this.chatContainer.add(this.chatErrBanner);
+
+        this.tweens.add({
+            targets: this.chatErrBanner,
+            y: yPos - 20,
+            alpha: 0,
+            delay: 2500,
+            duration: 500,
+            ease: 'Sine.easeOut',
+            onComplete: () => {
+                if (this.chatErrBanner) {
+                    this.chatErrBanner.destroy();
+                    this.chatErrBanner = null;
+                }
+            }
+        });
     },
 
     createChatToggleButton(x, y) {
@@ -526,14 +554,8 @@ Object.assign(MenuScene.prototype, {
             shadow, bg, icon, hitArea, this.unreadBadgeBg, this.unreadBadgeTxt
         ]);
         
-        this.chatToggleContainer.setScale(0);
-        this.tweens.add({
-            targets: this.chatToggleContainer,
-            scale: 1,
-            duration: 400,
-            delay: 200, 
-            ease: 'Back.out'
-        });
+        // Fix: Force button visibility to 1 immediately to prevent tween stalling issues on offline/lag
+        this.chatToggleContainer.setScale(1);
     },
 
     toggleChatWindow() {
@@ -576,8 +598,7 @@ Object.assign(MenuScene.prototype, {
             }
             
             this.chatToggleContainer.setVisible(true);
-            this.chatToggleContainer.setScale(0);
-            this.tweens.add({ targets: this.chatToggleContainer, scale: 1, duration: 300, ease: 'Back.out' });
+            this.chatToggleContainer.setScale(1); 
             
             if (this.refreshChatUI) this.refreshChatUI();
         }
@@ -649,6 +670,7 @@ Object.assign(MenuScene.prototype, {
     reactToMessage(msg, emoji) {
         if (!navigator.onLine) {
             if (this.showNotification) this.showNotification("Connection lost.", "error");
+            this.showChatError("Offline: Cannot react right now!");
             return; 
         }
         if (!window.FirebaseAuth || !window.FirebaseAuth.currentUser) return;
@@ -663,7 +685,10 @@ Object.assign(MenuScene.prototype, {
             updates[`reactions.${uid}`] = emoji; 
         }
 
-        window.FirebaseTools.updateDoc(docRef, updates);
+        window.FirebaseTools.updateDoc(docRef, updates).catch(err => {
+            console.error("Reaction failed:", err);
+            this.showChatError("Error: Failed to add reaction!");
+        });
     },
 
     showChatActionMenu(msg, x, y) {
@@ -822,9 +847,13 @@ Object.assign(MenuScene.prototype, {
                 pinHit.on('pointerover', () => { drawPinBg(true); pinTxt.setColor('#ffffff'); });
                 pinHit.on('pointerout', () => { drawPinBg(false); pinTxt.setColor('#cbd5e1'); });
                 pinHit.on('pointerdown', () => {
-                    if (!navigator.onLine) { if (this.showNotification) this.showNotification("Cannot pin offline.", "error"); return; }
+                    if (!navigator.onLine) { 
+                        if (this.showNotification) this.showNotification("Cannot pin offline.", "error"); 
+                        this.showChatError("Offline: Cannot pin message.");
+                        return; 
+                    }
                     const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id);
-                    window.FirebaseTools.updateDoc(docRef, { pinned: !isPinned });
+                    window.FirebaseTools.updateDoc(docRef, { pinned: !isPinned }).catch(err => this.showChatError("Failed to pin message."));
                     this.closeActionMenu();
                 });
 
@@ -846,9 +875,13 @@ Object.assign(MenuScene.prototype, {
                 delHit.on('pointerover', () => { drawDelBg(true); delTxt.setColor('#ef4444'); });
                 delHit.on('pointerout', () => { drawDelBg(false); delTxt.setColor('#f87171'); });
                 delHit.on('pointerdown', () => {
-                    if (!navigator.onLine) { if (this.showNotification) this.showNotification("Cannot delete offline.", "error"); return; }
+                    if (!navigator.onLine) { 
+                        if (this.showNotification) this.showNotification("Cannot delete offline.", "error"); 
+                        this.showChatError("Offline: Cannot delete message.");
+                        return; 
+                    }
                     const docRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", msg.id);
-                    window.FirebaseTools.updateDoc(docRef, { isDeleted: true, pinned: false });
+                    window.FirebaseTools.updateDoc(docRef, { isDeleted: true, pinned: false }).catch(err => this.showChatError("Failed to delete message."));
                     this.closeActionMenu();
                 });
 
@@ -885,7 +918,6 @@ Object.assign(MenuScene.prototype, {
         let isFirstLoad = true;
         this.chatDataCache = []; 
 
-        // Function triggered when player clicks a pinned chat banner
         this.scrollToChat = (msgId) => {
             if (!this.msgYMap || !this.msgYMap[msgId]) return;
             if (this.playSound) this.playSound('sfx_click');
@@ -908,13 +940,12 @@ Object.assign(MenuScene.prototype, {
                 onUpdate: () => this.updateChatScrollbar()
             });
 
-            // Visual flash overlay to highlight the jumped-to chat message
             let highlight = this.add.rectangle(
                 this.chatW / 2, 
                 targetMsgY + this.msgYMap[msgId].h / 2, 
                 this.chatW - 20, 
                 this.msgYMap[msgId].h + 16, 
-                0xffffff, 0.35 // Increased visibility slightly
+                0xffffff, 0.35 
             );
             this.msgListContainer.add(highlight);
             
@@ -951,9 +982,8 @@ Object.assign(MenuScene.prototype, {
             let lastSenderUid = null;
             let lastMessageWasPinned = false;
 
-            // 1. Render Thicker Clickable Banners for Pins
             pinnedMessages.forEach(msg => {
-                const bannerHeight = 60; // Thicker banner
+                const bannerHeight = 60;
                 const yCenter = pinnedY + bannerHeight / 2;
                 
                 const pBg = this.add.graphics();
@@ -970,7 +1000,6 @@ Object.assign(MenuScene.prototype, {
                 const pHit = this.add.rectangle(this.chatW/2, yCenter, this.chatW - 20, bannerHeight, 0, 0)
                     .setInteractive({useHandCursor: true});
                 
-                // Add hover visual feedback
                 pHit.on('pointerover', () => {
                     pBg.clear();
                     pBg.fillStyle(0x1e293b, 1);
@@ -988,16 +1017,14 @@ Object.assign(MenuScene.prototype, {
                 });
 
                 pHit.on('pointerdown', (pointer) => {
-                    // Prevent this click from leaking into the scroll-zone dragging logic
                     pointer.event.stopPropagation();
                     this.scrollToChat(msg.id);
                 });
                 
                 this.pinnedContainer.add([pBg, pTxt, pHit]);
-                pinnedY += bannerHeight + 8; // Spacer
+                pinnedY += bannerHeight + 8; 
             });
             
-            // Adjust current pinned height and container mask offsets
             this.currentPinnedHeight = pinnedY > 0 ? pinnedY + 10 : 0;
             let dynamicTopOffset = 125 + this.currentPinnedHeight;
             let dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
@@ -1006,7 +1033,6 @@ Object.assign(MenuScene.prototype, {
             this.chatMaskShape.fillStyle(0xffffff);
             this.chatMaskShape.fillRect(this.chatX + 10, this.chatYVisible + dynamicTopOffset, this.chatW - 20, dynamicScrollZoneHeight);
 
-            // 2. Base standard chat bubble logic (now applying to ALL messages inside the list)
             const renderMessage = (msg, targetContainer, startY) => {
                 const isMe = currentUserUid && (msg.uid === currentUserUid);
                 const isPinned = msg.pinned; 
@@ -1161,13 +1187,11 @@ Object.assign(MenuScene.prototype, {
                     reactionSpace = 55; 
                 }
 
-                // Store exact rendered position of each bubble for triggers
                 this.msgYMap[msg.id] = { y: bubY, h: bubbleH };
 
                 return bubY + bubbleH + reactionSpace + 15; 
             };
 
-            // 3. Render all normal scrollable messages
             lastSenderUid = null;
             allMessages.forEach(msg => {
                 currentY = renderMessage(msg, this.msgListContainer, currentY);
@@ -1223,12 +1247,15 @@ Object.assign(MenuScene.prototype, {
 
             this.chatDataCache = messages;
             this.refreshChatUI();
+        }, (error) => {
+            console.error("Global Chat Sync Error:", error);
         });
     },
 
     sendChatMessage() {
         if (!navigator.onLine) {
             if (this.showNotification) this.showNotification("Connection lost. Cannot send message.", "error");
+            this.showChatError("Offline: Message failed to send!");
             return;
         }
 
@@ -1258,7 +1285,11 @@ Object.assign(MenuScene.prototype, {
             payload.replyTo = this.replyData;
         }
         
-        window.FirebaseTools.addDoc(chatRef, payload);
+        // Add robust error capture here
+        window.FirebaseTools.addDoc(chatRef, payload).catch(err => {
+            console.error("Chat send failed:", err);
+            this.showChatError("Error: Failed to send message!");
+        });
 
         htmlElement.value = ""; 
         htmlElement.blur();
@@ -1269,7 +1300,6 @@ Object.assign(MenuScene.prototype, {
         if (!navigator.onLine) return; 
         
         oldDocs.forEach(doc => {
-            // FIX: Removed the nested .doc() call to resolve the invalid document reference Firebase Error
             const oldDocRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", doc.id);
             window.FirebaseTools.deleteDoc(oldDocRef).catch(e => console.log("Chat auto-cleanup issue:", e));
         });
