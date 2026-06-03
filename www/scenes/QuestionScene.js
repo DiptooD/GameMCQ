@@ -688,15 +688,17 @@ class QuestionScene extends Phaser.Scene {
             this.qBankTag.setText(bankName); 
             
             this.optionBtns.forEach((btn, i) => {
-                const cleanOpt = cleanStr(q.options[i]);
-                // UI SCALING
-                if (cleanOpt.length > 40) {
-                    btn.txt.setFontSize("24px");
-                } else {
-                    btn.txt.setFontSize("32px");
-                }
-                btn.txt.setText(cleanOpt);
-            });
+            const optionsArray = q.options || [];
+            const cleanOpt = cleanStr(optionsArray[i]) || ""; // Added fallback
+
+            // UI SCALING
+            if (cleanOpt.length > 40) {
+                btn.txt.setFontSize("24px");
+            } else {
+                btn.txt.setFontSize("32px");
+            }
+            btn.txt.setText(cleanOpt);
+        });
 
             this.markQuestionAsSeen(q.question);
             this.tweens.add({ targets: elements, alpha: { from: 0, to: 1 }, duration: skipAnim ? 0 : 400 });
@@ -726,19 +728,21 @@ class QuestionScene extends Phaser.Scene {
             this.qBankTag.setText(bankName);
             
             this.optionBtns.forEach((btn, i) => {
-                const cleanOpt = cleanStr(q.options[i]);
-                // UI SCALING
-                if (cleanOpt.length > 40) {
-                    btn.txt.setFontSize("24px");
-                } else {
-                    btn.txt.setFontSize("32px");
-                }
+            const optionsArray = q.options || [];
+            const cleanOpt = cleanStr(optionsArray[i]) || ""; // Added fallback
 
-                btn.txt.setText(cleanOpt);
-                btn.bg.setFillStyle(0x000000, 0.07); 
-                btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
-                btn.txt.setColor("#d3d3d3");
-            });
+            // UI SCALING
+            if (cleanOpt.length > 40) {
+                btn.txt.setFontSize("24px");
+            } else {
+                btn.txt.setFontSize("32px");
+            }
+
+            btn.txt.setText(cleanOpt);
+            btn.bg.setFillStyle(0x000000, 0.07); 
+            btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
+            btn.txt.setColor("#d3d3d3");
+        });
 
             this.quickAnsContainer.setAlpha(0);
             this.quickBtns.forEach((btn) => {
@@ -799,21 +803,23 @@ class QuestionScene extends Phaser.Scene {
                     this.qBankTag.y = this.qBankTag.originalY + 20;
                     
                     this.optionBtns.forEach((btn, i) => {
-                        const cleanOpt = cleanStr(q.options[i]);
-                        // UI SCALING
-                        if (cleanOpt.length > 40) {
-                            btn.txt.setFontSize("24px");
-                        } else {
-                            btn.txt.setFontSize("32px");
-                        }
+                    const optionsArray = q.options || [];
+                    const cleanOpt = cleanStr(optionsArray[i]) || ""; // Added fallback
+                    
+                    // UI SCALING
+                    if (cleanOpt.length > 40) {
+                        btn.txt.setFontSize("24px");
+                    } else {
+                        btn.txt.setFontSize("32px");
+                    }
 
-                        btn.txt.setText(cleanOpt);
-                        btn.container.y = btn.originalY + 20; 
-                        
-                        btn.bg.setFillStyle(0x000000, 0.07); 
-                        btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
-                        btn.txt.setColor("#d3d3d3");
-                    });
+                    btn.txt.setText(cleanOpt);
+                    btn.container.y = btn.originalY + 20; 
+                    
+                    btn.bg.setFillStyle(0x000000, 0.07); 
+                    btn.bg.setStrokeStyle(3, 0xffffff, 0.05);
+                    btn.txt.setColor("#d3d3d3");
+                });
 
                     this.quickAnsContainer.setAlpha(0);
                     this.quickBtns.forEach((btn) => {

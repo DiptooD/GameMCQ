@@ -17,18 +17,32 @@ class DeathScene extends Phaser.Scene {
   }
 
   showToast(msg, isError = false) {
-      if (typeof window.showToast === 'function') {
-          window.showToast(msg);
-          return;
-      }
+      // Bypassing window.showToast so this extra-large Phaser toast is strictly used.
+      const bgColor = isError ? 'rgba(220, 38, 38, 0.98)' : 'rgba(13, 148, 136, 0.98)';
       
-      const bgColor = isError ? 'rgba(200, 0, 0, 0.95)' : 'rgba(0, 102, 170, 0.95)';
-      const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 450, msg, {
-          fontSize: '28px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
-          backgroundColor: bgColor, padding: {x: 24, y: 16}
-      }).setOrigin(0.5).setDepth(5000).setAlpha(0);
+      const toast = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 380, msg, {
+          fontSize: '40px', 
+          fontFamily: "'Anek Bangla', sans-serif", 
+          color: '#ffffff',
+          fontStyle: 'bold',
+          backgroundColor: bgColor, 
+          padding: { x: 40, y: 25 },
+          stroke: '#000000',
+          strokeThickness: 6,
+          shadow: { offsetX: 4, offsetY: 4, color: '#000000', blur: 8, fill: true, stroke: true }
+      }).setOrigin(0.5).setDepth(10000).setAlpha(0);
       
-      this.tweens.add({ targets: toast, alpha: 1, duration: 250, yoyo: true, hold: 2500, onComplete: () => toast.destroy() });
+      // Eye-catching float-up animation
+      this.tweens.add({ 
+          targets: toast, 
+          alpha: 1, 
+          y: '-=60', 
+          duration: 300, 
+          ease: 'Cubic.easeOut',
+          yoyo: true, 
+          hold: 3500, 
+          onComplete: () => toast.destroy() 
+      });
   }
 
   create() {
@@ -151,7 +165,7 @@ class DeathScene extends Phaser.Scene {
         }).setOrigin(0.5);
     }
 
-    // --- NEW: SHARE TO CHAT BUTTON ---
+    // --- SHARE TO CHAT BUTTON ---
     if (totalQs > 0) {
         const shareBtnX = w - 50;
         const shareBtnY = titleY;
@@ -185,7 +199,6 @@ class DeathScene extends Phaser.Scene {
         shareHit.on('pointerdown', () => {
             if (isProcessing) return;
 
-            // Connection Checks
             if (!navigator.onLine) {
                 this.showToast("ইন্টারনেট সংযোগ নেই! 🌐", true);
                 return;
@@ -196,7 +209,6 @@ class DeathScene extends Phaser.Scene {
                 return;
             }
 
-            // Spam Prevention Checks (60 Second Cooldown)
             const now = Date.now();
             const cooldownMs = 60000; 
             const lastShareTime = window.GameState.lastChatShareTime || 0;
@@ -212,7 +224,6 @@ class DeathScene extends Phaser.Scene {
             drawShareBg(false, true);
             shareIcon.setAlpha(0.5);
 
-            // Mini pie chart exact rounding allocation to exactly 10 blocks
             const blocksCount = 10;
             let cBlocks = Math.floor((safeCorrect / totalQs) * blocksCount);
             let wBlocks = Math.floor((safeWrong / totalQs) * blocksCount);
@@ -220,7 +231,6 @@ class DeathScene extends Phaser.Scene {
             
             let remainder = blocksCount - (cBlocks + wBlocks + sBlocks);
             
-            // Distribute remaining blocks to the largest fractions to keep it perfectly at 10
             let fractions = [
                 { key: 'c', val: (safeCorrect / totalQs) * blocksCount - cBlocks },
                 { key: 'w', val: (safeWrong / totalQs) * blocksCount - wBlocks },
@@ -235,7 +245,9 @@ class DeathScene extends Phaser.Scene {
             }
 
             const visualBar = "🟩".repeat(cBlocks) + "🟥".repeat(wBlocks) + "🟨".repeat(sBlocks);
-            const shareText = `📊 আমার রেজাল্ট: ${percentText}%\n${visualBar}\nমোট: ${totalQs} | সঠিক: ${safeCorrect} | ভুল: ${safeWrong}`;
+            
+            // --- NEW: Added 'স্কিপ' to the chat share text ---
+            const shareText = `📊 গেইম রেজাল্ট: ${percentText}%\n${visualBar}\nমোট: ${totalQs} | সঠিক: ${safeCorrect} | ভুল: ${safeWrong} | স্কিপ: ${safeSkipped}`;
 
             const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
             const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
@@ -253,16 +265,12 @@ class DeathScene extends Phaser.Scene {
                 };
 
                 window.FirebaseTools.addDoc(chatRef, payload).then(() => {
-                    window.GameState.lastChatShareTime = Date.now(); // Register successful share time
+                    window.GameState.lastChatShareTime = Date.now();
                     this.showToast("রেজাল্ট চ্যাটে শেয়ার করা হয়েছে! 💬", false);
-                    
-                    // Button stays disabled indicating success for this context lifetime
                     this.tweens.add({ targets: [shareBg, shareIcon], scale: 0.9, yoyo: true, duration: 100 });
                 }).catch(e => {
                     console.error("Share failed", e);
                     this.showToast("শেয়ার ব্যর্থ হয়েছে!", true);
-                    
-                    // Reset to allow the user to try again on failure
                     isProcessing = false;
                     drawShareBg(false);
                     shareIcon.setAlpha(1);
@@ -652,7 +660,6 @@ class DeathScene extends Phaser.Scene {
         bgColor = 0x1a1a00; strokeColor = 0x666600;
     }
 
-    // UI SCALING
     const qText = this.add.text(textX, p, item.question, {
         fontSize: "30px", fontFamily: "'Anek Bangla'", color: "#ffffff", padding: { x: 0, y: 5 },
         wordWrap: { width: textW }, lineSpacing: 8 
@@ -663,7 +670,6 @@ class DeathScene extends Phaser.Scene {
     const uPrefix = status === 'skipped' ? "স্কিপ করেছেন" : "আপনার উত্তর: ";
     const uVal = status === 'skipped' ? "" : item.userAnswer;
 
-    // UI SCALING
     const uLabel = this.add.text(textX, ansY, uPrefix, {
         fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#aaaaaa" 
     }).setOrigin(0, 0);
@@ -739,7 +745,6 @@ class DeathScene extends Phaser.Scene {
       };
       draw(1, false);
 
-      // UI SCALING
       const txt = this.add.text(0, 0, text, {
           fontSize: "36px", 
           fontFamily: "'Anek Bangla'", 
