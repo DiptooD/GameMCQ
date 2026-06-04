@@ -26,8 +26,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-    
+    import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp, startAfter } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";    
     const firebaseConfig = {
       apiKey: "AIzaSyCT-5xo5GAmbloUaYIweUm81QQvz8uWgGM",
       authDomain: "gamemcq.firebaseapp.com",
@@ -43,8 +42,7 @@
     window.FirebaseAuth.useDeviceLanguage(); 
     window.FirebaseDB = getFirestore(app);
     
-    window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp };
-    
+window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp, startAfter };    
     window.connectToCloud = function() {
         return new Promise(async (resolve) => {
             console.log("Checking Firebase Auth state...");

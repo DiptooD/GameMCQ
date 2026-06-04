@@ -30,11 +30,9 @@ Object.assign(MenuScene.prototype, {
         const visibleTop = dynamicTopOffset - this.msgListContainer.y; 
         const visibleBottom = visibleTop + this.chatScrollZoneHeight;
         
-        // Increased buffer so tall messages don't disappear before fully scrolling off
         const buffer = 400; 
 
         this.msgListContainer.each(child => {
-            // Check our custom tag first. If it's a generic element, fallback to .y
             const checkY = child.trueY !== undefined ? child.trueY : child.y;
 
             if (checkY < visibleTop - buffer || checkY > visibleBottom + buffer) {
@@ -53,6 +51,7 @@ Object.assign(MenuScene.prototype, {
         this.lastSeenTime = Date.now();
         this.dividerRendered = false;
         this.trackedMessages = this.trackedMessages || {};
+        this.msgTimestamps = []; // Rate Limiting Tracker
         
         if (window.FirebaseAuth && window.FirebaseAuth.currentUser) {
             const uid = window.FirebaseAuth.currentUser.uid;
@@ -164,15 +163,20 @@ Object.assign(MenuScene.prototype, {
         let scrollYTracker = [];
         let hitStartX = 0, hitStartY = 0, hitStartTime = 0;
 
-        // --- NEW: Long Press Variables ---
         let longPressTimer = null;
         let hasLongPressed = false;
+        
+        // NEW: Double Tap & Swipe Tracking logic
+        this.lastChatTapTime = 0;
+        this.swipeMode = false;
+        this.scrollMode = false;
+        this.activeSwipeHit = null;
 
         scrollZone.on('pointerdown', (pointer) => {
             dragStartY = pointer.y;
             containerStartY = this.msgListContainer.y;
             isDraggingChat = true;
-            hasLongPressed = false; // Reset on new touch
+            hasLongPressed = false; 
             scrollYTracker = [{y: pointer.y, time: this.time.now}];
             
             this.tweens.killTweensOf(this.msgListContainer);
@@ -181,22 +185,48 @@ Object.assign(MenuScene.prototype, {
             hitStartY = pointer.y;
             hitStartTime = this.time.now;
 
-            // Clear any existing timer
+            this.swipeMode = false;
+            this.scrollMode = false;
+            this.activeSwipeHit = null;
+
+            // 🚀 NEW: Double Tap To React
+            if (this.lastChatTapTime && (hitStartTime - this.lastChatTapTime) < 300) {
+                let localX = pointer.x - this.chatContainer.x;
+                let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
+                
+                for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
+                    let child = this.msgListContainer.list[i];
+                    if (child.isInteractHit && !child.isError) {
+                        let left = child.x - child.width/2;
+                        let right = child.x + child.width/2;
+                        let top = child.y - child.height/2;
+                        let bottom = child.y + child.height/2;
+                        
+                        if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
+                            this.reactToMessage(child.msgData, '❤️');
+                            if (longPressTimer) { longPressTimer.remove(); longPressTimer = null; }
+                            isDraggingChat = false;
+                            this.lastChatTapTime = 0;
+                            return; 
+                        }
+                    }
+                }
+            }
+            this.lastChatTapTime = hitStartTime;
+
             if (longPressTimer) {
                 longPressTimer.remove();
                 longPressTimer = null;
             }
 
-            // Start 400ms Long Press Timer
+            // Long Press Timer for Menu
             longPressTimer = this.time.delayedCall(400, () => {
                 let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
                 
-                // If finger hasn't moved much, trigger the long press!
-                if (dist < 15 && isDraggingChat) {
+                if (dist < 15 && isDraggingChat && !this.swipeMode) {
                     hasLongPressed = true;
-                    isDraggingChat = false; // Stop scrolling logic
+                    isDraggingChat = false; 
 
-                    // Optional: Give a subtle haptic vibration on mobile
                     if (window.navigator && window.navigator.vibrate) {
                         window.navigator.vibrate(40); 
                     }
@@ -228,81 +258,109 @@ Object.assign(MenuScene.prototype, {
 
         scrollZone.on('pointermove', (pointer) => {
             if (pointer.isDown && isDraggingChat) {
-                // If the user drags their finger more than 15 pixels, cancel the long-press
                 let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
                 if (dist > 15 && longPressTimer) {
                     longPressTimer.remove();
                     longPressTimer = null;
                 }
 
-                let dynamicTopOffset = 125 + this.currentPinnedHeight;
-                let topY = dynamicTopOffset - this.chatKeyboardOffset;
-                let bottomY = topY - this.chatMaxScroll;
-                let newY = containerStartY + (pointer.y - dragStartY);
+                let deltaX = pointer.x - hitStartX;
+                let deltaY = pointer.y - hitStartY;
 
-                if (newY > topY) {
-                    newY = topY + (newY - topY) * 0.35;
-                } else if (newY < bottomY) {
-                    newY = bottomY + (newY - bottomY) * 0.35;
+                // 🚀 NEW: Detect intent (Swipe to Reply vs Scroll to read)
+                if (!this.swipeMode && !this.scrollMode) {
+                    if (Math.abs(deltaX) > 15 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                        this.swipeMode = true;
+                        let localX = hitStartX - this.chatContainer.x;
+                        let localY = hitStartY - this.chatContainer.y - this.msgListContainer.y;
+                        
+                        for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
+                            let child = this.msgListContainer.list[i];
+                            if (child.isInteractHit && !child.isError) {
+                                let left = child.x - child.width/2; let right = child.x + child.width/2;
+                                let top = child.y - child.height/2; let bottom = child.y + child.height/2;
+                                if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
+                                    this.activeSwipeHit = child;
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (Math.abs(deltaY) > 15) {
+                        this.scrollMode = true;
+                    }
                 }
 
-                this.msgListContainer.y = newY;
-                scrollYTracker.push({y: pointer.y, time: this.time.now});
-                if (scrollYTracker.length > 5) scrollYTracker.shift();
-                
-                this.updateChatScrollbar();
+                // Execute the chosen movement
+                if (this.scrollMode) {
+                    let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                    let topY = dynamicTopOffset - this.chatKeyboardOffset;
+                    let bottomY = topY - this.chatMaxScroll;
+                    let newY = containerStartY + deltaY;
+
+                    if (newY > topY) {
+                        newY = topY + (newY - topY) * 0.35;
+                        // 🚀 NEW: Infinite Scroll loader trigger
+                        if (newY > topY + 60 && this.loadOlderMessages && !this.isLoadingHistory && this.chatDataCache.length >= 30) {
+                            this.loadOlderMessages();
+                        }
+                    } else if (newY < bottomY) {
+                        newY = bottomY + (newY - bottomY) * 0.35;
+                    }
+
+                    this.msgListContainer.y = newY;
+                    scrollYTracker.push({y: pointer.y, time: this.time.now});
+                    if (scrollYTracker.length > 5) scrollYTracker.shift();
+                    
+                    this.updateChatScrollbar();
+
+                } else if (this.swipeMode && this.activeSwipeHit) {
+                    // 🚀 NEW: Visual swiping mechanics
+                    let isMe = this.activeSwipeHit.isMe;
+                    let clampX = isMe ? Phaser.Math.Clamp(deltaX, -80, 0) : Phaser.Math.Clamp(deltaX, 0, 80);
+                    
+                    this.activeSwipeHit.visuals.forEach(v => {
+                        if (v.baseX === undefined) v.baseX = v.x;
+                        v.x = v.baseX + clampX;
+                    });
+                    this.activeSwipeHit.currentDelta = clampX;
+                }
             }
         });
 
         const stopChatDrag = (pointer) => {
-            // Always clean up the timer when finger lifts
             if (longPressTimer) {
                 longPressTimer.remove();
                 longPressTimer = null;
             }
 
-            // If we already opened the menu via long-press, do nothing else
             if (hasLongPressed) {
                 hasLongPressed = false;
                 return;
             }
 
-            if (isDraggingChat) {
-                isDraggingChat = false;
-                
-                let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
-                let timeElapsed = this.time.now - hitStartTime;
-                
-                // Allow quick-tap ONLY for retrying errors now.
-                // Standard messages no longer react to short taps.
-                if (dist < 15 && timeElapsed < 350) {
-                    let localX = pointer.x - this.chatContainer.x;
-                    let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
-                    
-                    for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
-                        let child = this.msgListContainer.list[i];
-                        if (child.isInteractHit && child.isError) {
-                            let left = child.x - child.width/2;
-                            let right = child.x + child.width/2;
-                            let top = child.y - child.height/2;
-                            let bottom = child.y + child.height/2;
-                            
-                            if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
-                                this.retrySendMessage(child.msgData.id);
-                                return; 
-                            }
-                        }
-                    }
-                }
+            // 🚀 NEW: Snap back and trigger reply if swiped far enough
+            if (this.swipeMode && this.activeSwipeHit) {
+                let hit = this.activeSwipeHit;
+                let swiped = Math.abs(hit.currentDelta) >= 50;
 
-                // --- Momentum Scrolling Physics ---
-                // --- Momentum Scrolling Physics ---
+                hit.visuals.forEach(v => {
+                    if (v.baseX !== undefined) {
+                        this.tweens.add({ targets: v, x: v.baseX, duration: 250, ease: 'Back.out' });
+                    }
+                });
+
+                if (swiped) {
+                    this.initiateReply(hit.msgData);
+                }
+            }
+
+            if (isDraggingChat && this.scrollMode) {
+                // Momentum Scrolling Physics
                 let velocity = 0;
                 if (scrollYTracker.length > 1) {
                     let last = scrollYTracker[scrollYTracker.length - 1];
                     let timeSinceLastMove = this.time.now - last.time;
                     
-                    // NEW: Only apply momentum if you release within 100ms of moving
                     if (timeSinceLastMove < 100) {
                         let first = scrollYTracker[0];
                         let dt = last.time - first.time, dy = last.y - first.y;
@@ -346,6 +404,11 @@ Object.assign(MenuScene.prototype, {
                     }
                 }
             }
+
+            isDraggingChat = false;
+            this.swipeMode = false;
+            this.scrollMode = false;
+            this.activeSwipeHit = null;
         };
 
         scrollZone.on('pointerup', stopChatDrag);
@@ -388,6 +451,16 @@ Object.assign(MenuScene.prototype, {
         this.chatSendElements = [];
         this.chatLoginElements = [];
 
+        // 🚀 NEW: Update Typing Status to Firebase Method
+        this.updateTypingStatus = (isTyping) => {
+            if (!navigator.onLine || !window.FirebaseAuth || !window.FirebaseAuth.currentUser) return;
+            const uid = window.FirebaseAuth.currentUser.uid;
+            const docRef = window.FirebaseTools.doc(window.FirebaseDB, "chat_meta", "typing");
+            let payload = {};
+            payload[uid] = isTyping ? { n: GameState.profile.n, t: Date.now() } : { t: 0 };
+            window.FirebaseTools.setDoc(docRef, payload, { merge: true }).catch(()=>{});
+        };
+
         if (isConnected) {
             const inputHTML = `<input type="text" id="chatInput" autocomplete="off" maxlength="200" placeholder="এখানে লিখুন..." style="box-sizing: border-box; width: ${this.chatW - 130}px; height: 65px; padding: 0 20px; font-family: 'Anek Bangla', sans-serif; font-size: 26px; border-radius: 20px; border: 2px solid #0066aa; outline: none; background: #051025; color: #fff;">`;
                 
@@ -411,25 +484,30 @@ Object.assign(MenuScene.prototype, {
             
             const htmlElement = this.chatInput.getChildByID('chatInput');
             
-            // ==========================================
-            // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
-            // ==========================================
-           // ==========================================
-            // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
-            // ==========================================
             if (htmlElement) {
+                let typingTimer = null;
+
+                // 🚀 NEW: Detect and dispatch typing status
+                htmlElement.addEventListener('input', () => {
+                    this.updateTypingStatus(true);
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(() => {
+                        this.updateTypingStatus(false);
+                    }, 2500);
+                });
+
                 htmlElement.addEventListener('keydown', (e) => e.stopPropagation());
                 htmlElement.addEventListener('keypress', (event) => {
                     event.stopPropagation();
                     if (event.key === 'Enter') {
+                        this.updateTypingStatus(false);
+                        clearTimeout(typingTimer);
                         this.sendChatMessage();
                         htmlElement.blur(); 
                     }
                 });
 
-                // Helper to shift UI
                 this.shiftChatUIUp = (shiftDist) => {
-                    // Prevent shifting off-screen
                     shiftDist = Phaser.Math.Clamp(shiftDist, 100, this.cameras.main.height * 0.55);
                     this.chatKeyboardOffset = shiftDist;
 
@@ -446,7 +524,6 @@ Object.assign(MenuScene.prototype, {
                     });
                 };
 
-                // Helper to reset UI
                 this.resetChatUI = () => {
                     if (!this.isChatOpen) return;
                     
@@ -465,9 +542,7 @@ Object.assign(MenuScene.prototype, {
                     this.chatKeyboardOffset = 0;
                 };
 
-                // 1. NATIVE CORDOVA EVENTS (Using the Plugin)
                 window.addEventListener('keyboardWillShow', (e) => {
-                    // The plugin gives us the exact keyboard height! Convert it to Phaser's scale.
                     let scaleRatio = this.cameras.main.height / window.innerHeight;
                     let exactShift = e.keyboardHeight * scaleRatio;
                     this.shiftChatUIUp(exactShift);
@@ -478,11 +553,10 @@ Object.assign(MenuScene.prototype, {
                     if (htmlElement) htmlElement.blur(); 
                 });
 
-                // 2. WEB BROWSER FALLBACK (For testing on PC/Web)
                 htmlElement.addEventListener('focus', () => {
                     if (!window.cordova || !window.Keyboard) {
                         setTimeout(() => htmlElement.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
-                        this.shiftChatUIUp(this.cameras.main.height * 0.35); // Generic guess for web
+                        this.shiftChatUIUp(this.cameras.main.height * 0.35); 
                     }
                 });
 
@@ -502,7 +576,6 @@ Object.assign(MenuScene.prototype, {
             const loginHit = this.add.rectangle(this.chatW / 2, inputY, 350, 70, 0x000000, 0).setInteractive({useHandCursor: true});
 
             loginHit.on('pointerdown', () => {
-                // --- SPAM PROOF CHECK ---
                 if (window.isAuthenticating) return; 
 
                 if (!navigator.onLine) {
@@ -513,7 +586,6 @@ Object.assign(MenuScene.prototype, {
                 window.isAuthenticating = true;
                 if (this.playSound) this.playSound('sfx_click');
 
-                // --- 3-DOTS LOADER ANIMATION ---
                 let dotCount = 0;
                 loginTxt.setText("Connecting.");
                 let dotTimer = this.time.addEvent({
@@ -592,7 +664,47 @@ Object.assign(MenuScene.prototype, {
         
         this.updateChatNetworkState();
         this.createChatToggleButton(w - 60, h / 6 + 250);
+        
         this.listenToGlobalChat();
+        this.listenToTyping();
+    },
+
+    // 🚀 NEW: Typing Indicator Listener
+    listenToTyping() {
+        if (!window.FirebaseDB || !window.FirebaseTools) return;
+        const docRef = window.FirebaseTools.doc(window.FirebaseDB, "chat_meta", "typing");
+
+        if (!this.typingIndicatorTxt) {
+            this.typingIndicatorTxt = this.add.text(this.chatW / 2, 100, "", {
+                fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#00e1ff", fontStyle: "italic"
+            }).setOrigin(0.5).setDepth(10);
+            this.chatContainer.add(this.typingIndicatorTxt);
+        }
+
+        this.typingUnsubscribe = window.FirebaseTools.onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                const now = Date.now();
+                let typists = [];
+                const myUid = window.FirebaseAuth.currentUser ? window.FirebaseAuth.currentUser.uid : null;
+                
+                Object.keys(data).forEach(uid => {
+                    if (uid !== myUid && data[uid].t > now - 4000) {
+                        if (data[uid].n) typists.push(data[uid].n);
+                    }
+                });
+
+                if (typists.length === 0) {
+                    this.typingIndicatorTxt.setText("");
+                } else if (typists.length === 1) {
+                    this.typingIndicatorTxt.setText(`${typists[0]} is typing...`);
+                } else if (typists.length <= 3) {
+                    this.typingIndicatorTxt.setText(`${typists.join(", ")} are typing...`);
+                } else {
+                    this.typingIndicatorTxt.setText("Several people are typing...");
+                }
+            }
+        });
     },
 
     showChatError(msg) {
@@ -611,7 +723,7 @@ Object.assign(MenuScene.prototype, {
         bg.strokeRoundedRect(-180, -22.5, 360, 45, 12);
 
         const txt = this.add.text(0, 0, msg, {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
+            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0.5);
 
         this.chatErrBanner.add([bg, txt]);
@@ -826,6 +938,7 @@ Object.assign(MenuScene.prototype, {
     },
 
     initiateReply(msg) {
+        if (this.playSound) this.playSound('sfx_tick');
         this.replyData = { id: msg.id, n: msg.n, text: msg.text };
         let formattedText = msg.text.length > 20 ? msg.text.substring(0, 20) + "..." : msg.text;
         this.replyTxt.setText(`Replying to ${msg.n}: ${formattedText}`);
@@ -851,8 +964,10 @@ Object.assign(MenuScene.prototype, {
         let updates = {};
         if (msg.reactions && msg.reactions[uid] === emoji) {
             updates[`reactions.${uid}`] = null; 
+            if (this.playSound) this.playSound('sfx_tick', 0.5);
         } else {
             updates[`reactions.${uid}`] = emoji; 
+            if (this.playSound) this.playSound('sfx_powerup', 0.5);
         }
 
         window.FirebaseTools.updateDoc(docRef, updates).catch(err => {
@@ -1085,10 +1200,15 @@ Object.assign(MenuScene.prototype, {
         if (!window.FirebaseDB || !window.FirebaseTools) return;
         
         const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
-        const q = window.FirebaseTools.query(chatRef, window.FirebaseTools.orderBy("timestamp", "desc"), window.FirebaseTools.limit(105));
+        // 🚀 NEW: Limit lowered from 105 to 30 for performance (infinite scroll handles the rest)
+        const q = window.FirebaseTools.query(chatRef, window.FirebaseTools.orderBy("timestamp", "desc"), window.FirebaseTools.limit(30));
         
         let isFirstLoad = true;
+        
         this.chatDataCache = []; 
+        this.liveMessages = [];
+        this.historyMessages = [];
+        this.isLoadingHistory = false;
 
         this.scrollToChat = (msgId) => {
             if (!this.msgYMap || !this.msgYMap[msgId]) return;
@@ -1147,6 +1267,7 @@ Object.assign(MenuScene.prototype, {
             this.msgYMap = {}; 
 
             const currentUserUid = (window.FirebaseAuth && window.FirebaseAuth.currentUser) ? window.FirebaseAuth.currentUser.uid : null;
+            const myName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
 
             const pinnedMessages = this.chatDataCache.filter(m => m.pinned);
             
@@ -1178,28 +1299,19 @@ Object.assign(MenuScene.prototype, {
 
             pinnedMessages.forEach(msg => {
                 const bannerHeight = 60;
-                
-                // 1. CREATE A LOCAL SNAPSHOT OF THIS SPECIFIC PIN'S Y POSITION
                 const currentYPos = pinnedY; 
-                
-                // 2. USE THE SNAPSHOT FOR THE CENTER CALCULATION
                 const yCenter = currentYPos + bannerHeight / 2;
                 
                 const pBg = this.add.graphics();
                 
                 const drawPinnedBg = (isHovered) => {
                     pBg.clear();
-                    
-                    // Main Background (Dark Slate)
                     pBg.fillStyle(isHovered ? 0x1E293B : 0x0F172A, 0.95); 
-                    // 3. USE 'currentYPos' INSTEAD OF 'pinnedY' EVERYWHERE BELOW
                     pBg.fillRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 8);
                     
-                    // Subtle Border (Flat, not shiny)
                     pBg.lineStyle(1.5, isHovered ? 0x475569 : 0x334155, 1);
                     pBg.strokeRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 8);
 
-                    // Modern Blue Accent Line on the left edge
                     pBg.fillStyle(0x3B82F6, 1);
                     pBg.fillRoundedRect(10, currentYPos, 5, bannerHeight, { tl: 8, bl: 8, tr: 0, br: 0 });
                 };
@@ -1224,10 +1336,9 @@ Object.assign(MenuScene.prototype, {
                 });
                 
                 this.pinnedContainer.add([pBg, pTxt, pHit]);
-                
-                // 4. THIS CONTINUES TO INCREMENT FOR THE NEXT LOOP ITERATION
                 pinnedY += bannerHeight + 8; 
             });            
+            
             this.currentPinnedHeight = pinnedY > 0 ? pinnedY + 10 : 0;
             let dynamicTopOffset = 100 + this.currentPinnedHeight;
             let dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
@@ -1281,11 +1392,28 @@ Object.assign(MenuScene.prototype, {
                 const nameColorHexStr = isPinned ? "#ff0000" : (isMe ? "#00ffff" : this.getDeterministicColor(msg.uid));
                 const baseCol = Phaser.Display.Color.HexStringToColor(nameColorHexStr);
                 const darkenFac = isMe ? 0.35 : 0.15; 
+
+                // 🚀 NEW: Detect Mention (@Name)
+                let isMentioned = false;
+                if (!isMe && myName !== "Guest" && msg.text) {
+                    const mentionPattern = new RegExp(`@${myName}\\b`, 'i');
+                    if (mentionPattern.test(msg.text)) isMentioned = true;
+                }
                 
                 if (msg.isDeleted) {
                     displayMsgText = "🚫 This message was deleted.";
                     displayMsgColor = "#888888";
                     bubBgHex = Phaser.Display.Color.GetColor(baseCol.r * 0.1, baseCol.g * 0.1, baseCol.b * 0.1); 
+                } else if (isMentioned) {
+                    bubBgHex = 0x6B4B00; // Gold Glow for Mentions
+                    
+                    if (msgTime > this.lastSeenTime && !msg.isLocalOnly) {
+                        if (!this.pingedMessages) this.pingedMessages = new Set();
+                        if (!this.pingedMessages.has(msg.id)) {
+                            this.pingedMessages.add(msg.id);
+                            if (this.playSound) this.playSound('sfx_tick', 0.8); // Ping Sound
+                        }
+                    }
                 } else {
                     bubBgHex = Phaser.Display.Color.GetColor(baseCol.r * darkenFac, baseCol.g * darkenFac, baseCol.b * darkenFac);
                 }
@@ -1371,7 +1499,7 @@ Object.assign(MenuScene.prototype, {
                 bubbleBg.fillStyle(bubBgHex, 0.95);
                 
                 const strokeColor = Phaser.Display.Color.GetColor(baseCol.r * 0.6, baseCol.g * 0.6, baseCol.b * 0.6);
-                bubbleBg.lineStyle(2, strokeColor, 0.8);
+                bubbleBg.lineStyle(isMentioned ? 4 : 2, isMentioned ? 0xffcc00 : strokeColor, 0.8);
 
                 if (isMe) {
                     bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: 18, tr: 18, bl: 18, br: 4 });
@@ -1386,8 +1514,10 @@ Object.assign(MenuScene.prototype, {
 
                 timeTxt.setPosition(startX + bubbleW - timeWidth - 15, bubY + bubbleH - 22 - extraReactionPadding);
 
-                addItems([bubbleBg, msgTxt, timeTxt]); 
-                if (replyTxtObj) addItems(replyTxtObj); 
+                let msgVisuals = [bubbleBg, msgTxt, timeTxt];
+                if (replyTxtObj) msgVisuals.push(replyTxtObj);
+
+                addItems(msgVisuals); 
 
                 let isError = false;
                 let isSending = false;
@@ -1415,11 +1545,13 @@ Object.assign(MenuScene.prototype, {
                     finalBubbleH += 30;
                 }
 
+                let interactHit = null;
                 if (!msg.isDeleted && !isSending) {
-                    const interactHit = this.add.rectangle(startX + bubbleW/2, bubY + bubbleH/2, bubbleW, bubbleH, 0, 0);
+                    interactHit = this.add.rectangle(startX + bubbleW/2, bubY + bubbleH/2, bubbleW, bubbleH, 0, 0);
                     interactHit.isInteractHit = true;
                     interactHit.msgData = msg;
                     interactHit.isError = isError;
+                    interactHit.isMe = isMe;
                     addItems(interactHit); 
                 }
 
@@ -1443,11 +1575,16 @@ Object.assign(MenuScene.prototype, {
                             color: "#ffffff" 
                         }).setOrigin(0.5);
 
+                        msgVisuals.push(badgeBg, badgeTxt);
                         addItems([badgeBg, badgeTxt]); 
                         rxX += 95; 
                     });
                     
                     reactionSpace = 55; 
+                }
+
+                if (interactHit) {
+                    interactHit.visuals = msgVisuals; 
                 }
 
                 this.msgYMap[msg.id] = { y: bubY, h: finalBubbleH };
@@ -1494,25 +1631,81 @@ Object.assign(MenuScene.prototype, {
             isFirstLoad = false;
         };
 
+        // 🚀 NEW: Infinite Pagination Logic (Merge Live and History)
+        this.mergeAndRefreshChat = () => {
+            let merged = [...this.historyMessages, ...this.liveMessages];
+            let uniqueMap = {};
+            this.chatDataCache = [];
+            
+            merged.forEach(m => {
+                if (!uniqueMap[m.id]) {
+                    uniqueMap[m.id] = true;
+                    this.chatDataCache.push(m);
+                }
+            });
+            
+            this.chatDataCache.sort((a, b) => {
+                let ta = a.timestamp ? (typeof a.timestamp.toMillis === 'function' ? a.timestamp.toMillis() : a.timestamp) : 0;
+                let tb = b.timestamp ? (typeof b.timestamp.toMillis === 'function' ? b.timestamp.toMillis() : b.timestamp) : 0;
+                return ta - tb;
+            });
+            this.refreshChatUI();
+        };
+
         this.chatUnsubscribe = window.FirebaseTools.onSnapshot(q, (snapshot) => {
             let messages = [];
             snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
             messages.reverse();
-
-            if (messages.length > 100) {
-                const isAdmin = GameState.profile && GameState.profile.role === 'admin';
-                if (isAdmin && navigator.onLine) {
-                    const toDelete = messages.slice(0, messages.length - 100);
-                    this.cleanUpOldChats(toDelete);
-                }
-                messages = messages.slice(messages.length - 100);
-            }
-
-            this.chatDataCache = messages;
-            this.refreshChatUI();
+            this.liveMessages = messages;
+            this.mergeAndRefreshChat();
         }, (error) => {
             console.error("Global Chat Sync Error:", error);
         });
+
+        // 🚀 NEW: Load Older Messages fetcher
+        this.loadOlderMessages = async () => {
+            if (this.isLoadingHistory || this.chatDataCache.length === 0) return;
+            this.isLoadingHistory = true;
+
+            const loaderText = this.add.text(this.chatW / 2, 140, "Loading...", { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#00e1ff" }).setOrigin(0.5).setDepth(9999);
+            this.chatContainer.add(loaderText);
+
+            let dotCount = 0;
+            const loaderTimer = this.time.addEvent({
+                delay: 300, loop: true, callback: () => {
+                    dotCount = (dotCount + 1) % 4;
+                    loaderText.setText("Loading Older" + ".".repeat(dotCount));
+                }
+            });
+
+            try {
+                // Fetch oldest message (index 0 since we sort by timestamp)
+                const oldestMsg = this.chatDataCache[0];
+                if (oldestMsg && oldestMsg.timestamp) {
+                    const olderQ = window.FirebaseTools.query(
+                        chatRef,
+                        window.FirebaseTools.orderBy("timestamp", "desc"),
+                        window.FirebaseTools.startAfter(oldestMsg.timestamp),
+                        window.FirebaseTools.limit(30)
+                    );
+                    const querySnapshot = await window.FirebaseTools.getDocs(olderQ);
+                    let olderMessages = [];
+                    querySnapshot.forEach(doc => olderMessages.push({ id: doc.id, ...doc.data() }));
+
+                    if (olderMessages.length > 0) {
+                        olderMessages.reverse();
+                        this.historyMessages = [...olderMessages, ...this.historyMessages];
+                        this.mergeAndRefreshChat();
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load history", e);
+            }
+
+            loaderTimer.remove();
+            loaderText.destroy();
+            this.time.delayedCall(1000, () => this.isLoadingHistory = false);
+        };
     },
 
     async sendChatMessage() {
@@ -1522,6 +1715,16 @@ Object.assign(MenuScene.prototype, {
         let text = htmlElement.value.trim();
         if (!text || !window.FirebaseAuth || !window.FirebaseAuth.currentUser) return;
         
+        // 🚀 NEW: Rate Limiter (Max 3 messages per 5 seconds)
+        if (!this.msgTimestamps) this.msgTimestamps = [];
+        const now = Date.now();
+        this.msgTimestamps = this.msgTimestamps.filter(t => now - t < 5000);
+        if (this.msgTimestamps.length >= 3) {
+            this.showChatError("You are typing too fast! Please wait a moment.");
+            return; // Exit early without clearing input
+        }
+        this.msgTimestamps.push(now);
+
         text = this.filterBadWords(text);
 
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
@@ -1614,15 +1817,6 @@ Object.assign(MenuScene.prototype, {
             this.refreshChatUI();
             this.showChatError("Retry failed. Server issue or poor connection.");
         }
-    },
-
-    cleanUpOldChats(oldDocs) {
-        if (!navigator.onLine) return; 
-        
-        oldDocs.forEach(doc => {
-            const oldDocRef = window.FirebaseTools.doc(window.FirebaseDB, "global_chat", doc.id);
-            window.FirebaseTools.deleteDoc(oldDocRef).catch(e => console.log("Chat auto-cleanup issue:", e));
-        });
     },
 
     timeAgo(firebaseTimestamp) {
