@@ -10,6 +10,7 @@ class QuestionScene extends Phaser.Scene {
         
         this.currentGlowAlpha = 0;
         this.showerGlowAlpha = 0;
+        this.warningTriggered = false; // NEW: Track if the 15s warning has fired
     }
 
     create() {
@@ -93,7 +94,7 @@ class QuestionScene extends Phaser.Scene {
 
         const totalSkips = (GameState.freeSkips || 0) + (GameState.rewardSkips || 0);
 
-        this.skipBtn = this.add.text(rightAnchor - 60, headerY, `Skip (${totalSkips})`, {
+        this.skipBtn = this.add.text(rightAnchor - 50, headerY, `Skip (${totalSkips})`, {
             fontSize: "28px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", fontStyle: 'bold',
             backgroundColor: "rgba(255, 255, 255, 0.15)",
             padding: { x: 16, y: 10 }, stroke: '#000000', strokeThickness: 3
@@ -318,16 +319,18 @@ class QuestionScene extends Phaser.Scene {
         this.qContainer.setY(10 * (1 - uiScale)); 
         
         if (this.quickPanelEnabled) {
-            this.quickAnsContainer.setScale(uiScale);
+            let quickScale = uiScale * 0.90; 
+            
+            this.quickAnsContainer.setScale(quickScale);
             if (this.quickPanelState === 'left') {
-                this.quickAnsContainer.setX(25 * uiScale);
+                this.quickAnsContainer.setX(25 * quickScale);
             } else {
-                this.quickAnsContainer.setX(720 - (122 * uiScale));
+                this.quickAnsContainer.setX(720 - (122 * quickScale));
             }
-            this.quickAnsContainer.setY(760 - (460 * (uiScale - 1) / 2));
+            this.quickAnsContainer.setY(760 - (460 * (quickScale - 1) / 2));
         }
 
-        // --- 8. BOTTOM HUD ---
+        // --- BOTTOM HUD ---
         const uiY = h - 80;
         
         const botBar = this.add.graphics();
@@ -431,7 +434,19 @@ class QuestionScene extends Phaser.Scene {
         }
 
         let targetAlpha = 0;
+        
+        // NEW: Check Meteor Timer Progress to Trigger Warning 15 seconds before hit
         if (this.meteorTimer && !GameState.bossActive && GameState.battery >= 100) {
+            let elapsed = this.meteorTimer.getElapsed();
+            let delay = this.meteorTimer.delay;
+            let timeLeft = delay - elapsed;
+
+            // Trigger the 15-second warning text!
+            if (timeLeft <= 15000 && !this.warningTriggered) {
+                this.triggerMeteorWarning();
+                this.warningTriggered = true;
+            }
+
             const p = this.meteorTimer.getProgress();
             if (p > 0.05) {
                 targetAlpha = 0.7 * p;
@@ -511,6 +526,51 @@ class QuestionScene extends Phaser.Scene {
         });
     }
 
+    // NEW: Triggers the red urgent text
+    triggerMeteorWarning() {
+        if (this.readyText) {
+            this.readyText.setText("⚠️দ্রুত উত্তর দিন! নাহলে উল্কাপিণ্ড আঘাত হানতে যাচ্ছে!");
+            this.readyText.setColor("#ff0000");
+            
+            this.tweens.killTweensOf(this.readyText);
+            this.readyText.setScale(.95);
+            this.readyText.setAlpha(1);
+            
+            // Fast, urgent pulse
+            this.readyTween = this.tweens.add({
+                targets: this.readyText,
+                alpha: 0.8,
+                scale: 1,
+                duration: 600,
+                yoyo: true,
+                repeat: -1
+            });
+        }
+    }
+
+    // NEW: Resets the text back to normal
+    resetReadyText() {
+        if (this.readyText) {
+            this.readyText.setText("Ready! উত্তর দিন!");
+            this.readyText.setColor("#00ff00");
+            
+            this.tweens.killTweensOf(this.readyText);
+            this.readyText.setScale(1);
+            
+            if (GameState.battery >= 100 && !GameState.bossActive) {
+                this.readyText.setAlpha(1);
+                this.readyTween = this.tweens.add({
+                    targets: this.readyText,
+                    alpha: 0.4,
+                    scale: 1.05, 
+                    duration: 500,
+                    yoyo: true,
+                    repeat: -1
+                });
+            }
+        }
+    }
+
     manageMeteorTimer(isReady) {
         if (isReady && !GameState.bossActive) {
             if (!this.meteorTimer) {
@@ -520,15 +580,20 @@ class QuestionScene extends Phaser.Scene {
                         const gameScene = this.scene.get('GameScene');
                         if (gameScene && !GameState.bossActive) gameScene.spawnMeteors();
                         this.triggerMeteorShowerGlow();
+                        this.warningTriggered = false; // Reset warning state for next drop
+                        this.resetReadyText(); // Set text back to green Ready
                     },
                     loop: true 
                 });
+                this.warningTriggered = false; // Fresh reset
             }
         } else {
             if (this.meteorTimer) {
                 this.meteorTimer.remove();
                 this.meteorTimer = null;
             }
+            this.warningTriggered = false;
+            this.resetReadyText(); 
         }
     }
 
@@ -563,15 +628,18 @@ class QuestionScene extends Phaser.Scene {
 
             this.readyText.setAlpha(1);
             
-            if (!this.readyTween || !this.readyTween.isPlaying()) {
-                this.readyTween = this.tweens.add({
-                    targets: this.readyText,
-                    alpha: 0.4,
-                    scale: 1.05, 
-                    duration: 500,
-                    yoyo: true,
-                    repeat: -1
-                });
+            // Only start the normal tween if the red warning isn't currently active
+            if (!this.warningTriggered) {
+                if (!this.readyTween || !this.readyTween.isPlaying()) {
+                    this.readyTween = this.tweens.add({
+                        targets: this.readyText,
+                        alpha: 0.4,
+                        scale: 1.05, 
+                        duration: 500,
+                        yoyo: true,
+                        repeat: -1
+                    });
+                }
             }
         } else {
             this.readyText.setAlpha(0);
@@ -581,6 +649,7 @@ class QuestionScene extends Phaser.Scene {
                 this.readyTween = null;
             }
             this.readyText.setScale(1); 
+            this.resetReadyText(); // Immediately put text back to standard green state
         }
     }
 

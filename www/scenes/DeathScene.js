@@ -165,37 +165,85 @@ class DeathScene extends Phaser.Scene {
         }).setOrigin(0.5);
     }
 
-    // --- SHARE TO CHAT BUTTON ---
+    // --- SHARE TO CHAT BUTTON (PREMIUM & THICKER UI) ---
     if (totalQs > 0) {
-        const shareBtnX = w - 50;
-        const shareBtnY = titleY;
+        // Aligned perfectly to the right of your centered title text
+        const shareBtnX = cx + 290; 
+        const shareBtnY = titleY +13;
 
-        const shareBg = this.add.graphics();
-        const drawShareBg = (hover, disabled = false) => {
-            shareBg.clear();
-            if (disabled) {
-                shareBg.fillStyle(0x1e293b, 0.9);
-                shareBg.lineStyle(2, 0x475569, 1);
-            } else if (hover) {
-                shareBg.fillStyle(0x0088ff, 1);
-                shareBg.lineStyle(2, 0xffffff, 1);
-            } else {
-                shareBg.fillStyle(0x0f172a, 0.9);
-                shareBg.lineStyle(2, 0x334155, 1);
+        // Container to keep the icon and text grouped for clean scaling
+        const shareContainer = this.add.container(shareBtnX, shareBtnY).setDepth(50);
+
+        const shareIcon = this.add.graphics();
+        const shareLabel = this.add.text(0, 35, "SHARE CHAT", {
+            fontSize: "16px",
+            fontFamily: "'Anek Bangla', sans-serif",
+            fontWeight: "bold",
+            color: "#dfdfdf",
+            //shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 3, fill: true }
+        }).setOrigin(0.5);
+
+        const drawShareUI = (hover, disabled = false) => {
+            shareIcon.clear();
+            
+            const mainColor = disabled ? 0x475569 : (hover ? 0xffffff : 0x00e1ff);
+            const bgColor = disabled ? 0x1e293b : (hover ? 0x0044aa : 0x0f172a);
+            const bgAlpha = disabled ? 0.9 : (hover ? 1 : 0.6);
+
+            // Optional subtle ambient glow when hovering
+            if (hover && !disabled) {
+                shareIcon.fillStyle(0x00ffff, 0.15);
+                shareIcon.fillCircle(0, -12, 42);
             }
-            shareBg.fillRoundedRect(shareBtnX - 30, shareBtnY - 30, 60, 60, 15);
-            shareBg.strokeRoundedRect(shareBtnX - 30, shareBtnY - 30, 60, 60, 15);
-        };
-        drawShareBg(false);
 
-        const shareIcon = this.add.text(shareBtnX, shareBtnY, "📤", { fontSize: "28px" }).setOrigin(0.5);
-        const shareHit = this.add.rectangle(shareBtnX, shareBtnY, 60, 60, 0, 0).setInteractive({ useHandCursor: true });
+            // Draw thicker vector Chat Bubble
+            shareIcon.fillStyle(bgColor, bgAlpha);
+            shareIcon.fillRoundedRect(-28, -32, 56, 36, 10);
+            
+            // THICKER LINE STYLE (3.5)
+            shareIcon.lineStyle(3.5, mainColor, 1);
+            shareIcon.strokeRoundedRect(-28, -32, 56, 36, 10);
+            
+            // Chat Bubble Pointer/Tail (Adjusted for thickness)
+            shareIcon.beginPath();
+            shareIcon.moveTo(-12, 4);
+            shareIcon.lineTo(-16, 16);
+            shareIcon.lineTo(6, 4);
+            shareIcon.closePath();
+            shareIcon.fillPath();
+            shareIcon.strokePath();
+
+            // 3 Modern Message Dots (Scaled up slightly to match thickness)
+            shareIcon.fillStyle(mainColor, 1);
+            shareIcon.fillCircle(-13, -14, 3.2);
+            shareIcon.fillCircle(0, -14, 3.2);
+            shareIcon.fillCircle(13, -14, 3.2);
+        };
+        drawShareUI(false);
+
+        // A single hit area covering both the icon and the text
+        const shareHit = this.add.rectangle(0, 0, 110, 85, 0x000000, 0).setInteractive({ useHandCursor: true });
+        shareContainer.add([shareIcon, shareLabel, shareHit]);
 
         let isProcessing = false;
 
-        shareHit.on('pointerover', () => { if (!isProcessing) drawShareBg(true); });
-        shareHit.on('pointerout', () => { if (!isProcessing) drawShareBg(false); });
+        shareHit.on('pointerover', () => { 
+            if (!isProcessing) {
+                drawShareUI(true);
+                shareLabel.setColor("#ffffff");
+                this.tweens.add({ targets: shareContainer, scale: 1.08, duration: 150, ease: 'Cubic.out' });
+            } 
+        });
+        
+        shareHit.on('pointerout', () => { 
+            if (!isProcessing) {
+                drawShareUI(false);
+                shareLabel.setColor("#00e1ff");
+                this.tweens.add({ targets: shareContainer, scale: 1.0, duration: 150, ease: 'Cubic.out' });
+            } 
+        });
 
+        // Exact original functionality maintained below
         shareHit.on('pointerdown', async () => {
             if (isProcessing) return;
 
@@ -223,8 +271,8 @@ class DeathScene extends Phaser.Scene {
 
             this.playSound('sfx_click', 0.8);
             isProcessing = true;
-            drawShareBg(false, true);
-            shareIcon.setAlpha(0.5);
+            drawShareUI(false, true);
+            shareLabel.setColor("#475569");
 
             const blocksCount = 10;
             let cBlocks = Math.floor((safeCorrect / totalQs) * blocksCount);
@@ -269,20 +317,20 @@ class DeathScene extends Phaser.Scene {
                 window.FirebaseTools.addDoc(chatRef, payload).then(() => {
                     window.GameState.lastChatShareTime = Date.now();
                     this.showToast("রেজাল্ট চ্যাটে শেয়ার করা হয়েছে! 💬", false);
-                    this.tweens.add({ targets: [shareBg, shareIcon], scale: 0.9, yoyo: true, duration: 100 });
+                    this.tweens.add({ targets: shareContainer, scale: 0.9, yoyo: true, duration: 100 });
                 }).catch(e => {
                     console.error("Share failed", e);
                     this.showToast("শেয়ার ব্যর্থ হয়েছে!", true);
                     isProcessing = false;
-                    drawShareBg(false);
-                    shareIcon.setAlpha(1);
+                    drawShareUI(false);
+                    shareLabel.setColor("#00e1ff");
                 });
 
             } else {
                 this.showToast("সার্ভার সমস্যা, পরে চেষ্টা করুন।", true);
                 isProcessing = false;
-                drawShareBg(false);
-                shareIcon.setAlpha(1);
+                drawShareUI(false);
+                shareLabel.setColor("#00e1ff");
             }
         });
     }
