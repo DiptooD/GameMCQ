@@ -772,51 +772,52 @@ class MenuScene extends Phaser.Scene {
         });
         
         // FIX: Must use 'pointerup' instead of 'pointerdown' for native browser APIs
-        shareHit.on('pointerup', () => {
-            if (!canShare) return;
-            canShare = false;
+        shareHit.on('pointerup', async () => {
+    if (!canShare) return;
+    canShare = false;
 
-            this.playSound('sfx_click');
-            this.tweens.add({ targets: shareIcon, scale: 0.85, duration: 50, yoyo: true });
-            
-            const shareData = {
-                title: 'গেইম MCQ',
-                text: 'খেলতে খেলতে সাধারণ জ্ঞান যাচাই করুন গেইম MCQ-তে!',
-                url: 'https://sites.google.com/view/gamemcq'
-            };
+    const shareData = {
+        title: 'গেইম MCQ',
+        text: 'খেলতে খেলতে সাধারণ জ্ঞান যাচাই করুন গেইম MCQ-তে!',
+        url: 'https://sites.google.com/view/gamemcq'
+    };
 
-            // 1. Cordova Native Share (If packaged as an APK/AAB)
-            if (window.plugins && window.plugins.socialsharing) {
-                window.plugins.socialsharing.shareWithOptions(
-                    {
-                        message: shareData.text,
-                        subject: shareData.title,
-                        url: shareData.url
-                    },
-                    (result) => { console.log("Share success", result); },
-                    (err) => { console.log("Share failed", err); }
-                );
-            } 
-            // 2. Modern Web Share API (Mobile Browsers / PWA)
-            else if (navigator.share) {
-                navigator.share(shareData).catch(err => console.log("Share cancelled", err));
-            } 
-            // 3. Desktop / Unsupported Fallback
-            else {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(shareData.url).then(() => {
-                        this.showNotification("লিংক কপি করা হয়েছে!", "success");
-                    }).catch(() => {
-                        window.open(shareData.url, '_blank');
-                    });
-                } else {
-                    // Absolute fallback if clipboard API is also blocked
-                    window.prompt("কপি করতে নিচের লিংকটি সিলেক্ট করুন:", shareData.url);
-                }
+    // 1. FIRE SHARE API IMMEDIATELY to preserve the User Gesture token
+    try {
+        if (window.plugins && window.plugins.socialsharing) {
+            // Cordova Native Share
+            window.plugins.socialsharing.shareWithOptions(
+                { message: shareData.text, subject: shareData.title, url: shareData.url },
+                (result) => { console.log("Share success", result); },
+                (err) => { console.log("Share failed", err); }
+            );
+        } 
+        else if (navigator.share) {
+            // Modern Web Share API (Must happen before Audio context changes)
+            await navigator.share(shareData);
+        } 
+        else {
+            // Desktop / Unsupported Fallback
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    this.showNotification("লিংক কপি করা হয়েছে!", "success");
+                }).catch(() => {
+                    window.open(shareData.url, '_blank');
+                });
+            } else {
+                window.prompt("কপি করতে নিচের লিংকটি সিলেক্ট করুন:", shareData.url);
             }
+        }
+    } catch (err) {
+        console.log("Share cancelled or failed", err);
+    }
 
-            this.time.delayedCall(2500, () => { canShare = true; });
-        });
+    // 2. PLAY SOUND & TWEEN AFTER the share menu is requested
+    this.playSound('sfx_click');
+    this.tweens.add({ targets: shareIcon, scale: 0.85, duration: 50, yoyo: true });
+
+    this.time.delayedCall(2500, () => { canShare = true; });
+});
 
         // --- 2. EXIT SECTION (Right 180px) ---
         const exitText = this.add.text(combX + 80 + 90, combY + combH/2, "✖ বাহির", {

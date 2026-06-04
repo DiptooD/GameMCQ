@@ -414,6 +414,9 @@ Object.assign(MenuScene.prototype, {
             // ==========================================
             // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
             // ==========================================
+           // ==========================================
+            // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
+            // ==========================================
             if (htmlElement) {
                 htmlElement.addEventListener('keydown', (e) => e.stopPropagation());
                 htmlElement.addEventListener('keypress', (event) => {
@@ -424,70 +427,68 @@ Object.assign(MenuScene.prototype, {
                     }
                 });
 
-                // Grab the physical screen height before the keyboard opens
-                const baseWindowHeight = window.innerHeight || document.documentElement.clientHeight;
+                // Helper to shift UI
+                this.shiftChatUIUp = (shiftDist) => {
+                    // Prevent shifting off-screen
+                    shiftDist = Phaser.Math.Clamp(shiftDist, 100, this.cameras.main.height * 0.55);
+                    this.chatKeyboardOffset = shiftDist;
 
+                    this.tweens.killTweensOf(this.bottomUIContainer);
+                    this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
+
+                    this.tweens.killTweensOf(this.msgListContainer);
+                    this.tweens.add({
+                        targets: this.msgListContainer,
+                        y: this.msgListContainer.y - shiftDist,
+                        duration: 250,
+                        ease: 'Cubic.easeOut',
+                        onUpdate: () => this.updateChatScrollbar()
+                    });
+                };
+
+                // Helper to reset UI
+                this.resetChatUI = () => {
+                    if (!this.isChatOpen) return;
+                    
+                    this.tweens.killTweensOf(this.bottomUIContainer);
+                    this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
+
+                    this.tweens.killTweensOf(this.msgListContainer);
+                    this.tweens.add({
+                        targets: this.msgListContainer,
+                        y: this.msgListContainer.y + this.chatKeyboardOffset,
+                        duration: 250,
+                        ease: 'Cubic.easeOut',
+                        onUpdate: () => this.updateChatScrollbar()
+                    });
+
+                    this.chatKeyboardOffset = 0;
+                };
+
+                // 1. NATIVE CORDOVA EVENTS (Using the Plugin)
+                window.addEventListener('keyboardWillShow', (e) => {
+                    // The plugin gives us the exact keyboard height! Convert it to Phaser's scale.
+                    let scaleRatio = this.cameras.main.height / window.innerHeight;
+                    let exactShift = e.keyboardHeight * scaleRatio;
+                    this.shiftChatUIUp(exactShift);
+                });
+
+                window.addEventListener('keyboardWillHide', () => {
+                    this.resetChatUI();
+                    if (htmlElement) htmlElement.blur(); 
+                });
+
+                // 2. WEB BROWSER FALLBACK (For testing on PC/Web)
                 htmlElement.addEventListener('focus', () => {
-                    // Force the browser to natively scroll the input into view. 
-                    // This helps fix issues where inputs get clipped completely.
-                    setTimeout(() => {
-                        htmlElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 200);
-
-                    // Wait for the slow mobile keyboard animation to finish (usually 300-350ms)
-                    setTimeout(() => {
-                        let currentHeight = window.innerHeight || document.documentElement.clientHeight;
-                        let shiftDist = 0;
-
-                        // Check if the window physically shrunk (Android usually does this)
-                        if (currentHeight < baseWindowHeight - 50) {
-                            let diff = baseWindowHeight - currentHeight;
-                            let scale = this.cameras.main.height / baseWindowHeight;
-                            shiftDist = diff * scale;
-                        } else {
-                            // The window didn't shrink. The keyboard just overlaid the screen (iOS usually does this).
-                            // Safely shift the UI up by 40% of the game height to guarantee it clears the keyboard.
-                            shiftDist = this.cameras.main.height * 0.32;
-                        }
-
-                        // Ensure we don't accidentally shift it completely off the top edge
-                        shiftDist = Phaser.Math.Clamp(shiftDist, 100, this.cameras.main.height * 0.55);
-                        this.chatKeyboardOffset = shiftDist;
-
-                        // Shift UI up
-                        this.tweens.killTweensOf(this.bottomUIContainer);
-                        this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
-
-                        // Shift Messages up so they don't get hidden behind the raised UI
-                        this.tweens.killTweensOf(this.msgListContainer);
-                        this.tweens.add({
-                            targets: this.msgListContainer,
-                            y: this.msgListContainer.y - shiftDist,
-                            duration: 250,
-                            ease: 'Cubic.easeOut',
-                            onUpdate: () => this.updateChatScrollbar()
-                        });
-                    }, 350); 
+                    if (!window.cordova || !window.Keyboard) {
+                        setTimeout(() => htmlElement.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+                        this.shiftChatUIUp(this.cameras.main.height * 0.35); // Generic guess for web
+                    }
                 });
 
                 htmlElement.addEventListener('blur', () => {
-                    if (this.isChatOpen) {
-                        // Return UI to normal
-                        this.tweens.killTweensOf(this.bottomUIContainer);
-                        this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
-
-                        this.tweens.killTweensOf(this.msgListContainer);
-                        this.tweens.add({
-                            targets: this.msgListContainer,
-                            y: this.msgListContainer.y + this.chatKeyboardOffset,
-                            duration: 250,
-                            ease: 'Cubic.easeOut',
-                            onUpdate: () => this.updateChatScrollbar()
-                        });
-
-                        this.chatKeyboardOffset = 0;
-                        
-                        // Just in case the browser scrolled natively, gently return it to the top
+                    if (!window.cordova || !window.Keyboard) {
+                        this.resetChatUI();
                         setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 100);
                     }
                 });
