@@ -317,7 +317,7 @@ Object.assign(MenuScene.prototype, {
                 let easeType = 'Quart.easeOut';
 
                 if (Math.abs(velocity) > 0.2) {
-                    let amplitude = velocity * 650; 
+                    let amplitude = velocity * 750; 
                     targetY += amplitude;
                     duration = Math.min(Math.abs(amplitude) * 1.5, 1200);
                 }
@@ -412,8 +412,7 @@ Object.assign(MenuScene.prototype, {
             const htmlElement = this.chatInput.getChildByID('chatInput');
             
             // ==========================================
-            // ==========================================
-            // 🚀 SIMPLIFIED, CONFLICT-FREE KEYBOARD LOGIC
+            // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
             // ==========================================
             if (htmlElement) {
                 htmlElement.addEventListener('keydown', (e) => e.stopPropagation());
@@ -425,53 +424,72 @@ Object.assign(MenuScene.prototype, {
                     }
                 });
 
+                // Grab the physical screen height before the keyboard opens
+                const baseWindowHeight = window.innerHeight || document.documentElement.clientHeight;
+
                 htmlElement.addEventListener('focus', () => {
-                    // 1. Wait 300ms for the keyboard to finish sliding up
+                    // Force the browser to natively scroll the input into view. 
+                    // This helps fix issues where inputs get clipped completely.
                     setTimeout(() => {
-                        // 2. Cancel the browser's native auto-scroll to stop the "Double Shift"
-                        window.scrollTo(0, 0); 
-                        document.body.scrollTop = 0;
+                        htmlElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 200);
 
-                        // 3. Shift by 32% (this is usually the sweet spot for modern keyboards, 40% is too high)
-                        let shiftDist = this.cameras.main.height * 0.32; 
+                    // Wait for the slow mobile keyboard animation to finish (usually 300-350ms)
+                    setTimeout(() => {
+                        let currentHeight = window.innerHeight || document.documentElement.clientHeight;
+                        let shiftDist = 0;
 
-                        // 4. Tween the Input box up
+                        // Check if the window physically shrunk (Android usually does this)
+                        if (currentHeight < baseWindowHeight - 50) {
+                            let diff = baseWindowHeight - currentHeight;
+                            let scale = this.cameras.main.height / baseWindowHeight;
+                            shiftDist = diff * scale;
+                        } else {
+                            // The window didn't shrink. The keyboard just overlaid the screen (iOS usually does this).
+                            // Safely shift the UI up by 40% of the game height to guarantee it clears the keyboard.
+                            shiftDist = this.cameras.main.height * 0.32;
+                        }
+
+                        // Ensure we don't accidentally shift it completely off the top edge
+                        shiftDist = Phaser.Math.Clamp(shiftDist, 100, this.cameras.main.height * 0.55);
+                        this.chatKeyboardOffset = shiftDist;
+
+                        // Shift UI up
                         this.tweens.killTweensOf(this.bottomUIContainer);
-                        this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 200, ease: 'Power2' });
+                        this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
 
-                        // 5. Tween the Messages up so they don't get covered
-                        let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                        // Shift Messages up so they don't get hidden behind the raised UI
                         this.tweens.killTweensOf(this.msgListContainer);
                         this.tweens.add({
                             targets: this.msgListContainer,
-                            y: dynamicTopOffset - this.chatMaxScroll - shiftDist,
-                            duration: 200,
-                            ease: 'Power2',
+                            y: this.msgListContainer.y - shiftDist,
+                            duration: 250,
+                            ease: 'Cubic.easeOut',
                             onUpdate: () => this.updateChatScrollbar()
                         });
-                    }, 300); 
+                    }, 350); 
                 });
 
                 htmlElement.addEventListener('blur', () => {
-                    // 1. Reset the UI back to normal when the keyboard closes
-                    this.tweens.killTweensOf(this.bottomUIContainer);
-                    this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 200, ease: 'Power2' });
+                    if (this.isChatOpen) {
+                        // Return UI to normal
+                        this.tweens.killTweensOf(this.bottomUIContainer);
+                        this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
 
-                    let dynamicTopOffset = 125 + this.currentPinnedHeight;
-                    this.tweens.killTweensOf(this.msgListContainer);
-                    this.tweens.add({
-                        targets: this.msgListContainer,
-                        y: dynamicTopOffset - this.chatMaxScroll,
-                        duration: 200,
-                        ease: 'Power2',
-                        onUpdate: () => this.updateChatScrollbar()
-                    });
+                        this.tweens.killTweensOf(this.msgListContainer);
+                        this.tweens.add({
+                            targets: this.msgListContainer,
+                            y: this.msgListContainer.y + this.chatKeyboardOffset,
+                            duration: 250,
+                            ease: 'Cubic.easeOut',
+                            onUpdate: () => this.updateChatScrollbar()
+                        });
 
-                    // 2. Ensure the window is snapped back perfectly
-                    setTimeout(() => {
-                        window.scrollTo(0, 0);
-                        document.body.scrollTop = 0;
-                    }, 100);
+                        this.chatKeyboardOffset = 0;
+                        
+                        // Just in case the browser scrolled natively, gently return it to the top
+                        setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 100);
+                    }
                 });
             }
         } else {
@@ -483,12 +501,43 @@ Object.assign(MenuScene.prototype, {
             const loginHit = this.add.rectangle(this.chatW / 2, inputY, 350, 70, 0x000000, 0).setInteractive({useHandCursor: true});
 
             loginHit.on('pointerdown', () => {
+                // --- SPAM PROOF CHECK ---
+                if (window.isAuthenticating) return; 
+
                 if (!navigator.onLine) {
                     if (this.showNotification) this.showNotification("Connection lost. Cannot connect.", "error");
                     return;
                 }
+
+                window.isAuthenticating = true;
                 if (this.playSound) this.playSound('sfx_click');
-                if (window.signInWithGoogle) window.signInWithGoogle().then(() => this.scene.restart());
+
+                // --- 3-DOTS LOADER ANIMATION ---
+                let dotCount = 0;
+                loginTxt.setText("Connecting.");
+                let dotTimer = this.time.addEvent({
+                    delay: 400, loop: true,
+                    callback: () => {
+                        dotCount = (dotCount + 1) % 4;
+                        loginTxt.setText("Connecting" + ".".repeat(dotCount));
+                    }
+                });
+
+                if (window.signInWithGoogle) {
+                    window.signInWithGoogle().then(() => {
+                        window.isAuthenticating = false;
+                        if (dotTimer) dotTimer.remove();
+                        this.scene.restart();
+                    }).catch(() => {
+                        window.isAuthenticating = false;
+                        if (dotTimer) dotTimer.remove();
+                        loginTxt.setText("Connect (Google)");
+                    });
+                } else {
+                    window.isAuthenticating = false;
+                    if (dotTimer) dotTimer.remove();
+                    loginTxt.setText("Connect (Google)");
+                }
             });
 
             this.chatLoginElements = [promptTxt, loginBg, loginTxt, loginHit];

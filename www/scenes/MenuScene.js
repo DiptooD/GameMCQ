@@ -349,21 +349,53 @@ class MenuScene extends Phaser.Scene {
         const connectHit = this.add.rectangle(0, 120, 280, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         connectHit.on('pointerdown', () => {
+            // --- SPAM PROOF CHECK ---
+            if (window.isAuthenticating) return;
+            window.isAuthenticating = true;
+
             this.playSound('sfx_click');
-            localStorage.setItem('google_prompt_seen', 'true');
-            overlay.destroy();
-            container.destroy();
+
+            // --- 3-DOTS LOADER ANIMATION ---
+            let dotCount = 0;
+            connectBtnTxt.setText("Connecting.");
+            let dotTimer = this.time.addEvent({
+                delay: 400, loop: true,
+                callback: () => {
+                    dotCount = (dotCount + 1) % 4;
+                    connectBtnTxt.setText("Connecting" + ".".repeat(dotCount));
+                }
+            });
+
             if (window.signInWithGoogle) {
                 let res = window.signInWithGoogle();
                 if (res && res.then) {
                     res.then(() => {
+                        window.isAuthenticating = false;
+                        if (dotTimer) dotTimer.remove();
+
+                        localStorage.setItem('google_prompt_seen', 'true');
+                        overlay.destroy();
+                        container.destroy();
+                        
                         this.showNotification("Google Account Connected!\nCloud sync active.", "success");
                         if (this.profileRedDot) this.profileRedDot.setVisible(false);
                     }).catch((error) => {
+                        window.isAuthenticating = false;
+                        if (dotTimer) dotTimer.remove();
+                        connectBtnTxt.setText("Connect Google");
+                        
                         console.error("Sign in failed:", error);
                         this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
                     });
+                } else {
+                    window.isAuthenticating = false;
+                    if (dotTimer) dotTimer.remove();
+                    connectBtnTxt.setText("Connect Google");
                 }
+            } else {
+                 window.isAuthenticating = false;
+                 if (dotTimer) dotTimer.remove();
+                 connectBtnTxt.setText("Connect Google");
             }
         });
 

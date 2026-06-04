@@ -409,16 +409,35 @@ class PlayerProfileScene extends Phaser.Scene {
 
         // 👉 NEW: Trigger Google API and give Name & Bonus
         this.connHitArea.on('pointerdown', () => {
+            // --- SPAM PROOF CHECK ---
+            if (window.isAuthenticating) return;
+            
             this.playSound('sfx_click');
             const currentlyConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
             
             if (currentlyConnected) {
                 this.showLogoutConfirmation();
             } else {
+                window.isAuthenticating = true;
+                
+                // --- 3-DOTS LOADER ANIMATION ---
+                let dotCount = 0;
+                this.connBtnTxt.setText("Connecting.");
+                let dotTimer = this.time.addEvent({
+                    delay: 400, loop: true,
+                    callback: () => {
+                        dotCount = (dotCount + 1) % 4;
+                        this.connBtnTxt.setText("Connecting" + ".".repeat(dotCount));
+                    }
+                });
+
                 if (window.signInWithGoogle) {
                     let res = window.signInWithGoogle();
                     if (res && res.then) {
                         res.then(() => {
+                            window.isAuthenticating = false;
+                            if (dotTimer) dotTimer.remove();
+                            
                             this.showNotification("Google Account Connected!\nCloud sync active.", "success");
                             
                             // Check if the current name is default, empty, or "GUEST"
@@ -445,9 +464,20 @@ class PlayerProfileScene extends Phaser.Scene {
                             }
                             
                         }).catch(() => {
+                            window.isAuthenticating = false;
+                            if (dotTimer) dotTimer.remove();
+                            this.updateConnectionUI(false); 
                             this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
                         });
+                    } else {
+                        window.isAuthenticating = false;
+                        if (dotTimer) dotTimer.remove();
+                        this.updateConnectionUI(false); 
                     }
+                } else {
+                    window.isAuthenticating = false;
+                    if (dotTimer) dotTimer.remove();
+                    this.updateConnectionUI(false);
                 }
             }
         });
