@@ -412,8 +412,7 @@ Object.assign(MenuScene.prototype, {
             const htmlElement = this.chatInput.getChildByID('chatInput');
             
             // ==========================================
-            // ==========================================
-            // 🚀 IMPROVED CROSS-DEVICE KEYBOARD LOGIC
+            // 🚀 NEW ROCK-SOLID MOBILE KEYBOARD LOGIC
             // ==========================================
             if (htmlElement) {
                 htmlElement.addEventListener('keydown', (e) => e.stopPropagation());
@@ -428,95 +427,69 @@ Object.assign(MenuScene.prototype, {
                 // Grab the physical screen height before the keyboard opens
                 const baseWindowHeight = window.innerHeight || document.documentElement.clientHeight;
 
-                // Create a dynamic handler that fires exactly as the keyboard animates
-                const handleKeyboardShift = () => {
-                    if (!this.isChatOpen) return;
+                htmlElement.addEventListener('focus', () => {
+                    // Force the browser to natively scroll the input into view. 
+                    // This helps fix issues where inputs get clipped completely.
+                    setTimeout(() => {
+                        htmlElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 200);
 
-                    // Use VisualViewport API if available (highly accurate on modern iOS/Android)
-                    const viewport = window.visualViewport || window;
-                    const currentHeight = viewport.height;
-                    
-                    // If the viewport height shrinks, the keyboard is open
-                    if (currentHeight < baseWindowHeight - 50) {
-                        let diffPixels = baseWindowHeight - currentHeight;
-                        let scale = this.cameras.main.height / baseWindowHeight;
-                        
-                        // Calculate exact shift needed in Phaser coordinates
-                        let shiftDist = diffPixels * scale;
-                        
-                        // FIX: The "Double Shift" Preventer
-                        // If iOS natively forces the page to scroll, offsetTop will be > 0.
-                        // We subtract this from our shift so we don't push it up twice.
-                        let autoScrollDiff = (viewport.offsetTop || 0) * scale;
-                        shiftDist -= autoScrollDiff;
+                    // Wait for the slow mobile keyboard animation to finish (usually 300-350ms)
+                    setTimeout(() => {
+                        let currentHeight = window.innerHeight || document.documentElement.clientHeight;
+                        let shiftDist = 0;
 
-                        // Ensure we don't shift into negative values
-                        shiftDist = Math.max(0, shiftDist);
+                        // Check if the window physically shrunk (Android usually does this)
+                        if (currentHeight < baseWindowHeight - 50) {
+                            let diff = baseWindowHeight - currentHeight;
+                            let scale = this.cameras.main.height / baseWindowHeight;
+                            shiftDist = diff * scale;
+                        } else {
+                            // The window didn't shrink. The keyboard just overlaid the screen (iOS usually does this).
+                            // Safely shift the UI up by 40% of the game height to guarantee it clears the keyboard.
+                            shiftDist = this.cameras.main.height * 0.40;
+                        }
+
+                        // Ensure we don't accidentally shift it completely off the top edge
+                        shiftDist = Phaser.Math.Clamp(shiftDist, 100, this.cameras.main.height * 0.55);
                         this.chatKeyboardOffset = shiftDist;
 
-                        // Smoothly snap UI to the exact top of the keyboard
+                        // Shift UI up
                         this.tweens.killTweensOf(this.bottomUIContainer);
-                        this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 150, ease: 'Sine.easeOut' });
+                        this.tweens.add({ targets: this.bottomUIContainer, y: -shiftDist, duration: 250, ease: 'Cubic.easeOut' });
 
-                        // Keep messages visible above the input box
-                        let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                        // Shift Messages up so they don't get hidden behind the raised UI
                         this.tweens.killTweensOf(this.msgListContainer);
                         this.tweens.add({
                             targets: this.msgListContainer,
-                            y: dynamicTopOffset - this.chatMaxScroll - shiftDist,
-                            duration: 150,
-                            ease: 'Sine.easeOut',
+                            y: this.msgListContainer.y - shiftDist,
+                            duration: 250,
+                            ease: 'Cubic.easeOut',
                             onUpdate: () => this.updateChatScrollbar()
                         });
-                    } else {
-                        // Keyboard is fully closed
-                        this.chatKeyboardOffset = 0;
-                        
+                    }, 350); 
+                });
+
+                htmlElement.addEventListener('blur', () => {
+                    if (this.isChatOpen) {
+                        // Return UI to normal
                         this.tweens.killTweensOf(this.bottomUIContainer);
                         this.tweens.add({ targets: this.bottomUIContainer, y: 0, duration: 250, ease: 'Cubic.easeOut' });
 
-                        let dynamicTopOffset = 125 + this.currentPinnedHeight;
                         this.tweens.killTweensOf(this.msgListContainer);
                         this.tweens.add({
                             targets: this.msgListContainer,
-                            y: dynamicTopOffset - this.chatMaxScroll,
+                            y: this.msgListContainer.y + this.chatKeyboardOffset,
                             duration: 250,
                             ease: 'Cubic.easeOut',
                             onUpdate: () => this.updateChatScrollbar()
                         });
 
-                        // Gently snap the native browser window back into place
-                        setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' }), 50);
+                        this.chatKeyboardOffset = 0;
+                        
+                        // Just in case the browser scrolled natively, gently return it to the top
+                        setTimeout(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, 100);
                     }
-                };
-
-                // Attach smart listeners
-                if (window.visualViewport) {
-                    window.visualViewport.addEventListener('resize', handleKeyboardShift);
-                    // Catch iOS native scrolling quirks
-                    window.visualViewport.addEventListener('scroll', handleKeyboardShift); 
-                } else {
-                    window.addEventListener('resize', handleKeyboardShift);
-                }
-
-                // Cleanup listeners when the scene shuts down to prevent memory leaks
-                this.events.once('shutdown', () => {
-                    if (window.visualViewport) {
-                        window.visualViewport.removeEventListener('resize', handleKeyboardShift);
-                        window.visualViewport.removeEventListener('scroll', handleKeyboardShift);
-                    } else {
-                        window.removeEventListener('resize', handleKeyboardShift);
-                    }
-                });
-
-                htmlElement.addEventListener('focus', () => {
-                    // Removed 'scrollIntoView' and hardcoded setTimeout delays.
-                    // The resize event above will instantly catch the focus math automatically.
-                });
-
-                htmlElement.addEventListener('blur', () => {
-                    // Fallback safety reset in case the resize event misses the blur
-                    setTimeout(handleKeyboardShift, 200);
                 });
             }
         } else {
