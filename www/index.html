@@ -26,7 +26,8 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    
     const firebaseConfig = {
       apiKey: "AIzaSyCT-5xo5GAmbloUaYIweUm81QQvz8uWgGM",
       authDomain: "gamemcq.firebaseapp.com",
@@ -42,12 +43,12 @@ import { getFirestore, doc, setDoc, getDoc, collection, query, orderBy, limit, g
     window.FirebaseAuth.useDeviceLanguage(); 
     window.FirebaseDB = getFirestore(app);
     
-window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp };
+    window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp };
+    
     window.connectToCloud = function() {
         return new Promise(async (resolve) => {
             console.log("Checking Firebase Auth state...");
             
-            // --- NEW: Robust check before attempting Cloud Sync ---
             const isOnline = await window.checkRealConnection();
             if (!isOnline) {
                 console.log("No internet. Playing offline.");
@@ -61,7 +62,6 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
                     const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", user.uid);
                     try {
                         const saveFile = await window.FirebaseTools.getDoc(playerRef);
-                        // ... (keep the rest of your existing saveFile code here) ...
                         if (saveFile.exists()) {
                             console.log("Cloud save found! Syncing data to device...");
                             const cloudData = saveFile.data();
@@ -99,7 +99,6 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
 
     window.signInWithGoogle = function() {
         return new Promise(async (resolve, reject) => {
-            // --- NEW: Robust check before triggering the Google Auth flow ---
             const isOnline = await window.checkRealConnection();
             if (!isOnline) {
                 alert("Please connect to the internet to sign in.");
@@ -111,7 +110,9 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
                     window.plugins.googleplus.login(
                         {
                             'webClientId': '1060690619330-cb5uqvur0e3c6p1290ie61j6n61nkrq7.apps.googleusercontent.com',
-                            'offline': true
+                            'offline': true,
+                            // Ensure the native SDK forces account selection
+                            'prompt': 'select_account' 
                         },
                         async function (obj) {
                             try {
@@ -142,7 +143,7 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
                 } else {
                     const provider = new window.FirebaseTools.GoogleAuthProvider();
                     
-                    // --- NEW: Force the Google Account Chooser every time ---
+                    // Force the Google Account Chooser every time on the web
                     provider.setCustomParameters({
                         prompt: 'select_account'
                     });
@@ -193,54 +194,11 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
         return new Promise((resolve, reject) => {
             if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
                 window.FirebaseAuth.signOut().then(() => {
-                    // Use logout() instead of disconnect() to cleanly clear the session 
-                    // without revoking app permissions entirely.
-                    if (window.cordova && window.plugins && window.plugins.googleplus) {
-                        window.plugins.googleplus.logout(
-                            function (msg) { resolve(); },
-                            function (err) { resolve(); } 
-                        );
-                    } else {
-                        resolve(); 
-                    }
-                }).catch(reject);
-            } else {
-                resolve();
-            }
-        });
-    };
-
-    window.syncAfterLogin = async function(uid) {
-        const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
-        try {
-            const saveFile = await window.FirebaseTools.getDoc(playerRef);
-            if (saveFile.exists()) {
-                const cloudData = saveFile.data();
-                const gs = window.GameState;
-                
-                if (cloudData.keys !== undefined) gs.keys = cloudData.keys;
-                if (cloudData.debris !== undefined) gs.debris = cloudData.debris;
-                if (cloudData.profile) gs.profile = cloudData.profile;
-                if (cloudData.equippedShip) gs.equippedShip = cloudData.equippedShip;
-                if (cloudData.ownedShips) gs.ownedShips = cloudData.ownedShips;
-                if (cloudData.gamesPlayed !== undefined) gs.gamesPlayed = cloudData.gamesPlayed;
-                if (cloudData.matchHistory) gs.matchHistory = cloudData.matchHistory;
-            }
-            if (window.saveGame) window.saveGame();
-        } catch (e) {
-            console.error("Error syncing after login", e);
-        }
-    };
-    // --- ADD THIS NEW LOGOUT FUNCTION ---
-    window.signOutGoogle = function() {
-        return new Promise((resolve, reject) => {
-            if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
-                window.FirebaseAuth.signOut().then(() => {
-                    // Force the native Android Google SDK to forget the account
+                    // Force the native Android Google SDK to forget the account completely
                     if (window.cordova && window.plugins && window.plugins.googleplus) {
                         window.plugins.googleplus.disconnect(
                             function (msg) { resolve(); },
-                            function (err) { resolve(); } // Resolve anyway so the UI updates
+                            function (err) { resolve(); } 
                         );
                     } else {
                         resolve(); // Web fallback
