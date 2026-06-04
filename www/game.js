@@ -258,6 +258,11 @@ window.GameState = {
 };
 
 window.updateMissionProgress = function(type, amount = 1) {
+    // Safety check: Prevent crash if missions were wiped during logout
+    if (!GameState.dailyMissions || !Array.isArray(GameState.dailyMissions)) {
+        return;
+    }
+
     if (GameState.currentSubject && GameState.currentSubject !== "all" && GameState.currentSubject !== "all_no_math") {
         return;
     }

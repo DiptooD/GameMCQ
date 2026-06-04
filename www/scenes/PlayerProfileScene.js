@@ -372,8 +372,8 @@ class PlayerProfileScene extends Phaser.Scene {
             bg.lineStyle(4, 0xff0000, 1);
             bg.strokeRoundedRect(-280, -160, 560, 320, 20);
             
-            const warnTitle = this.add.text(0, -90, "সতর্কতা!", { fontSize: "42px", fontFamily: "'Anek Bangla'", color: "#ff4444", fontStyle: "bold" }).setOrigin(0.5);
-            const desc = this.add.text(0, -15, "আপনি কি লগ আউট করতে চান?\nআপনার ক্লাউড সেভ বন্ধ হয়ে যাবে।", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8 }).setOrigin(0.5);
+            const warnTitle = this.add.text(0, -110, "সতর্কতা!", { fontSize: "42px", fontFamily: "'Anek Bangla'", color: "#ff4444", fontStyle: "bold", padding: { y: 5 } }).setOrigin(0.5);
+            const desc = this.add.text(0, -20, "আপনি কি লগ আউট করতে চান?\nফোনে সংরক্ষিত ডেটা মুছে যাবে\n তবে অ্যাকাউন্টের ডেটা অক্ষত থাকবে।", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center",padding: { y: 5 }, lineSpacing: 8 }).setOrigin(0.5);
             
             const cancelBtn = this.add.text(-130, 90, "বাতিল", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#444444", padding: {x: 30, y: 15} }).setOrigin(0.5).setInteractive({useHandCursor: true});
             const confirmBtn = this.add.text(130, 90, "লগ আউট", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", backgroundColor: "#aa0000", padding: {x: 30, y: 15} }).setOrigin(0.5).setInteractive({useHandCursor: true});
@@ -387,21 +387,16 @@ class PlayerProfileScene extends Phaser.Scene {
             confirmBtn.on('pointerdown', () => {
                 this.playSound('sfx_click');
                 
-                // Use the new global sign out that clears both Firebase AND the Native Google SDK
+                // 🚀 NEW: Wipe Data and Restart UI
                 if (window.signOutGoogle) {
                     window.signOutGoogle().then(() => {
-                        this.updateConnectionUI(false);
-                        this.showNotification("লগ আউট সফল হয়েছে।", "success"); // Logged out successfully
-                    });
-                } else if (window.FirebaseAuth && window.FirebaseAuth.signOut) {
-                    // Fallback just in case
-                    window.FirebaseAuth.signOut().then(() => {
-                        this.updateConnectionUI(false);
+                        overlay.destroy();
+                        popup.destroy();
+                        
+                        // The safest way to truly "start fresh" is to reload the game window entirely
+                        window.location.reload(); 
                     });
                 }
-                
-                overlay.destroy();
-                popup.destroy();
             });
             
             popup.add([bg, warnTitle, desc, cancelBtn, confirmBtn]);
