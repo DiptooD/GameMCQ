@@ -121,10 +121,26 @@ class InstructionScene extends Phaser.Scene {
             this.mockOptions.push({ container, bg, txt, originalY: y }); 
         }
 
-        this.actionContainer.add([this.mockPlayer, this.mockEnemy, this.mockBatteryDrop, this.mockBullet, this.handPointer]);
+        // --- 5. BEGINNER'S LUCK UI (MOCK) ---
+        this.beginnersLuckContainer = this.add.container(cx, cy - 80).setAlpha(0).setDepth(160);
+        
+        const luckIcon = this.add.text(0, -40, "🍀", { fontSize: '80px', padding: { y: 10 } }).setOrigin(0.5);
+        const luckTitle = this.add.text(0, 40, "Beginner's Luck (100%)", {
+            fontSize: "42px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold",
+            stroke: "#000000", strokeThickness: 6,
+            shadow: { offsetX: 3, offsetY: 3, color: "#004400", blur: 8, stroke: true, fill: true }
+        }).setOrigin(0.5);
+        const luckDesc = this.add.text(0, 100, "সহজ শুরু, কিন্তু ডেব্রি (Debris) কম পাবেন!", {
+            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center",
+            stroke: "#000000", strokeThickness: 3
+        }).setOrigin(0.5);
+
+        this.beginnersLuckContainer.add([luckIcon, luckTitle, luckDesc]);
+
+        this.actionContainer.add([this.mockPlayer, this.mockEnemy, this.mockBatteryDrop, this.mockBullet, this.handPointer, this.beginnersLuckContainer]);
 
 
-        // --- 5. DIALOGUE UI (OVERHAULED & REFINED) ---
+        // --- 6. DIALOGUE UI (OVERHAULED & REFINED) ---
         const dialogW = w - 40;
         const dialogH = 260;
         const dialogY = cy + 40; 
@@ -181,7 +197,7 @@ class InstructionScene extends Phaser.Scene {
 
         this.dialogContainer.add([this.dialogBg, this.stepCounter, this.skipTxtHit, this.instructionText, this.prevBtn, this.prevTxt, this.nextBtn, this.nextTxt]);
 
-        // --- 6. CONTINUOUS WEAPON FIRING SYSTEM ---
+        // --- 7. CONTINUOUS WEAPON FIRING SYSTEM ---
         this.fireTimer = this.time.addEvent({
             delay: 250, 
             loop: true,
@@ -214,7 +230,7 @@ class InstructionScene extends Phaser.Scene {
             }
         });
 
-        // --- 7. STEPS LOGIC (Refined Text) ---
+        // --- 8. STEPS LOGIC (Refined Text) ---
         this.steps = [
             { text: "মহাশূন্যে আপনাকে স্বাগতম!\nকীভাবে খেলতে হয় চলুন একনজরে শিখে নিই।", anim: this.animWelcome.bind(this) },
             { text: "স্ক্রিনে আঙুল দিয়ে ড্র্যাগ করে স্পেসশিপটি\nযেকোনো দিকে সরাতে পারবেন।", anim: this.animMove.bind(this) },
@@ -344,7 +360,8 @@ class InstructionScene extends Phaser.Scene {
                 this.mockPlayer, this.handPointer, this.mockEnemy, 
                 this.mockBatteryDrop, this.mockBullet, this.readyText, 
                 this.mockMcqContainer, this.mockShieldAura, this.skipTxtHit, 
-                this.mockSkipBtn,
+                this.mockSkipBtn, this.beginnersLuckContainer,
+                (this.beginnersLuckContainer ? this.beginnersLuckContainer.list[0] : null),
                 ...this.mockHearts
             ]); 
             
@@ -369,7 +386,8 @@ class InstructionScene extends Phaser.Scene {
             this.mockPlayer, this.handPointer, this.mockEnemy, 
             this.mockBatteryDrop, this.mockBullet, this.readyText, 
             this.mockMcqContainer, this.mockShieldAura, this.skipTxtHit, 
-            this.mockSkipBtn,
+            this.mockSkipBtn, this.beginnersLuckContainer,
+            (this.beginnersLuckContainer ? this.beginnersLuckContainer.list[0] : null),
             ...this.mockHearts
         ]); 
         
@@ -407,6 +425,7 @@ class InstructionScene extends Phaser.Scene {
         
         this.mockHearts.forEach(h => h.setAlpha(0).setScale(0.9).clearTint());
         this.mockShieldAura.setVisible(false);
+        this.beginnersLuckContainer.setAlpha(0).setScale(1);
         
         // Reset MCQ UI properly
         this.mockQText.setAlpha(1).setText("মহাশূন্যে কিভাবে শত্রুকে ধ্বংস করবেন?");
@@ -890,9 +909,32 @@ class InstructionScene extends Phaser.Scene {
     animLuck() {
         let seq = this.stepSequenceId;
         this.mockPlayer.setTexture("player_lv1");
+        
         this.tweens.add({
             targets: this.mockPlayer, y: this.mockPlayer.y - 20, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
         });
+
+        // Show Beginner's Luck UI specific to this step
+        this.beginnersLuckContainer.setAlpha(0).setScale(0.5);
+        this.tweens.add({
+            targets: this.beginnersLuckContainer,
+            alpha: 1,
+            scale: 1,
+            duration: 500,
+            ease: 'Back.out'
+        });
+
+        // Add a gentle pulsing effect to the Luck Icon
+        this.tweens.add({
+            targets: this.beginnersLuckContainer.list[0], 
+            scale: 1.2,
+            duration: 500,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+        this.playSound('sfx_powerup', 0.5);
     }
 
     animEnd() {
