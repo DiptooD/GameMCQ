@@ -839,10 +839,81 @@ class MenuScene extends Phaser.Scene {
         exitHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             this.tweens.add({ targets: [exitText], scale: 0.95, duration: 50, yoyo: true });
+            
+            // Call the confirmation popup instead of exiting directly
+            this.showExitConfirmation();
+        });
+    }
+    // --- NEW: Exit Confirmation Popup ---
+    showExitConfirmation() {
+        const cx = this.cameras.main.width / 2;
+        const cy = this.cameras.main.height / 2;
+        const w = this.cameras.main.width;
+        const h = this.cameras.main.height;
+
+        // Dark overlay blocking background clicks
+        const overlay = this.add.rectangle(cx, cy, w, h, 0x000000, 0.85).setInteractive().setDepth(10001);
+        const container = this.add.container(cx, cy).setDepth(10002);
+
+        // Popup Background
+        const bg = this.add.graphics();
+        bg.fillStyle(0x001122, 1);
+        bg.fillRoundedRect(-220, -140, 440, 280, 20);
+        bg.lineStyle(4, 0x00ffff, 1);
+        bg.strokeRoundedRect(-220, -140, 440, 280, 20);
+
+        // Title & Description
+        const title = this.add.text(0, -80, "গেম থেকে বাহির?", {
+            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#00ffff", fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        const desc = this.add.text(0, -20, "আপনি কি গেম থেকে বের হতে চান?", {
+            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center"
+        }).setOrigin(0.5);
+
+        // --- 'NO' Button (Cancel) ---
+        const noBg = this.add.graphics();
+        noBg.fillStyle(0x0066aa, 1);
+        noBg.fillRoundedRect(-180, 50, 160, 60, 25);
+        const noTxt = this.add.text(-100, 80, "না", { 
+            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" 
+        }).setOrigin(0.5);
+        const noHit = this.add.rectangle(-100, 80, 160, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        noHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            overlay.destroy();
+            container.destroy();
+        });
+
+        // --- 'YES' Button (Confirm Exit) ---
+        const yesBg = this.add.graphics();
+        yesBg.fillStyle(0xff3333, 1);
+        yesBg.fillRoundedRect(20, 50, 160, 60, 25);
+        const yesTxt = this.add.text(100, 80, "হ্যাঁ", { 
+            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" 
+        }).setOrigin(0.5);
+        const yesHit = this.add.rectangle(100, 80, 160, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        yesHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
             if (navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
+            } else {
+                // Fallback behavior if testing in a desktop browser
+                console.log("App exit triggered (Native exit only works on Cordova/Mobile)");
+                overlay.destroy();
+                container.destroy();
             }
         });
+
+        // Add everything to container
+        container.add([bg, title, desc, noBg, noTxt, noHit, yesBg, yesTxt, yesHit]);
+
+        // Pop-in animation
+        container.setScale(0.8);
+        container.setAlpha(0);
+        this.tweens.add({ targets: container, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
     }
 
     createHangarButton(x, y) {
@@ -1436,8 +1507,20 @@ class MenuScene extends Phaser.Scene {
         const div = this.add.rectangle(0, -height/2 + 50, width - 40, 1.5, 0x004488, 0.3);
         container.add(div);
 
-        let currentTab = "tips";
-        highlightBg.x = 0; 
+        // --- UPDATED: Cycle tabs on load ---
+        let currentTab = localStorage.getItem('cycle_info_tab') || "tips";
+        
+        // Determine the next tab to save for the NEXT time the game loads
+        let nextTab = "mission"; 
+        if (currentTab === "mission") nextTab = "top";
+        else if (currentTab === "top") nextTab = "tips";
+        
+        localStorage.setItem('cycle_info_tab', nextTab);
+
+        // Set the initial highlight position based on the dynamic currentTab
+        let activeTabObj = tabs.find(t => t.id === currentTab);
+        highlightBg.x = activeTabObj ? activeTabObj.xOffset : 0;
+        // -----------------------------------
 
         tabs.forEach(tab => {
             const btnHit = this.add.rectangle(tab.xOffset, tabY, tabW, 45, 0x000000, 0).setInteractive({ useHandCursor: true });
