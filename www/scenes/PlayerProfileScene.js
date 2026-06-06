@@ -31,7 +31,6 @@ class PlayerProfileScene extends Phaser.Scene {
             GameState.gamesPlayed = 0;
         }
 
-        // 👉 NEW: Check if already connected on scene load to sync name & give unclaimed bonus
         const currentlyConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         if (currentlyConnected) {
             let user = window.FirebaseAuth.currentUser;
@@ -46,7 +45,6 @@ class PlayerProfileScene extends Phaser.Scene {
                 }
             }
             
-            // Show popup if they are connected but haven't claimed the bonus yet
             if (!GameState.profile.googleBonusClaimed) {
                 this.time.delayedCall(1000, () => {
                     this.showGoogleBonusPopup();
@@ -83,13 +81,11 @@ class PlayerProfileScene extends Phaser.Scene {
         // --- PANEL LAYOUT CONFIGURATION (Adjusted for 1280h bounds) ---
         const panelW = 680;
         
-        // Panels scaled to fit larger text & buttons
         this.createIdentitySection(cx, 345, panelW, 300);
         this.createStatsSection(cx, 755, panelW, 450);
         this.createMasterySection(cx, 1205, panelW, 380);
     }
 
-    // 👉 NEW: The Bonus Popup UI
     showGoogleBonusPopup() {
         const cxScreen = this.cameras.main.width / 2;
         const cyScreen = this.cameras.main.height / 2;
@@ -113,17 +109,15 @@ class PlayerProfileScene extends Phaser.Scene {
         claimBtn.on('pointerdown', () => {
             this.playSound('sfx_powerup');
             
-            // Give Rewards
             GameState.debris = (GameState.debris || 0) + 200;
             GameState.keys = (GameState.keys || 0) + 5;
-            GameState.profile.googleBonusClaimed = true; // Mark as claimed forever
+            GameState.profile.googleBonusClaimed = true; 
             
             if (window.saveCurrency) window.saveCurrency();
             if (window.saveGame) window.saveGame();
             
             this.showNotification("Bonus Claimed Successfully!", "success");
             
-            // Animate popup closing
             this.tweens.add({
                 targets: popup, scale: 0.8, alpha: 0, duration: 250, ease: 'Power2',
                 onComplete: () => {
@@ -236,7 +230,6 @@ class PlayerProfileScene extends Phaser.Scene {
         const avatarY = 0; 
         const baseRingScale = 0.65; 
         
-        // Avatar Background & Ring (Scaled up)
         const avatarBg = this.add.graphics();
         avatarBg.fillStyle(0x020815, 0.95);
         avatarBg.fillCircle(avatarX, avatarY, 80);
@@ -251,16 +244,22 @@ class PlayerProfileScene extends Phaser.Scene {
         techRingInner.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRingInner, rotation: -Math.PI * 2, duration: 25000, repeat: -1, ease: 'Linear' });
 
-        const avatarTxt = this.add.text(avatarX, avatarY, this.rankData.avatar, { 
+        // --- AVATAR LOGIC WITH SPECIAL SKINS OVERRIDE ---
+        let currentAvatarToDisplay = this.rankData.avatar; 
+        if (GameState.equippedAvatar && GameState.equippedAvatar !== "default") {
+            const specialDef = window.SpecialItemsData && window.SpecialItemsData.find(i => i.id === GameState.equippedAvatar);
+            if (specialDef && specialDef.value) currentAvatarToDisplay = specialDef.value;
+        }
+
+        const avatarTxt = this.add.text(avatarX, avatarY, currentAvatarToDisplay, { 
             fontSize: '80px',
             shadow: { offsetX: 0, offsetY: 4, color: 'rgba(0,0,0,0.6)', blur: 8 }
         }).setOrigin(0.5);
         this.tweens.add({ targets: avatarTxt, y: avatarY - 4, duration: 2000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         const dividerX = avatarX + 130;
-        const vertDivider = this.add.rectangle(dividerX, 0, 2, 230, 0x0066aa, 0.5); // Slightly taller to match new text span
+        const vertDivider = this.add.rectangle(dividerX, 0, 2, 230, 0x0066aa, 0.5);
 
-        // FIX: Shifted everything UP to remove the top gap and center perfectly
         const textStartX = dividerX + 30; 
         const nameY = -110; 
         const rankY = -65;
@@ -276,7 +275,7 @@ class PlayerProfileScene extends Phaser.Scene {
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
-        // Edit Button (Anchored cleanly)
+        // Edit Button
         const editBtnContainer = this.add.container(textStartX, btnY);
         const editW = 110;
         const editH = 40; 
@@ -358,7 +357,6 @@ class PlayerProfileScene extends Phaser.Scene {
             nameTxt.setText(GameState.profile.n);
         };
 
-        // Mobile-friendly Logout Popup
         this.showLogoutConfirmation = () => {
             const cxScreen = this.cameras.main.width / 2;
             const cyScreen = this.cameras.main.height / 2;
@@ -387,13 +385,10 @@ class PlayerProfileScene extends Phaser.Scene {
             confirmBtn.on('pointerdown', () => {
                 this.playSound('sfx_click');
                 
-                // 🚀 NEW: Wipe Data and Restart UI
                 if (window.signOutGoogle) {
                     window.signOutGoogle().then(() => {
                         overlay.destroy();
                         popup.destroy();
-                        
-                        // The safest way to truly "start fresh" is to reload the game window entirely
                         window.location.reload(); 
                     });
                 }
@@ -402,9 +397,7 @@ class PlayerProfileScene extends Phaser.Scene {
             popup.add([bg, warnTitle, desc, cancelBtn, confirmBtn]);
         };
 
-        // 👉 NEW: Trigger Google API and give Name & Bonus
         this.connHitArea.on('pointerdown', () => {
-            // --- SPAM PROOF CHECK ---
             if (window.isAuthenticating) return;
             
             this.playSound('sfx_click');
@@ -415,7 +408,6 @@ class PlayerProfileScene extends Phaser.Scene {
             } else {
                 window.isAuthenticating = true;
                 
-                // --- 3-DOTS LOADER ANIMATION ---
                 let dotCount = 0;
                 this.connBtnTxt.setText("Connecting.");
                 let dotTimer = this.time.addEvent({
@@ -435,7 +427,6 @@ class PlayerProfileScene extends Phaser.Scene {
                             
                             this.showNotification("Google Account Connected!\nCloud sync active.", "success");
                             
-                            // Check if the current name is default, empty, or "GUEST"
                             let user = window.FirebaseAuth.currentUser;
                             if (user && user.displayName) {
                                 let currentName = GameState.profile.n;
@@ -451,7 +442,6 @@ class PlayerProfileScene extends Phaser.Scene {
 
                             this.updateConnectionUI(true);
 
-                            // Trigger the Connect Bonus Popup
                             if (!GameState.profile.googleBonusClaimed) {
                                 this.time.delayedCall(500, () => {
                                     this.showGoogleBonusPopup();
@@ -564,7 +554,7 @@ class PlayerProfileScene extends Phaser.Scene {
         const cardH = 95; 
         
         const startX = -w / 2 + 30 + cardW / 2; 
-        const startY = -70; // Pre-calculated offset inside the panel
+        const startY = -70;
 
         const statData = [
             { label: "সঠিকতার হার (Accuracy)", val: `${accuracy}%`, color: 0x00ffcc },
@@ -593,10 +583,8 @@ class PlayerProfileScene extends Phaser.Scene {
     createMasterySection(x, y, w, h) {
         const container = this.add.container(x, y + 40).setAlpha(0);
         
-        // Draw the background panel boundaries
         this.drawGlassPanel(container, 0, 0, w, h);
 
-        // Keep the exact same title as requested
         const title = this.add.text(0, -h / 2 + 40, "বিষয়ভিত্তিক তথ্য (Top 3)", {
             fontSize: '34px', fontFamily: "'Anek Bangla', sans-serif", color: '#00e1ff', fontStyle: 'bold',
             stroke: "#000000", strokeThickness: 4
@@ -615,15 +603,13 @@ class PlayerProfileScene extends Phaser.Scene {
         }).sort((a, b) => b.total - a.total).slice(0, 3);
 
         if (sortedSubs.length === 0) {
-            // Centered cleanly in the remaining space
             const noData = this.add.text(0, 20, "পর্যাপ্ত যুদ্ধ তথ্য নেই (No mission logs found)", {
                 fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#5577aa', fontStyle: 'italic'
             }).setOrigin(0.5);
             container.add(noData);
         } else {
-            // FIX: Dynamically calculate starting Y based on height to prevent clipping
             let currY = -h / 2 + 130; 
-            const ySpacing = 95; // Reduced from 105 to keep all 3 items inside
+            const ySpacing = 95; 
             const barW = w - 80;
 
             sortedSubs.forEach((sub, i) => {
@@ -633,7 +619,6 @@ class PlayerProfileScene extends Phaser.Scene {
                 const color = sub.acc >= 0.8 ? 0x00ff88 : (sub.acc >= 0.5 ? 0xffcc00 : 0xff4444);
                 const colorStr = "#" + color.toString(16).padStart(6, '0');
 
-                // Slightly adjusted font sizes for a cleaner hierarchy within tighter space
                 const nameTxt = this.add.text(-barW / 2, currY - 18, `${i + 1}. ${sub.name}`, {
                     fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold'
                 }).setOrigin(0, 0.5);
@@ -643,7 +628,6 @@ class PlayerProfileScene extends Phaser.Scene {
                     stroke: "#000000", strokeThickness: 3
                 }).setOrigin(1, 0.5);
 
-                // Progress Bar
                 const barBg = this.add.graphics();
                 barBg.fillStyle(0x000a1a, 1);
                 barBg.fillRoundedRect(-barW / 2, currY + 5, barW, 14, 7);
@@ -653,14 +637,12 @@ class PlayerProfileScene extends Phaser.Scene {
                 barFill.fillStyle(color, 1);
                 barFill.fillRoundedRect(-barW / 2, currY + 5, fillW, 14, 7);
 
-                // Detail text tucked neatly beneath the bar
                 const detailTxt = this.add.text(barW / 2, currY + 34, `${sub.r}/${sub.total} Correct`, {
                     fontSize: '20px', fontFamily: "Arial", color: '#88aacc'
                 }).setOrigin(1, 0.5);
 
                 container.add([nameTxt, accTxt, barBg, barFill, detailTxt]);
                 
-                // Increment Y for the next subject
                 currY += ySpacing;
             });
         }

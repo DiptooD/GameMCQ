@@ -18,9 +18,11 @@ class ShopScene extends Phaser.Scene {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
 
-        if (typeof GameSFX !== 'undefined') {
-            GameSFX.init(this);
-        }
+        // Initialize Audio and Textures so they are available immediately
+        if (typeof GameSFX !== 'undefined') GameSFX.init(this);
+        if (typeof GameTextures !== 'undefined') GameTextures.init(this);
+        if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
+        if (typeof SpecialItemsTexture !== 'undefined') SpecialItemsTexture.init(this);
 
         let menuMusic = this.sound.get('menubgm');
         const targetMusicVol = (window.GameState && window.GameState.musicVolume !== undefined) ? window.GameState.musicVolume : 0.5;
@@ -30,9 +32,7 @@ class ShopScene extends Phaser.Scene {
             menuMusic.play();
         } else {
             menuMusic.setVolume(targetMusicVol);
-            if (!menuMusic.isPlaying) {
-                menuMusic.play();
-            }
+            if (!menuMusic.isPlaying) menuMusic.play();
         }
 
         this.handleBack = () => {
@@ -49,23 +49,12 @@ class ShopScene extends Phaser.Scene {
         this.createBackground();
 
         const title = this.add.text(cx, 160, "দোকান", {
-            fontSize: "76px",
-            fontFamily: "'Anek Bangla'",
-            fontWeight: 800,
-            color: "#00e1ff",
-            stroke: "#000000",
-            strokeThickness: 8,
+            fontSize: "76px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#00e1ff",
+            stroke: "#000000", strokeThickness: 8,
             shadow: { offsetX: 0, offsetY: 4, color: "#0044aa", blur: 15, fill: true, stroke: true }
         }).setOrigin(0.5);
 
-        this.tweens.add({
-            targets: title,
-            y: title.y - 5,
-            duration: 1500,
-            yoyo: true,
-            repeat: -1,
-            ease: 'Sine.easeInOut'
-        });
+        this.tweens.add({ targets: title, y: title.y - 5, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         this.createTopUI();
         this.createCurrencyUI();
@@ -87,15 +76,10 @@ class ShopScene extends Phaser.Scene {
         this.refreshContent();
 
         this.scrollState = { isDragging: false, velocityY: 0 };
-        let startY = 0;
-        let lastY = 0;
-        let containerStartY = 0;
-        let lastTime = 0;
+        let startY = 0, lastY = 0, containerStartY = 0, lastTime = 0;
 
         this.input.on('pointerdown', (pointer) => {
-            if (pointer.y < topMargin) return; 
-            if (this.contentHeight <= this.visibleHeight) return; 
-
+            if (pointer.y < topMargin || this.contentHeight <= this.visibleHeight) return; 
             this.scrollState.isDragging = true;
             this.scrollState.velocityY = 0;
             startY = pointer.y;
@@ -111,39 +95,31 @@ class ShopScene extends Phaser.Scene {
 
                 const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
 
-                if (newY > this.listStartY) {
-                    newY = this.listStartY + (newY - this.listStartY) * 0.4;
-                } else if (newY < this.listStartY + minScroll) {
-                    newY = this.listStartY + minScroll + (newY - (this.listStartY + minScroll)) * 0.4;
-                }
+                if (newY > this.listStartY) newY = this.listStartY + (newY - this.listStartY) * 0.4;
+                else if (newY < this.listStartY + minScroll) newY = this.listStartY + minScroll + (newY - (this.listStartY + minScroll)) * 0.4;
                 
                 this.container.y = newY;
-
-                const now = this.time.now;
-                const dt = now - lastTime;
+                const dt = this.time.now - lastTime;
                 
                 if (dt > 0) {
-                    const instantVelocity = (pointer.y - lastY) / dt;
-                    this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (instantVelocity * 0.6);
+                    this.scrollState.velocityY = (this.scrollState.velocityY * 0.4) + (((pointer.y - lastY) / dt) * 0.6);
                 }
-                
-                lastTime = now;
-                lastY = pointer.y;
+                lastTime = this.time.now; lastY = pointer.y;
             }
         });
 
-        const stopDrag = () => { 
+        const stopDrag = (pointer) => { 
             this.scrollState.isDragging = false; 
+            if (pointer && typeof pointer.y === 'number') {
+                if (Math.abs(pointer.y - startY) < 15) {
+                    this.scrollState.velocityY = 0;
+                }
+            }
         };
-        
         this.input.on('pointerup', stopDrag);
         this.input.on('pointerout', stopDrag);
 
-        this.time.addEvent({
-            delay: 1000,
-            loop: true,
-            callback: () => this.updateTimers()
-        });
+        this.time.addEvent({ delay: 1000, loop: true, callback: () => this.updateTimers() });
 
         this.events.on('shutdown', () => {
             document.removeEventListener("backbutton", this.handleBack);
@@ -152,19 +128,13 @@ class ShopScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        if (this.scrollingBg) {
-            this.scrollingBg.tilePositionY -= 0.6;
-        }
-
+        if (this.scrollingBg) this.scrollingBg.tilePositionY -= 0.6;
         if (this.backgroundLayers) {
             this.backgroundLayers.forEach(layer => {
                 layer.group.children.iterate(star => {
                     if (star) {
                         star.y += layer.speed;
-                        if (star.y > this.cameras.main.height) {
-                            star.y = -10;
-                            star.x = Phaser.Math.Between(0, 720);
-                        }
+                        if (star.y > this.cameras.main.height) { star.y = -10; star.x = Phaser.Math.Between(0, 720); }
                     }
                 });
             });
@@ -175,7 +145,6 @@ class ShopScene extends Phaser.Scene {
                 const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
                 let vY = this.scrollState.velocityY;
                 let currentY = this.container.y;
-
                 const timeScale = delta / 16.66; 
 
                 if (Math.abs(vY) > 0.01) {
@@ -190,7 +159,6 @@ class ShopScene extends Phaser.Scene {
                     currentY += ((this.listStartY + minScroll) - currentY) * 0.15 * timeScale;
                     if (Math.abs((this.listStartY + minScroll) - currentY) < 0.5) currentY = this.listStartY + minScroll;
                 }
-
                 this.container.y = currentY;
             } else {
                 this.scrollState.velocityY *= 0.9; 
@@ -200,13 +168,9 @@ class ShopScene extends Phaser.Scene {
 
     playSound(key, baseVolume = 1.0) {
         if (!this.sound || !this.cache.audio.exists(key)) return;
-        
         const globalSfxVol = (window.GameState && window.GameState.sfxVolume !== undefined) ? window.GameState.sfxVolume : 1.0;
         const finalVolume = Phaser.Math.Clamp(baseVolume * globalSfxVol, 0, 1);
-        
-        if (finalVolume > 0) {
-            this.sound.play(key, { volume: finalVolume });
-        }
+        if (finalVolume > 0) this.sound.play(key, { volume: finalVolume });
     }
 
     sanitizeBanglaText(text) {
@@ -216,57 +180,39 @@ class ShopScene extends Phaser.Scene {
 
     createTopUI() {
         const backContainer = this.add.container(100, 65);
-
         const backBg = this.add.graphics();
         backBg.fillStyle(0x001122, 0.8);
         backBg.fillRoundedRect(-70, -30, 140, 60, 30);
         backBg.lineStyle(3, 0x0066aa, 0.9);
         backBg.strokeRoundedRect(-70, -30, 140, 60, 30);
-
         const hitArea = this.add.rectangle(0, 0, 140, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
-
         const backArrow = this.add.text(-35, 0, "◄", { fontSize: "28px", color: "#00ffff" }).setOrigin(0.5);
-        const backText = this.add.text(15, 0, "BACK", { 
-            fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#ffffff"
-        }).setOrigin(0.5);
-
+        const backText = this.add.text(15, 0, "BACK", { fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff" }).setOrigin(0.5);
         backContainer.add([backBg, backArrow, backText, hitArea]);
 
         hitArea.on('pointerdown', () => {
-            this.tweens.add({
-                targets: backContainer, scale: 0.9, duration: 50, yoyo: true,
-                onComplete: () => this.handleBack()
-            });
+            this.tweens.add({ targets: backContainer, scale: 0.9, duration: 50, yoyo: true, onComplete: () => this.handleBack() });
         });
     }
 
     createCurrencyUI() {
         const keys = (window.GameState && window.GameState.keys) || 0;
         const debris = (window.GameState && window.GameState.debris) || 0;
-
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 0.8);
         bg.fillRoundedRect(420, 35, 270, 60, 30);
         bg.lineStyle(3, 0x0066aa, 0.9);
         bg.strokeRoundedRect(420, 35, 270, 60, 30);
-
         this.add.image(465, 65, "ui_key").setScale(0.65);
-        this.kText = this.add.text(495, 63, keys.toString(), {
-            fontSize: "26px", color: "#ffd700", fontFamily: "Arial", fontStyle: "bold"
-        }).setOrigin(0, 0.5);
-
+        this.kText = this.add.text(495, 63, keys.toString(), { fontSize: "26px", color: "#ffd700", fontFamily: "Arial", fontStyle: "bold" }).setOrigin(0, 0.5);
         this.add.rectangle(555, 65, 3, 35, 0x0066aa, 0.8);
-
         this.add.image(600, 67, "ui_debris_icon").setScale(0.70);
-        this.dText = this.add.text(630, 63, debris.toString(), {
-            fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold"
-        }).setOrigin(0, 0.5);
+        this.dText = this.add.text(630, 63, debris.toString(), { fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" }).setOrigin(0, 0.5);
     }
 
     createBackground() {
         this.backgroundLayers = [];
         const themeColors = window.getThemeColors();
-
         if (!this.textures.exists('animated_bg_grad')) {
             const gradBg = this.make.graphics({ x: 0, y: 0 });
             gradBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
@@ -280,10 +226,7 @@ class ShopScene extends Phaser.Scene {
 
         const neb1 = this.add.circle(250, 100, 250, themeColors.nebulae[0], 0.1).setDepth(-99);
         const neb2 = this.add.circle(550, 1100, 300, themeColors.nebulae[1] || themeColors.nebulae[0], 0.1).setDepth(-99);
-        this.tweens.add({
-            targets: [neb1, neb2], x: 650, y: 750, scale: 1.15, alpha: 0.15,
-            duration: 8000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
-        });
+        this.tweens.add({ targets: [neb1, neb2], x: 650, y: 750, scale: 1.15, alpha: 0.15, duration: 8000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
         const createLayer = (count, speed, color, size, alpha = 1) => {
             const group = this.add.group();
@@ -302,9 +245,9 @@ class ShopScene extends Phaser.Scene {
 
     createTabs(cx) {
         const y = 250;
-        const totalWidth = 540; 
-        const height = 65;
-        const btnWidth = totalWidth / 3;
+        const totalWidth = 640; 
+        const height = 60;
+        const btnWidth = totalWidth / 4;
         const container = this.add.container(cx, y);
 
         const baseBg = this.add.graphics();
@@ -317,70 +260,283 @@ class ShopScene extends Phaser.Scene {
         this.tabHighlight = this.add.graphics();
         this.tabHighlight.fillStyle(0xffffff, 0.15);
         this.tabHighlight.fillRoundedRect(-btnWidth / 2 + 4, -height / 2 + 4, btnWidth - 8, height - 8, (height - 8) / 2);
-        this.tabHighlight.x = -btnWidth; 
+        this.tabHighlight.x = -btnWidth * 1.5; 
         container.add(this.tabHighlight);
 
-        // UI SCALING
-        this.shipTabTxt = this.add.text(-btnWidth, 0, "🚀 পাখি", {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#ffffff"
-        }).setOrigin(0.5);
+        const tabFont = { fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700 };
+        
+        this.shipTabTxt = this.add.text(-btnWidth * 1.5, 0, "🚀 পাখি", { ...tabFont, color: "#ffffff" }).setOrigin(0.5);
+        this.boosterTabTxt = this.add.text(-btnWidth * 0.5, 0, "⚡ বুস্টার", { ...tabFont, color: "#88bbdd" }).setOrigin(0.5);
+        this.themeTabTxt = this.add.text(btnWidth * 0.5, 0, "🌌 থিম", { ...tabFont, color: "#88bbdd" }).setOrigin(0.5);
+        this.specialTabTxt = this.add.text(btnWidth * 1.5, 0, "🎁 স্পেশাল", { ...tabFont, color: "#88bbdd" }).setOrigin(0.5);
 
-        this.boosterTabTxt = this.add.text(0, 0, "⚡ বুস্টার", {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
-        }).setOrigin(0.5);
-
-        this.themeTabTxt = this.add.text(btnWidth, 0, "🌌 থিম", {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: 700, color: "#88bbdd"
-        }).setOrigin(0.5);
-
-        const shipHitArea = this.add.rectangle(-btnWidth, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const boosterHitArea = this.add.rectangle(0, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const themeHitArea = this.add.rectangle(btnWidth, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const shipHitArea = this.add.rectangle(-btnWidth * 1.5, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const boosterHitArea = this.add.rectangle(-btnWidth * 0.5, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const themeHitArea = this.add.rectangle(btnWidth * 0.5, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const specialHitArea = this.add.rectangle(btnWidth * 1.5, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         shipHitArea.on('pointerdown', () => this.switchTab("ships"));
         boosterHitArea.on('pointerdown', () => this.switchTab("boosters"));
         themeHitArea.on('pointerdown', () => this.switchTab("themes"));
+        specialHitArea.on('pointerdown', () => this.switchTab("special"));
 
-        container.add([this.shipTabTxt, this.boosterTabTxt, this.themeTabTxt, shipHitArea, boosterHitArea, themeHitArea]);
+        container.add([this.shipTabTxt, this.boosterTabTxt, this.themeTabTxt, this.specialTabTxt, shipHitArea, boosterHitArea, themeHitArea, specialHitArea]);
     }
 
     switchTab(tab) {
         if (this.currentTab === tab) return;
         this.currentTab = tab;
-
         this.playSound('sfx_click', 0.7);
 
-        const btnWidth = 540 / 3;
+        const btnWidth = 640 / 4;
         let targetX = 0;
-        if (tab === "ships") targetX = -btnWidth;
-        else if (tab === "boosters") targetX = 0;
-        else if (tab === "themes") targetX = btnWidth;
+        if (tab === "ships") targetX = -btnWidth * 1.5;
+        else if (tab === "boosters") targetX = -btnWidth * 0.5;
+        else if (tab === "themes") targetX = btnWidth * 0.5;
+        else if (tab === "special") targetX = btnWidth * 1.5;
 
-        this.tweens.add({
-            targets: this.tabHighlight,
-            x: targetX,
-            duration: 250,
-            ease: 'Cubic.out'
-        });
+        this.tweens.add({ targets: this.tabHighlight, x: targetX, duration: 250, ease: 'Cubic.out' });
 
         this.shipTabTxt.setColor(tab === "ships" ? "#ffffff" : "#88bbdd");
         this.boosterTabTxt.setColor(tab === "boosters" ? "#ffffff" : "#88bbdd");
         this.themeTabTxt.setColor(tab === "themes" ? "#ffffff" : "#88bbdd");
+        this.specialTabTxt.setColor(tab === "special" ? "#ffffff" : "#88bbdd");
 
         this.containerY = this.listStartY;
         this.container.y = this.listStartY;
-        this.refreshContent();
+        
+        this.refreshContent(); // Build synchronously, removing the "Blinking effect"
     }
 
     refreshContent() {
         this.container.removeAll(true);
-        if (this.currentTab === "ships") {
-            this.renderShipList();
-        } else if (this.currentTab === "boosters") {
-            this.renderBoosterList();
-        } else if (this.currentTab === "themes") {
-            this.renderThemeList();
+        if (this.currentTab === "ships") this.renderShipList();
+        else if (this.currentTab === "boosters") this.renderBoosterList();
+        else if (this.currentTab === "themes") this.renderThemeList();
+        else if (this.currentTab === "special") this.renderSpecialList();
+    }
+
+    renderSpecialList() {
+        const redeemContainer = this.add.container(360, 40);
+        const rBg = this.add.graphics();
+        rBg.fillGradientStyle(0x00aa44, 0x00aa44, 0x005522, 0x005522, 1);
+        rBg.fillRoundedRect(-160, -30, 320, 60, 16);
+        rBg.lineStyle(3, 0x00ff88, 1);
+        rBg.strokeRoundedRect(-160, -30, 320, 60, 16);
+        const rTxt = this.add.text(0, 0, "Redeem Gift Code", { fontSize: "24px", fontFamily: "'Anek Bangla'", fontStyle: "bold", color: "#ffffff" }).setOrigin(0.5);
+        const rHit = this.add.rectangle(0, 0, 320, 60, 0x000000, 0).setInteractive({useHandCursor: true});
+        redeemContainer.add([rBg, rTxt, rHit]);
+        
+        rHit.on('pointerdown', () => {
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: redeemContainer, scale: 0.95, duration: 50, yoyo: true, onComplete: () => {
+                if(window.redeemPromoCode) window.redeemPromoCode();
+                this.refreshContent();
+            }});
+        });
+        this.container.add(redeemContainer);
+
+        const ownedShips = new Set(GameState.ownedShips || []);
+        const ownedAvatars = new Set(GameState.ownedAvatars || []);
+        const ownedShields = new Set(GameState.ownedShields || []);
+        const ownedTrails = new Set(GameState.ownedTrails || []);
+        const ownedDashAuras = new Set(GameState.ownedDashAuras || []);
+
+        const specials = window.SpecialItemsData || [];
+        const categories = { ship: [], avatar: [], shield: [], trail: [], dash: [] };
+
+        categories.ship.push({ id: "default", type: "ship", rarity: "Common", name: "ডিফল্ট স্কিন", desc: "মূল স্পেসশিপ" });
+        categories.avatar.push({ id: "default", type: "avatar", rarity: "Common", name: "ডিফল্ট অ্যাভাটার", desc: "সাধারণ প্রোফাইল", value: "👤" });
+        categories.shield.push({ id: "default", type: "shield", rarity: "Common", name: "ডিফল্ট শিল্ড", desc: "সাধারণ শিল্ড এনার্জি" });
+        categories.trail.push({ id: "default", type: "trail", rarity: "Common", name: "ডিফল্ট ট্রেইল", desc: "সাধারণ ইঞ্জিনের ধোঁয়া" });
+        categories.dash.push({ id: "default", type: "dash", rarity: "Common", name: "ডিফল্ট ড্যাশ", desc: "সাধারণ ড্যাশ অরা" });
+
+        specials.forEach(item => {
+            let isOwned = false;
+            if (item.type === "ship") isOwned = ownedShips.has(item.id);
+            else if (item.type === "avatar") isOwned = ownedAvatars.has(item.id);
+            else if (item.type === "shield") isOwned = ownedShields.has(item.id);
+            else if (item.type === "trail") isOwned = ownedTrails.has(item.id);
+            else if (item.type === "dash") isOwned = ownedDashAuras.has(item.id);
+            
+            if (isOwned && categories[item.type]) categories[item.type].push(item);
+        });
+
+        let expectedHeight = 120; 
+        let hasAnyItems = false;
+        [categories.ship, categories.avatar, categories.shield, categories.trail, categories.dash].forEach(items => {
+            if (items.length > 1) { // 1 means only default is there. Don't show category if they don't own any.
+                hasAnyItems = true;
+                expectedHeight += 80; // Header height
+                const numRows = Math.ceil(items.length / 2); // 2 COLUMNS layout
+                expectedHeight += numRows * 340 + 40; 
+            }
+        });
+        this.contentHeight = hasAnyItems ? expectedHeight + 50 : 300;
+
+        let currentY = 120; // Starting point under the redeem button
+        const categoryLabels = {
+            ship: "🚀 স্পেসশিপ স্কিন (Ship Skins)",
+            avatar: "👤 অ্যাভাটার (Avatars)",
+            shield: "🛡️ শিল্ড (Shields)",
+            trail: "🔥 ট্রেইল (Trails)",
+            dash: "⚡ ড্যাশ অরা (Dash Auras)"
+        };
+
+        const renderCategory = (type, items) => {
+            if (items.length <= 1) return; 
+
+            // Category Header
+            const headerBg = this.add.graphics();
+            headerBg.fillStyle(0x002244, 0.8);
+            headerBg.fillRoundedRect(160, currentY, 400, 50, 25);
+            
+            const headerText = this.add.text(360, currentY + 25, categoryLabels[type], {
+                fontSize: "24px", fontFamily: "'Anek Bangla'", fontStyle: "bold", color: "#00ffff"
+            }).setOrigin(0.5);
+            
+            this.container.add([headerBg, headerText]);
+            currentY += 80; 
+
+            let count = 0;
+            items.forEach((item) => {
+                let isEquipped = false;
+                if (item.type === "ship") isEquipped = (GameState.equippedShip || "default") === item.id;
+                else if (item.type === "avatar") isEquipped = (GameState.equippedAvatar || "default") === item.id;
+                else if (item.type === "shield") isEquipped = (GameState.equippedShield || "default") === item.id;
+                else if (item.type === "trail") isEquipped = (GameState.equippedTrail || "default") === item.id;
+                else if (item.type === "dash") isEquipped = (GameState.equippedDashAura || "default") === item.id;
+
+                const col = count % 2; // Fixed to 2 Columns
+                const row = Math.floor(count / 2);
+                const xCard = col === 0 ? 190 : 530; 
+                const yCard = currentY + row * 340 + 160; 
+                
+                this.createSpecialCard(item, isEquipped, xCard, yCard);
+                count++;
+            });
+
+            const numRows = Math.ceil(items.length / 2);
+            currentY += numRows * 340 + 40; 
+        };
+
+        // Render synchronously to eliminate blinking
+        renderCategory("ship", categories.ship);
+        renderCategory("avatar", categories.avatar);
+        renderCategory("shield", categories.shield);
+        renderCategory("trail", categories.trail);
+        renderCategory("dash", categories.dash);
+
+        if (!hasAnyItems) {
+            const noTxt = this.add.text(360, 200, "আপনার কাছে কোনো স্পেশাল আইটেম নেই।\n(No Special Items Unlocked)", {
+                fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#aaaaaa", align: "center", lineSpacing: 10
+            }).setOrigin(0.5);
+            this.container.add(noTxt);
         }
+    }
+
+    createSpecialCard(item, isEquipped, x, y) {
+        if (this.currentTab !== "special") return;
+
+        const cardContainer = this.add.container(x, y);
+
+        let rarityColor = 0xffffff;
+        if (item.rarity === "Common") rarityColor = 0xaaccff;
+        else if (item.rarity === "Epic") rarityColor = 0xcc00ff;
+        else if (item.rarity === "Legendary") rarityColor = 0xffaa00;
+        else if (item.rarity === "Mythic") rarityColor = 0xff0044;
+
+        let borderColor = isEquipped ? 0x00ff00 : rarityColor;
+        let borderAlpha = isEquipped ? 1 : 0.8;
+        let borderThickness = isEquipped ? 4 : 2;
+        let bgColor = isEquipped ? 0x002200 : 0x000c22;
+
+        const bg = this.add.graphics();
+        bg.fillStyle(bgColor, 0.9);
+        
+        // Enlarged card to fit properly within the 2-column layout (280x320)
+        bg.fillRoundedRect(-140, -160, 280, 320, 20); 
+        bg.lineStyle(borderThickness, borderColor, borderAlpha);
+        bg.strokeRoundedRect(-140, -160, 280, 320, 20);
+
+        const rarityStr = (item.rarity || "Common").toUpperCase();
+        const rarityTag = this.add.text(0, -135, rarityStr, { 
+            fontSize: "14px", fontFamily: "Arial", 
+            color: "#" + rarityColor.toString(16).padStart(6, '0'), fontStyle: "bold" 
+        }).setOrigin(0.5);
+
+        let preview;
+        if (item.type === "ship") {
+            const previewKey = item.id === "default" ? "player_lv1" : (this.textures.exists(`${item.id}_lv1`) ? `${item.id}_lv1` : "player_lv1");
+            preview = this.add.image(0, -50, previewKey).setScale(0.8);
+        } else if (item.type === "avatar") {
+            preview = this.add.text(0, -50, item.value || "👤", { fontSize: "65px" }).setOrigin(0.5);
+        } else {
+            const previewKey = item.id === "default" ? "spark" : (this.textures.exists(`${item.id}_img`) ? `${item.id}_img` : "spark");
+            preview = this.add.image(0, -50, previewKey);
+            
+            if (item.type === "dash") preview.setScale(1.5);
+            else if (item.type === "shield") preview.setScale(0.9);
+            else preview.setScale(2.5); // trails or spark
+        }
+
+        const name = this.add.text(0, 30, this.sanitizeBanglaText(item.name), { 
+            fontSize: "22px", fontFamily: "'Anek Bangla'", padding: { y: 2 }, 
+            fontWeight: 800, color: "#ffffff", align: 'center', wordWrap: { width: 260 } 
+        }).setOrigin(0.5);
+        
+        const desc = this.add.text(0, 70, this.sanitizeBanglaText(item.desc), { 
+            fontSize: "16px", fontFamily: "'Anek Bangla'", padding: { y: 2 }, 
+            color: "#aaccff", align: 'center', wordWrap: { width: 260 }, lineSpacing: 4 
+        }).setOrigin(0.5);
+
+        let statusBadge;
+        if (isEquipped) {
+            statusBadge = this.add.text(0, 120, "✔ ব্যবহৃত (Equipped)", { 
+                fontSize: "18px", fontFamily: "'Anek Bangla'", fontWeight: "bold", 
+                color: "#00ff00", backgroundColor: "#004400", padding: { x: 12, y: 6 } 
+            }).setOrigin(0.5);
+        } else {
+            statusBadge = this.add.text(0, 120, "ব্যবহার করুন (Equip)", { 
+                fontSize: "18px", fontFamily: "'Anek Bangla'", fontWeight: "bold", 
+                color: "#88bbdd", backgroundColor: "#002244", padding: { x: 12, y: 6 } 
+            }).setOrigin(0.5);
+        }
+
+        // Updated HitArea to match card background size
+        const hitArea = this.add.rectangle(0, 0, 280, 320, 0x000000, 0).setInteractive({ useHandCursor: true });
+
+        cardContainer.add([bg, rarityTag, preview, name, desc, statusBadge, hitArea]);
+        this.container.add(cardContainer);
+
+        let downY = 0;
+        hitArea.on('pointerdown', (pointer) => {
+            downY = pointer.y;
+            this.tweens.add({ targets: cardContainer, scale: 0.95, duration: 50 });
+        });
+        
+        hitArea.on('pointerup', (pointer) => {
+            this.tweens.add({ targets: cardContainer, scale: 1, duration: 50 });
+            if (Math.abs(pointer.y - downY) < 15) {
+                if (this.scrollState) this.scrollState.velocityY = 0; 
+                this.playSound('sfx_powerup');
+                
+                let valToSet = isEquipped ? "default" : item.id;
+                
+                if (item.type === "ship") GameState.equippedShip = valToSet;
+                else if (item.type === "avatar") GameState.equippedAvatar = valToSet;
+                else if (item.type === "shield") GameState.equippedShield = valToSet;
+                else if (item.type === "trail") GameState.equippedTrail = valToSet;
+                else if (item.type === "dash") GameState.equippedDashAura = valToSet;
+                
+                window.saveGame();
+                this.refreshContent();
+            }
+        });
+        
+        hitArea.on('pointerout', () => { 
+            this.tweens.add({ targets: cardContainer, scale: 1, duration: 50 }); 
+        });
     }
 
     renderShipList() {
@@ -390,7 +546,6 @@ class ShopScene extends Phaser.Scene {
         allShips.forEach((ship, i) => {
             const col = i % 2;
             const row = Math.floor(i / 2);
-            
             const xPos = col === 0 ? 190 : 530; 
             const yPos = row * 430 + 220; 
 
@@ -404,10 +559,8 @@ class ShopScene extends Phaser.Scene {
         boosterData.forEach((item, i) => {
             const col = i % 2;
             const row = Math.floor(i / 2);
-            
             const xPos = col === 0 ? 190 : 530;
             const yPos = row * 430 + 220; 
-
             this.createBoosterCard(item, xPos, yPos);
             this.contentHeight = yPos + 220;
         });
@@ -418,10 +571,8 @@ class ShopScene extends Phaser.Scene {
         themeData.forEach((theme, i) => {
             const col = i % 2;
             const row = Math.floor(i / 2);
-            
             const xPos = col === 0 ? 190 : 530;
             const yPos = row * 430 + 220; 
-
             this.createThemeCard(theme, xPos, yPos);
             this.contentHeight = yPos + 220;
         });
@@ -440,16 +591,8 @@ class ShopScene extends Phaser.Scene {
         const finalKey = this.textures.exists(previewKey) ? previewKey : "player_lv1";
         const preview = this.add.image(0, -95, finalKey).setScale(0.75);
 
-        const name = this.add.text(0, 10, this.sanitizeBanglaText(ship.name), {
-            fontSize: "26px", fontFamily: "'Anek Bangla'",padding: { y: 5 }, fontWeight: 800, color: "#ffffff",
-            align: 'center', wordWrap: { width: 280 }
-        }).setOrigin(0.5);
-
-        // UI SCALING
-        const desc = this.add.text(0, 65, this.sanitizeBanglaText(ship.desc), {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", padding: { y: 5 }, color: "#aaccff", 
-            align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
-        }).setOrigin(0.5);
+        const name = this.add.text(0, 10, this.sanitizeBanglaText(ship.name), { fontSize: "26px", fontFamily: "'Anek Bangla'",padding: { y: 5 }, fontWeight: 800, color: "#ffffff", align: 'center', wordWrap: { width: 280 } }).setOrigin(0.5);
+        const desc = this.add.text(0, 65, this.sanitizeBanglaText(ship.desc), { fontSize: "20px", fontFamily: "'Anek Bangla'", padding: { y: 5 }, color: "#aaccff", align: 'center', wordWrap: { width: 280 }, lineSpacing: 4 }).setOrigin(0.5);
 
         cardContainer.add([bg, preview, name, desc]);
 
@@ -457,31 +600,18 @@ class ShopScene extends Phaser.Scene {
         const isEquipped = GameState.equippedShip === ship.id;
         const craftingEnd = GameState.craftingQueue[ship.id];
 
-        let btnColor1 = 0x000000, btnColor2 = 0x000000, btnStroke = 0x000000;
-        let btnTextStr = "";
-        let onClick = null;
+        let btnColor1 = 0x000000, btnColor2 = 0x000000, btnStroke = 0x000000, btnTextStr = "", onClick = null;
 
         if (isEquipped) {
             btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "ব্যবহৃত";
         } else if (isOwned) {
             btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "ব্যবহার করুন";
-            onClick = () => {
-                this.playSound('sfx_powerup');
-                GameState.equippedShip = ship.id;
-                this.updateCurrencyDisplay();
-                this.refreshContent();
-            };
+            onClick = () => { this.playSound('sfx_powerup'); GameState.equippedShip = ship.id; this.updateCurrencyDisplay(); this.refreshContent(); };
         } else if (craftingEnd) {
             const now = Date.now();
             if (now >= craftingEnd) {
                 btnColor1 = 0x008800; btnColor2 = 0x004400; btnStroke = 0x00ff00; btnTextStr = "সংগ্রহ করুন";
-                onClick = () => {
-                    this.playSound('sfx_jackpot');
-                    GameState.ownedShips.push(ship.id);
-                    delete GameState.craftingQueue[ship.id];
-                    this.updateCurrencyDisplay();
-                    this.refreshContent();
-                };
+                onClick = () => { this.playSound('sfx_jackpot'); GameState.ownedShips.push(ship.id); delete GameState.craftingQueue[ship.id]; this.updateCurrencyDisplay(); this.refreshContent(); };
             } else {
                 btnColor1 = 0x222222; btnColor2 = 0x111111; btnStroke = 0x555555;
                 const msLeft = craftingEnd - now;
@@ -497,16 +627,8 @@ class ShopScene extends Phaser.Scene {
                 btnStroke = canAfford ? 0xffaa00 : 0x664400;
                 btnTextStr = `${ship.cost} চাবি`;
                 onClick = () => {
-                    if (canAfford) {
-                        this.playSound('sfx_coin');
-                        GameState.keys -= ship.cost;
-                        GameState.ownedShips.push(ship.id);
-                        this.updateCurrencyDisplay();
-                        this.refreshContent();
-                    } else {
-                        this.playSound('sfx_error', 0.4);
-                        this.cameras.main.shake(100, 0.005);
-                    }
+                    if (canAfford) { this.playSound('sfx_coin'); GameState.keys -= ship.cost; GameState.ownedShips.push(ship.id); this.updateCurrencyDisplay(); this.refreshContent(); }
+                    else { this.playSound('sfx_error', 0.4); this.cameras.main.shake(100, 0.005); }
                 };
             } else if (ship.costType === "debris") {
                 const canAfford = GameState.debris >= ship.cost;
@@ -514,24 +636,13 @@ class ShopScene extends Phaser.Scene {
                 btnStroke = canAfford ? 0x00ffff : 0x004466;
                 btnTextStr = `তৈরি (${ship.cost})`;
                 onClick = () => {
-                    if (canAfford) {
-                        this.playSound('sfx_coin');
-                        GameState.debris -= ship.cost;
-                        GameState.craftingQueue[ship.id] = Date.now() + ship.time;
-                        this.updateCurrencyDisplay();
-                        this.refreshContent();
-                    } else {
-                        this.playSound('sfx_error', 0.4);
-                        this.cameras.main.shake(100, 0.005);
-                    }
+                    if (canAfford) { this.playSound('sfx_coin'); GameState.debris -= ship.cost; GameState.craftingQueue[ship.id] = Date.now() + ship.time; this.updateCurrencyDisplay(); this.refreshContent(); }
+                    else { this.playSound('sfx_error', 0.4); this.cameras.main.shake(100, 0.005); }
                 };
-            } else {
-                btnTextStr = "ফ্রি";
-            }
+            } else { btnTextStr = "ফ্রি"; }
         }
 
         const btnContainer = this.add.container(0, 145);
-
         const btnBg = this.add.graphics();
         btnBg.fillGradientStyle(btnColor1, btnColor1, btnColor2, btnColor2, 1);
         btnBg.fillRoundedRect(-110, -30, 220, 60, 30);
@@ -539,14 +650,9 @@ class ShopScene extends Phaser.Scene {
         btnBg.strokeRoundedRect(-110, -30, 220, 60, 30);
 
         const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
-        
-        // UI SCALING
-        const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
-        }).setOrigin(0.5);
+        const btnLabel = this.add.text(0, 0, btnTextStr, { fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
 
-        btnLabel.shipId = ship.id;
-        btnLabel.isTimer = (craftingEnd && Date.now() < craftingEnd);
+        btnLabel.shipId = ship.id; btnLabel.isTimer = (craftingEnd && Date.now() < craftingEnd);
 
         btnContainer.add([btnBg, btnLabel, hitArea]);
         cardContainer.add(btnContainer);
@@ -554,25 +660,20 @@ class ShopScene extends Phaser.Scene {
 
         if (onClick) {
             let downY = 0;
-            hitArea.on('pointerdown', (pointer) => {
-                downY = pointer.y;
-                this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
-            });
-            hitArea.on('pointerup', (pointer) => {
-                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
+            hitArea.on('pointerdown', (pointer) => { downY = pointer.y; this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 }); });
+            hitArea.on('pointerup', (pointer) => { 
+                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 }); 
                 if (Math.abs(pointer.y - downY) < 15) {
-                    onClick();
-                }
+                    if (this.scrollState) this.scrollState.velocityY = 0; 
+                    onClick(); 
+                } 
             });
-            hitArea.on('pointerout', () => {
-                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
-            });
+            hitArea.on('pointerout', () => { this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 }); });
         }
     }
 
     createBoosterCard(item, x, y) {
         const cardContainer = this.add.container(x, y);
-
         const bg = this.add.graphics();
         bg.fillStyle(0x000c22, 0.75);
         bg.fillRoundedRect(-155, -205, 310, 410, 20);
@@ -581,29 +682,14 @@ class ShopScene extends Phaser.Scene {
 
         const iconKey = this.textures.exists(item.icon) ? item.icon : "ui_debris_icon";
         const icon = this.add.image(0, -90, iconKey).setScale(1.5);
-
-        const name = this.add.text(0, 5, this.sanitizeBanglaText(item.name), {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
-            align: 'center', wordWrap: { width: 280 }
-        }).setOrigin(0.5);
-
-        // UI SCALING
-        const desc = this.add.text(0, 60, this.sanitizeBanglaText(item.desc), {
-            fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ddaaff", 
-            align: 'center', wordWrap: { width: 280 }, lineSpacing: 3
-        }).setOrigin(0.5);
-
+        const name = this.add.text(0, 5, this.sanitizeBanglaText(item.name), { fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", align: 'center', wordWrap: { width: 280 } }).setOrigin(0.5);
+        const desc = this.add.text(0, 60, this.sanitizeBanglaText(item.desc), { fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ddaaff", align: 'center', wordWrap: { width: 280 }, lineSpacing: 3 }).setOrigin(0.5);
         const count = GameState.boosters[item.id] || 0;
-        const countText = this.add.text(0, 110, `মজুদ: ${count}`, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#00ff00"
-        }).setOrigin(0.5);
-
+        const countText = this.add.text(0, 110, `মজুদ: ${count}`, { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#00ff00" }).setOrigin(0.5);
         cardContainer.add([bg, icon, name, desc, countText]);
 
         const canAfford = GameState.debris >= item.cost;
-        const btnColor1 = canAfford ? 0x8800ff : 0x330055;
-        const btnColor2 = canAfford ? 0x4400aa : 0x110022;
-        const btnStroke = canAfford ? 0xff00ff : 0x440088;
+        const btnColor1 = canAfford ? 0x8800ff : 0x330055; const btnColor2 = canAfford ? 0x4400aa : 0x110022; const btnStroke = canAfford ? 0xff00ff : 0x440088;
 
         const btnContainer = this.add.container(0, 155);
         const btnBg = this.add.graphics();
@@ -613,45 +699,24 @@ class ShopScene extends Phaser.Scene {
         btnBg.strokeRoundedRect(-110, -25, 220, 50, 25);
 
         const hitArea = this.add.rectangle(0, 0, 220, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
-        
-        // UI SCALING
-        const btnTxt = this.add.text(0, 0, `${item.cost} ডেব্রি`, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
-        }).setOrigin(0.5);
-
+        const btnTxt = this.add.text(0, 0, `${item.cost} ডেব্রি`, { fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
         btnContainer.add([btnBg, btnTxt, hitArea]);
         cardContainer.add(btnContainer);
         this.container.add(cardContainer);
 
-        if (!canAfford) {
-            btnContainer.setAlpha(0.5);
-        }
+        if (!canAfford) btnContainer.setAlpha(0.5);
 
         let downY = 0;
-        hitArea.on('pointerdown', (pointer) => {
-            downY = pointer.y;
-            this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
-        });
-        
+        hitArea.on('pointerdown', (pointer) => { downY = pointer.y; this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 }); });
         hitArea.on('pointerup', (pointer) => {
             this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
             if (Math.abs(pointer.y - downY) < 15) { 
-                if (canAfford) {
-                    this.playSound('sfx_coin');
-                    GameState.debris -= item.cost;
-                    GameState.boosters[item.id] = (GameState.boosters[item.id] || 0) + 1;
-                    this.updateCurrencyDisplay();
-                    this.refreshContent();
-                } else {
-                    this.playSound('sfx_error', 0.4);
-                    this.cameras.main.shake(100, 0.005);
-                }
+                if (this.scrollState) this.scrollState.velocityY = 0; 
+                if (canAfford) { this.playSound('sfx_coin'); GameState.debris -= item.cost; GameState.boosters[item.id] = (GameState.boosters[item.id] || 0) + 1; this.updateCurrencyDisplay(); this.refreshContent(); }
+                else { this.playSound('sfx_error', 0.4); this.cameras.main.shake(100, 0.005); }
             }
         });
-
-        hitArea.on('pointerout', () => {
-            this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
-        });
+        hitArea.on('pointerout', () => { this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 }); });
     }
 
     createThemeCard(theme, x, y) {
@@ -670,71 +735,30 @@ class ShopScene extends Phaser.Scene {
         previewBg.strokeRoundedRect(-130, -180, 260, 150, 10);
         
         previewBg.fillStyle(theme.colors.starBase, 0.8);
-        previewBg.fillCircle(-80, -130, 2);
-        previewBg.fillCircle(-20, -150, 3);
-        previewBg.fillCircle(50, -110, 2);
-        previewBg.fillCircle(90, -140, 1);
+        previewBg.fillCircle(-80, -130, 2); previewBg.fillCircle(-20, -150, 3); previewBg.fillCircle(50, -110, 2); previewBg.fillCircle(90, -140, 1);
         previewBg.fillStyle(theme.colors.starFast, 0.6);
-        previewBg.fillCircle(-50, -80, 2);
-        previewBg.fillCircle(70, -60, 2);
+        previewBg.fillCircle(-50, -80, 2); previewBg.fillCircle(70, -60, 2);
 
-        const name = this.add.text(0, -10, this.sanitizeBanglaText(theme.name), {
-            fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff",
-            align: 'center', wordWrap: { width: 280 }
-        }).setOrigin(0.5);
-
-        // UI SCALING
-        const desc = this.add.text(0, 50, this.sanitizeBanglaText(theme.desc), {
-            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#aaccff", 
-            align: 'center', wordWrap: { width: 280 }, lineSpacing: 4
-        }).setOrigin(0.5);
-
+        const name = this.add.text(0, -10, this.sanitizeBanglaText(theme.name), { fontSize: "26px", fontFamily: "'Anek Bangla'", fontWeight: 800, color: "#ffffff", align: 'center', wordWrap: { width: 280 } }).setOrigin(0.5);
+        const desc = this.add.text(0, 50, this.sanitizeBanglaText(theme.desc), { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#aaccff", align: 'center', wordWrap: { width: 280 }, lineSpacing: 4 }).setOrigin(0.5);
         cardContainer.add([bg, previewBg, name, desc]);
 
         const isOwned = GameState.ownedThemes.includes(theme.id);
         const isEquipped = GameState.equippedTheme === theme.id;
+        let btnColor1 = 0x000000, btnColor2 = 0x000000, btnStroke = 0x000000, btnTextStr = "", onClick = null;
 
-        let btnColor1 = 0x000000, btnColor2 = 0x000000, btnStroke = 0x000000;
-        let btnTextStr = "";
-        let onClick = null;
-
-        if (isEquipped) {
-            btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "ব্যবহৃত";
-        } else if (isOwned) {
-            btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "ব্যবহার করুন";
-            onClick = () => {
-                this.playSound('sfx_powerup');
-                GameState.equippedTheme = theme.id;
-                this.updateCurrencyDisplay();
-                this.textures.remove('animated_bg_grad');
-                this.createBackground();
-                this.refreshContent();
-            };
-        } else {
+        if (isEquipped) { btnColor1 = 0x004400; btnColor2 = 0x002200; btnStroke = 0x00ff00; btnTextStr = "ব্যবহৃত"; }
+        else if (isOwned) { btnColor1 = 0x004488; btnColor2 = 0x002244; btnStroke = 0x00ffff; btnTextStr = "ব্যবহার করুন"; onClick = () => { this.playSound('sfx_powerup'); GameState.equippedTheme = theme.id; this.updateCurrencyDisplay(); this.textures.remove('animated_bg_grad'); this.createBackground(); this.refreshContent(); }; }
+        else {
             if (theme.costType === "keys") {
                 const canAfford = GameState.keys >= theme.cost;
-                btnColor1 = canAfford ? 0xaa6600 : 0x442200; btnColor2 = canAfford ? 0x663300 : 0x221100;
-                btnStroke = canAfford ? 0xffaa00 : 0x664400;
+                btnColor1 = canAfford ? 0xaa6600 : 0x442200; btnColor2 = canAfford ? 0x663300 : 0x221100; btnStroke = canAfford ? 0xffaa00 : 0x664400;
                 btnTextStr = `${theme.cost} চাবি`;
-                onClick = () => {
-                    if (canAfford) {
-                        this.playSound('sfx_coin');
-                        GameState.keys -= theme.cost;
-                        GameState.ownedThemes.push(theme.id);
-                        this.updateCurrencyDisplay();
-                        this.refreshContent();
-                    } else {
-                        this.playSound('sfx_error', 0.4);
-                        this.cameras.main.shake(100, 0.005);
-                    }
-                };
-            } else {
-                btnTextStr = "ফ্রি";
-            }
+                onClick = () => { if (canAfford) { this.playSound('sfx_coin'); GameState.keys -= theme.cost; GameState.ownedThemes.push(theme.id); this.updateCurrencyDisplay(); this.refreshContent(); } else { this.playSound('sfx_error', 0.4); this.cameras.main.shake(100, 0.005); } };
+            } else { btnTextStr = "ফ্রি"; }
         }
 
         const btnContainer = this.add.container(0, 145);
-
         const btnBg2 = this.add.graphics();
         btnBg2.fillGradientStyle(btnColor1, btnColor1, btnColor2, btnColor2, 1);
         btnBg2.fillRoundedRect(-110, -30, 220, 60, 30);
@@ -742,29 +766,22 @@ class ShopScene extends Phaser.Scene {
         btnBg2.strokeRoundedRect(-110, -30, 220, 60, 30);
 
         const hitArea = this.add.rectangle(0, 0, 220, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
-        
-        // UI SCALING
-        const btnLabel = this.add.text(0, 0, btnTextStr, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff"
-        }).setOrigin(0.5);
-
+        const btnLabel = this.add.text(0, 0, btnTextStr, { fontSize: "24px", fontFamily: "'Anek Bangla'", fontWeight: "bold", color: "#ffffff" }).setOrigin(0.5);
         btnContainer.add([btnBg2, btnLabel, hitArea]);
         cardContainer.add(btnContainer);
         this.container.add(cardContainer);
 
         if (onClick) {
             let downY = 0;
-            hitArea.on('pointerdown', (pointer) => {
-                downY = pointer.y;
-                this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 });
+            hitArea.on('pointerdown', (pointer) => { downY = pointer.y; this.tweens.add({ targets: btnContainer, scale: 0.95, duration: 50 }); });
+            hitArea.on('pointerup', (pointer) => { 
+                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 }); 
+                if (Math.abs(pointer.y - downY) < 15) { 
+                    if (this.scrollState) this.scrollState.velocityY = 0; 
+                    onClick(); 
+                } 
             });
-            hitArea.on('pointerup', (pointer) => {
-                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
-                if (Math.abs(pointer.y - downY) < 15) onClick();
-            });
-            hitArea.on('pointerout', () => {
-                this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 });
-            });
+            hitArea.on('pointerout', () => { this.tweens.add({ targets: btnContainer, scale: 1, duration: 50 }); });
         }
     }
 
@@ -776,7 +793,6 @@ class ShopScene extends Phaser.Scene {
 
     updateTimers() {
         if (this.currentTab !== "ships") return;
-
         if (!this.container || !this.container.list) return;
 
         this.container.list.forEach(cardContainer => {
@@ -788,9 +804,8 @@ class ShopScene extends Phaser.Scene {
                                 const end = GameState.craftingQueue[grandChild.shipId];
                                 if (end) {
                                     const now = Date.now();
-                                    if (now >= end) {
-                                        this.refreshContent();
-                                    } else {
+                                    if (now >= end) this.refreshContent();
+                                    else {
                                         const msLeft = end - now;
                                         const hrs = Math.floor(msLeft / 3600000);
                                         const mins = Math.floor((msLeft % 3600000) / 60000);

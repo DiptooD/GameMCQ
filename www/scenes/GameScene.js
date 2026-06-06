@@ -13,6 +13,8 @@ class GameScene extends GameBase {
         if (typeof GameState.gamesPlayed === 'undefined') GameState.gamesPlayed = 0;
         this.luckMods = this.getLuckModifiers();
 
+        if (typeof SpecialItemsTexture !== 'undefined') SpecialItemsTexture.init(this);
+
         const h = this.cameras.main.height;
         const w = 720;
 
@@ -275,10 +277,6 @@ class GameScene extends GameBase {
         }
     }
 
-    activateShield() {
-        this.hasShield = true;
-        this.shieldArc.setVisible(true);
-    }
 
     activateMagnet() {
         if (this.magnetActive) {
@@ -335,13 +333,25 @@ class GameScene extends GameBase {
         this.isDashActive = true;
         this.playSFX('sfx_speed_boost', 0.7); 
         
+        // 1. Safety Check: If the player is destroyed or missing, stop right here!
+        if (!this.player || !this.player.scene) return;
+
         if (!this.originalBgSpeedDash) this.originalBgSpeedDash = this.backgroundSpeed;
         this.backgroundSpeed = this.originalBgSpeedDash * 2.5;
         this.physics.world.timeScale = 0.7; 
 
-        if (!this.dashAura) {
-            this.dashAura = this.add.image(this.player.x, this.player.y - 20, "aura_dash").setDepth(12);
+        // NEW: Select Dash Aura based on equipped Special
+        let dashTex = (GameState.equippedDashAura && GameState.equippedDashAura !== "default" && this.textures.exists(`${GameState.equippedDashAura}_img`)) 
+                      ? `${GameState.equippedDashAura}_img` 
+                      : "aura_dash";
+
+        // Check if the aura doesn't exist OR if it was destroyed in a previous game
+        if (!this.dashAura || !this.dashAura.scene) {
+            this.dashAura = this.add.image(this.player.x, this.player.y - 20, dashTex).setDepth(12);
+        } else {
+            this.dashAura.setTexture(dashTex);
         }
+        
         this.dashAura.setVisible(true);
         this.dashAura.setScale(2.5);
         this.dashAura.setTint(0x00ffff);
@@ -772,20 +782,36 @@ class GameScene extends GameBase {
         }
 
         if (this.hasShield) {
-            this.shieldArc.clear();
-            const pulse = Math.sin(this.time.now / 100);
-            this.shieldArc.lineStyle(4, 0xffcc00, 0.8 + pulse * 0.2);
-            this.shieldArc.fillStyle(0xffcc00, 0.15 + pulse * 0.1);
+            if (this.specialShieldSprite && this.specialShieldSprite.visible) {
+                // Animate Special Shields
+                this.specialShieldSprite.x = this.player.x;
+                this.specialShieldSprite.y = this.player.y;
+                
+                let shieldType = GameState.equippedShield;
+                if(shieldType === "shield_cosmic") {
+                    this.specialShieldSprite.rotation -= 0.05; // Fast rotation for flames
+                    this.specialShieldSprite.setScale(0.9 + Math.sin(this.time.now / 100) * 0.05); // Pulsing
+                } else {
+                    this.specialShieldSprite.rotation += 0.01; // Slow rotation for hex
+                    this.specialShieldSprite.setScale(1);
+                }
+            } else {
+                // Original Standard Shield Draw
+                this.shieldArc.clear();
+                const pulse = Math.sin(this.time.now / 100);
+                this.shieldArc.lineStyle(4, 0xffcc00, 0.8 + pulse * 0.2);
+                this.shieldArc.fillStyle(0xffcc00, 0.15 + pulse * 0.1);
 
-            this.shieldArc.beginPath();
-            this.shieldArc.arc(this.player.x, this.player.y, 75, Phaser.Math.DegToRad(225), Phaser.Math.DegToRad(315));
-            this.shieldArc.strokePath();
-            this.shieldArc.fillPath();
-            
-            this.shieldArc.lineStyle(2, 0xffff00, 0.5);
-            this.shieldArc.beginPath();
-            this.shieldArc.arc(this.player.x, this.player.y, 60 + pulse * 5, Phaser.Math.DegToRad(225), Phaser.Math.DegToRad(315));
-            this.shieldArc.strokePath();
+                this.shieldArc.beginPath();
+                this.shieldArc.arc(this.player.x, this.player.y, 75, Phaser.Math.DegToRad(225), Phaser.Math.DegToRad(315));
+                this.shieldArc.strokePath();
+                this.shieldArc.fillPath();
+                
+                this.shieldArc.lineStyle(2, 0xffff00, 0.5);
+                this.shieldArc.beginPath();
+                this.shieldArc.arc(this.player.x, this.player.y, 60 + pulse * 5, Phaser.Math.DegToRad(225), Phaser.Math.DegToRad(315));
+                this.shieldArc.strokePath();
+            }
         }
 
         if (this.magnetActive) {
@@ -1339,6 +1365,7 @@ class GameScene extends GameBase {
 
     collectPowerUp(player, powerUp) {
         window.updateMissionProgress("collect_powerups", 1);
+        if (!player.scene) return;
 
         const type = powerUp.powerUpType;
         powerUp.destroy();
@@ -2441,6 +2468,10 @@ class GameScene extends GameBase {
             this.playSFX('sfx_shield_break', 0.3, false);
             this.hasShield = false;
             this.shieldArc.setVisible(false);
+            
+            // ADD THIS NEW LINE RIGHT HERE:
+            if (this.specialShieldSprite) this.specialShieldSprite.setVisible(false);
+
             if (!isBoss && source.active) {
                 if (this.enemies.contains(source)) this.destroyEnemy(source);
                 else {

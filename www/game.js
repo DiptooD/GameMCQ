@@ -9,7 +9,7 @@ window.checkRealConnection = function() {
             return;
         }
         const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), 3500); // Fast 3.5s timeout
+        const id = setTimeout(() => controller.abort(), 3500); 
         
         fetch('https://www.gstatic.com/generate_204?rand=' + Date.now(), { 
             method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: controller.signal 
@@ -46,12 +46,21 @@ window.saveGame = function() {
         localStorage.setItem('game_currentSubject', GameState.currentSubject || "all");
         localStorage.setItem('game_profile', JSON.stringify(GameState.profile));
 
+        // Save Special Items
+        localStorage.setItem('game_ownedAvatars', JSON.stringify(GameState.ownedAvatars));
+        localStorage.setItem('game_equippedAvatar', GameState.equippedAvatar);
+        localStorage.setItem('game_ownedShields', JSON.stringify(GameState.ownedShields));
+        localStorage.setItem('game_equippedShield', GameState.equippedShield);
+        localStorage.setItem('game_ownedTrails', JSON.stringify(GameState.ownedTrails));
+        localStorage.setItem('game_equippedTrail', GameState.equippedTrail);
+        localStorage.setItem('game_ownedDashAuras', JSON.stringify(GameState.ownedDashAuras));
+        localStorage.setItem('game_equippedDashAura', GameState.equippedDashAura);
+
         if (GameState.matchHistory && GameState.matchHistory.length > 15) {
             GameState.matchHistory = GameState.matchHistory.slice(-15);
         }
         localStorage.setItem('game_matchHistory', JSON.stringify(GameState.matchHistory));
 
-        // --- FIREBASE CLOUD SYNC ---
         if (window.FirebaseAuth && window.FirebaseAuth.currentUser && window.FirebaseTools) {
             const uid = window.FirebaseAuth.currentUser.uid;
             const playerRef = window.FirebaseTools.doc(window.FirebaseDB, "players", uid);
@@ -67,6 +76,14 @@ window.saveGame = function() {
                 rewardSkips: GameState.rewardSkips || 0,
                 gamesPlayed: GameState.gamesPlayed || 0,
                 profile: GameState.profile || {},
+                ownedAvatars: GameState.ownedAvatars || [],
+                equippedAvatar: GameState.equippedAvatar || "default",
+                ownedShields: GameState.ownedShields || [],
+                equippedShield: GameState.equippedShield || "default",
+                ownedTrails: GameState.ownedTrails || [],
+                equippedTrail: GameState.equippedTrail || "default",
+                ownedDashAuras: GameState.ownedDashAuras || [],
+                equippedDashAura: GameState.equippedDashAura || "default",
                 lastSaved: new Date().toISOString()
             }, { merge: true }).then(() => {
                 console.log("Cloud Sync Successful!");
@@ -75,7 +92,6 @@ window.saveGame = function() {
             });
         }
 
-        // --- Trigger Background PWA Sync if supported ---
         if ('serviceWorker' in navigator && 'SyncManager' in window) {
             navigator.serviceWorker.ready.then(swRegistration => {
                 return swRegistration.sync.register('sync-game-data');
@@ -128,11 +144,10 @@ window.getLevelData = function() {
 const storedMusicVol = localStorage.getItem('settings_musicVol');
 const storedSfxVol = localStorage.getItem('settings_sfxVol');
 
-// FIX: Ensure Delay logic stays strictly within bounds to prevent 0s freezing
 const storedQDelay = localStorage.getItem('settings_qDelay');
 let parsedQDelay = storedQDelay !== null ? parseInt(storedQDelay) : 15;
 if (isNaN(parsedQDelay) || parsedQDelay < 5 || parsedQDelay > 40) {
-    parsedQDelay = 15; // Default 1.5 seconds if data is corrupted or old format
+    parsedQDelay = 15; 
 }
 
 let storedRewardSkips = parseInt(localStorage.getItem('game_rewardSkips'));
@@ -240,7 +255,7 @@ window.GameState = {
     
     musicVolume: storedMusicVol !== null ? parseFloat(storedMusicVol) : 0.5,
     sfxVolume: storedSfxVol !== null ? parseFloat(storedSfxVol) : 1.0,
-    qDelayLevel: parsedQDelay, // Applied parsed safe delay here
+    qDelayLevel: parsedQDelay,
 
     keys: parseInt(localStorage.getItem('game_keys')) || 0,
     debris: parseInt(localStorage.getItem('game_debris')) || 0,
@@ -248,6 +263,16 @@ window.GameState = {
     equippedShip: localStorage.getItem('game_equippedShip') || "default",
     ownedThemes: JSON.parse(localStorage.getItem('game_ownedThemes')) || ["theme_default"],
     equippedTheme: localStorage.getItem('game_equippedTheme') || "theme_default",
+
+    // SPECIALS ARRAYS
+    ownedAvatars: JSON.parse(localStorage.getItem('game_ownedAvatars')) || [],
+    equippedAvatar: localStorage.getItem('game_equippedAvatar') || "default",
+    ownedShields: JSON.parse(localStorage.getItem('game_ownedShields')) || [],
+    equippedShield: localStorage.getItem('game_equippedShield') || "default",
+    ownedTrails: JSON.parse(localStorage.getItem('game_ownedTrails')) || [],
+    equippedTrail: localStorage.getItem('game_equippedTrail') || "default",
+    ownedDashAuras: JSON.parse(localStorage.getItem('game_ownedDashAuras')) || [],
+    equippedDashAura: localStorage.getItem('game_equippedDashAura') || "default",
 
     craftingQueue: JSON.parse(localStorage.getItem('game_crafting')) || {},
     boosters: JSON.parse(localStorage.getItem('game_boosters')) || { 
@@ -257,15 +282,54 @@ window.GameState = {
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
 };
 
-window.updateMissionProgress = function(type, amount = 1) {
-    // Safety check: Prevent crash if missions were wiped during logout
-    if (!GameState.dailyMissions || !Array.isArray(GameState.dailyMissions)) {
-        return;
-    }
+// ==========================================
+// REDEEM PROMO CODE SYSTEM
+// ==========================================
+window.redeemPromoCode = function() {
+    let code = prompt("উপহার কোড লিখুন (Enter Gift/Promo Code):");
+    if (!code) return;
+    code = code.trim().toUpperCase();
 
-    if (GameState.currentSubject && GameState.currentSubject !== "all" && GameState.currentSubject !== "all_no_math") {
-        return;
+    // Map the Promo Codes directly to Special Item IDs
+    let codeMap = {
+        "PHANTOM26": "ship_special_phantom",
+        "KINGALIEN": "avatar_alien_king",
+        "HEXDEFENSE": "shield_hex",
+        "BIFROST": "trail_rainbow",
+        "THUNDERDASH": "dash_lightning",
+        "VOIDTRAIL": "trail_void",
+        "VIPBUBBLES": "trail_bubbles",
+        "COSMICFIRE": "shield_cosmic"
+    };
+
+    let itemId = codeMap[code];
+    if (itemId) {
+        let itemDef = window.SpecialItemsData.find(i => i.id === itemId);
+        if (itemDef) {
+            let arr;
+            if (itemDef.type === "ship") arr = GameState.ownedShips;
+            else if (itemDef.type === "avatar") arr = GameState.ownedAvatars;
+            else if (itemDef.type === "shield") arr = GameState.ownedShields;
+            else if (itemDef.type === "trail") arr = GameState.ownedTrails;
+            else if (itemDef.type === "dash") arr = GameState.ownedDashAuras;
+
+            if (arr && !arr.includes(itemId)) {
+                arr.push(itemId);
+                window.saveGame();
+                alert(`অভিনন্দন! আপনি '${itemDef.name}' আনলক করেছেন।`);
+            } else {
+                alert("আপনার কাছে ইতিমধ্যে এটি আছে। (Already Owned)");
+            }
+        }
+    } else {
+        alert("কোডটি ভুল অথবা মেয়াদোত্তীর্ণ। (Invalid or Expired Code)");
     }
+};
+
+window.updateMissionProgress = function(type, amount = 1) {
+    if (!GameState.dailyMissions || !Array.isArray(GameState.dailyMissions)) return;
+
+    if (GameState.currentSubject && GameState.currentSubject !== "all" && GameState.currentSubject !== "all_no_math") return;
     let updated = false;
     let newlyCompleted = [];
 
@@ -353,9 +417,7 @@ window.resetGameState = function () {
     GameState.bossActive = false;
     GameState.isEndlessMode = false;
     GameState.sessionHistory = [];
-    
     GameState.freeSkips = 10;
-    
     window.updateLevelTargets(); 
 };
 
@@ -439,6 +501,17 @@ window.ThemeData = [
             starBase: 0xFFFF00, starFast: 0xFFFFAA, starDistant: 0xAA7700, debris: 0x775511
         }
     }
+];
+
+window.SpecialItemsData = [
+    { id: "ship_special_phantom", name: "Phantom X1 (Ship)", type: "ship", rarity: "Legendary", desc: "A ghostly stealth interceptor." },
+    { id: "avatar_alien_king", name: "Alien King (Avatar)", type: "avatar", value: "👽", rarity: "Epic", desc: "Show off your cosmic royalty." },
+    { id: "shield_hex", name: "Hex Matrix (Shield)", type: "shield", rarity: "Epic", desc: "High-tech honeycomb barrier." },
+    { id: "shield_cosmic", name: "Cosmic Fire (Shield)", type: "shield", rarity: "Mythic", desc: "Burn with stellar blue flames." },
+    { id: "trail_rainbow", name: "Bifrost (Trail)", type: "trail", rarity: "Legendary", desc: "Leave a rainbow behind you." },
+    { id: "trail_void", name: "Void Particles (Trail)", type: "trail", rarity: "Epic", desc: "Dark matter engine emissions." },
+    { id: "trail_bubbles", name: "Bubble Stream (Trail)", type: "trail", rarity: "Common", desc: "A fun and bubbly thruster trail." },
+    { id: "dash_lightning", name: "Thunder Dash (Dash)", type: "dash", rarity: "Mythic", desc: "Electrifying golden strike aura." }
 ];
 
 window.getThemeColors = function() {

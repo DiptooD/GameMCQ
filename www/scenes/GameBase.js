@@ -144,35 +144,53 @@ class GameBase extends Phaser.Scene {
   }
 
   createParticleSystems() {
-    this.engineEmitter = this.add.particles(0, 0, 'engine_flame', {
-      speedY: { min: 100, max: 200 },
-      speedX: { min: -20, max: 20 },
-      scale: { start: 1.5, end: 0 }, 
-      alpha: { start: 0.8, end: 0 },
-      lifespan: 300,
-      blendMode: 'ADD',
-      frequency: -1,
-      tint: [0x00ffff, 0x0099ff]
-    });
+        let trailType = GameState.equippedTrail || "default";
+        
+        // Setup configuration based on equipped Special Trail
+        let trailConfig = {
+            speedY: { min: 100, max: 200 },
+            speedX: { min: -20, max: 20 },
+            scale: { start: 1.5, end: 0 }, 
+            alpha: { start: 0.8, end: 0 },
+            lifespan: 300,
+            blendMode: 'ADD',
+            frequency: -1,
+            tint: [0x00ffff, 0x0099ff] // Default cyan flames
+        };
 
-    this.hitEmitter = this.add.particles(0, 0, 'spark', {
-      speed: { min: 100, max: 300 },
-      scale: { start: 1.2, end: 0 }, 
-      alpha: { start: 1, end: 0 },
-      lifespan: 400,
-      blendMode: 'ADD',
-      frequency: -1
-    });
+        if (trailType === "trail_rainbow") {
+            trailConfig.tint = [0xff0000, 0xff7f00, 0xffff00, 0x00ff00, 0x0000ff, 0x4b0082, 0x8b00ff];
+        } else if (trailType === "trail_void") {
+            trailConfig.tint = [0x111111, 0x330033, 0x000000];
+            trailConfig.blendMode = 'NORMAL'; 
+        } else if (trailType === "trail_bubbles") {
+            trailConfig.tint = 0xddffff;
+            trailConfig.scale = { start: 0.5, end: 1.2 };
+            trailConfig.alpha = { start: 0.6, end: 0 };
+        }
 
-    this.explosionEmitter = this.add.particles(0, 0, 'explosion_particle', {
-      speed: { min: 50, max: 200 },
-      scale: { start: 1.8, end: 0 }, 
-      alpha: { start: 1, end: 0 },
-      lifespan: 500,
-      blendMode: 'ADD',
-      frequency: -1
-    });
-  }
+        let emitTexture = (trailType === "trail_bubbles") ? 'explosion_particle' : 'engine_flame';
+        
+        this.engineEmitter = this.add.particles(0, 0, emitTexture, trailConfig);
+
+        this.hitEmitter = this.add.particles(0, 0, 'spark', {
+            speed: { min: 100, max: 300 },
+            scale: { start: 1.2, end: 0 }, 
+            alpha: { start: 1, end: 0 },
+            lifespan: 400,
+            blendMode: 'ADD',
+            frequency: -1
+        });
+
+        this.explosionEmitter = this.add.particles(0, 0, 'explosion_particle', {
+            speed: { min: 50, max: 200 },
+            scale: { start: 1.8, end: 0 }, 
+            alpha: { start: 1, end: 0 },
+            lifespan: 500,
+            blendMode: 'ADD',
+            frequency: -1
+        });
+    }
 
   createExplosion(x, y, color, particleCount = 10) { 
     for(let i = 0; i < particleCount; i++) {
@@ -448,10 +466,25 @@ class GameBase extends Phaser.Scene {
     powerUp.setSize(45, 45);
   }
 
-  activateShield() {
-    this.hasShield = true;
-    this.shieldArc.setVisible(true);
-  }
+activateShield() {
+        this.hasShield = true;
+        
+        // Create the sprite if it doesn't exist OR if it was destroyed in a previous game
+        if (!this.specialShieldSprite || !this.specialShieldSprite.scene) {
+            this.specialShieldSprite = this.add.sprite(this.player.x, this.player.y, "shield_hex_img").setDepth(10).setVisible(false);
+        }
+
+        let shieldType = GameState.equippedShield || "default";
+        
+        if (shieldType !== "default" && this.textures.exists(`${shieldType}_img`)) {
+            this.specialShieldSprite.setTexture(`${shieldType}_img`);
+            this.specialShieldSprite.setVisible(true);
+            this.shieldArc.setVisible(false);
+        } else {
+            this.specialShieldSprite.setVisible(false);
+            this.shieldArc.setVisible(true);
+        }
+    }
 
   activateMagnet() {
     if (this.magnetActive) {
