@@ -135,5 +135,4 @@ class SpecialItemsTexture {
 
         g.destroy();
     }
-    
 }
