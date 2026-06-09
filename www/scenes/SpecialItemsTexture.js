@@ -133,6 +133,67 @@ class SpecialItemsTexture {
             g.generateTexture("dash_lightning_img", 60, 50);
         }
 
+        // ==========================================
+        // 4. NEW HUD PREVIEWS (For Shop Cards)
+        // ==========================================
+        if (!scene.textures.exists("hud_glassmorphism_img")) {
+            g.clear();
+            g.fillStyle(0x002244, 0.8); g.fillRoundedRect(10, 10, 80, 80, 10);
+            g.lineStyle(4, 0x00ffff, 1); g.strokeRoundedRect(10, 10, 80, 80, 10);
+            g.generateTexture("hud_glassmorphism_img", 100, 100);
+        }
+        if (!scene.textures.exists("hud_military_img")) {
+            g.clear();
+            g.fillStyle(0x1a1c1a, 1); g.fillRect(10, 10, 80, 80);
+            g.lineStyle(4, 0x00ff00, 1); g.strokeRect(10, 10, 80, 80);
+            g.lineStyle(6, 0xff0000, 1);
+            g.beginPath(); g.moveTo(10, 30); g.lineTo(10, 10); g.lineTo(30, 10); g.strokePath();
+            g.beginPath(); g.moveTo(90, 30); g.lineTo(90, 10); g.lineTo(70, 10); g.strokePath();
+            g.beginPath(); g.moveTo(10, 70); g.lineTo(10, 90); g.lineTo(30, 90); g.strokePath();
+            g.beginPath(); g.moveTo(90, 70); g.lineTo(90, 90); g.lineTo(70, 90); g.strokePath();
+            g.generateTexture("hud_military_img", 100, 100);
+        }
+        if (!scene.textures.exists("hud_retro_img")) {
+            g.clear();
+            g.fillStyle(0x0000aa, 1); g.fillRect(10, 10, 80, 80);
+            g.lineStyle(6, 0xffffff, 1); g.strokeRect(10, 10, 80, 80);
+            g.generateTexture("hud_retro_img", 100, 100);
+        }
+        if (!scene.textures.exists("hud_jungle_img")) {
+            g.clear();
+            g.fillStyle(0x0a220a, 1); g.fillRoundedRect(10, 10, 80, 80, 8);
+            g.lineStyle(5, 0x228822, 1); g.strokeRoundedRect(10, 10, 80, 80, 8);
+            g.fillStyle(0x00ff00, 0.5); g.fillCircle(20, 20, 10); g.fillCircle(80, 80, 10);
+            g.generateTexture("hud_jungle_img", 100, 100);
+        }
+
+        // ==========================================
+        // 5. NEW BATTERY PREVIEWS (For Shop Cards)
+        // ==========================================
+        if (!scene.textures.exists("battery_neon_img")) {
+            g.clear();
+            g.fillStyle(0x110022, 1); g.fillRoundedRect(10, 30, 80, 40, 5);
+            g.lineStyle(4, 0xff00ff, 1); g.strokeRoundedRect(10, 30, 80, 40, 5);
+            g.fillStyle(0xff00ff, 1); g.fillRect(20, 35, 15, 30); g.fillRect(40, 35, 15, 30);
+            g.generateTexture("battery_neon_img", 100, 100);
+        }
+        if (!scene.textures.exists("battery_plasma_img")) {
+            g.clear();
+            g.fillStyle(0x001122, 1); g.fillRoundedRect(10, 30, 80, 40, 5);
+            g.lineStyle(4, 0x00ffff, 1); g.strokeRoundedRect(10, 30, 80, 40, 5);
+            g.fillStyle(0x00ffff, 1); g.fillRoundedRect(15, 35, 60, 30, 4);
+            g.generateTexture("battery_plasma_img", 100, 100);
+        }
+        if (!scene.textures.exists("battery_crystal_img")) {
+            g.clear();
+            g.fillStyle(0x220033, 1); g.fillRoundedRect(10, 30, 80, 40, 5);
+            g.lineStyle(4, 0xcc00ff, 1); g.strokeRoundedRect(10, 30, 80, 40, 5);
+            g.fillStyle(0xcc00ff, 1); 
+            g.beginPath(); g.moveTo(30, 35); g.lineTo(40, 50); g.lineTo(30, 65); g.lineTo(20, 50); g.fillPath();
+            g.beginPath(); g.moveTo(60, 35); g.lineTo(70, 50); g.lineTo(60, 65); g.lineTo(50, 50); g.fillPath();
+            g.generateTexture("battery_crystal_img", 100, 100);
+        }
+
         g.destroy();
     }
 }

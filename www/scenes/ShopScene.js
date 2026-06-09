@@ -18,7 +18,6 @@ class ShopScene extends Phaser.Scene {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
 
-        // Initialize Audio and Textures so they are available immediately
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
         if (typeof GameTextures !== 'undefined') GameTextures.init(this);
         if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
@@ -305,7 +304,7 @@ class ShopScene extends Phaser.Scene {
         this.containerY = this.listStartY;
         this.container.y = this.listStartY;
         
-        this.refreshContent(); // Build synchronously, removing the "Blinking effect"
+        this.refreshContent(); 
     }
 
     refreshContent() {
@@ -341,15 +340,23 @@ class ShopScene extends Phaser.Scene {
         const ownedShields = new Set(GameState.ownedShields || []);
         const ownedTrails = new Set(GameState.ownedTrails || []);
         const ownedDashAuras = new Set(GameState.ownedDashAuras || []);
+        
+        // NEW
+        const ownedHuds = new Set(GameState.ownedHuds || []);
+        const ownedBatteries = new Set(GameState.ownedBatteries || []);
 
         const specials = window.SpecialItemsData || [];
-        const categories = { ship: [], avatar: [], shield: [], trail: [], dash: [] };
+        const categories = { ship: [], avatar: [], shield: [], trail: [], dash: [], hud: [], battery: [] };
 
         categories.ship.push({ id: "default", type: "ship", rarity: "Common", name: "ডিফল্ট স্কিন", desc: "মূল স্পেসশিপ" });
         categories.avatar.push({ id: "default", type: "avatar", rarity: "Common", name: "ডিফল্ট অ্যাভাটার", desc: "সাধারণ প্রোফাইল", value: "👤" });
         categories.shield.push({ id: "default", type: "shield", rarity: "Common", name: "ডিফল্ট শিল্ড", desc: "সাধারণ শিল্ড এনার্জি" });
         categories.trail.push({ id: "default", type: "trail", rarity: "Common", name: "ডিফল্ট ট্রেইল", desc: "সাধারণ ইঞ্জিনের ধোঁয়া" });
         categories.dash.push({ id: "default", type: "dash", rarity: "Common", name: "ডিফল্ট ড্যাশ", desc: "সাধারণ ড্যাশ অরা" });
+        
+        // NEW DEFAULTS
+        categories.hud.push({ id: "default", type: "hud", rarity: "Common", name: "ডিফল্ট থিম", desc: "সাধারণ গ্লাস থিম" });
+        categories.battery.push({ id: "default", type: "battery", rarity: "Common", name: "ডিফল্ট ব্যাটারি", desc: "সাধারণ ব্যাটারি প্যানেল" });
 
         specials.forEach(item => {
             let isOwned = false;
@@ -358,29 +365,33 @@ class ShopScene extends Phaser.Scene {
             else if (item.type === "shield") isOwned = ownedShields.has(item.id);
             else if (item.type === "trail") isOwned = ownedTrails.has(item.id);
             else if (item.type === "dash") isOwned = ownedDashAuras.has(item.id);
+            else if (item.type === "hud") isOwned = ownedHuds.has(item.id);
+            else if (item.type === "battery") isOwned = ownedBatteries.has(item.id);
             
             if (isOwned && categories[item.type]) categories[item.type].push(item);
         });
 
         let expectedHeight = 120; 
         let hasAnyItems = false;
-        [categories.ship, categories.avatar, categories.shield, categories.trail, categories.dash].forEach(items => {
-            if (items.length > 1) { // 1 means only default is there. Don't show category if they don't own any.
+        [categories.ship, categories.avatar, categories.shield, categories.trail, categories.dash, categories.hud, categories.battery].forEach(items => {
+            if (items.length > 1) { 
                 hasAnyItems = true;
-                expectedHeight += 80; // Header height
-                const numRows = Math.ceil(items.length / 2); // 2 COLUMNS layout
+                expectedHeight += 80; 
+                const numRows = Math.ceil(items.length / 2); 
                 expectedHeight += numRows * 340 + 40; 
             }
         });
         this.contentHeight = hasAnyItems ? expectedHeight + 50 : 300;
 
-        let currentY = 120; // Starting point under the redeem button
+        let currentY = 120; 
         const categoryLabels = {
             ship: "🚀 স্পেসশিপ স্কিন (Ship Skins)",
             avatar: "👤 অ্যাভাটার (Avatars)",
             shield: "🛡️ শিল্ড (Shields)",
             trail: "🔥 ট্রেইল (Trails)",
-            dash: "⚡ ড্যাশ অরা (Dash Auras)"
+            dash: "⚡ ড্যাশ অরা (Dash Auras)",
+            hud: "🖥️ হুড/বক্স থিম (HUD Themes)",
+            battery: "🔋 ব্যাটারি স্কিন (Battery Skins)"
         };
 
         const renderCategory = (type, items) => {
@@ -406,8 +417,10 @@ class ShopScene extends Phaser.Scene {
                 else if (item.type === "shield") isEquipped = (GameState.equippedShield || "default") === item.id;
                 else if (item.type === "trail") isEquipped = (GameState.equippedTrail || "default") === item.id;
                 else if (item.type === "dash") isEquipped = (GameState.equippedDashAura || "default") === item.id;
+                else if (item.type === "hud") isEquipped = (GameState.equippedHud || "default") === item.id;
+                else if (item.type === "battery") isEquipped = (GameState.equippedBattery || "default") === item.id;
 
-                const col = count % 2; // Fixed to 2 Columns
+                const col = count % 2; 
                 const row = Math.floor(count / 2);
                 const xCard = col === 0 ? 190 : 530; 
                 const yCard = currentY + row * 340 + 160; 
@@ -420,12 +433,13 @@ class ShopScene extends Phaser.Scene {
             currentY += numRows * 340 + 40; 
         };
 
-        // Render synchronously to eliminate blinking
         renderCategory("ship", categories.ship);
         renderCategory("avatar", categories.avatar);
         renderCategory("shield", categories.shield);
         renderCategory("trail", categories.trail);
         renderCategory("dash", categories.dash);
+        renderCategory("hud", categories.hud);
+        renderCategory("battery", categories.battery);
 
         if (!hasAnyItems) {
             const noTxt = this.add.text(360, 200, "আপনার কাছে কোনো স্পেশাল আইটেম নেই।\n(No Special Items Unlocked)", {
@@ -454,7 +468,6 @@ class ShopScene extends Phaser.Scene {
         const bg = this.add.graphics();
         bg.fillStyle(bgColor, 0.9);
         
-        // Enlarged card to fit properly within the 2-column layout (280x320)
         bg.fillRoundedRect(-140, -160, 280, 320, 20); 
         bg.lineStyle(borderThickness, borderColor, borderAlpha);
         bg.strokeRoundedRect(-140, -160, 280, 320, 20);
@@ -477,6 +490,7 @@ class ShopScene extends Phaser.Scene {
             
             if (item.type === "dash") preview.setScale(1.5);
             else if (item.type === "shield") preview.setScale(0.9);
+            else if (item.type === "hud" || item.type === "battery") preview.setScale(0.9);
             else preview.setScale(2.5); // trails or spark
         }
 
@@ -503,7 +517,6 @@ class ShopScene extends Phaser.Scene {
             }).setOrigin(0.5);
         }
 
-        // Updated HitArea to match card background size
         const hitArea = this.add.rectangle(0, 0, 280, 320, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         cardContainer.add([bg, rarityTag, preview, name, desc, statusBadge, hitArea]);
@@ -528,6 +541,8 @@ class ShopScene extends Phaser.Scene {
                 else if (item.type === "shield") GameState.equippedShield = valToSet;
                 else if (item.type === "trail") GameState.equippedTrail = valToSet;
                 else if (item.type === "dash") GameState.equippedDashAura = valToSet;
+                else if (item.type === "hud") GameState.equippedHud = valToSet;
+                else if (item.type === "battery") GameState.equippedBattery = valToSet;
                 
                 window.saveGame();
                 this.refreshContent();

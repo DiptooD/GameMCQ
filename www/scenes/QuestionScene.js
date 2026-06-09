@@ -10,7 +10,7 @@ class QuestionScene extends Phaser.Scene {
         
         this.currentGlowAlpha = 0;
         this.showerGlowAlpha = 0;
-        this.warningTriggered = false; // NEW: Track if the 15s warning has fired
+        this.warningTriggered = false; 
     }
 
     create() {
@@ -35,7 +35,7 @@ class QuestionScene extends Phaser.Scene {
         const boxH = 445; 
 
         this.qPanel = this.add.graphics();
-        this.drawGlassPanel(this.qPanel, boxX, boxY, boxW, boxH);
+        this.drawHudPanel(this.qPanel, boxX, boxY, boxW, boxH);
         this.qContainer.add(this.qPanel);
 
         // UI SCALING
@@ -214,7 +214,7 @@ class QuestionScene extends Phaser.Scene {
 
         if (this.quickPanelEnabled) {
             const qaBg = this.add.graphics();
-            this.drawGlassPanel(qaBg, -20, -10, 140, 520);
+            this.drawHudPanel(qaBg, -20, -10, 140, 520);
             this.quickAnsContainer.add(qaBg);
 
             const qaLabels = ["ক", "খ", "গ", "ঘ"];
@@ -337,9 +337,12 @@ class QuestionScene extends Phaser.Scene {
         botBar.fillGradientStyle(0x000000, 0x000000, 0x000510, 0x000510, 0, 0, 0.9, 0.9);
         botBar.fillRect(0, h - 120, w, 120);
 
-        this.boltIcon = this.add.image(60, uiY, "ui_bolt").setScale(1.1).setTint(0x00ffcc);
+        this.boltIcon = this.add.image(60, uiY, "ui_bolt").setScale(1.1);
+        this.batteryBg = this.add.rectangle(230, uiY, 260, 30, 0x000000, 0.4);
         
-        this.batteryBg = this.add.rectangle(230, uiY, 260, 30, 0x000000, 0.4).setStrokeStyle(3, 0x555555, 0.6);
+        // Setup proper styles for the battery bar
+        this.applyBatterySkin();
+
         this.batteryFill = this.add.graphics();
 
         this.correctLabel = this.add.text(w - 30, uiY, "", {
@@ -395,12 +398,61 @@ class QuestionScene extends Phaser.Scene {
         this.sound.play(key, config);
     }
 
-    drawGlassPanel(graphics, x, y, w, h) {
+    // NEW HUD Dynamic Drawer (Replaces drawGlassPanel)
+    drawHudPanel(graphics, x, y, w, h) {
         graphics.clear();
-        graphics.fillStyle(0x000000, 0.3);
-        graphics.fillRoundedRect(x, y, w, h, 16);
-        graphics.lineStyle(3, 0xffffff, 0.15); 
-        graphics.strokeRoundedRect(x, y, w, h, 16);
+        const hudId = GameState.equippedHud || "default";
+
+        if (hudId === "hud_glassmorphism") {
+            graphics.fillStyle(0x002244, 0.4);
+            graphics.fillRoundedRect(x, y, w, h, 20);
+            graphics.lineStyle(2, 0x00ffff, 0.3);
+            graphics.strokeRoundedRect(x, y, w, h, 20);
+        } else if (hudId === "hud_military") {
+            graphics.fillStyle(0x1a1c1a, 0.9);
+            graphics.fillRect(x, y, w, h);
+            graphics.lineStyle(4, 0x00ff00, 0.8);
+            graphics.strokeRect(x, y, w, h);
+            // Add corner accents
+            graphics.lineStyle(6, 0xff0000, 1);
+            graphics.beginPath(); graphics.moveTo(x, y+20); graphics.lineTo(x, y); graphics.lineTo(x+20, y); graphics.strokePath();
+            graphics.beginPath(); graphics.moveTo(x+w-20, y); graphics.lineTo(x+w, y); graphics.lineTo(x+w, y+20); graphics.strokePath();
+            graphics.beginPath(); graphics.moveTo(x, y+h-20); graphics.lineTo(x, y+h); graphics.lineTo(x+20, y+h); graphics.strokePath();
+            graphics.beginPath(); graphics.moveTo(x+w-20, y+h); graphics.lineTo(x+w, y+h); graphics.lineTo(x+w, y+h-20); graphics.strokePath();
+        } else if (hudId === "hud_retro") {
+            graphics.fillStyle(0x0000aa, 1);
+            graphics.fillRect(x, y, w, h);
+            graphics.lineStyle(4, 0xffffff, 1);
+            graphics.strokeRect(x, y, w, h);
+        } else if (hudId === "hud_jungle") {
+            graphics.fillStyle(0x0a220a, 0.85);
+            graphics.fillRoundedRect(x, y, w, h, 10);
+            graphics.lineStyle(5, 0x228822, 0.9);
+            graphics.strokeRoundedRect(x, y, w, h, 10);
+        } else {
+            // Default Glass
+            graphics.fillStyle(0x000000, 0.3);
+            graphics.fillRoundedRect(x, y, w, h, 16);
+            graphics.lineStyle(3, 0xffffff, 0.15); 
+            graphics.strokeRoundedRect(x, y, w, h, 16);
+        }
+    }
+
+    applyBatterySkin() {
+        const batId = GameState.equippedBattery || "default";
+        if(batId === "battery_neon") {
+            this.boltIcon.setTint(0xff00ff);
+            this.batteryBg.setFillStyle(0x110022, 0.8).setStrokeStyle(3, 0xff00ff, 0.8);
+        } else if (batId === "battery_plasma") {
+            this.boltIcon.setTint(0x00ffff);
+            this.batteryBg.setFillStyle(0x001122, 0.8).setStrokeStyle(3, 0x00ffff, 0.8);
+        } else if (batId === "battery_crystal") {
+            this.boltIcon.setTint(0xcc00ff);
+            this.batteryBg.setFillStyle(0x220033, 0.6).setStrokeStyle(3, 0xcc00ff, 0.6);
+        } else { // default
+            this.boltIcon.setTint(0x00ffcc);
+            this.batteryBg.setFillStyle(0x000000, 0.4).setStrokeStyle(3, 0x555555, 0.6);
+        }
     }
 
     refreshHearts() {
@@ -435,13 +487,11 @@ class QuestionScene extends Phaser.Scene {
 
         let targetAlpha = 0;
         
-        // NEW: Check Meteor Timer Progress to Trigger Warning 15 seconds before hit
         if (this.meteorTimer && !GameState.bossActive && GameState.battery >= 100) {
             let elapsed = this.meteorTimer.getElapsed();
             let delay = this.meteorTimer.delay;
             let timeLeft = delay - elapsed;
 
-            // Trigger the 15-second warning text!
             if (timeLeft <= 15000 && !this.warningTriggered) {
                 this.triggerMeteorWarning();
                 this.warningTriggered = true;
@@ -526,7 +576,6 @@ class QuestionScene extends Phaser.Scene {
         });
     }
 
-    // NEW: Triggers the red urgent text
     triggerMeteorWarning() {
         if (this.readyText) {
             this.readyText.setText("⚠️দ্রুত উত্তর দিন! নাহলে উল্কাপিণ্ড আঘাত হানতে যাচ্ছে!");
@@ -536,7 +585,6 @@ class QuestionScene extends Phaser.Scene {
             this.readyText.setScale(.95);
             this.readyText.setAlpha(1);
             
-            // Fast, urgent pulse
             this.readyTween = this.tweens.add({
                 targets: this.readyText,
                 alpha: 0.8,
@@ -548,7 +596,6 @@ class QuestionScene extends Phaser.Scene {
         }
     }
 
-    // NEW: Resets the text back to normal
     resetReadyText() {
         if (this.readyText) {
             this.readyText.setText("Ready! উত্তর দিন!");
@@ -580,12 +627,12 @@ class QuestionScene extends Phaser.Scene {
                         const gameScene = this.scene.get('GameScene');
                         if (gameScene && !GameState.bossActive) gameScene.spawnMeteors();
                         this.triggerMeteorShowerGlow();
-                        this.warningTriggered = false; // Reset warning state for next drop
-                        this.resetReadyText(); // Set text back to green Ready
+                        this.warningTriggered = false; 
+                        this.resetReadyText(); 
                     },
                     loop: true 
                 });
-                this.warningTriggered = false; // Fresh reset
+                this.warningTriggered = false; 
             }
         } else {
             if (this.meteorTimer) {
@@ -600,24 +647,57 @@ class QuestionScene extends Phaser.Scene {
     updateBatteryVisuals() {
         this.batteryFill.clear();
         const pct = Math.min(GameState.battery / 100, 1);
+        const batId = GameState.equippedBattery || "default";
+
+        let color = 0xff0000;
+        if (pct >= 1) {
+            if (batId === "battery_neon") color = 0xff00ff;
+            else if (batId === "battery_plasma") color = 0x00ffff;
+            else if (batId === "battery_crystal") color = 0xcc00ff;
+            else color = 0x00ffff; // default
+        } else if (pct > 0.7) {
+            color = 0x00ff00;
+        } else if (pct > 0.3) {
+            color = 0xffff00;
+        }
+
+        const barTotalWidth = 252;
+        const startX = 104;
+        const startY = this.cameras.main.height - 90;
         
-        let color = 0xff0000; 
-        if (pct >= 1) color = 0x00ffff; 
-        else if (pct > 0.7) color = 0x00ff00; 
-        else if (pct > 0.3) color = 0xffff00; 
+        if (batId === "battery_plasma") {
+            // Continuous liquid bar
+            this.batteryFill.fillStyle(color, 0.9);
+            this.batteryFill.fillRoundedRect(startX, startY, barTotalWidth * pct, 20, 5);
+        } else if (batId === "battery_crystal") {
+            // Crystal shards (triangles/diamonds)
+            const totalShards = 8;
+            const gap = 6;
+            const w = (barTotalWidth - ((totalShards - 1) * gap)) / totalShards;
+            const active = Math.ceil(pct * totalShards);
+            for(let i=0; i<totalShards; i++) {
+                const cx = startX + (i * (w + gap)) + (w/2);
+                const cy = startY + 10;
+                this.batteryFill.fillStyle(i < active ? color : 0x222222, 0.9);
+                this.batteryFill.beginPath();
+                this.batteryFill.moveTo(cx, cy - 10);
+                this.batteryFill.lineTo(cx + w/2, cy);
+                this.batteryFill.lineTo(cx, cy + 10);
+                this.batteryFill.lineTo(cx - w/2, cy);
+                this.batteryFill.fillPath();
+            }
+        } else {
+            // Default & Neon (segmented)
+            const totalSegments = 10;
+            const gap = 4;
+            const segmentWidth = (barTotalWidth - ((totalSegments - 1) * gap)) / totalSegments;
+            const activeSegments = Math.ceil(pct * totalSegments);
 
-        const barTotalWidth = 252;  
-        const startX = 104;         
-        const startY = this.cameras.main.height - 90; 
-        const totalSegments = 10;
-        const gap = 4;             
-        const segmentWidth = (barTotalWidth - ((totalSegments - 1) * gap)) / totalSegments;
-        const activeSegments = Math.ceil(pct * totalSegments);
-
-        for (let i = 0; i < totalSegments; i++) {
-            const segX = startX + (i * (segmentWidth + gap));
-            this.batteryFill.fillStyle(i < activeSegments ? color : 0x222222, 0.9);
-            this.batteryFill.fillRoundedRect(segX, startY, segmentWidth, 20, 3); 
+            for (let i = 0; i < totalSegments; i++) {
+                const segX = startX + (i * (segmentWidth + gap));
+                this.batteryFill.fillStyle(i < activeSegments ? color : 0x222222, 0.9);
+                this.batteryFill.fillRoundedRect(segX, startY, segmentWidth, 20, 3);
+            }
         }
     }
 
@@ -628,7 +708,6 @@ class QuestionScene extends Phaser.Scene {
 
             this.readyText.setAlpha(1);
             
-            // Only start the normal tween if the red warning isn't currently active
             if (!this.warningTriggered) {
                 if (!this.readyTween || !this.readyTween.isPlaying()) {
                     this.readyTween = this.tweens.add({
@@ -649,7 +728,7 @@ class QuestionScene extends Phaser.Scene {
                 this.readyTween = null;
             }
             this.readyText.setScale(1); 
-            this.resetReadyText(); // Immediately put text back to standard green state
+            this.resetReadyText(); 
         }
     }
 
@@ -758,7 +837,7 @@ class QuestionScene extends Phaser.Scene {
             
             this.optionBtns.forEach((btn, i) => {
             const optionsArray = q.options || [];
-            const cleanOpt = cleanStr(optionsArray[i]) || ""; // Added fallback
+            const cleanOpt = cleanStr(optionsArray[i]) || ""; 
 
             // UI SCALING
             if (cleanOpt.length > 40) {
@@ -798,7 +877,7 @@ class QuestionScene extends Phaser.Scene {
             
             this.optionBtns.forEach((btn, i) => {
             const optionsArray = q.options || [];
-            const cleanOpt = cleanStr(optionsArray[i]) || ""; // Added fallback
+            const cleanOpt = cleanStr(optionsArray[i]) || ""; 
 
             // UI SCALING
             if (cleanOpt.length > 40) {
@@ -873,7 +952,7 @@ class QuestionScene extends Phaser.Scene {
                     
                     this.optionBtns.forEach((btn, i) => {
                     const optionsArray = q.options || [];
-                    const cleanOpt = cleanStr(optionsArray[i]) || ""; // Added fallback
+                    const cleanOpt = cleanStr(optionsArray[i]) || ""; 
                     
                     // UI SCALING
                     if (cleanOpt.length > 40) {

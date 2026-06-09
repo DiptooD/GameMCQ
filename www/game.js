@@ -55,6 +55,12 @@ window.saveGame = function() {
         localStorage.setItem('game_equippedTrail', GameState.equippedTrail);
         localStorage.setItem('game_ownedDashAuras', JSON.stringify(GameState.ownedDashAuras));
         localStorage.setItem('game_equippedDashAura', GameState.equippedDashAura);
+        
+        // NEW: Save HUDs and Batteries
+        localStorage.setItem('game_ownedHuds', JSON.stringify(GameState.ownedHuds));
+        localStorage.setItem('game_equippedHud', GameState.equippedHud);
+        localStorage.setItem('game_ownedBatteries', JSON.stringify(GameState.ownedBatteries));
+        localStorage.setItem('game_equippedBattery', GameState.equippedBattery);
 
         if (GameState.matchHistory && GameState.matchHistory.length > 15) {
             GameState.matchHistory = GameState.matchHistory.slice(-15);
@@ -84,6 +90,10 @@ window.saveGame = function() {
                 equippedTrail: GameState.equippedTrail || "default",
                 ownedDashAuras: GameState.ownedDashAuras || [],
                 equippedDashAura: GameState.equippedDashAura || "default",
+                ownedHuds: GameState.ownedHuds || [],
+                equippedHud: GameState.equippedHud || "default",
+                ownedBatteries: GameState.ownedBatteries || [],
+                equippedBattery: GameState.equippedBattery || "default",
                 lastSaved: new Date().toISOString()
             }, { merge: true }).then(() => {
                 console.log("Cloud Sync Successful!");
@@ -274,6 +284,12 @@ window.GameState = {
     ownedDashAuras: JSON.parse(localStorage.getItem('game_ownedDashAuras')) || [],
     equippedDashAura: localStorage.getItem('game_equippedDashAura') || "default",
 
+    // NEW HUD AND BATTERIES
+    ownedHuds: JSON.parse(localStorage.getItem('game_ownedHuds')) || [],
+    equippedHud: localStorage.getItem('game_equippedHud') || "default",
+    ownedBatteries: JSON.parse(localStorage.getItem('game_ownedBatteries')) || [],
+    equippedBattery: localStorage.getItem('game_equippedBattery') || "default",
+
     craftingQueue: JSON.parse(localStorage.getItem('game_crafting')) || {},
     boosters: JSON.parse(localStorage.getItem('game_boosters')) || { 
         fireShield: 0, speedBoost: 0, batteryEff: 0 
@@ -299,7 +315,14 @@ window.redeemPromoCode = function() {
         "THUNDERDASH": "dash_lightning",
         "VOIDTRAIL": "trail_void",
         "VIPBUBBLES": "trail_bubbles",
-        "COSMICFIRE": "shield_cosmic"
+        "COSMICFIRE": "shield_cosmic",
+        "GLASSHUD": "hud_glassmorphism",
+        "NEONBATT": "battery_neon",
+        "D1" : "hud_military",
+        "D2" : "hud_retro",
+        "D3" : "hud_jungle",
+        "D4" : "battery_plasma",
+        "D5" : "battery_crystal"
     };
 
     let itemId = codeMap[code];
@@ -312,6 +335,8 @@ window.redeemPromoCode = function() {
             else if (itemDef.type === "shield") arr = GameState.ownedShields;
             else if (itemDef.type === "trail") arr = GameState.ownedTrails;
             else if (itemDef.type === "dash") arr = GameState.ownedDashAuras;
+            else if (itemDef.type === "hud") arr = GameState.ownedHuds;
+            else if (itemDef.type === "battery") arr = GameState.ownedBatteries;
 
             if (arr && !arr.includes(itemId)) {
                 arr.push(itemId);
@@ -511,7 +536,18 @@ window.SpecialItemsData = [
     { id: "trail_rainbow", name: "Bifrost (Trail)", type: "trail", rarity: "Legendary", desc: "Leave a rainbow behind you." },
     { id: "trail_void", name: "Void Particles (Trail)", type: "trail", rarity: "Epic", desc: "Dark matter engine emissions." },
     { id: "trail_bubbles", name: "Bubble Stream (Trail)", type: "trail", rarity: "Common", desc: "A fun and bubbly thruster trail." },
-    { id: "dash_lightning", name: "Thunder Dash (Dash)", type: "dash", rarity: "Mythic", desc: "Electrifying golden strike aura." }
+    { id: "dash_lightning", name: "Thunder Dash (Dash)", type: "dash", rarity: "Mythic", desc: "Electrifying golden strike aura." },
+    
+    // NEW HUD Skins
+    { id: "hud_glassmorphism", name: "Cool Glassmorphism", type: "hud", rarity: "Epic", desc: "Sleek, semi-transparent blur interface." },
+    { id: "hud_military", name: "Military Sci-Fi", type: "hud", rarity: "Legendary", desc: "Tactical dark metal with neon accents." },
+    { id: "hud_retro", name: "Minimalist Retro", type: "hud", rarity: "Common", desc: "Classic 8-bit style solid borders." },
+    { id: "hud_jungle", name: "Jungle Theme", type: "hud", rarity: "Mythic", desc: "Overgrown vines and deep forest tones." },
+    
+    // NEW Battery Skins
+    { id: "battery_neon", name: "Neon Core", type: "battery", rarity: "Epic", desc: "Vibrant neon glowing energy cells." },
+    { id: "battery_plasma", name: "Plasma Tube", type: "battery", rarity: "Legendary", desc: "Liquid plasma containment unit." },
+    { id: "battery_crystal", name: "Mana Crystal", type: "battery", rarity: "Mythic", desc: "Magical crystal energy shards." }
 ];
 
 window.getThemeColors = function() {
