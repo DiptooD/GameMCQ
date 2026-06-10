@@ -45,6 +45,11 @@ class MenuScene extends Phaser.Scene {
         if (typeof GameTextures !== 'undefined') GameTextures.init(this);
         if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
+        
+        // Dynamic Skin Pack Loader
+        if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.textureInits) {
+            window.SpecialItemsRegistry.textureInits.forEach(initFn => initFn(this));
+        }
 
         if (this.sound.get('bg_music')) {
             this.sound.get('bg_music').stop();

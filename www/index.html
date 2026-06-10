@@ -42,7 +42,7 @@
     window.FirebaseAuth.useDeviceLanguage(); 
     window.FirebaseDB = getFirestore(app);
     
-window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp, startAfter };    
+    window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCredential, signInWithPopup, doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, onSnapshot, addDoc, deleteDoc, updateDoc, serverTimestamp, startAfter };    
     window.connectToCloud = function() {
         return new Promise(async (resolve) => {
             console.log("Checking Firebase Auth state...");
@@ -80,7 +80,6 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
                             if (cloudData.lastMissionDate) gs.lastMissionDate = cloudData.lastMissionDate;
                             if (cloudData.dailyMissionsCompleted !== undefined) gs.dailyMissionsCompleted = cloudData.dailyMissionsCompleted;
 
-                            // Sync Special Items
                             if (cloudData.ownedAvatars) gs.ownedAvatars = cloudData.ownedAvatars;
                             if (cloudData.equippedAvatar) gs.equippedAvatar = cloudData.equippedAvatar;
                             if (cloudData.ownedShields) gs.ownedShields = cloudData.ownedShields;
@@ -177,7 +176,6 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
                 if (cloudData.gamesPlayed !== undefined) gs.gamesPlayed = cloudData.gamesPlayed;
                 if (cloudData.matchHistory) gs.matchHistory = cloudData.matchHistory;
 
-                // Sync Special Items
                 if (cloudData.ownedAvatars) gs.ownedAvatars = cloudData.ownedAvatars;
                 if (cloudData.equippedAvatar) gs.equippedAvatar = cloudData.equippedAvatar;
                 if (cloudData.ownedShields) gs.ownedShields = cloudData.ownedShields;
@@ -322,9 +320,13 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
             await loadScript('js/phaser.min.js');
         }
 
-        // ADDED scenes/SpecialItemsTexture.js HERE
         const scripts = [
             "game.js",
+
+            // --- LOAD SKIN PACKS HERE ---
+            "skins/promo_pack.js",
+            "skins/season1skins.js", // Add future seasons here!
+
             "scenes/LoadingScene.js",
             "scenes/PlayerProfileScene.js",
             "scenes/Leaderboard.js", 
@@ -336,7 +338,6 @@ window.FirebaseTools = { onAuthStateChanged, GoogleAuthProvider, signInWithCrede
             "scenes/SpinWheelScene.js",
             "scenes/PlayerShipTextures.js",
             "scenes/GameTextures.js",
-            "scenes/SpecialItemsTexture.js", 
             "GameSFX.js",
             "scenes/GameBase.js",
             "scenes/GameScene.js",

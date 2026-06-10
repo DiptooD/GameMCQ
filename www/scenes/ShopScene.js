@@ -21,7 +21,11 @@ class ShopScene extends Phaser.Scene {
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
         if (typeof GameTextures !== 'undefined') GameTextures.init(this);
         if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
-        if (typeof SpecialItemsTexture !== 'undefined') SpecialItemsTexture.init(this);
+
+        // --- DYNAMIC TEXTURE LOADING ---
+        if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.textureInits) {
+            window.SpecialItemsRegistry.textureInits.forEach(initFn => initFn(this));
+        }
 
         let menuMusic = this.sound.get('menubgm');
         const targetMusicVol = (window.GameState && window.GameState.musicVolume !== undefined) ? window.GameState.musicVolume : 0.5;
@@ -340,21 +344,19 @@ class ShopScene extends Phaser.Scene {
         const ownedShields = new Set(GameState.ownedShields || []);
         const ownedTrails = new Set(GameState.ownedTrails || []);
         const ownedDashAuras = new Set(GameState.ownedDashAuras || []);
-        
-        // NEW
         const ownedHuds = new Set(GameState.ownedHuds || []);
         const ownedBatteries = new Set(GameState.ownedBatteries || []);
 
-        const specials = window.SpecialItemsData || [];
+        // --- READ FROM DYNAMIC REGISTRY ---
+        const specials = window.SpecialItemsRegistry.items || [];
         const categories = { ship: [], avatar: [], shield: [], trail: [], dash: [], hud: [], battery: [] };
 
+        // Keep the defaults always visible
         categories.ship.push({ id: "default", type: "ship", rarity: "Common", name: "ডিফল্ট স্কিন", desc: "মূল স্পেসশিপ" });
         categories.avatar.push({ id: "default", type: "avatar", rarity: "Common", name: "ডিফল্ট অ্যাভাটার", desc: "সাধারণ প্রোফাইল", value: "👤" });
         categories.shield.push({ id: "default", type: "shield", rarity: "Common", name: "ডিফল্ট শিল্ড", desc: "সাধারণ শিল্ড এনার্জি" });
         categories.trail.push({ id: "default", type: "trail", rarity: "Common", name: "ডিফল্ট ট্রেইল", desc: "সাধারণ ইঞ্জিনের ধোঁয়া" });
         categories.dash.push({ id: "default", type: "dash", rarity: "Common", name: "ডিফল্ট ড্যাশ", desc: "সাধারণ ড্যাশ অরা" });
-        
-        // NEW DEFAULTS
         categories.hud.push({ id: "default", type: "hud", rarity: "Common", name: "ডিফল্ট থিম", desc: "সাধারণ গ্লাস থিম" });
         categories.battery.push({ id: "default", type: "battery", rarity: "Common", name: "ডিফল্ট ব্যাটারি", desc: "সাধারণ ব্যাটারি প্যানেল" });
 

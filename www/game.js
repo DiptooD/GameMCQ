@@ -1,3 +1,24 @@
+// ==========================================
+// SKIN PACK / SEASONS REGISTRY SYSTEM
+// ==========================================
+window.SpecialItemsRegistry = {
+    items: [],
+    promoCodes: {},
+    textureInits: []
+};
+
+window.registerSkinPack = function(packData) {
+    if (packData.items) {
+        window.SpecialItemsRegistry.items.push(...packData.items);
+    }
+    if (packData.promoCodes) {
+        Object.assign(window.SpecialItemsRegistry.promoCodes, packData.promoCodes);
+    }
+    if (packData.initTextures) {
+        window.SpecialItemsRegistry.textureInits.push(packData.initTextures);
+    }
+};
+
 window.saveCurrency = function() {
     window.saveGame();
     console.log("Currency/Boosters Saved");
@@ -56,7 +77,6 @@ window.saveGame = function() {
         localStorage.setItem('game_ownedDashAuras', JSON.stringify(GameState.ownedDashAuras));
         localStorage.setItem('game_equippedDashAura', GameState.equippedDashAura);
         
-        // NEW: Save HUDs and Batteries
         localStorage.setItem('game_ownedHuds', JSON.stringify(GameState.ownedHuds));
         localStorage.setItem('game_equippedHud', GameState.equippedHud);
         localStorage.setItem('game_ownedBatteries', JSON.stringify(GameState.ownedBatteries));
@@ -274,7 +294,6 @@ window.GameState = {
     ownedThemes: JSON.parse(localStorage.getItem('game_ownedThemes')) || ["theme_default"],
     equippedTheme: localStorage.getItem('game_equippedTheme') || "theme_default",
 
-    // SPECIALS ARRAYS
     ownedAvatars: JSON.parse(localStorage.getItem('game_ownedAvatars')) || [],
     equippedAvatar: localStorage.getItem('game_equippedAvatar') || "default",
     ownedShields: JSON.parse(localStorage.getItem('game_ownedShields')) || [],
@@ -284,7 +303,6 @@ window.GameState = {
     ownedDashAuras: JSON.parse(localStorage.getItem('game_ownedDashAuras')) || [],
     equippedDashAura: localStorage.getItem('game_equippedDashAura') || "default",
 
-    // NEW HUD AND BATTERIES
     ownedHuds: JSON.parse(localStorage.getItem('game_ownedHuds')) || [],
     equippedHud: localStorage.getItem('game_equippedHud') || "default",
     ownedBatteries: JSON.parse(localStorage.getItem('game_ownedBatteries')) || [],
@@ -299,35 +317,18 @@ window.GameState = {
 };
 
 // ==========================================
-// REDEEM PROMO CODE SYSTEM
+// REDEEM PROMO CODE SYSTEM (Now uses Registry)
 // ==========================================
 window.redeemPromoCode = function() {
     let code = prompt("উপহার কোড লিখুন (Enter Gift/Promo Code):");
     if (!code) return;
     code = code.trim().toUpperCase();
 
-    // Map the Promo Codes directly to Special Item IDs
-    let codeMap = {
-        "PHANTOM26": "ship_special_phantom",
-        "KINGALIEN": "avatar_alien_king",
-        "HEXDEFENSE": "shield_hex",
-        "BIFROST": "trail_rainbow",
-        "THUNDERDASH": "dash_lightning",
-        "VOIDTRAIL": "trail_void",
-        "VIPBUBBLES": "trail_bubbles",
-        "COSMICFIRE": "shield_cosmic",
-        "GLASSHUD": "hud_glassmorphism",
-        "NEONBATT": "battery_neon",
-        "D1" : "hud_military",
-        "D2" : "hud_retro",
-        "D3" : "hud_jungle",
-        "D4" : "battery_plasma",
-        "D5" : "battery_crystal"
-    };
+    // Map the Promo Codes dynamically from the registry
+    let itemId = window.SpecialItemsRegistry.promoCodes[code];
 
-    let itemId = codeMap[code];
     if (itemId) {
-        let itemDef = window.SpecialItemsData.find(i => i.id === itemId);
+        let itemDef = window.SpecialItemsRegistry.items.find(i => i.id === itemId);
         if (itemDef) {
             let arr;
             if (itemDef.type === "ship") arr = GameState.ownedShips;
@@ -526,28 +527,6 @@ window.ThemeData = [
             starBase: 0xFFFF00, starFast: 0xFFFFAA, starDistant: 0xAA7700, debris: 0x775511
         }
     }
-];
-
-window.SpecialItemsData = [
-    { id: "ship_special_phantom", name: "Phantom X1 (Ship)", type: "ship", rarity: "Legendary", desc: "A ghostly stealth interceptor." },
-    { id: "avatar_alien_king", name: "Alien King (Avatar)", type: "avatar", value: "👽", rarity: "Epic", desc: "Show off your cosmic royalty." },
-    { id: "shield_hex", name: "Hex Matrix (Shield)", type: "shield", rarity: "Epic", desc: "High-tech honeycomb barrier." },
-    { id: "shield_cosmic", name: "Cosmic Fire (Shield)", type: "shield", rarity: "Mythic", desc: "Burn with stellar blue flames." },
-    { id: "trail_rainbow", name: "Bifrost (Trail)", type: "trail", rarity: "Legendary", desc: "Leave a rainbow behind you." },
-    { id: "trail_void", name: "Void Particles (Trail)", type: "trail", rarity: "Epic", desc: "Dark matter engine emissions." },
-    { id: "trail_bubbles", name: "Bubble Stream (Trail)", type: "trail", rarity: "Common", desc: "A fun and bubbly thruster trail." },
-    { id: "dash_lightning", name: "Thunder Dash (Dash)", type: "dash", rarity: "Mythic", desc: "Electrifying golden strike aura." },
-    
-    // NEW HUD Skins
-    { id: "hud_glassmorphism", name: "Cool Glassmorphism", type: "hud", rarity: "Epic", desc: "Sleek, semi-transparent blur interface." },
-    { id: "hud_military", name: "Military Sci-Fi", type: "hud", rarity: "Legendary", desc: "Tactical dark metal with neon accents." },
-    { id: "hud_retro", name: "Minimalist Retro", type: "hud", rarity: "Common", desc: "Classic 8-bit style solid borders." },
-    { id: "hud_jungle", name: "Jungle Theme", type: "hud", rarity: "Mythic", desc: "Overgrown vines and deep forest tones." },
-    
-    // NEW Battery Skins
-    { id: "battery_neon", name: "Neon Core", type: "battery", rarity: "Epic", desc: "Vibrant neon glowing energy cells." },
-    { id: "battery_plasma", name: "Plasma Tube", type: "battery", rarity: "Legendary", desc: "Liquid plasma containment unit." },
-    { id: "battery_crystal", name: "Mana Crystal", type: "battery", rarity: "Mythic", desc: "Magical crystal energy shards." }
 ];
 
 window.getThemeColors = function() {

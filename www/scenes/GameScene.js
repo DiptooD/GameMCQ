@@ -13,7 +13,9 @@ class GameScene extends GameBase {
         if (typeof GameState.gamesPlayed === 'undefined') GameState.gamesPlayed = 0;
         this.luckMods = this.getLuckModifiers();
 
-        if (typeof SpecialItemsTexture !== 'undefined') SpecialItemsTexture.init(this);
+        if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.textureInits) {
+            window.SpecialItemsRegistry.textureInits.forEach(initFn => initFn(this));
+        }
 
         const h = this.cameras.main.height;
         const w = 720;
