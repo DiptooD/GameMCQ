@@ -255,13 +255,11 @@ Object.assign(MenuScene.prototype, {
             longPressTimer = this.time.delayedCall(400, () => {
                 let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
                 if (dist < 15 && isDraggingChat && !this.swipeMode) {
-                    hasLongPressed = true;
-                    isDraggingChat = false; 
-                    if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(40); 
 
                     let localX = pointer.x - this.chatContainer.x;
                     let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
-                    
+                    let hitMessage = false;
+
                     for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
                         let child = this.msgListContainer.list[i];
                         if (child.isInteractHit) {
@@ -269,11 +267,19 @@ Object.assign(MenuScene.prototype, {
                             let top = child.y - child.height/2, bottom = child.y + child.height/2;
                             
                             if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
+                                hitMessage = true;
                                 if (child.isError) this.retrySendMessage(child.msgData.id);
                                 else this.showChatActionMenu(child.msgData, pointer.x, pointer.y);
-                                return; 
+                                break; 
                             }
                         }
+                    }
+
+                    // FIXED: Only cancel the drag state IF we actually hit a message
+                    if (hitMessage) {
+                        hasLongPressed = true;
+                        isDraggingChat = false; 
+                        if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(40); 
                     }
                 }
             });
@@ -1477,13 +1483,13 @@ Object.assign(MenuScene.prototype, {
                     );
                 }
 
-                // THICKER AVATAR RENDERING
+                // FIXED 2: AVATAR & BUBBLE ALIGNMENT
                 const hasAvatar = !isConsecutive;
-                const avatarSize = 60; 
+                const avatarSize = 52; // Slightly refined to save horizontal space
                 let avatarIcon = msg.avatar || "👤"; 
-                let avatarX = isMe ? this.chatW - 40 : 40;
+                let avatarX = isMe ? this.chatW - 35 : 35; // Pushed closer to the screen edges
 
-                const bubbleMaxWidth = this.chatW * 0.80; // Adjusted for bigger avatars
+                const bubbleMaxWidth = this.chatW * 0.85; // Increased max width
                 let extraHeight = (msg.replyTo && !msg.isDeleted) ? 46 : 0;
                 let replyTxtObj = null;
                 
@@ -1515,7 +1521,7 @@ Object.assign(MenuScene.prototype, {
                         fontSize: "28px", fontFamily: "'Anek Bangla'", color: nameColorHexStr, fontStyle: "bold"
                     }).setOrigin(0, 0.5);
 
-                    let nameX = isMe ? this.chatW - avatarSize - 25 - nameTxt.width : 25 + avatarSize + 15;
+                    let nameX = isMe ? this.chatW - avatarSize - 25 - nameTxt.width : 15 + avatarSize + 15;
                     nameTxt.x = nameX;
                     addItems(nameTxt); 
 
@@ -1556,7 +1562,8 @@ Object.assign(MenuScene.prototype, {
                 }
 
                 let bubbleH = msgTxt.height + 45 + extraHeight + extraReactionPadding;
-                let startX = isMe ? (this.chatW - bubbleW - avatarSize - 25) : (25 + avatarSize + 15);
+                // FIXED 3: Reduced the gap padding to push bubbles closer to avatars and edges
+                let startX = isMe ? (this.chatW - bubbleW - avatarSize - 25) : (10 + avatarSize + 15);
 
                 const bubbleBg = this.add.graphics();
                 bubbleBg.fillStyle(bubBgHex, bubAlpha);
@@ -1648,6 +1655,7 @@ Object.assign(MenuScene.prototype, {
             allMessages.forEach(msg => {
                 currentY = renderMessage(msg, this.msgListContainer, currentY);
             });
+            currentY += 10;
 
             const visibleHeight = dynamicScrollZoneHeight;
             this.chatMaxScroll = Math.max(0, currentY - visibleHeight);
