@@ -399,38 +399,18 @@ class QuestionScene extends Phaser.Scene {
     }
 
     // NEW HUD Dynamic Drawer (Replaces drawGlassPanel)
+    // Inside QuestionScene.js - Replace your existing drawHudPanel with this:
+
     drawHudPanel(graphics, x, y, w, h) {
         graphics.clear();
         const hudId = GameState.equippedHud || "default";
 
-        if (hudId === "hud_glassmorphism") {
-            graphics.fillStyle(0x002244, 0.4);
-            graphics.fillRoundedRect(x, y, w, h, 20);
-            graphics.lineStyle(2, 0x00ffff, 0.3);
-            graphics.strokeRoundedRect(x, y, w, h, 20);
-        } else if (hudId === "hud_military") {
-            graphics.fillStyle(0x1a1c1a, 0.9);
-            graphics.fillRect(x, y, w, h);
-            graphics.lineStyle(4, 0x00ff00, 0.8);
-            graphics.strokeRect(x, y, w, h);
-            // Add corner accents
-            graphics.lineStyle(6, 0xff0000, 1);
-            graphics.beginPath(); graphics.moveTo(x, y+20); graphics.lineTo(x, y); graphics.lineTo(x+20, y); graphics.strokePath();
-            graphics.beginPath(); graphics.moveTo(x+w-20, y); graphics.lineTo(x+w, y); graphics.lineTo(x+w, y+20); graphics.strokePath();
-            graphics.beginPath(); graphics.moveTo(x, y+h-20); graphics.lineTo(x, y+h); graphics.lineTo(x+20, y+h); graphics.strokePath();
-            graphics.beginPath(); graphics.moveTo(x+w-20, y+h); graphics.lineTo(x+w, y+h); graphics.lineTo(x+w, y+h-20); graphics.strokePath();
-        } else if (hudId === "hud_retro") {
-            graphics.fillStyle(0x0000aa, 1);
-            graphics.fillRect(x, y, w, h);
-            graphics.lineStyle(4, 0xffffff, 1);
-            graphics.strokeRect(x, y, w, h);
-        } else if (hudId === "hud_jungle") {
-            graphics.fillStyle(0x0a220a, 0.85);
-            graphics.fillRoundedRect(x, y, w, h, 10);
-            graphics.lineStyle(5, 0x228822, 0.9);
-            graphics.strokeRoundedRect(x, y, w, h, 10);
+        // 1. Check if the active HUD has a custom renderer in the Registry
+        if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.hudRenderers[hudId]) {
+            // Execute the custom code from the skin pack
+            window.SpecialItemsRegistry.hudRenderers[hudId](graphics, x, y, w, h);
         } else {
-            // Default Glass
+            // 2. Fallback to the Default Glass HUD (Keep this safely in the main engine)
             graphics.fillStyle(0x000000, 0.3);
             graphics.fillRoundedRect(x, y, w, h, 16);
             graphics.lineStyle(3, 0xffffff, 0.15); 
@@ -440,16 +420,12 @@ class QuestionScene extends Phaser.Scene {
 
     applyBatterySkin() {
         const batId = GameState.equippedBattery || "default";
-        if(batId === "battery_neon") {
-            this.boltIcon.setTint(0xff00ff);
-            this.batteryBg.setFillStyle(0x110022, 0.8).setStrokeStyle(3, 0xff00ff, 0.8);
-        } else if (batId === "battery_plasma") {
-            this.boltIcon.setTint(0x00ffff);
-            this.batteryBg.setFillStyle(0x001122, 0.8).setStrokeStyle(3, 0x00ffff, 0.8);
-        } else if (batId === "battery_crystal") {
-            this.boltIcon.setTint(0xcc00ff);
-            this.batteryBg.setFillStyle(0x220033, 0.6).setStrokeStyle(3, 0xcc00ff, 0.6);
-        } else { // default
+
+        // Check if active battery has a custom skin applicator in the Registry
+        if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.batteryRenderers[batId]) {
+            window.SpecialItemsRegistry.batteryRenderers[batId].applySkin(this.boltIcon, this.batteryBg);
+        } else {
+            // Fallback to the Default Theme
             this.boltIcon.setTint(0x00ffcc);
             this.batteryBg.setFillStyle(0x000000, 0.4).setStrokeStyle(3, 0x555555, 0.6);
         }
@@ -649,45 +625,20 @@ class QuestionScene extends Phaser.Scene {
         const pct = Math.min(GameState.battery / 100, 1);
         const batId = GameState.equippedBattery || "default";
 
-        let color = 0xff0000;
-        if (pct >= 1) {
-            if (batId === "battery_neon") color = 0xff00ff;
-            else if (batId === "battery_plasma") color = 0x00ffff;
-            else if (batId === "battery_crystal") color = 0xcc00ff;
-            else color = 0x00ffff; // default
-        } else if (pct > 0.7) {
-            color = 0x00ff00;
-        } else if (pct > 0.3) {
-            color = 0xffff00;
-        }
-
         const barTotalWidth = 252;
         const startX = 104;
         const startY = this.cameras.main.height - 90;
-        
-        if (batId === "battery_plasma") {
-            // Continuous liquid bar
-            this.batteryFill.fillStyle(color, 0.9);
-            this.batteryFill.fillRoundedRect(startX, startY, barTotalWidth * pct, 20, 5);
-        } else if (batId === "battery_crystal") {
-            // Crystal shards (triangles/diamonds)
-            const totalShards = 8;
-            const gap = 6;
-            const w = (barTotalWidth - ((totalShards - 1) * gap)) / totalShards;
-            const active = Math.ceil(pct * totalShards);
-            for(let i=0; i<totalShards; i++) {
-                const cx = startX + (i * (w + gap)) + (w/2);
-                const cy = startY + 10;
-                this.batteryFill.fillStyle(i < active ? color : 0x222222, 0.9);
-                this.batteryFill.beginPath();
-                this.batteryFill.moveTo(cx, cy - 10);
-                this.batteryFill.lineTo(cx + w/2, cy);
-                this.batteryFill.lineTo(cx, cy + 10);
-                this.batteryFill.lineTo(cx - w/2, cy);
-                this.batteryFill.fillPath();
-            }
+
+        // Check if active battery has a custom fill renderer in the Registry
+        if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.batteryRenderers[batId]) {
+            window.SpecialItemsRegistry.batteryRenderers[batId].renderFill(this.batteryFill, pct, startX, startY, barTotalWidth);
         } else {
-            // Default & Neon (segmented)
+            // Fallback Default Engine (Segmented)
+            let color = 0xff0000;
+            if (pct >= 1) color = 0x00ffff;
+            else if (pct > 0.7) color = 0x00ff00;
+            else if (pct > 0.3) color = 0xffff00;
+
             const totalSegments = 10;
             const gap = 4;
             const segmentWidth = (barTotalWidth - ((totalSegments - 1) * gap)) / totalSegments;

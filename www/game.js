@@ -4,18 +4,22 @@
 window.SpecialItemsRegistry = {
     items: [],
     promoCodes: {},
-    textureInits: []
+    textureInits: [],
+    hudRenderers: {}, // <-- NEW: Store dynamic drawing functions here
+    batteryRenderers: {} // <-- NEW: Store dynamic battery renderers here
 };
 
 window.registerSkinPack = function(packData) {
-    if (packData.items) {
-        window.SpecialItemsRegistry.items.push(...packData.items);
+    if (packData.items) window.SpecialItemsRegistry.items.push(...packData.items);
+    if (packData.promoCodes) Object.assign(window.SpecialItemsRegistry.promoCodes, packData.promoCodes);
+    if (packData.initTextures) window.SpecialItemsRegistry.textureInits.push(packData.initTextures);
+    
+    if (packData.hudRenderers) {
+        Object.assign(window.SpecialItemsRegistry.hudRenderers, packData.hudRenderers);
     }
-    if (packData.promoCodes) {
-        Object.assign(window.SpecialItemsRegistry.promoCodes, packData.promoCodes);
-    }
-    if (packData.initTextures) {
-        window.SpecialItemsRegistry.textureInits.push(packData.initTextures);
+    // <-- NEW: Register dynamic battery renderers
+    if (packData.batteryRenderers) {
+        Object.assign(window.SpecialItemsRegistry.batteryRenderers, packData.batteryRenderers);
     }
 };
 
