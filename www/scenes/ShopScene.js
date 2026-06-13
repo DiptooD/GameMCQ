@@ -183,6 +183,7 @@ class ShopScene extends Phaser.Scene {
 
     createTopUI() {
         const backContainer = this.add.container(100, 65);
+        backContainer.setDepth(100); // <--- ADD THIS LINE HERE
         const backBg = this.add.graphics();
         backBg.fillStyle(0x001122, 0.8);
         backBg.fillRoundedRect(-70, -30, 140, 60, 30);
@@ -252,6 +253,7 @@ class ShopScene extends Phaser.Scene {
         const height = 60;
         const btnWidth = totalWidth / 4;
         const container = this.add.container(cx, y);
+        container.setDepth(100); // <--- ADD THIS LINE HERE
 
         const baseBg = this.add.graphics();
         baseBg.fillStyle(0x041022, 0.9);
