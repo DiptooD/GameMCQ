@@ -184,21 +184,34 @@ window.registerSkinPack({
 
         if (!scene.textures.exists("hud_jungle_img")) {
             g.clear(); 
-            g.fillStyle(0x0a220a, 0.9); g.fillRoundedRect(5, 5, 90, 90, 10);
-            // Vine
-            g.lineStyle(4, 0x229922, 1);
-            let leafPath = new Phaser.Curves.Path(5, 20);
-            leafPath.quadraticBezierTo(30, 50, 5, 80); 
-            leafPath.draw(g);
-            // Vibrant Leaf
-            g.fillStyle(0x33cc33, 1); 
-            g.beginPath(); g.moveTo(5,5); g.lineTo(35,15); g.lineTo(15,35); g.closePath(); g.fillPath();
-            // Beast Eyes
-            g.fillStyle(0xffaa00, 1); g.fillEllipse(70, 70, 6, 4); g.fillEllipse(82, 68, 6, 4);
-            g.fillStyle(0xffff00, 1); g.fillEllipse(70, 70, 3, 2); g.fillEllipse(82, 68, 3, 2);
-            g.fillStyle(0x000000, 1); g.fillEllipse(70, 70, 1, 3); g.fillEllipse(82, 68, 1, 3);
-            // Wood Frame
-            g.lineStyle(4, 0x885522, 1); g.strokeRoundedRect(5, 5, 90, 90, 10);
+            // Deeper, darker canopy background
+            g.fillStyle(0x031203, 1); 
+            g.fillRoundedRect(5, 5, 90, 90, 8);
+            
+            // Tropical Leaf (Top-Left)
+            let leaf = new Phaser.Curves.Path(5, 5);
+            leaf.quadraticBezierTo(50, 50, 40, 15);
+            leaf.quadraticBezierTo(5, 60, 15, 40);
+            leaf.lineTo(5, 5);
+            
+            // Darker, richer leaf green
+            g.fillStyle(0x113811, 1);
+            g.fillPoints(leaf.getPoints(24), true);
+
+            // Hanging Vine
+            let vine = new Phaser.Curves.Path(70, 5);
+            vine.quadraticBezierTo(75, 45, 60, 25);
+            g.lineStyle(3, 0x1c591c, 1); // Subdued vine color
+            vine.draw(g);
+
+            // Bioluminescent Spores (Muted opacity and darker glow)
+            g.fillStyle(0x00997a, 0.8); g.fillCircle(75, 75, 2.5); g.fillCircle(25, 80, 1.5);
+            g.fillStyle(0x88aa00, 0.8); g.fillCircle(55, 85, 2);
+
+            // Ancient Carved Stone & Aged Gold Border
+            g.lineStyle(3, 0x424235, 1); g.strokeRoundedRect(5, 5, 90, 90, 8);
+            g.lineStyle(1, 0xaa8c2c, 0.8); g.strokeRoundedRect(9, 9, 82, 82, 6);
+
             g.generateTexture("hud_jungle_img", 100, 100);
         }
 
@@ -371,7 +384,7 @@ window.registerSkinPack({
 
         "hud_retro": function(graphics, x, y, w, h) {
             // Highly transparent CRT Space background
-            graphics.fillStyle(0x02001a, 0.25); 
+            graphics.fillStyle(0x02001a, 0.35); 
             graphics.fillRect(x, y, w, h);
 
             // Retro Vaporwave Sun (Center bottom, scaled safely inside boundaries)
@@ -443,72 +456,148 @@ window.registerSkinPack({
         },
 
         "hud_jungle": function(graphics, x, y, w, h) {
-            // Highly transparent murky jungle background (clear faint green)
-            graphics.fillStyle(0x0a220a, 0.15); 
-            graphics.fillRoundedRect(x, y, w, h, 14);
-            
-            // Mystical Glowing Tribal Runes faintly in the background
-            graphics.lineStyle(2, 0x55ff55, 0.3); // Bright neon cyan/green runes
-            graphics.beginPath(); 
-            graphics.moveTo(x+w/2, y+20); graphics.lineTo(x+w/2-15, y+40); graphics.lineTo(x+w/2+15, y+40); 
-            graphics.closePath(); 
-            graphics.strokePath();
-            graphics.beginPath(); 
-            graphics.moveTo(x+w/2, y+40); graphics.lineTo(x+w/2, y+70); 
-            graphics.strokePath();
+            // Highly transparent center so questions/text are completely legible
+            graphics.fillStyle(0x051505, 0.20);
+            graphics.fillRect(x, y, w, h);
 
-            // Thick, winding organic vines crossing the edges
-            graphics.lineStyle(6, 0x229922, 0.85); // Vibrant bright green
-            let leftVine = new Phaser.Curves.Path(x, y + h*0.2);
-            leftVine.quadraticBezierTo(x + w*0.15, y + h*0.5, x, y + h*0.8);
-            leftVine.draw(graphics);
-            
-            let rightVine = new Phaser.Curves.Path(x + w, y + h*0.3);
-            rightVine.quadraticBezierTo(x + w - w*0.15, y + h*0.6, x + w, y + h*0.9);
-            rightVine.draw(graphics);
+            // Expand the bounding box so the overall frame encompasses more space
+            let expand = 6;
+            let fx = x - expand;
+            let fy = y - expand;
+            let fw = w + (expand * 2);
+            let fh = h + (expand * 2);
+            let thick = 10; // Keep the wood sleek, not thick
 
-            // Ferns / Broad Leaves at the corners (Brighter green)
-            graphics.fillStyle(0x33cc33, 0.8);
-            // Top Left Leaf
-            graphics.beginPath(); 
-            graphics.moveTo(x, y); graphics.lineTo(x+w*0.3, y+10); graphics.lineTo(x+10, y+h*0.2); 
-            graphics.closePath(); 
-            graphics.fillPath();
-            // Bottom Right Leaf
-            graphics.beginPath(); 
-            graphics.moveTo(x+w, y+h); graphics.lineTo(x+w-w*0.3, y+h-10); graphics.lineTo(x+w-10, y+h-h*0.2); 
-            graphics.closePath(); 
-            graphics.fillPath();
+            // NEW BORDER: Balanced, slightly dimmed Olive Green Bamboo Frame
+            let drawBamboo = (bx, by, bw, bh, isVertical) => {
+                graphics.fillStyle(0x475924, 1); // Dimmed Olive Green base
+                graphics.fillRect(bx, by, bw, bh);
+                graphics.fillStyle(0x2E3A18, 0.8); // Deep olive shadow
+                
+                if (isVertical) {
+                    graphics.fillRect(bx + bw - 3, by, 3, bh); // Right edge shadow
+                    // Bamboo joints
+                    for(let i = 40; i < bh; i += 60) {
+                        graphics.fillRect(bx - 2, by + i, bw + 4, 4);
+                        graphics.fillStyle(0x627A34, 0.8); // Muted olive highlight
+                        graphics.fillRect(bx - 2, by + i - 2, bw + 4, 2);
+                        graphics.fillStyle(0x2E3A18, 0.8); // Reset shadow color
+                    }
+                } else {
+                    graphics.fillRect(bx, by + bh - 3, bw, 3); // Bottom edge shadow
+                    // Bamboo joints
+                    for(let i = 40; i < bw; i += 60) {
+                        graphics.fillRect(bx + i, by - 2, 4, bh + 4);
+                        graphics.fillStyle(0x627A34, 0.8); // Muted olive highlight
+                        graphics.fillRect(bx + i - 2, by - 2, 2, bh + 4);
+                        graphics.fillStyle(0x2E3A18, 0.8); // Reset shadow color
+                    }
+                }
+            };
 
-            // Glowing Fireflies scattered around (Bright yellow/green)
-            graphics.fillStyle(0xddff44, 0.9);
-            graphics.fillCircle(x + w*0.8, y + h*0.7, 2.5);
-            graphics.fillCircle(x + w*0.7, y + h*0.8, 1.5);
-            graphics.fillCircle(x + w*0.2, y + h*0.6, 3);
-            graphics.fillCircle(x + w*0.4, y + h*0.15, 2);
-            
-            // Beast Eyes peering from the dark (Large and glowing neon)
-            graphics.fillStyle(0xffaa00, 1); // Neon orange outer
-            let ex = x + w*0.8, ey = y + h*0.3;
-            graphics.fillEllipse(ex, ey, 10, 6); 
-            graphics.fillEllipse(ex + 18, ey - 2, 10, 6);
-            
-            graphics.fillStyle(0xffff00, 1); // Intense yellow inner
-            graphics.fillEllipse(ex, ey, 5, 3); 
-            graphics.fillEllipse(ex + 18, ey - 2, 5, 3);
-            
-            graphics.fillStyle(0x000000, 1); // Slits
-            graphics.fillEllipse(ex, ey, 2, 5);
-            graphics.fillEllipse(ex + 18, ey - 2, 2, 5);
+            // Draw the expanded border (Top, Bottom, Left, Right)
+            drawBamboo(fx, fy, fw, thick, false);
+            drawBamboo(fx, fy + fh - thick, fw, thick, false);
+            drawBamboo(fx, fy, thick, fh, true);
+            drawBamboo(fx + fw - thick, fy, thick, fh, true);
 
-            // Wood / Bamboo solid natural border (Lighter wood tone)
-            graphics.lineStyle(5, 0x885522, 0.9); 
-            graphics.strokeRoundedRect(x, y, w, h, 14);
+            // PALM FROND GENERATOR 
+            let drawPalm = (px, py, angle, length, scale) => {
+                graphics.lineStyle(4 * scale, 0x0A240A, 0.9); // Dark stem
+                let ex = px + Math.cos(angle) * length;
+                let ey = py + Math.sin(angle) * length;
+                graphics.beginPath(); graphics.moveTo(px, py); graphics.lineTo(ex, ey); graphics.strokePath();
+                
+                graphics.lineStyle(3 * scale, 0x1F7A1F, 0.9); // Mid-dark jungle green
+                for(let i = 0.1; i < 0.95; i += 0.08) {
+                    let cx = px + (ex - px) * i;
+                    let cy = py + (ey - py) * i;
+                    let frondLen = (30 * scale) * Math.sin(i * Math.PI); 
+                    
+                    graphics.beginPath(); graphics.moveTo(cx, cy); 
+                    graphics.lineTo(cx + Math.cos(angle - 0.7) * frondLen, cy + Math.sin(angle - 0.7) * frondLen); 
+                    graphics.strokePath();
+                    
+                    graphics.beginPath(); graphics.moveTo(cx, cy); 
+                    graphics.lineTo(cx + Math.cos(angle + 0.7) * frondLen, cy + Math.sin(angle + 0.7) * frondLen); 
+                    graphics.strokePath();
+                }
+            };
+
+            // LEAF CLUSTER FUNCTION
+            let drawLeaf = (lx, ly, scale) => {
+                graphics.fillStyle(0x154015, 0.95); // Deep base leaf
+                graphics.fillCircle(lx, ly, 25 * scale);
+                graphics.fillCircle(lx + 15*scale, ly + 10*scale, 20 * scale);
+                graphics.fillCircle(lx - 5*scale, ly + 20*scale, 18 * scale);
+                graphics.fillStyle(0x216639, 0.9); // Rich mossy accent
+                graphics.fillCircle(lx, ly, 15 * scale);
+            };
+
+            // DIVERSE FLOWER GENERATORS 
+            let drawPlumeria = (fx, fy, scale) => { // Darker Beige/Cream
+                graphics.fillStyle(0x948E66, 0.90); 
+                for (let i = 0; i < 5; i++) {
+                    let a = (i * Math.PI * 2) / 5;
+                    graphics.fillCircle(fx + Math.cos(a)*12*scale, fy + Math.sin(a)*12*scale, 14*scale);
+                }
+                graphics.fillStyle(0x735E00, 1); graphics.fillCircle(fx, fy, 8*scale); 
+            };
+
+            let drawHibiscus = (fx, fy, scale) => { // Deeper Burnt Terracotta
+                graphics.fillStyle(0x800000, 0.95); 
+                for (let i = 0; i < 5; i++) {
+                    let a = (i * Math.PI * 2) / 5;
+                    graphics.fillCircle(fx + Math.cos(a)*14*scale, fy + Math.sin(a)*14*scale, 16*scale);
+                }
+                graphics.fillStyle(0x300216, 1); graphics.fillCircle(fx, fy, 8*scale);
+                // Stamen
+                graphics.lineStyle(3*scale, 0x8F7200, 1); 
+                graphics.beginPath(); graphics.moveTo(fx, fy); graphics.lineTo(fx - 20*scale, fy + 25*scale); graphics.strokePath();
+                graphics.fillStyle(0xA88600, 1); graphics.fillCircle(fx - 20*scale, fy + 25*scale, 4*scale);
+            };
+
+            let drawLotus = (fx, fy, scale) => { // Darker Amethyst
+                graphics.fillStyle(0x3D1963, 0.95); 
+                for (let i = 0; i < 6; i++) {
+                    let a = (i * Math.PI * 2) / 6;
+                    graphics.beginPath();
+                    graphics.moveTo(fx, fy);
+                    graphics.lineTo(fx + Math.cos(a - 0.2)*20*scale, fy + Math.sin(a - 0.2)*20*scale);
+                    graphics.lineTo(fx + Math.cos(a)*30*scale, fy + Math.sin(a)*30*scale);
+                    graphics.lineTo(fx + Math.cos(a + 0.2)*20*scale, fy + Math.sin(a + 0.2)*20*scale);
+                    graphics.fillPath();
+                }
+                graphics.fillStyle(0x0D4747, 1); graphics.fillCircle(fx, fy, 6*scale); 
+            };
+
+            // --- DRAWING THE ASSETS ---
             
-            // Small bright leaf accents wrapping the border
-            graphics.fillStyle(0x55ff55, 0.9);
-            graphics.fillCircle(x + w*0.2, y, 4);
-            graphics.fillCircle(x + w, y + h*0.4, 4);
+            // 1. Base Foliage
+            drawPalm(x, y, Math.PI/4, 150, 1.2);                 // Top Left Palm
+            drawPalm(x + w, y, Math.PI*3/4, 120, 1.0);           // Top Right Palm
+            drawPalm(x, y + h, -Math.PI/4, 180, 1.4);            // Bottom Left Palm
+            drawPalm(x + w, y + h, -Math.PI*3/4, 140, 1.1);      // Bottom Right Palm
+            
+            drawLeaf(x + w/2, y, 1.0);                           // Top Center cluster
+            drawLeaf(x + 20, y + h/2, 0.8);                      // Left edge cluster
+
+            // 2. Flowers
+            drawPlumeria(x + 60, y + h - 60, 1.3);               // Bottom Left (Beige)
+            drawHibiscus(x + w - 70, y + h - 50, 1.2);           // Bottom Right (Terracotta)
+            drawLotus(x + w - 50, y + 60, 0.9);                  // Top Right (Amethyst)
+            drawPlumeria(x + w/2 + 20, y + 10, 0.7);             // Top Center (Small Beige)
+            drawHibiscus(x + 30, y + h/2 + 40, 0.8);             // Left Edge (Small Terracotta)
+
+            // 3. Ambient touches
+            graphics.fillStyle(0x9E9B78, 0.4); // Soft falling petals
+            graphics.beginPath(); graphics.arc(x + 100, y + h - 120, 5, 0, Math.PI); graphics.fillPath();
+            graphics.beginPath(); graphics.arc(x + w - 140, y + h - 90, 4, 0, Math.PI); graphics.fillPath();
+            
+            graphics.fillStyle(0x8C7300, 0.5); // Warm pollen dots
+            graphics.fillCircle(x + 80, y + 80, 2);
+            graphics.fillCircle(x + w - 90, y + 130, 2.5);
+            graphics.fillCircle(x + w/2 - 40, y + h - 40, 2);
         }
     },
 
