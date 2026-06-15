@@ -639,6 +639,35 @@ class MenuScene extends Phaser.Scene {
             shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
 
+        // --- NEW: BIG BADGE ICON LOGIC ---
+        // Checks if the player has a badge assigned either in their profile or rank data
+        const badgeKey = (GameState.profile && GameState.profile.badge) ? GameState.profile.badge : (rankData.badge || null);
+        
+        // Ensure the texture actually exists in cache before attempting to display it
+        if (badgeKey && this.textures.exists(badgeKey)) {
+            // Position on the far right (opposite side of the name box)
+            const badgeX = boxX + boxW - 35; 
+            const badgeY = boxY + boxH / 2;
+            
+            const badgeIcon = this.add.image(badgeX, badgeY, badgeKey);
+            
+            // Make it big and fit into the boxH (60px) leaving a small margin (50px max size)
+            const maxBadgeSize = 50; 
+            const scaleFactor = maxBadgeSize / Math.max(badgeIcon.width, badgeIcon.height);
+            badgeIcon.setScale(scaleFactor);
+            
+            // Added a subtle floating animation so it pops visually!
+            this.tweens.add({
+                targets: badgeIcon,
+                y: badgeY - 3,
+                duration: 1800,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.easeInOut'
+            });
+        }
+        // ----------------------------------
+
         hitArea.on('pointerover', () => { 
             profBg.lineStyle(3, 0xffffff, 1); 
             profBg.strokeRoundedRect(boxX, boxY, boxW, boxH, 30); 

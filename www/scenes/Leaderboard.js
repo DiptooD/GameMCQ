@@ -39,24 +39,31 @@ class Leaderboard extends Phaser.GameObjects.Container {
             snapshot.forEach(doc => {
                 const data = doc.data();
                 if(data.profile) {
+                    // Safe mapping for legacy string "badge" to new "badges" array format
+                    let bData = [];
+                    if (Array.isArray(data.profile.badges)) bData = data.profile.badges;
+                    else if (data.profile.badge) bData = [data.profile.badge];
+                    
                     this.players.push({
                         name: data.profile.n || "Guest",
                         xp: data.profile.xp || 0,
                         avatar: window.getAvatars ? (window.getAvatars()[data.profile.a || 0] || "👨‍🚀") : "👨‍🚀",
-                        badge: data.profile.badge || ""
+                        badges: bData
                     });
                 }
             });
 
             if (this.players.length > 0) {
                 // --- DYNAMIC CHAMPION BADGE ASSIGNMENT ---
-                this.players[0].badge = "champion"; 
+                if (!this.players[0].badges.includes("champion")) {
+                    this.players[0].badges.unshift("champion"); 
+                }
                 
-                // If the local player is #1, temporarily inject Champion status so Global Chat uses it
+                // Set temporary local override so Global Chat catches it instantly
                 if (window.GameState && window.GameState.profile && this.players[0].name === window.GameState.profile.n && this.players[0].xp === window.GameState.profile.xp) {
-                    window.GameState.profile.tempBadge = "champion";
+                    window.GameState.profile.tempBadges = ["champion"];
                 } else if (window.GameState && window.GameState.profile) {
-                    window.GameState.profile.tempBadge = null;
+                    window.GameState.profile.tempBadges = null;
                 }
 
                 this.loadingText.setVisible(false);
@@ -90,17 +97,31 @@ class Leaderboard extends Phaser.GameObjects.Container {
             else if(index === 1) color = "#e0e0e0"; 
             else if(index === 2) color = "#cd7f32"; 
 
-            // Handle Badge UI 
-            const badgeInfo = window.getBadgeData(p.badge);
-            const badgeIcon = badgeInfo ? `${badgeInfo.icon} ` : "";
-            const displayColor = badgeInfo ? badgeInfo.color : color;
+            let playerXP = p.xp || 0;
+            let playerLevel = Math.floor(Math.sqrt(playerXP / 50)) + 1;
 
-            const rankText = this.scene.add.text(-this.width/2 + 10, currentY, `${index + 1}. ${p.avatar} ${badgeIcon}${p.name.substring(0, 10)}`, {
+            const rankText = this.scene.add.text(-this.width/2 + 10, currentY, `${index + 1}. ${p.avatar}`, {
                 fontSize: "24px", 
                 fontFamily: "'Anek Bangla', sans-serif", 
-                color: displayColor, 
+                color: color, 
                 fontStyle: "bold",
                 padding: { y: 2 },
+                shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
+            }).setOrigin(0, 0.5);
+
+            const lvlText = this.scene.add.text(rankText.x + rankText.width + 5, currentY, `Lv.${playerLevel}`, {
+                fontSize: "18px", 
+                fontFamily: "'Anek Bangla', sans-serif", 
+                color: "#00ffff", 
+                fontStyle: "bold",
+                shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
+            }).setOrigin(0, 0.5);
+
+            const nameText = this.scene.add.text(lvlText.x + lvlText.width + 5, currentY, p.name.substring(0, 10), {
+                fontSize: "24px", 
+                fontFamily: "'Anek Bangla', sans-serif", 
+                color: color, 
+                fontStyle: "bold",
                 shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
             }).setOrigin(0, 0.5);
 
@@ -112,7 +133,15 @@ class Leaderboard extends Phaser.GameObjects.Container {
                 shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
             }).setOrigin(1, 0.5);
 
-            contentContainer.add([rankText, xpText]);
+            // Fetch and draw multiple badges if they exist
+            let badgeObjects = [];
+            if (p.badges && p.badges.length > 0) {
+                // Renders badges Left-to-Right starting right next to the name
+                let badgeRes = window.drawPlayerBadges(this.scene, p.badges, nameText.x + nameText.width + 8, currentY, '14px', 1);
+                badgeObjects = badgeRes.objects;
+            }
+
+            contentContainer.add([rankText, lvlText, nameText, xpText, ...badgeObjects]);
             
             if (index < this.players.length - 1) {
                 const div = this.scene.add.rectangle(0, currentY + itemSpacing/2, this.width - 20, 1.5, 0x004488, 0.25);

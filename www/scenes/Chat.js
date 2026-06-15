@@ -1001,7 +1001,7 @@ Object.assign(MenuScene.prototype, {
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const isAdmin = GameState.profile && GameState.profile.role === 'admin';
         
-        const menuW = 420; // THICKER Width
+        const menuW = 420; 
         let menuH = isConnected ? 180 : 120;
         if (isConnected && isAdmin) menuH = 240; 
         
@@ -1361,7 +1361,6 @@ Object.assign(MenuScene.prototype, {
             this.chatMaskShape.fillStyle(0xffffff);
             this.chatMaskShape.fillRect(this.chatX + 5, this.chatYVisible + dynamicTopOffset, this.chatW - 10, dynamicScrollZoneHeight);
 
-            // Format precise time
             const formatTime = (ts) => {
                 const d = new Date(ts);
                 let hrs = d.getHours();
@@ -1372,7 +1371,6 @@ Object.assign(MenuScene.prototype, {
                 return `${hrs}:${mins} ${ampm}`;
             };
             
-            // Format nice relative day string
             const getRelativeDateString = (ts) => {
                 const d = new Date(ts);
                 const today = new Date();
@@ -1392,7 +1390,6 @@ Object.assign(MenuScene.prototype, {
                 
                 if (msgTime > this.lastSeenTime && !msg.isLocalOnly) unreadCalc++;
 
-                // Date Divider
                 const msgDateString = getRelativeDateString(msgTime);
                 if (msgDateString !== lastMessageDateString) {
                     lastMessageDateString = msgDateString;
@@ -1413,7 +1410,6 @@ Object.assign(MenuScene.prototype, {
                     startY += 55;
                 }
 
-                // New Message Divider
                 if (msgTime > this.lastSeenTime && !this.dividerRendered && !msg.isLocalOnly) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
@@ -1434,7 +1430,7 @@ Object.assign(MenuScene.prototype, {
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
 
-                let topPadding = isConsecutive ? 8 : 45; // Increased padding to fit Avatar & Name perfectly
+                let topPadding = isConsecutive ? 8 : 45; 
                 const bubY = startY + topPadding; 
 
                 const addItems = (items) => {
@@ -1474,8 +1470,6 @@ Object.assign(MenuScene.prototype, {
                         }
                     }
                 } else {
-                    // FIXED 1: Dynamically calculate background based on player name color!
-                    // Multiplied by 0.25 to make it a deep, readable, dark shade of their color.
                     bubBgHex = Phaser.Display.Color.GetColor(
                         Math.floor(baseCol.r * 0.25), 
                         Math.floor(baseCol.g * 0.25), 
@@ -1483,13 +1477,12 @@ Object.assign(MenuScene.prototype, {
                     );
                 }
 
-                // FIXED 2: AVATAR & BUBBLE ALIGNMENT
                 const hasAvatar = !isConsecutive;
-                const avatarSize = 52; // Slightly refined to save horizontal space
+                const avatarSize = 52; 
                 let avatarIcon = msg.avatar || "👤"; 
-                let avatarX = isMe ? this.chatW - 35 : 35; // Pushed closer to the screen edges
+                let avatarX = isMe ? this.chatW - 35 : 35; 
 
-                const bubbleMaxWidth = this.chatW * 0.85; // Increased max width
+                const bubbleMaxWidth = this.chatW * 0.85; 
                 let extraHeight = (msg.replyTo && !msg.isDeleted) ? 46 : 0;
                 let replyTxtObj = null;
                 
@@ -1516,13 +1509,19 @@ Object.assign(MenuScene.prototype, {
                     const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 10, avatarIcon, { fontSize: "38px" }).setOrigin(0.5);
                     addItems([avatarBg, avTxt]);
 
-                    // 1. Fetch Badge Data & Let players keep their emojis!
-                    const badgeInfo = window.getBadgeData(msg.badge);
-                    const safeName = msg.n || "Guest"; 
-                    const overrideNameColor = badgeInfo ? badgeInfo.color : nameColorHexStr;
+                    // --- NEW MULTI-BADGE LOGIC INJECTION ---
+                    let currentBadges = msg.badges || [];
+                    if (msg.badge && currentBadges.length === 0) currentBadges = [msg.badge];
 
-                    // 2. Render Name (Without the text-based tags)
+                    let overrideNameColor = nameColorHexStr;
+                    if (currentBadges.length > 0) {
+                        const firstBadgeInfo = window.getBadgeData(currentBadges[0]);
+                        if (firstBadgeInfo) overrideNameColor = firstBadgeInfo.color;
+                    }
+
+                    const safeName = msg.n || "Guest"; 
                     const nameTextStr = (isPinned ? "📌 " : "") + safeName;
+                    
                     const nameTxt = this.add.text(0, bubY - 30, nameTextStr, { 
                         fontSize: "24px", 
                         fontFamily: "'Anek Bangla'", color: overrideNameColor, fontStyle: "bold"
@@ -1532,11 +1531,9 @@ Object.assign(MenuScene.prototype, {
                     nameTxt.x = nameX;
                     addItems(nameTxt); 
 
-                    // 3. Chain Labels Together (Level, then Badge)
                     let nextLabelX = isMe ? nameX - 12 : nameX + nameTxt.width + 12;
                     const labelY = bubY - 30 + 1;
 
-                    // --- DRAW LEVEL LABEL ---
                     if (msg.lvl) {
                         const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
                             fontSize: "16px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold"
@@ -1545,7 +1542,6 @@ Object.assign(MenuScene.prototype, {
                         const lvlW = lvlTxt.width + 16;
                         const lvlH = 26;
                         
-                        // Calculate placement based on whether it's my message (right) or others (left)
                         const lvlCenterX = isMe ? nextLabelX - lvlW/2 : nextLabelX + lvlW/2;
         
                         const lvlBg = this.add.graphics();
@@ -1555,29 +1551,15 @@ Object.assign(MenuScene.prototype, {
                         lvlTxt.setPosition(lvlCenterX, labelY);
                         addItems([lvlBg, lvlTxt]); 
                         
-                        // Shift the next X position for the Badge
                         nextLabelX = isMe ? nextLabelX - lvlW - 8 : nextLabelX + lvlW + 8;
                     }
 
-                    // --- DRAW OFFICIAL BADGE LABEL ---
-                    if (badgeInfo) {
-                        const badgeTxt = this.add.text(0, 0, `${badgeInfo.icon} ${badgeInfo.title}`, {
-                            fontSize: "15px", fontFamily: "Arial", color: "#000000", fontStyle: "bold"
-                        }).setOrigin(0.5);
-                        
-                        const bW = badgeTxt.width + 16;
-                        const bH = 26;
-                        
-                        const bCenterX = isMe ? nextLabelX - bW/2 : nextLabelX + bW/2;
-                        
-                        const bBg = this.add.graphics();
-                        // Fill the label with the Badge's actual color hex
-                        bBg.fillStyle(Phaser.Display.Color.HexStringToColor(badgeInfo.color).color, 1);
-                        bBg.fillRoundedRect(bCenterX - bW/2, labelY - bH/2, bW, bH, 6);
-                        
-                        badgeTxt.setPosition(bCenterX, labelY);
-                        addItems([bBg, badgeTxt]);
+                    if (currentBadges.length > 0) {
+                        let badgeRes = window.drawPlayerBadges(this, currentBadges, nextLabelX, labelY, '15px', isMe ? -1 : 1);
+                        addItems(badgeRes.objects);
+                        nextLabelX = badgeRes.nextX;
                     }
+                    // --- END MULTI-BADGE LOGIC INJECTION ---
                 }
 
                 const timeWidth = timeTxt.width;
@@ -1598,7 +1580,6 @@ Object.assign(MenuScene.prototype, {
                 }
 
                 let bubbleH = msgTxt.height + 45 + extraHeight + extraReactionPadding;
-                // FIXED 3: Reduced the gap padding to push bubbles closer to avatars and edges
                 let startX = isMe ? (this.chatW - bubbleW - avatarSize - 25) : (10 + avatarSize + 15);
 
                 const bubbleBg = this.add.graphics();
@@ -1666,7 +1647,7 @@ Object.assign(MenuScene.prototype, {
                     sortedReactions.forEach((e) => {
                         const badgeBg = this.add.graphics();
                         badgeBg.fillStyle(0x1e293b, 1);
-                        badgeBg.fillRoundedRect(rxX, rxY, 95, 45, 22); // Larger badges
+                        badgeBg.fillRoundedRect(rxX, rxY, 95, 45, 22);
                         badgeBg.lineStyle(1.5, 0x38bdf8, 1);
                         badgeBg.strokeRoundedRect(rxX, rxY, 95, 45, 22);
                         
@@ -1721,20 +1702,17 @@ Object.assign(MenuScene.prototype, {
                     onUpdate: () => this.updateChatScrollbar()
                 });
             } else if (!this.isLoadingHistory) {
-                // Keep view anchored unless we are actively loading history
                 this.msgListContainer.y = Phaser.Math.Clamp(this.msgListContainer.y, newBottomY, topY);
                 this.updateChatScrollbar();
             }
             isFirstLoad = false;
         };
 
-        // 🚀 FLAWLESS: Perfect Pixel Anchor Tracking for Infinite Pagination
         this.mergeAndRefreshChat = () => {
             let wasLoading = this.isLoadingHistory;
             let anchorMsgId = null;
             let anchorScreenY = null;
             
-            // Step 1: Before refreshing, find the exact on-screen Y position of the top-most visible message
             if (wasLoading && this.msgListContainer.list.length > 0) {
                 const dynamicTopOffset = 125 + this.currentPinnedHeight;
                 const visibleTop = dynamicTopOffset - this.msgListContainer.y;
@@ -1742,10 +1720,9 @@ Object.assign(MenuScene.prototype, {
                 for (let i = 0; i < this.msgListContainer.list.length; i++) {
                     let child = this.msgListContainer.list[i];
                     if (child.isInteractHit && child.msgData) {
-                        // Find the first message that is within or just above the visible viewport bounds
                         if (child.trueY >= visibleTop - 50) { 
                             anchorMsgId = child.msgData.id;
-                            anchorScreenY = child.trueY + this.msgListContainer.y; // Calculate exact screen Y
+                            anchorScreenY = child.trueY + this.msgListContainer.y; 
                             break;
                         }
                     }
@@ -1769,12 +1746,9 @@ Object.assign(MenuScene.prototype, {
                 return ta - tb;
             });
 
-            // Step 2: Build the new list (which resets all Y positions internally)
             this.refreshChatUI();
 
-            // Step 3: Physically lock the container back to exactly where the anchor message used to be
             if (wasLoading) {
-                // ABSOLUTE FIX: Prevent any lingering scroll Tweens from stealing the Y position
                 this.tweens.killTweensOf(this.msgListContainer);
                 
                 let dynamicTopOffset = 125 + this.currentPinnedHeight;
@@ -1787,7 +1761,7 @@ Object.assign(MenuScene.prototype, {
                     targetY = Phaser.Math.Clamp(targetY, bottomY, topY);
                     this.msgListContainer.y = targetY;
                 } else {
-                    this.msgListContainer.y = topY; // fallback safely to top 
+                    this.msgListContainer.y = topY; 
                 }
                 this.updateChatScrollbar();
             }
@@ -1868,10 +1842,15 @@ Object.assign(MenuScene.prototype, {
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
         const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
         
-        // --- NEW: FETCH ACTIVE BADGE FOR CHAT (Takes Temp Champion over Permanent Profile) ---
-        const currentBadge = (GameState.profile.tempBadge || GameState.profile.badge || "");
+        // --- MULTI-BADGE LOGIC INJECTION FOR SENDING ---
+        let baseBadges = GameState.profile.badges || [];
+        if (GameState.profile.badge && baseBadges.length === 0) {
+            baseBadges = [GameState.profile.badge];
+        }
+        let tempBadges = GameState.profile.tempBadges || [];
+        
+        let currentBadges = [...new Set([...tempBadges, ...baseBadges])].filter(Boolean);
 
-        // Fetch User Avatar Data dynamically
         let getAvatarValue = () => {
             if (!GameState.equippedAvatar || GameState.equippedAvatar === "default") return "👨‍🚀";
             let registry = window.SpecialItemsRegistry;
@@ -1891,7 +1870,7 @@ Object.assign(MenuScene.prototype, {
             n: playerName,
             lvl: playerLvl, 
             avatar: getAvatarValue(),
-            badge: currentBadge, // --- ADDED TO PAYLOAD
+            badges: currentBadges, 
             text: text,
             timestamp: window.FirebaseTools.serverTimestamp(),
             pinned: false

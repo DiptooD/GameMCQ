@@ -5,8 +5,8 @@ window.SpecialItemsRegistry = {
     items: [],
     promoCodes: {},
     textureInits: [],
-    hudRenderers: {}, // <-- NEW: Store dynamic drawing functions here
-    batteryRenderers: {} // <-- NEW: Store dynamic battery renderers here
+    hudRenderers: {},
+    batteryRenderers: {}
 };
 
 window.registerSkinPack = function(packData) {
@@ -17,7 +17,6 @@ window.registerSkinPack = function(packData) {
     if (packData.hudRenderers) {
         Object.assign(window.SpecialItemsRegistry.hudRenderers, packData.hudRenderers);
     }
-    // <-- NEW: Register dynamic battery renderers
     if (packData.batteryRenderers) {
         Object.assign(window.SpecialItemsRegistry.batteryRenderers, packData.batteryRenderers);
     }
@@ -27,12 +26,8 @@ window.saveCurrency = function() {
     window.saveGame();
     console.log("Currency/Boosters Saved");
 };
-window.saveCurrency = function() {
-    window.saveGame();
-    console.log("Currency/Boosters Saved");
-};
 
-// --- ADD THIS NEW BADGE UTILITY ---
+// --- BADGE UTILITY & GLOBAL MULTI-BADGE RENDERER ---
 window.getBadgeData = function(badgeId) {
     const badges = {
         "vip": { title: "VIP", icon: "👑", color: "#FFD700" },
@@ -42,6 +37,44 @@ window.getBadgeData = function(badgeId) {
     };
     return badges[badgeId] || null;
 };
+
+window.drawPlayerBadges = function(scene, badgesArray, startX, startY, fontSize = '18px', direction = 1) {
+    let currentX = startX;
+    let badgeObjects = [];
+
+    // Failsafe ensuring an array exists
+    if (!Array.isArray(badgesArray)) return { objects: badgeObjects, nextX: currentX };
+
+    badgesArray.forEach(badgeId => {
+        let bData = window.getBadgeData(badgeId);
+        if (bData) {
+            let badgeBg = scene.add.graphics();
+            let badgeTxt = scene.add.text(0, 0, `${bData.icon} ${bData.title}`, {
+                fontSize: fontSize,
+                fontFamily: "Arial",
+                color: "#000000",
+                fontStyle: "bold"
+            }).setOrigin(0.5);
+
+            const bW = badgeTxt.width + 16;
+            const bH = parseInt(fontSize) + 10;
+            
+            // direction: 1 for Left-to-Right, -1 for Right-to-Left
+            const bCenterX = direction === 1 ? currentX + bW/2 : currentX - bW/2;
+            
+            badgeBg.fillStyle(Phaser.Display.Color.HexStringToColor(bData.color).color, 1);
+            badgeBg.fillRoundedRect(bCenterX - bW/2, startY - bH/2, bW, bH, 6);
+            
+            badgeTxt.setPosition(bCenterX, startY);
+            badgeObjects.push(badgeBg, badgeTxt);
+
+            currentX += (bW + 8) * direction; 
+        }
+    });
+
+    return { objects: badgeObjects, nextX: currentX };
+};
+
 window.checkRealConnection = function() {
     return new Promise((resolve) => {
         if (!navigator.onLine) {
@@ -86,7 +119,6 @@ window.saveGame = function() {
         localStorage.setItem('game_currentSubject', GameState.currentSubject || "all");
         localStorage.setItem('game_profile', JSON.stringify(GameState.profile));
 
-        // Save Special Items
         localStorage.setItem('game_ownedAvatars', JSON.stringify(GameState.ownedAvatars));
         localStorage.setItem('game_equippedAvatar', GameState.equippedAvatar);
         localStorage.setItem('game_ownedShields', JSON.stringify(GameState.ownedShields));
@@ -137,15 +169,7 @@ window.saveGame = function() {
             }, { merge: true }).then(() => {
                 console.log("Cloud Sync Successful!");
             }).catch((err) => {
-                console.warn("Cloud Sync Failed (Player might be offline). Local save secure.", err);
-            });
-        }
-
-        if ('serviceWorker' in navigator && 'SyncManager' in window) {
-            navigator.serviceWorker.ready.then(swRegistration => {
-                return swRegistration.sync.register('sync-game-data');
-            }).catch(err => {
-                console.log('Background Sync could not be registered!', err);
+                console.warn("Cloud Sync Failed. Local secure.", err);
             });
         }
 
@@ -206,10 +230,18 @@ if (isNaN(storedRewardSkips)) {
     localStorage.setItem('game_rewardSkips', storedRewardSkips);
 }
 
-// Change this line to include the badge property:
-let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {}, badge: "" };
+// CHANGED: Removed badge (string), added badges (array)
+let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {}, badges: [] };
 let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
 let mergedProfile = { ...defaultProfile, ...storedProfile };
+
+// Migration fallback for legacy profiles:
+if (mergedProfile.badge && typeof mergedProfile.badge === 'string') {
+    if (!mergedProfile.badges.includes(mergedProfile.badge)) {
+        mergedProfile.badges.push(mergedProfile.badge);
+    }
+    delete mergedProfile.badge; // clean legacy key
+}
 
 const generateDailyMissions = () => {
     let xp = mergedProfile.xp || 0;
@@ -336,15 +368,11 @@ window.GameState = {
     gamesPlayed: parseInt(localStorage.getItem('game_gamesPlayed')) || 0 
 };
 
-// ==========================================
-// REDEEM PROMO CODE SYSTEM (Now uses Registry)
-// ==========================================
 window.redeemPromoCode = function() {
     let code = prompt("উপহার কোড লিখুন (Enter Gift/Promo Code):");
     if (!code) return;
     code = code.trim().toUpperCase();
 
-    // Map the Promo Codes dynamically from the registry
     let itemId = window.SpecialItemsRegistry.promoCodes[code];
 
     if (itemId) {

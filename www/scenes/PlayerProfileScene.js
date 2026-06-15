@@ -14,7 +14,7 @@ class PlayerProfileScene extends Phaser.Scene {
         const h = this.cameras.main.height;
 
         if (!GameState.profile) {
-            GameState.profile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
+            GameState.profile = { n: "GUEST", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {}, badges: [] };
         }
         
         if (!GameState.profile.joined) {
@@ -78,7 +78,7 @@ class PlayerProfileScene extends Phaser.Scene {
 
         this.tweens.add({ targets: title, alpha: 1, y: 142, duration: 600, ease: 'Cubic.easeOut' });
 
-        // --- PANEL LAYOUT CONFIGURATION (Adjusted for 1280h bounds) ---
+        // --- PANEL LAYOUT CONFIGURATION ---
         const panelW = 680;
         
         this.createIdentitySection(cx, 345, panelW, 300);
@@ -259,12 +259,14 @@ class PlayerProfileScene extends Phaser.Scene {
         const dividerX = avatarX + 130;
         const vertDivider = this.add.rectangle(dividerX, 0, 2, 230, 0x0066aa, 0.5);
 
-        // --- NEW: Layout Coordinates Shifted to Fit Badges ---
         const textStartX = dividerX + 30; 
-        const nameY = -115; 
-        const badgeY = -80; 
-        const rankY = -50;
-        const btnY = -10;     
+        
+        // --- UPDATED COORDINATES ---
+        const nameY = -100; 
+        const badgeY = -100; 
+        
+        const rankY = -60;
+        const btnY = -15;     
         const dateY = 35;
         const barHeaderY = 80;
         const barY = 105;
@@ -276,17 +278,21 @@ class PlayerProfileScene extends Phaser.Scene {
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
-        // --- NEW: Render Badge Logic ---
-        // Dynamically get the current badge (Temp badge from Leaderboard or Permanent profile badge)
-        const currentBadge = GameState.profile.tempBadge || GameState.profile.badge;
-        const badgeInfo = window.getBadgeData(currentBadge);
+        // --- FIXED: Multiple Badges Logic with Safe Merging ---
+        let badgeObjects = [];
+        let baseBadges = GameState.profile.badges || [];
+        if (GameState.profile.badge && baseBadges.length === 0) baseBadges = [GameState.profile.badge];
+        let tempBadges = GameState.profile.tempBadges || [];
         
-        let badgeTxt = null;
-        if (badgeInfo) {
-            badgeTxt = this.add.text(textStartX, badgeY, `${badgeInfo.icon} ${badgeInfo.title}`, {
-                fontSize: '20px', fontFamily: "'Anek Bangla', sans-serif", color: badgeInfo.color, fontStyle: 'bold',
-                shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
-            }).setOrigin(0, 0.5);
+        // Combines both arrays and removes duplicates/empty values safely
+        let currentBadges = [...new Set([...tempBadges, ...baseBadges])].filter(Boolean);
+
+        if (currentBadges.length > 0) {
+            // --- UPDATED X POSITION FOR BADGES ---
+            let badgeStartX = textStartX + nameTxt.width + 15;
+            
+            let badgeRes = window.drawPlayerBadges(this, currentBadges, badgeStartX, badgeY, '16px', 1);
+            badgeObjects = badgeRes.objects;
         }
 
         // Edit Button
@@ -539,8 +545,7 @@ class PlayerProfileScene extends Phaser.Scene {
         xpFill.fillGradientStyle(0x0055ff, 0x00ffff, 0x001188, 0x0088cc, 1);
         xpFill.fillRoundedRect(textStartX, barY, fillW, barHeight, barHeight/2);
 
-        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, this.connBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
-        if (badgeTxt) container.add(badgeTxt);
+        container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, this.connBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill, ...badgeObjects]);
 
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 100 });
     }
