@@ -244,7 +244,6 @@ class PlayerProfileScene extends Phaser.Scene {
         techRingInner.setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: techRingInner, rotation: -Math.PI * 2, duration: 25000, repeat: -1, ease: 'Linear' });
 
-        // --- AVATAR LOGIC WITH SPECIAL SKINS OVERRIDE ---
         let currentAvatarToDisplay = this.rankData.avatar; 
         if (GameState.equippedAvatar && GameState.equippedAvatar !== "default") {
             const specialDef = window.SpecialItemsData && window.SpecialItemsData.find(i => i.id === GameState.equippedAvatar);
@@ -260,10 +259,12 @@ class PlayerProfileScene extends Phaser.Scene {
         const dividerX = avatarX + 130;
         const vertDivider = this.add.rectangle(dividerX, 0, 2, 230, 0x0066aa, 0.5);
 
+        // --- NEW: Layout Coordinates Shifted to Fit Badges ---
         const textStartX = dividerX + 30; 
-        const nameY = -110; 
-        const rankY = -65;
-        const btnY = -15;     
+        const nameY = -115; 
+        const badgeY = -80; 
+        const rankY = -50;
+        const btnY = -10;     
         const dateY = 35;
         const barHeaderY = 80;
         const barY = 105;
@@ -274,6 +275,19 @@ class PlayerProfileScene extends Phaser.Scene {
             stroke: "#002266", strokeThickness: 5,
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
+
+        // --- NEW: Render Badge Logic ---
+        // Dynamically get the current badge (Temp badge from Leaderboard or Permanent profile badge)
+        const currentBadge = GameState.profile.tempBadge || GameState.profile.badge;
+        const badgeInfo = window.getBadgeData(currentBadge);
+        
+        let badgeTxt = null;
+        if (badgeInfo) {
+            badgeTxt = this.add.text(textStartX, badgeY, `${badgeInfo.icon} ${badgeInfo.title}`, {
+                fontSize: '20px', fontFamily: "'Anek Bangla', sans-serif", color: badgeInfo.color, fontStyle: 'bold',
+                shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
+            }).setOrigin(0, 0.5);
+        }
 
         // Edit Button
         const editBtnContainer = this.add.container(textStartX, btnY);
@@ -526,7 +540,8 @@ class PlayerProfileScene extends Phaser.Scene {
         xpFill.fillRoundedRect(textStartX, barY, fillW, barHeight, barHeight/2);
 
         container.add([avatarBg, techRingInner, techRing, avatarTxt, vertDivider, nameTxt, editBtnContainer, this.connBtnContainer, rankTxt, joinedTxt, lvlHeader, xpText, barBg, xpFill]);
-        
+        if (badgeTxt) container.add(badgeTxt);
+
         this.tweens.add({ targets: container, y: y, alpha: 1, duration: 600, ease: 'Cubic.easeOut', delay: 100 });
     }
 

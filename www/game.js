@@ -27,6 +27,21 @@ window.saveCurrency = function() {
     window.saveGame();
     console.log("Currency/Boosters Saved");
 };
+window.saveCurrency = function() {
+    window.saveGame();
+    console.log("Currency/Boosters Saved");
+};
+
+// --- ADD THIS NEW BADGE UTILITY ---
+window.getBadgeData = function(badgeId) {
+    const badges = {
+        "vip": { title: "VIP", icon: "👑", color: "#FFD700" },
+        "premium": { title: "PREMIUM", icon: "💎", color: "#00E1FF" },
+        "champion": { title: "CHAMPION", icon: "🏆", color: "#FF8C00" },
+        "creator": { title: "CONTENT CREATOR", icon: "📣", color: "#FF1764" }
+    };
+    return badges[badgeId] || null;
+};
 window.checkRealConnection = function() {
     return new Promise((resolve) => {
         if (!navigator.onLine) {
@@ -191,7 +206,8 @@ if (isNaN(storedRewardSkips)) {
     localStorage.setItem('game_rewardSkips', storedRewardSkips);
 }
 
-let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {} };
+// Change this line to include the badge property:
+let defaultProfile = { n: "নাম লিখুন", a: 0, xp: 0, k: 0, bk: 0, qr: 0, qw: 0, s: {}, badge: "" };
 let storedProfile = JSON.parse(localStorage.getItem('game_profile')) || defaultProfile;
 let mergedProfile = { ...defaultProfile, ...storedProfile };
 

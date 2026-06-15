@@ -1511,20 +1511,32 @@ Object.assign(MenuScene.prototype, {
                 });
 
                 if (hasAvatar) {
-                    // Place avatar top-aligned with bubble
                     const avatarBg = this.add.circle(avatarX, bubY + avatarSize/2 - 10, avatarSize/2, 0x0f172a);
                     avatarBg.setStrokeStyle(2, Phaser.Display.Color.HexStringToColor(nameColorHexStr).color, 0.8);
                     const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 10, avatarIcon, { fontSize: "38px" }).setOrigin(0.5);
                     addItems([avatarBg, avTxt]);
 
-                    const nameTxt = this.add.text(0, bubY - 30, (isPinned ? "📌 " : "") + (msg.n || "Guest"), { 
-                        fontSize: "28px", fontFamily: "'Anek Bangla'", color: nameColorHexStr, fontStyle: "bold"
+                    // 1. Fetch Badge Data & Let players keep their emojis!
+                    const badgeInfo = window.getBadgeData(msg.badge);
+                    const safeName = msg.n || "Guest"; 
+                    const overrideNameColor = badgeInfo ? badgeInfo.color : nameColorHexStr;
+
+                    // 2. Render Name (Without the text-based tags)
+                    const nameTextStr = (isPinned ? "📌 " : "") + safeName;
+                    const nameTxt = this.add.text(0, bubY - 30, nameTextStr, { 
+                        fontSize: "24px", 
+                        fontFamily: "'Anek Bangla'", color: overrideNameColor, fontStyle: "bold"
                     }).setOrigin(0, 0.5);
 
                     let nameX = isMe ? this.chatW - avatarSize - 25 - nameTxt.width : 15 + avatarSize + 15;
                     nameTxt.x = nameX;
                     addItems(nameTxt); 
 
+                    // 3. Chain Labels Together (Level, then Badge)
+                    let nextLabelX = isMe ? nameX - 12 : nameX + nameTxt.width + 12;
+                    const labelY = bubY - 30 + 1;
+
+                    // --- DRAW LEVEL LABEL ---
                     if (msg.lvl) {
                         const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
                             fontSize: "16px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold"
@@ -1532,15 +1544,39 @@ Object.assign(MenuScene.prototype, {
                         
                         const lvlW = lvlTxt.width + 16;
                         const lvlH = 26;
-                        const badgeX = isMe ? nameX - lvlW/2 - 12 : nameX + nameTxt.width + lvlW/2 + 12;
-                        const badgeY = bubY - 30 + 1; 
+                        
+                        // Calculate placement based on whether it's my message (right) or others (left)
+                        const lvlCenterX = isMe ? nextLabelX - lvlW/2 : nextLabelX + lvlW/2;
         
                         const lvlBg = this.add.graphics();
                         lvlBg.fillStyle(0x334155, 0.9);
-                        lvlBg.fillRoundedRect(badgeX - lvlW/2, badgeY - lvlH/2, lvlW, lvlH, 6);
+                        lvlBg.fillRoundedRect(lvlCenterX - lvlW/2, labelY - lvlH/2, lvlW, lvlH, 6);
                         
-                        lvlTxt.setPosition(badgeX, badgeY);
+                        lvlTxt.setPosition(lvlCenterX, labelY);
                         addItems([lvlBg, lvlTxt]); 
+                        
+                        // Shift the next X position for the Badge
+                        nextLabelX = isMe ? nextLabelX - lvlW - 8 : nextLabelX + lvlW + 8;
+                    }
+
+                    // --- DRAW OFFICIAL BADGE LABEL ---
+                    if (badgeInfo) {
+                        const badgeTxt = this.add.text(0, 0, `${badgeInfo.icon} ${badgeInfo.title}`, {
+                            fontSize: "15px", fontFamily: "Arial", color: "#000000", fontStyle: "bold"
+                        }).setOrigin(0.5);
+                        
+                        const bW = badgeTxt.width + 16;
+                        const bH = 26;
+                        
+                        const bCenterX = isMe ? nextLabelX - bW/2 : nextLabelX + bW/2;
+                        
+                        const bBg = this.add.graphics();
+                        // Fill the label with the Badge's actual color hex
+                        bBg.fillStyle(Phaser.Display.Color.HexStringToColor(badgeInfo.color).color, 1);
+                        bBg.fillRoundedRect(bCenterX - bW/2, labelY - bH/2, bW, bH, 6);
+                        
+                        badgeTxt.setPosition(bCenterX, labelY);
+                        addItems([bBg, badgeTxt]);
                     }
                 }
 
@@ -1831,6 +1867,9 @@ Object.assign(MenuScene.prototype, {
 
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
         const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
+        
+        // --- NEW: FETCH ACTIVE BADGE FOR CHAT (Takes Temp Champion over Permanent Profile) ---
+        const currentBadge = (GameState.profile.tempBadge || GameState.profile.badge || "");
 
         // Fetch User Avatar Data dynamically
         let getAvatarValue = () => {
@@ -1852,6 +1891,7 @@ Object.assign(MenuScene.prototype, {
             n: playerName,
             lvl: playerLvl, 
             avatar: getAvatarValue(),
+            badge: currentBadge, // --- ADDED TO PAYLOAD
             text: text,
             timestamp: window.FirebaseTools.serverTimestamp(),
             pinned: false
