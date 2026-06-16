@@ -88,6 +88,8 @@ document.addEventListener("deviceready", () => {
   
     document.addEventListener("backbutton", (e) => {
         e.preventDefault(); 
+        // FIX: Ignore the back button if the native Google Auth window is active or just closed
+        if (window.isAuthenticating) return;
         const now = Date.now();
         
         const sceneManager = window.game.scene;

@@ -692,7 +692,7 @@ class MenuScene extends Phaser.Scene {
                 // Subtle rotation tilting
                 this.tweens.add({
                     targets: badgeTxt,
-                    angle:{ from: -4, to: 4 }, // Tilts a few degrees
+                    angle:{ from: -7, to: 7 }, // Tilts a few degrees
                     duration: 3100, // A longer, odd duration for maximum randomness
                     yoyo: true,
                     repeat: -1,

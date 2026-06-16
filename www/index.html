@@ -108,7 +108,6 @@
         return new Promise(async (resolve, reject) => {
             const isOnline = await window.checkRealConnection();
             if (!isOnline) {
-                alert("Please connect to the internet to sign in.");
                 return reject(new Error("Offline"));
             }
 
@@ -129,16 +128,14 @@
                                     const activeScenes = window.game.scene.getScenes(true);
                                     activeScenes.forEach(s => s.scene.restart());
                                 }
-                                alert("Successfully connected to Cloud!");
                                 resolve(result);
                             } catch (err) {
-                                alert("Sign-in failed: " + err.message);
                                 reject(err);
                             }
                         },
                         function (msg) {
-                            alert("Sign-in failed: " + JSON.stringify(msg));
-                            reject(new Error(JSON.stringify(msg)));
+                            // Safely pass the native error object/string to the UI catch block
+                            reject(new Error(typeof msg === 'string' ? msg : JSON.stringify(msg)));
                         }
                     );
                 } else {
@@ -150,11 +147,9 @@
                         const activeScenes = window.game.scene.getScenes(true);
                         activeScenes.forEach(s => s.scene.restart());
                     }
-                    alert("Successfully connected to Cloud!");
                     resolve(result);
                 }
             } catch(e) {
-                alert("Sign-in failed: " + e.message);
                 reject(e);
             }
         });

@@ -81,9 +81,9 @@ Object.assign(MenuScene.prototype, {
         this.chatKeyboardOffset = 0; 
         this.currentPinnedHeight = 0; 
         
-        // UI SCALING & LAYOUT adjustments for mobile perfection
-        this.chatW = w - 30; 
-        this.chatH = h * 0.88; 
+        // UI SCALING & LAYOUT (Scaled up by ~3-5%)
+        this.chatW = w - 20; 
+        this.chatH = h * 0.90; 
         
         this.chatX = (w - this.chatW) / 2; 
         this.chatYVisible = (h - this.chatH) / 2; 
@@ -100,13 +100,13 @@ Object.assign(MenuScene.prototype, {
         
         const panelBg = this.add.graphics();
         panelBg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
-        panelBg.fillRoundedRect(0, 0, this.chatW, this.chatH, 20);
+        panelBg.fillRoundedRect(0, 0, this.chatW, this.chatH, 22);
         panelBg.lineStyle(2, 0x334155, 1);
-        panelBg.strokeRoundedRect(0, 0, this.chatW, this.chatH, 20);
+        panelBg.strokeRoundedRect(0, 0, this.chatW, this.chatH, 22);
         panelBg.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.chatW, this.chatH), Phaser.Geom.Rectangle.Contains);
 
         const title = this.add.text(this.chatW / 2, 45, "গ্লোবাল CHAT", {
-            fontSize: "44px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
+            fontSize: "46px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
             shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0.5);
         
@@ -118,7 +118,7 @@ Object.assign(MenuScene.prototype, {
         closeBtnBg.lineStyle(2, 0xef4444, 0.8);
         closeBtnBg.strokeRoundedRect(this.chatW - 75, 15, 60, 60, 16);
         
-        const closeIcon = this.add.text(this.chatW - 45, 45, "✖", { fontSize: "32px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
+        const closeIcon = this.add.text(this.chatW - 45, 45, "✖", { fontSize: "34px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
         const closeHit = this.add.rectangle(this.chatW - 45, 45, 80, 80, 0, 0).setInteractive({useHandCursor:true});
         
         closeHit.on('pointerdown', () => this.toggleChatWindow());
@@ -128,7 +128,7 @@ Object.assign(MenuScene.prototype, {
         this.chatContainer.add([panelBg, title, headerDiv, closeBtnBg, closeIcon, closeHit]);
 
         const inputY = this.chatH - 50; 
-        this.chatScrollZoneHeight = this.chatH - 100 - 90; // perfectly fits between header and input
+        this.chatScrollZoneHeight = this.chatH - 100 - 90; 
 
         this.msgListContainer = this.add.container(0, 90);
         this.chatContainer.add(this.msgListContainer);
@@ -183,7 +183,7 @@ Object.assign(MenuScene.prototype, {
         fabBg.fillRoundedRect(-100, -22, 200, 44, 22);
         fabBg.lineStyle(2, 0x334155, 1);
         fabBg.strokeRoundedRect(-100, -22, 200, 44, 22);
-        const fabIcon = this.add.text(0, 0, "⬇ Scroll to Bottom", { fontSize: "20px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold" }).setOrigin(0.5);
+        const fabIcon = this.add.text(0, 0, "⬇ Scroll to Bottom", { fontSize: "22px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold" }).setOrigin(0.5);
         const fabHit = this.add.rectangle(0, 0, 200, 44).setInteractive({useHandCursor: true});
         
         fabHit.on('pointerdown', () => {
@@ -436,8 +436,8 @@ Object.assign(MenuScene.prototype, {
         replyBg.fillRoundedRect(- (this.chatW - 30)/2, -22, this.chatW - 30, 44, 16);
         replyBg.lineStyle(2, 0x334155, 1);
         replyBg.strokeRoundedRect(- (this.chatW - 30)/2, -22, this.chatW - 30, 44, 16);
-        this.replyTxt = this.add.text(- (this.chatW - 30)/2 + 15, 0, "", { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#38bdf8" }).setOrigin(0, 0.5);
-        const replyCancel = this.add.text((this.chatW - 30)/2 - 25, 0, "✖", { fontSize: "24px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5).setInteractive({useHandCursor:true});
+        this.replyTxt = this.add.text(- (this.chatW - 30)/2 + 15, 0, "", { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#38bdf8" }).setOrigin(0, 0.5);
+        const replyCancel = this.add.text((this.chatW - 30)/2 - 25, 0, "✖", { fontSize: "26px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5).setInteractive({useHandCursor:true});
         
         this.cancelReply = () => {
             this.replyData = null;
@@ -460,16 +460,16 @@ Object.assign(MenuScene.prototype, {
         };
 
         if (isConnected) {
-            const inputHTML = `<input type="text" id="chatInput" autocomplete="off" maxlength="200" placeholder="Type a message..." style="box-sizing: border-box; width: ${this.chatW - 100}px; height: 64px; padding: 0 20px; font-family: 'Anek Bangla', sans-serif; font-size: 24px; border-radius: 32px; border: 2px solid #334155; outline: none; background: #0f172a; color: #f8fafc; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">`;
+            const inputHTML = `<input type="text" id="chatInput" autocomplete="off" maxlength="200" placeholder="Type a message..." style="box-sizing: border-box; width: ${this.chatW - 100}px; height: 68px; padding: 0 20px; font-family: 'Anek Bangla', sans-serif; font-size: 26px; border-radius: 34px; border: 2px solid #334155; outline: none; background: #0f172a; color: #f8fafc; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">`;
                 
             this.chatInput = this.add.dom(10 + (this.chatW - 100)/2, inputY).createFromHTML(inputHTML);
             this.bottomUIContainer.add(this.chatInput);
             
             if (this.chatInput.node) this.chatInput.node.style.display = 'none';
 
-            const sendBtnBg = this.add.circle(this.chatW - 45, inputY, 34, 0x38bdf8);
-            const sendBtnTxt = this.add.text(this.chatW - 43, inputY, "➤", { fontSize: "32px", color: "#ffffff" }).setOrigin(0.5);
-            const sendHit = this.add.circle(this.chatW - 45, inputY, 45).setInteractive({useHandCursor: true});
+            const sendBtnBg = this.add.circle(this.chatW - 45, inputY, 36, 0x38bdf8);
+            const sendBtnTxt = this.add.text(this.chatW - 43, inputY, "➤", { fontSize: "34px", color: "#ffffff" }).setOrigin(0.5);
+            const sendHit = this.add.circle(this.chatW - 45, inputY, 48).setInteractive({useHandCursor: true});
             
             sendHit.on('pointerdown', () => {
                 this.tweens.add({ targets: sendBtnBg, scale: 0.8, yoyo: true, duration: 100 });
@@ -567,11 +567,11 @@ Object.assign(MenuScene.prototype, {
                 });
             }
         } else {
-            const promptTxt = this.add.text(this.chatW / 2, inputY - 60, "Please login to chat", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#94a3b8" }).setOrigin(0.5);
+            const promptTxt = this.add.text(this.chatW / 2, inputY - 60, "Please login to chat", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#94a3b8" }).setOrigin(0.5);
             const loginBg = this.add.graphics();
             loginBg.fillStyle(0x38bdf8, 1);
             loginBg.fillRoundedRect(this.chatW / 2 - 140, inputY - 30, 280, 60, 30);
-            const loginTxt = this.add.text(this.chatW / 2, inputY, "Connect Google", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+            const loginTxt = this.add.text(this.chatW / 2, inputY, "Connect Google", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
             const loginHit = this.add.rectangle(this.chatW / 2, inputY, 280, 60, 0x000000, 0).setInteractive({useHandCursor: true});
 
             loginHit.on('pointerdown', () => {
@@ -601,6 +601,9 @@ Object.assign(MenuScene.prototype, {
                         window.isAuthenticating = false;
                         if (dotTimer) dotTimer.remove();
                         loginTxt.setText("Connect Google");
+                        if (this.showNotification) {
+                            this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
+                        }
                     });
                 } else {
                     window.isAuthenticating = false;
@@ -615,7 +618,7 @@ Object.assign(MenuScene.prototype, {
 
         this.offlinePromptGroup = this.add.container(0, 0).setVisible(false);
         const offlineTxt = this.add.text(this.chatW / 2, inputY, "Offline Mode", { 
-            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#f87171", fontStyle: "bold" 
+            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#f87171", fontStyle: "bold" 
         }).setOrigin(0.5);
         this.offlinePromptGroup.add(offlineTxt);
         this.bottomUIContainer.add(this.offlinePromptGroup);
@@ -649,6 +652,16 @@ Object.assign(MenuScene.prototype, {
                 this.chatToggleContainer.setScale(1);
             }
         };
+                    // Add this near the end of createGlobalChat()
+            this.events.once('shutdown', () => {
+                if (this.chatOnlineListener) window.removeEventListener('online', this.chatOnlineListener);
+                if (this.chatOfflineListener) window.removeEventListener('offline', this.chatOfflineListener);
+                // Make sure to extract and remove keyboard listeners as well!
+                
+                // Unsubscribe from Firebase listeners to save reads/bandwidth
+                if (this.chatUnsubscribe) this.chatUnsubscribe();
+                if (this.typingUnsubscribe) this.typingUnsubscribe();
+            });
 
         if (this.chatOnlineListener) window.removeEventListener('online', this.chatOnlineListener);
         if (this.chatOfflineListener) window.removeEventListener('offline', this.chatOfflineListener);
@@ -759,7 +772,7 @@ Object.assign(MenuScene.prototype, {
 
         const shadow = this.add.graphics();
         shadow.fillStyle(0x000000, 0.4);
-        shadow.fillRoundedRect(-35, -35, 160, 70, 20); 
+        shadow.fillRoundedRect(-40, -40, 170, 75, 22); 
 
         const bg = this.add.graphics();
         const drawBase = (isHovered) => {
@@ -771,18 +784,18 @@ Object.assign(MenuScene.prototype, {
                 bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 1); 
                 bg.lineStyle(2, 0x334155, 1);
             }
-            bg.fillRoundedRect(-35, -35, 160, 70, 20);
-            bg.strokeRoundedRect(-35, -35, 160, 70, 20);
+            bg.fillRoundedRect(-40, -40, 170, 75, 22);
+            bg.strokeRoundedRect(-40, -40, 170, 75, 22);
         };
         drawBase(false);
 
         const icon = this.add.text(5, 0, "💬", { 
-            fontSize: "48px", 
+            fontSize: "52px", 
             fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif' 
         }).setOrigin(0.5).setAlpha(0.90);
         icon.clearTint();
 
-        const hitArea = this.add.rectangle(45, 0, 160, 70, 0, 0).setInteractive({ useHandCursor: true });
+        const hitArea = this.add.rectangle(45, 0, 170, 75, 0, 0).setInteractive({ useHandCursor: true });
 
         hitArea.on('pointerover', () => {
             drawBase(true);
@@ -810,12 +823,12 @@ Object.assign(MenuScene.prototype, {
 
         this.unreadBadgeBg = this.add.graphics();
         this.unreadBadgeBg.fillStyle(0xef4444, 1); 
-        this.unreadBadgeBg.fillCircle(25, -25, 18); 
+        this.unreadBadgeBg.fillCircle(30, -28, 20); 
         this.unreadBadgeBg.lineStyle(2.5, 0x0f172a, 1); 
-        this.unreadBadgeBg.strokeCircle(25, -25, 18);
+        this.unreadBadgeBg.strokeCircle(30, -28, 20);
         
-        this.unreadBadgeTxt = this.add.text(25, -25, "0", {
-            fontSize: "22px", 
+        this.unreadBadgeTxt = this.add.text(30, -28, "0", {
+            fontSize: "24px", 
             fontFamily: "Arial", 
             color: "#ffffff", 
             fontStyle: "bold"
@@ -992,9 +1005,9 @@ Object.assign(MenuScene.prototype, {
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const isAdmin = GameState.profile && GameState.profile.role === 'admin';
         
-        const menuW = 380; 
-        let menuH = isConnected ? 150 : 100;
-        if (isConnected && isAdmin) menuH = 210; 
+        const menuW = 400; 
+        let menuH = isConnected ? 160 : 110;
+        if (isConnected && isAdmin) menuH = 220; 
         
         const halfW = menuW / 2;
         const halfH = menuH / 2;
@@ -1020,24 +1033,24 @@ Object.assign(MenuScene.prototype, {
         
         if (!isConnected) {
             const warnTxt = this.add.text(0, 0, "লগইন করে চ্যাট করুন", { 
-                fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#fca5a5" 
+                fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#fca5a5" 
             }).setOrigin(0.5);
             this.chatActionPopup.add(warnTxt);
 
         } else {
             const emojiY = -halfH + 40;
             const divider1Y = -halfH + 80;
-            const row1BtnY = -halfH + 110;
-            const divider2Y = -halfH + 145;
-            const row2BtnY = -halfH + 175;
+            const row1BtnY = -halfH + 115;
+            const divider2Y = -halfH + 150;
+            const row2BtnY = -halfH + 185;
 
             const emojis = ['👍', '❤️', '😂', '😮', '😢'];
-            const startX = -134;
-            const spacing = 67;
+            const startX = -140;
+            const spacing = 70;
 
             emojis.forEach((emoji, i) => {
                 const emTxt = this.add.text(startX + (i * spacing), emojiY, emoji, { 
-                    fontSize: "40px", 
+                    fontSize: "44px", 
                     fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif'
                 }).setOrigin(0.5).setInteractive({useHandCursor: true});
                 
@@ -1062,15 +1075,15 @@ Object.assign(MenuScene.prototype, {
                 repBg.clear();
                 if (hover) {
                     repBg.fillStyle(0x334155, 0.8);
-                    repBg.fillRoundedRect(-175, row1BtnY - 22, 160, 44, 12); 
+                    repBg.fillRoundedRect(-185, row1BtnY - 22, 170, 44, 12); 
                 }
             };
             drawRepBg(false);
 
-            const repIcon = this.add.text(-135, row1BtnY, "↩️", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+            const repIcon = this.add.text(-145, row1BtnY, "↩️", { fontSize: "26px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
             repIcon.clearTint();
-            const repTxt = this.add.text(-110, row1BtnY, "Reply", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
-            const repHit = this.add.rectangle(-95, row1BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
+            const repTxt = this.add.text(-120, row1BtnY, "Reply", { fontSize: "22px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
+            const repHit = this.add.rectangle(-100, row1BtnY, 170, 44, 0, 0).setInteractive({useHandCursor: true});
 
             repHit.on('pointerover', () => { drawRepBg(true); repTxt.setColor('#ffffff'); });
             repHit.on('pointerout', () => { drawRepBg(false); repTxt.setColor('#cbd5e1'); });
@@ -1084,15 +1097,15 @@ Object.assign(MenuScene.prototype, {
                 copyBg.clear();
                 if (hover) {
                     copyBg.fillStyle(0x334155, 0.8);
-                    copyBg.fillRoundedRect(15, row1BtnY - 22, 160, 44, 12); 
+                    copyBg.fillRoundedRect(15, row1BtnY - 22, 170, 44, 12); 
                 }
             };
             drawCopyBg(false);
 
-            const copyIcon = this.add.text(45, row1BtnY, "📋", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+            const copyIcon = this.add.text(45, row1BtnY, "📋", { fontSize: "26px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
             copyIcon.clearTint();
-            const copyTxt = this.add.text(70, row1BtnY, "Copy", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
-            const copyHit = this.add.rectangle(95, row1BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
+            const copyTxt = this.add.text(70, row1BtnY, "Copy", { fontSize: "22px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
+            const copyHit = this.add.rectangle(100, row1BtnY, 170, 44, 0, 0).setInteractive({useHandCursor: true});
 
             copyHit.on('pointerover', () => { drawCopyBg(true); copyTxt.setColor('#ffffff'); });
             copyHit.on('pointerout', () => { drawCopyBg(false); copyTxt.setColor('#cbd5e1'); });
@@ -1127,16 +1140,16 @@ Object.assign(MenuScene.prototype, {
                     pinBg.clear();
                     if (hover) {
                         pinBg.fillStyle(0x334155, 0.8);
-                        pinBg.fillRoundedRect(-175, row2BtnY - 22, 160, 44, 12);
+                        pinBg.fillRoundedRect(-185, row2BtnY - 22, 170, 44, 12);
                     }
                 };
                 drawPinBg(false);
 
                 const isPinned = msg.pinned;
-                const pinIcon = this.add.text(-135, row2BtnY, isPinned ? "❌" : "📌", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+                const pinIcon = this.add.text(-145, row2BtnY, isPinned ? "❌" : "📌", { fontSize: "26px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
                 pinIcon.clearTint();
-                const pinTxt = this.add.text(-110, row2BtnY, isPinned ? "Unpin" : "Pin", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
-                const pinHit = this.add.rectangle(-95, row2BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
+                const pinTxt = this.add.text(-120, row2BtnY, isPinned ? "Unpin" : "Pin", { fontSize: "22px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
+                const pinHit = this.add.rectangle(-100, row2BtnY, 170, 44, 0, 0).setInteractive({useHandCursor: true});
 
                 pinHit.on('pointerover', () => { drawPinBg(true); pinTxt.setColor('#ffffff'); });
                 pinHit.on('pointerout', () => { drawPinBg(false); pinTxt.setColor('#cbd5e1'); });
@@ -1157,15 +1170,15 @@ Object.assign(MenuScene.prototype, {
                     delBg.clear();
                     if (hover) {
                         delBg.fillStyle(0xef4444, 0.2);
-                        delBg.fillRoundedRect(15, row2BtnY - 22, 160, 44, 12);
+                        delBg.fillRoundedRect(15, row2BtnY - 22, 170, 44, 12);
                     }
                 };
                 drawDelBg(false);
 
-                const delIcon = this.add.text(45, row2BtnY, "🗑️", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+                const delIcon = this.add.text(45, row2BtnY, "🗑️", { fontSize: "26px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
                 delIcon.clearTint();
-                const delTxt = this.add.text(70, row2BtnY, "Delete", { fontSize: "20px", fontFamily: 'sans-serif', color: '#f87171' }).setOrigin(0, 0.5);
-                const delHit = this.add.rectangle(95, row2BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
+                const delTxt = this.add.text(70, row2BtnY, "Delete", { fontSize: "22px", fontFamily: 'sans-serif', color: '#f87171' }).setOrigin(0, 0.5);
+                const delHit = this.add.rectangle(100, row2BtnY, 170, 44, 0, 0).setInteractive({useHandCursor: true});
 
                 delHit.on('pointerover', () => { drawDelBg(true); delTxt.setColor('#ef4444'); });
                 delHit.on('pointerout', () => { drawDelBg(false); delTxt.setColor('#f87171'); });
@@ -1307,7 +1320,7 @@ Object.assign(MenuScene.prototype, {
             let lastMessageDateString = null; 
 
             pinnedMessages.forEach(msg => {
-                const bannerHeight = 65;
+                const bannerHeight = 68;
                 const currentYPos = pinnedY; 
                 const yCenter = currentYPos + bannerHeight / 2;
                 
@@ -1326,7 +1339,7 @@ Object.assign(MenuScene.prototype, {
                 const shortText = msg.text.length > 30 ? msg.text.substring(0, 30) + "..." : msg.text;
                 
                 const pTxt = this.add.text(30, yCenter, `📌 ${msg.n}: ${shortText}`, {
-                    fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", color: "#F8FAFC", fontStyle: "bold"
+                    fontSize: "24px", fontFamily: "'Anek Bangla', sans-serif", color: "#F8FAFC", fontStyle: "bold"
                 }).setOrigin(0, 0.5);
                 
                 const pHit = this.add.rectangle(this.chatW/2, yCenter, this.chatW - 20, bannerHeight, 0, 0)
@@ -1388,10 +1401,10 @@ Object.assign(MenuScene.prototype, {
                     const divCont = this.add.container(this.chatW / 2, startY + 14);
                     const divBg = this.add.graphics();
                     divBg.fillStyle(0x1e293b, 0.85);
-                    divBg.fillRoundedRect(-70, -18, 140, 36, 18);
+                    divBg.fillRoundedRect(-75, -20, 150, 40, 20);
                     
                     const divTxt = this.add.text(0, 0, msgDateString, { 
-                        fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#94a3b8", fontStyle: 'bold'
+                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#94a3b8", fontStyle: 'bold'
                     }).setOrigin(0.5);
                     
                     divCont.add([divBg, divTxt]);
@@ -1407,7 +1420,7 @@ Object.assign(MenuScene.prototype, {
                     const divCont = this.add.container(this.chatW / 2, startY + 14);
                     const divLine = this.add.rectangle(0, 0, this.chatW - 50, 2, 0xef4444, 0.6);
                     const divTxt = this.add.text(0, 0, "New Messages", { 
-                        fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ef4444", backgroundColor: "#020617", padding: {x: 10} 
+                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ef4444", backgroundColor: "#020617", padding: {x: 10} 
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
                     
@@ -1420,7 +1433,7 @@ Object.assign(MenuScene.prototype, {
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
 
-                let topPadding = isConsecutive ? 6 : 38; 
+                let topPadding = isConsecutive ? 8 : 42; 
                 const bubY = startY + topPadding; 
 
                 const addItems = (items) => {
@@ -1467,40 +1480,48 @@ Object.assign(MenuScene.prototype, {
                     );
                 }
 
+                // AVATAR AND ALIGNMENT SCALING AND BUG FIX
                 const hasAvatar = !isConsecutive;
-                const avatarSize = 44; 
+                const avatarSize = 48; 
                 let avatarIcon = msg.avatar || "👤"; 
-                let avatarX = isMe ? this.chatW - 32 : 32; 
+                // Avatar positioned cleanly spaced symmetrically on sides
+                let avatarX = isMe ? this.chatW - 36 : 36; 
 
-                const bubbleMaxWidth = this.chatW - 100; 
-                let extraHeight = (msg.replyTo && !msg.isDeleted) ? 38 : 0;
+                const bubbleMaxWidth = this.chatW - 148;
+                let extraHeight = (msg.replyTo && !msg.isDeleted) ? 42 : 0;
                 let replyTxtObj = null;
                 
                 if (msg.replyTo && !msg.isDeleted) {
                     let replySnippet = msg.replyTo.text.length > 25 ? msg.replyTo.text.substring(0, 25) + "..." : msg.replyTo.text;
                     replyTxtObj = this.add.text(0, 0, `➥ ${msg.replyTo.n}: ${replySnippet}`, { 
-                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#7dd3fc", fontStyle: "italic", 
+                        fontSize: "21px", fontFamily: "'Anek Bangla'", color: "#7dd3fc", fontStyle: "italic", 
                         backgroundColor: "#00000044", padding: {x: 10, y: 6}
                     });
                 }
 
+                // AFTER
                 const msgTxt = this.add.text(0, 0, displayMsgText, { 
-                    fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", color: displayMsgColor, wordWrap: { width: bubbleMaxWidth - 30 }, fontStyle: msg.isDeleted ? "italic" : "normal", lineSpacing: 6
+                    fontSize: "30px", 
+                    fontFamily: "'Anek Bangla', sans-serif", 
+                    color: displayMsgColor, 
+                    wordWrap: { width: bubbleMaxWidth - 30, useAdvancedWrap: true }, 
+                    fontStyle: msg.isDeleted ? "italic" : "normal", 
+                    lineSpacing: 6
                 });
 
                 const timeStr = formatTime(msgTime);
                 const timeTxt = this.add.text(0, 0, timeStr, { 
-                    fontSize: "16px", fontFamily: "Arial", color: "#94a3b8" 
+                    fontSize: "18px", fontFamily: "Arial", color: "#94a3b8" 
                 });
 
                 if (hasAvatar) {
                     const avatarBg = this.add.graphics();
                     avatarBg.fillStyle(0x0f172a, 1);
-                    avatarBg.fillRoundedRect(avatarX - avatarSize/2, bubY - 10, avatarSize, avatarSize, 12);
+                    avatarBg.fillRoundedRect(avatarX - avatarSize/2, bubY - 12, avatarSize, avatarSize, 14);
                     avatarBg.lineStyle(2, Phaser.Display.Color.HexStringToColor(nameColorHexStr).color, 0.9);
-                    avatarBg.strokeRoundedRect(avatarX - avatarSize/2, bubY - 10, avatarSize, avatarSize, 12);
+                    avatarBg.strokeRoundedRect(avatarX - avatarSize/2, bubY - 12, avatarSize, avatarSize, 14);
                     
-                    const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 10, avatarIcon, { fontSize: "30px" }).setOrigin(0.5);
+                    const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 12, avatarIcon, { fontSize: "32px" }).setOrigin(0.5);
                     addItems([avatarBg, avTxt]);
 
                     let currentBadges = msg.badges || [];
@@ -1515,40 +1536,43 @@ Object.assign(MenuScene.prototype, {
                     const safeName = msg.n || "Guest"; 
                     const nameTextStr = (isPinned ? "📌 " : "") + safeName;
                     
-                    const nameTxt = this.add.text(0, bubY - 26, nameTextStr, { 
-                        fontSize: "20px", 
+                    const nameTxt = this.add.text(0, bubY - 30, nameTextStr, { 
+                        fontSize: "24px", 
                         fontFamily: "'Anek Bangla'", color: overrideNameColor, fontStyle: "bold"
                     }).setOrigin(0, 0.5);
 
-                    let nameX = isMe ? this.chatW - avatarSize - 20 - nameTxt.width : 15 + avatarSize + 15;
+                    // Name alignment perfectly matched flush with the chat bubble body boundaries
+                    let bubbleAlignRight = this.chatW - 74;
+                    let bubbleAlignLeft = 74;
+                    let nameX = isMe ? bubbleAlignRight - nameTxt.width : bubbleAlignLeft;
                     nameTxt.x = nameX;
                     addItems(nameTxt); 
 
-                    let nextLabelX = isMe ? nameX - 10 : nameX + nameTxt.width + 10;
-                    const labelY = bubY - 26 + 1;
+                    let nextLabelX = isMe ? nameX - 12 : nameX + nameTxt.width + 12;
+                    const labelY = bubY - 30 + 1;
 
                     if (msg.lvl) {
                         const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
-                            fontSize: "14px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold"
+                            fontSize: "16px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold"
                         }).setOrigin(0.5);
                         
                         const lvlW = lvlTxt.width + 12;
-                        const lvlH = 22;
+                        const lvlH = 24;
                         
                         const lvlCenterX = isMe ? nextLabelX - lvlW/2 : nextLabelX + lvlW/2;
         
                         const lvlBg = this.add.graphics();
                         lvlBg.fillStyle(0x334155, 0.9);
-                        lvlBg.fillRoundedRect(lvlCenterX - lvlW/2, labelY - lvlH/2, lvlW, lvlH, 5);
+                        lvlBg.fillRoundedRect(lvlCenterX - lvlW/2, labelY - lvlH/2, lvlW, lvlH, 6);
                         
                         lvlTxt.setPosition(lvlCenterX, labelY);
                         addItems([lvlBg, lvlTxt]); 
                         
-                        nextLabelX = isMe ? nextLabelX - lvlW - 6 : nextLabelX + lvlW + 6;
+                        nextLabelX = isMe ? nextLabelX - lvlW - 8 : nextLabelX + lvlW + 8;
                     }
 
                     if (currentBadges.length > 0) {
-                        let badgeRes = window.drawPlayerBadges(this, currentBadges, nextLabelX, labelY, '14px', isMe ? -1 : 1);
+                        let badgeRes = window.drawPlayerBadges(this, currentBadges, nextLabelX, labelY, '18px', isMe ? -1 : 1);
                         addItems(badgeRes.objects);
                         nextLabelX = badgeRes.nextX;
                     }
@@ -1557,6 +1581,9 @@ Object.assign(MenuScene.prototype, {
                 const timeWidth = timeTxt.width;
                 const bubbleW = Math.max(msgTxt.width + 30, (replyTxtObj ? replyTxtObj.width + 30 : 90), timeWidth + 24);
                 
+                // FIXED GAP MATH: Always 14px gap perfectly centered off avatars (36 + 24(avatar/2) + 14 = 74 bounds)
+                let startX = isMe ? (this.chatW - 74 - bubbleW) : 74;
+
                 let hasReactions = false;
                 let extraReactionPadding = 0;
                 let reactionCounts = {};
@@ -1572,7 +1599,6 @@ Object.assign(MenuScene.prototype, {
                 }
 
                 let bubbleH = msgTxt.height + 34 + extraHeight + extraReactionPadding;
-                let startX = isMe ? (this.chatW - bubbleW - avatarSize - 16) : (16 + avatarSize + 16);
 
                 const bubbleBg = this.add.graphics();
                 bubbleBg.fillStyle(bubBgHex, bubAlpha);
@@ -1580,7 +1606,7 @@ Object.assign(MenuScene.prototype, {
                 const strokeColor = Phaser.Display.Color.GetColor(baseCol.r * 0.5, baseCol.g * 0.5, baseCol.b * 0.5);
                 bubbleBg.lineStyle(isMentioned ? 2 : 1.5, isMentioned ? 0xf59e0b : strokeColor, 0.8);
 
-                const bRad = 16;
+                const bRad = 18;
                 const sRad = 4;
                 if (isMe) {
                     bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: bRad, tr: bRad, bl: bRad, br: isConsecutive ? bRad : sRad });
@@ -1610,14 +1636,14 @@ Object.assign(MenuScene.prototype, {
 
                 if (isError) {
                     const errTxt = this.add.text(startX + bubbleW - 8, bubY + finalBubbleH + 4, "⚠️ Failed to send. Tap to retry.", {
-                        fontSize: "16px", fontFamily: "'Anek Bangla', Arial", color: "#f87171", fontStyle: "bold"
+                        fontSize: "18px", fontFamily: "'Anek Bangla', Arial", color: "#f87171", fontStyle: "bold"
                     }).setOrigin(1, 0);
-                    addItems(errTxt); finalBubbleH += 24; 
+                    addItems(errTxt); finalBubbleH += 26; 
                 } else if (isSending) {
                     const sendTxt = this.add.text(startX + bubbleW - 8, bubY + finalBubbleH + 4, "Sending...", {
-                        fontSize: "14px", fontFamily: "'Anek Bangla', Arial", color: "#64748b", fontStyle: "italic"
+                        fontSize: "16px", fontFamily: "'Anek Bangla', Arial", color: "#64748b", fontStyle: "italic"
                     }).setOrigin(1, 0);
-                    addItems(sendTxt); finalBubbleH += 24;
+                    addItems(sendTxt); finalBubbleH += 26;
                 }
 
                 let interactHit = null;
@@ -1639,19 +1665,19 @@ Object.assign(MenuScene.prototype, {
                     sortedReactions.forEach((e) => {
                         const badgeBg = this.add.graphics();
                         badgeBg.fillStyle(0x1e293b, 1);
-                        badgeBg.fillRoundedRect(rxX, rxY, 80, 36, 18);
+                        badgeBg.fillRoundedRect(rxX, rxY, 84, 40, 20);
                         badgeBg.lineStyle(1.5, 0x38bdf8, 1);
-                        badgeBg.strokeRoundedRect(rxX, rxY, 80, 36, 18);
+                        badgeBg.strokeRoundedRect(rxX, rxY, 84, 40, 20);
                         
-                        const badgeTxt = this.add.text(rxX + 40, rxY + 18, `${e} ${reactionCounts[e]}`, { 
-                            fontSize: "24px", fontFamily: '"Apple Color Emoji", sans-serif', color: "#ffffff" 
+                        const badgeTxt = this.add.text(rxX + 42, rxY + 20, `${e} ${reactionCounts[e]}`, { 
+                            fontSize: "26px", fontFamily: '"Apple Color Emoji", sans-serif', color: "#ffffff" 
                         }).setOrigin(0.5);
 
                         msgVisuals.push(badgeBg, badgeTxt);
                         addItems([badgeBg, badgeTxt]); 
-                        rxX += 88; 
+                        rxX += 92; 
                     });
-                    reactionSpace = 40; 
+                    reactionSpace = 44; 
                 }
 
                 if (interactHit) interactHit.visuals = msgVisuals; 
