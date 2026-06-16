@@ -26,28 +26,27 @@ Object.assign(MenuScene.prototype, {
     cullChatMessages() {
         if (!this.msgListContainer || !this.isChatOpen) return;
 
-        const dynamicTopOffset = 125 + this.currentPinnedHeight;
+        const dynamicTopOffset = 90 + this.currentPinnedHeight;
         const visibleTop = dynamicTopOffset - this.msgListContainer.y; 
         const visibleBottom = visibleTop + this.chatScrollZoneHeight;
         
         const buffer = 800; 
 
-        this.msgListContainer.each(child => {
+        const children = this.msgListContainer.list;
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
             const checkY = child.trueY !== undefined ? child.trueY : child.y;
-            if (checkY < visibleTop - buffer || checkY > visibleBottom + buffer) {
-                child.setVisible(false);
-            } else {
-                child.setVisible(true);
+            const shouldBeVisible = (checkY >= visibleTop - buffer && checkY <= visibleBottom + buffer);
+            
+            if (child.visible !== shouldBeVisible) {
+                child.setVisible(shouldBeVisible);
             }
-        });
+        }
 
-        // FIXED: "Scroll to Bottom" logic
         if (this.scrollToBottomBtn) {
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
             let topY = dynamicTopOffset - this.chatKeyboardOffset;
             let bottomY = topY - this.chatMaxScroll;
             
-            // Show if we are scrolled up more than 250px away from the bottom (newest messages)
             if (this.msgListContainer.y > bottomY + 250 && this.chatMaxScroll > 0) {
                 this.scrollToBottomBtn.setVisible(true);
             } else {
@@ -82,8 +81,9 @@ Object.assign(MenuScene.prototype, {
         this.chatKeyboardOffset = 0; 
         this.currentPinnedHeight = 0; 
         
-        this.chatW = w - 10; 
-        this.chatH = h * 0.92; 
+        // UI SCALING & LAYOUT adjustments for mobile perfection
+        this.chatW = w - 30; 
+        this.chatH = h * 0.88; 
         
         this.chatX = (w - this.chatW) / 2; 
         this.chatYVisible = (h - this.chatH) / 2; 
@@ -100,27 +100,26 @@ Object.assign(MenuScene.prototype, {
         
         const panelBg = this.add.graphics();
         panelBg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
-        panelBg.fillRoundedRect(0, 0, this.chatW, this.chatH, 24);
+        panelBg.fillRoundedRect(0, 0, this.chatW, this.chatH, 20);
         panelBg.lineStyle(2, 0x334155, 1);
-        panelBg.strokeRoundedRect(0, 0, this.chatW, this.chatH, 24);
+        panelBg.strokeRoundedRect(0, 0, this.chatW, this.chatH, 20);
         panelBg.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.chatW, this.chatH), Phaser.Geom.Rectangle.Contains);
 
-        const title = this.add.text(this.chatW / 2, 55, "গ্লোবাল CHAT", {
-            fontSize: "56px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
+        const title = this.add.text(this.chatW / 2, 45, "গ্লোবাল CHAT", {
+            fontSize: "44px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
             shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0.5);
         
-        const headerDiv = this.add.rectangle(this.chatW / 2, 115, this.chatW - 40, 2, 0x334155, 1);
+        const headerDiv = this.add.rectangle(this.chatW / 2, 90, this.chatW - 40, 2, 0x334155, 1);
 
-        // THICKER Close Button
         const closeBtnBg = this.add.graphics();
         closeBtnBg.fillStyle(0xef4444, 0.15);
-        closeBtnBg.fillRoundedRect(this.chatW - 100, 15, 80, 80, 24);
+        closeBtnBg.fillRoundedRect(this.chatW - 75, 15, 60, 60, 16);
         closeBtnBg.lineStyle(2, 0xef4444, 0.8);
-        closeBtnBg.strokeRoundedRect(this.chatW - 100, 15, 80, 80, 24);
+        closeBtnBg.strokeRoundedRect(this.chatW - 75, 15, 60, 60, 16);
         
-        const closeIcon = this.add.text(this.chatW - 60, 55, "✖", { fontSize: "42px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
-        const closeHit = this.add.rectangle(this.chatW - 60, 55, 100, 100, 0, 0).setInteractive({useHandCursor:true});
+        const closeIcon = this.add.text(this.chatW - 45, 45, "✖", { fontSize: "32px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(this.chatW - 45, 45, 80, 80, 0, 0).setInteractive({useHandCursor:true});
         
         closeHit.on('pointerdown', () => this.toggleChatWindow());
         closeHit.on('pointerover', () => closeIcon.setScale(1.1));
@@ -128,24 +127,22 @@ Object.assign(MenuScene.prototype, {
 
         this.chatContainer.add([panelBg, title, headerDiv, closeBtnBg, closeIcon, closeHit]);
 
-        // Input Setup Y Position
-        const inputY = this.chatH - 75; 
-        this.chatScrollZoneHeight = inputY - 70 - 125;
+        const inputY = this.chatH - 50; 
+        this.chatScrollZoneHeight = this.chatH - 100 - 90; // perfectly fits between header and input
 
-        this.msgListContainer = this.add.container(0, 125);
+        this.msgListContainer = this.add.container(0, 90);
         this.chatContainer.add(this.msgListContainer);
 
         this.chatMaskShape = this.make.graphics();
         this.chatMaskShape.fillStyle(0xffffff);
-        this.chatMaskShape.fillRect(this.chatX + 5, this.chatYVisible + 125, this.chatW - 10, this.chatScrollZoneHeight); 
+        this.chatMaskShape.fillRect(this.chatX + 5, this.chatYVisible + 90, this.chatW - 10, this.chatScrollZoneHeight); 
         this.chatMaskShape.y = this.chatYHidden - this.chatYVisible; 
         this.msgListContainer.setMask(this.chatMaskShape.createGeometryMask());
 
         this.chatMaxScroll = 0;
         
-        // Thicker Scrollbar
-        this.chatScrollbarBg = this.add.rectangle(this.chatW - 10, 125 + this.chatScrollZoneHeight / 2, 14, this.chatScrollZoneHeight, 0x000000, 0.3);
-        this.chatScrollbarThumb = this.add.rectangle(this.chatW - 10, 125, 14, 70, 0x94a3b8, 0.8).setOrigin(0.5, 0);
+        this.chatScrollbarBg = this.add.rectangle(this.chatW - 8, 90 + this.chatScrollZoneHeight / 2, 10, this.chatScrollZoneHeight, 0x000000, 0.3);
+        this.chatScrollbarThumb = this.add.rectangle(this.chatW - 8, 90, 10, 60, 0x94a3b8, 0.8).setOrigin(0.5, 0);
         this.chatContainer.add([this.chatScrollbarBg, this.chatScrollbarThumb]);
 
         this.updateChatScrollbar = () => {
@@ -157,12 +154,12 @@ Object.assign(MenuScene.prototype, {
             this.chatScrollbarThumb.setVisible(true);
             this.chatScrollbarBg.setVisible(true);
 
-            const dynamicTopOffset = 125 + this.currentPinnedHeight;
+            const dynamicTopOffset = 90 + this.currentPinnedHeight;
             const topY = dynamicTopOffset - this.chatKeyboardOffset;
             const scrollRatio = Phaser.Math.Clamp((topY - this.msgListContainer.y) / this.chatMaxScroll, 0, 1);
             
             const dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
-            const thumbHeight = Math.max(70, (dynamicScrollZoneHeight / (this.chatMaxScroll + dynamicScrollZoneHeight)) * dynamicScrollZoneHeight);
+            const thumbHeight = Math.max(60, (dynamicScrollZoneHeight / (this.chatMaxScroll + dynamicScrollZoneHeight)) * dynamicScrollZoneHeight);
             
             this.chatScrollbarThumb.height = thumbHeight;
             this.chatScrollbarBg.height = dynamicScrollZoneHeight;
@@ -174,31 +171,30 @@ Object.assign(MenuScene.prototype, {
             this.cullChatMessages();
         };
 
-        const scrollZone = this.add.zone(this.chatW / 2, 125 + this.chatScrollZoneHeight / 2, this.chatW, this.chatScrollZoneHeight).setInteractive();
+        const scrollZone = this.add.zone(this.chatW / 2, 90 + this.chatScrollZoneHeight / 2, this.chatW, this.chatScrollZoneHeight).setInteractive();
         this.chatContainer.add(scrollZone);
 
-        this.pinnedContainer = this.add.container(0, 125);
+        this.pinnedContainer = this.add.container(0, 90);
         this.chatContainer.add(this.pinnedContainer);
 
-        // THICKER Centered Scroll to Bottom Pill
-        this.scrollToBottomBtn = this.add.container(this.chatW / 2, inputY - 70).setVisible(false).setDepth(999);
+        this.scrollToBottomBtn = this.add.container(this.chatW / 2, inputY - 60).setVisible(false).setDepth(999);
         const fabBg = this.add.graphics();
         fabBg.fillStyle(0x0f172a, 0.95);
-        fabBg.fillRoundedRect(-120, -28, 240, 56, 28);
+        fabBg.fillRoundedRect(-100, -22, 200, 44, 22);
         fabBg.lineStyle(2, 0x334155, 1);
-        fabBg.strokeRoundedRect(-120, -28, 240, 56, 28);
-        const fabIcon = this.add.text(0, 0, "⬇ Scroll to Bottom", { fontSize: "24px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold" }).setOrigin(0.5);
-        const fabHit = this.add.rectangle(0, 0, 240, 56).setInteractive({useHandCursor: true});
+        fabBg.strokeRoundedRect(-100, -22, 200, 44, 22);
+        const fabIcon = this.add.text(0, 0, "⬇ Scroll to Bottom", { fontSize: "20px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold" }).setOrigin(0.5);
+        const fabHit = this.add.rectangle(0, 0, 200, 44).setInteractive({useHandCursor: true});
         
         fabHit.on('pointerdown', () => {
             if (this.playSound) this.playSound('sfx_click', 0.5);
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let dynamicTopOffset = 90 + this.currentPinnedHeight;
             let topY = dynamicTopOffset - this.chatKeyboardOffset;
-            let bottomY = topY - this.chatMaxScroll; // FIXED: Target Bottom
+            let bottomY = topY - this.chatMaxScroll; 
             
             this.tweens.add({
                 targets: this.msgListContainer,
-                y: bottomY, // FIXED: Now goes to bottom
+                y: bottomY, 
                 duration: 400,
                 ease: 'Cubic.easeOut',
                 onUpdate: () => this.updateChatScrollbar()
@@ -207,7 +203,6 @@ Object.assign(MenuScene.prototype, {
         this.scrollToBottomBtn.add([fabBg, fabIcon, fabHit]);
         this.chatContainer.add(this.scrollToBottomBtn);
 
-        // INTERACTION TRACKING
         let dragStartY = 0, containerStartY = 0, isDraggingChat = false;
         let scrollYTracker = [], hitStartX = 0, hitStartY = 0, hitStartTime = 0;
         let longPressTimer = null, hasLongPressed = false;
@@ -275,7 +270,6 @@ Object.assign(MenuScene.prototype, {
                         }
                     }
 
-                    // FIXED: Only cancel the drag state IF we actually hit a message
                     if (hitMessage) {
                         hasLongPressed = true;
                         isDraggingChat = false; 
@@ -315,7 +309,7 @@ Object.assign(MenuScene.prototype, {
                 }
 
                 if (this.scrollMode) {
-                    let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                    let dynamicTopOffset = 90 + this.currentPinnedHeight;
                     let topY = dynamicTopOffset - this.chatKeyboardOffset;
                     let bottomY = topY - this.chatMaxScroll;
                     let newY = containerStartY + deltaY;
@@ -385,14 +379,13 @@ Object.assign(MenuScene.prototype, {
                     duration = Math.min(Math.abs(amplitude) * 1.5, 1200);
                 }
 
-                let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                let dynamicTopOffset = 90 + this.currentPinnedHeight;
                 let topY = dynamicTopOffset - this.chatKeyboardOffset;
                 let bottomY = topY - this.chatMaxScroll;
 
                 if (targetY > topY) targetY = topY;
                 if (targetY < bottomY) targetY = bottomY;
 
-                // FIX: Only snap back to bounds if we didn't just fire off a history load request
                 if (!this.isLoadingHistory) {
                     if (targetY !== this.msgListContainer.y) {
                         this.tweens.add({
@@ -420,7 +413,7 @@ Object.assign(MenuScene.prototype, {
         
         scrollZone.on('wheel', (pointer, deltaX, deltaY, deltaZ) => {
             this.tweens.killTweensOf(this.msgListContainer);
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let dynamicTopOffset = 90 + this.currentPinnedHeight;
             let topY = dynamicTopOffset - this.chatKeyboardOffset;
             let bottomY = topY - this.chatMaxScroll;
             let newY = this.msgListContainer.y - (deltaY * 1.5);
@@ -432,19 +425,19 @@ Object.assign(MenuScene.prototype, {
         this.bottomUIContainer = this.add.container(0, 0);
         this.chatContainer.add(this.bottomUIContainer);
 
-        const bottomBg = this.add.rectangle(this.chatW / 2, this.chatH - 65, this.chatW, 130, 0x020617, 0.98);
+        const bottomBg = this.add.rectangle(this.chatW / 2, this.chatH - 50, this.chatW, 100, 0x020617, 0.98);
         this.bottomUIContainer.add(bottomBg);
 
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
 
-        this.replyUI = this.add.container(this.chatW / 2, inputY - 85).setVisible(false);
+        this.replyUI = this.add.container(this.chatW / 2, inputY - 65).setVisible(false);
         const replyBg = this.add.graphics();
         replyBg.fillStyle(0x1e293b, 0.95);
-        replyBg.fillRoundedRect(- (this.chatW - 40)/2, -30, this.chatW - 40, 60, 20);
+        replyBg.fillRoundedRect(- (this.chatW - 30)/2, -22, this.chatW - 30, 44, 16);
         replyBg.lineStyle(2, 0x334155, 1);
-        replyBg.strokeRoundedRect(- (this.chatW - 40)/2, -30, this.chatW - 40, 60, 20);
-        this.replyTxt = this.add.text(- (this.chatW - 40)/2 + 20, 0, "", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#38bdf8" }).setOrigin(0, 0.5);
-        const replyCancel = this.add.text((this.chatW - 40)/2 - 35, 0, "✖", { fontSize: "32px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5).setInteractive({useHandCursor:true});
+        replyBg.strokeRoundedRect(- (this.chatW - 30)/2, -22, this.chatW - 30, 44, 16);
+        this.replyTxt = this.add.text(- (this.chatW - 30)/2 + 15, 0, "", { fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#38bdf8" }).setOrigin(0, 0.5);
+        const replyCancel = this.add.text((this.chatW - 30)/2 - 25, 0, "✖", { fontSize: "24px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5).setInteractive({useHandCursor:true});
         
         this.cancelReply = () => {
             this.replyData = null;
@@ -467,18 +460,16 @@ Object.assign(MenuScene.prototype, {
         };
 
         if (isConnected) {
-            // THICKER Input Element
-            const inputHTML = `<input type="text" id="chatInput" autocomplete="off" maxlength="200" placeholder="Type a message..." style="box-sizing: border-box; width: ${this.chatW - 130}px; height: 90px; padding: 0 35px; font-family: 'Anek Bangla', sans-serif; font-size: 32px; border-radius: 45px; border: 2px solid #334155; outline: none; background: #0f172a; color: #f8fafc; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">`;
+            const inputHTML = `<input type="text" id="chatInput" autocomplete="off" maxlength="200" placeholder="Type a message..." style="box-sizing: border-box; width: ${this.chatW - 100}px; height: 64px; padding: 0 20px; font-family: 'Anek Bangla', sans-serif; font-size: 24px; border-radius: 32px; border: 2px solid #334155; outline: none; background: #0f172a; color: #f8fafc; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">`;
                 
-            this.chatInput = this.add.dom(10 + (this.chatW - 130)/2, inputY).createFromHTML(inputHTML);
+            this.chatInput = this.add.dom(10 + (this.chatW - 100)/2, inputY).createFromHTML(inputHTML);
             this.bottomUIContainer.add(this.chatInput);
             
             if (this.chatInput.node) this.chatInput.node.style.display = 'none';
 
-            // THICKER Send Button
-            const sendBtnBg = this.add.circle(this.chatW - 60, inputY, 45, 0x38bdf8);
-            const sendBtnTxt = this.add.text(this.chatW - 58, inputY, "➤", { fontSize: "42px", color: "#ffffff" }).setOrigin(0.5);
-            const sendHit = this.add.circle(this.chatW - 60, inputY, 55).setInteractive({useHandCursor: true});
+            const sendBtnBg = this.add.circle(this.chatW - 45, inputY, 34, 0x38bdf8);
+            const sendBtnTxt = this.add.text(this.chatW - 43, inputY, "➤", { fontSize: "32px", color: "#ffffff" }).setOrigin(0.5);
+            const sendHit = this.add.circle(this.chatW - 45, inputY, 45).setInteractive({useHandCursor: true});
             
             sendHit.on('pointerdown', () => {
                 this.tweens.add({ targets: sendBtnBg, scale: 0.8, yoyo: true, duration: 100 });
@@ -576,12 +567,12 @@ Object.assign(MenuScene.prototype, {
                 });
             }
         } else {
-            const promptTxt = this.add.text(this.chatW / 2, inputY - 80, "Please login to chat", { fontSize: "30px", fontFamily: "'Anek Bangla'", color: "#94a3b8" }).setOrigin(0.5);
+            const promptTxt = this.add.text(this.chatW / 2, inputY - 60, "Please login to chat", { fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#94a3b8" }).setOrigin(0.5);
             const loginBg = this.add.graphics();
             loginBg.fillStyle(0x38bdf8, 1);
-            loginBg.fillRoundedRect(this.chatW / 2 - 180, inputY - 40, 360, 80, 40);
-            const loginTxt = this.add.text(this.chatW / 2, inputY, "Connect Google", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-            const loginHit = this.add.rectangle(this.chatW / 2, inputY, 360, 80, 0x000000, 0).setInteractive({useHandCursor: true});
+            loginBg.fillRoundedRect(this.chatW / 2 - 140, inputY - 30, 280, 60, 30);
+            const loginTxt = this.add.text(this.chatW / 2, inputY, "Connect Google", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+            const loginHit = this.add.rectangle(this.chatW / 2, inputY, 280, 60, 0x000000, 0).setInteractive({useHandCursor: true});
 
             loginHit.on('pointerdown', () => {
                 if (window.isAuthenticating) return; 
@@ -624,7 +615,7 @@ Object.assign(MenuScene.prototype, {
 
         this.offlinePromptGroup = this.add.container(0, 0).setVisible(false);
         const offlineTxt = this.add.text(this.chatW / 2, inputY, "Offline Mode", { 
-            fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#f87171", fontStyle: "bold" 
+            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#f87171", fontStyle: "bold" 
         }).setOrigin(0.5);
         this.offlinePromptGroup.add(offlineTxt);
         this.bottomUIContainer.add(this.offlinePromptGroup);
@@ -668,7 +659,7 @@ Object.assign(MenuScene.prototype, {
         window.addEventListener('offline', this.chatOfflineListener);
         
         this.updateChatNetworkState();
-        this.createChatToggleButton(w - 60, h / 6 + 250);
+        this.createChatToggleButton(w - 55, h / 6 + 250);
         
         this.listenToGlobalChat();
         this.listenToTyping();
@@ -679,26 +670,26 @@ Object.assign(MenuScene.prototype, {
         const docRef = window.FirebaseTools.doc(window.FirebaseDB, "chat_meta", "typing");
 
         if (!this.typingIndicatorContainer) {
-            this.typingIndicatorContainer = this.add.container(40, this.chatH - 160).setDepth(10).setAlpha(0);
+            this.typingIndicatorContainer = this.add.container(30, this.chatH - 120).setDepth(10).setAlpha(0);
             
             const bg = this.add.graphics();
             bg.fillStyle(0x1e293b, 0.9);
-            bg.fillRoundedRect(0, 0, 90, 45, 22.5);
+            bg.fillRoundedRect(0, 0, 70, 36, 18);
             
-            this.dot1 = this.add.circle(22.5, 22.5, 6, 0x38bdf8);
-            this.dot2 = this.add.circle(45, 22.5, 6, 0x38bdf8);
-            this.dot3 = this.add.circle(67.5, 22.5, 6, 0x38bdf8);
+            this.dot1 = this.add.circle(18, 18, 4.5, 0x38bdf8);
+            this.dot2 = this.add.circle(35, 18, 4.5, 0x38bdf8);
+            this.dot3 = this.add.circle(52, 18, 4.5, 0x38bdf8);
             
-            this.typingNameTxt = this.add.text(105, 22.5, "", {
-                fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#94a3b8", fontStyle: "italic"
+            this.typingNameTxt = this.add.text(80, 18, "", {
+                fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#94a3b8", fontStyle: "italic"
             }).setOrigin(0, 0.5);
 
             this.typingIndicatorContainer.add([bg, this.dot1, this.dot2, this.dot3, this.typingNameTxt]);
             this.chatContainer.add(this.typingIndicatorContainer);
 
-            this.tweens.add({ targets: this.dot1, y: 16.5, duration: 300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: 0 });
-            this.tweens.add({ targets: this.dot2, y: 16.5, duration: 300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: 150 });
-            this.tweens.add({ targets: this.dot3, y: 16.5, duration: 300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: 300 });
+            this.tweens.add({ targets: this.dot1, y: 13.5, duration: 300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: 0 });
+            this.tweens.add({ targets: this.dot2, y: 13.5, duration: 300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: 150 });
+            this.tweens.add({ targets: this.dot3, y: 13.5, duration: 300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: 300 });
         }
 
         this.typingUnsubscribe = window.FirebaseTools.onSnapshot(docRef, (docSnap) => {
@@ -731,17 +722,17 @@ Object.assign(MenuScene.prototype, {
             this.chatErrBanner.destroy();
         }
 
-        const yPos = this.chatH - 160;
+        const yPos = this.chatH - 120;
         this.chatErrBanner = this.add.container(this.chatW / 2, yPos).setDepth(9999);
 
         const bg = this.add.graphics();
         bg.fillStyle(0xef4444, 0.95);
-        bg.fillRoundedRect(-220, -30, 440, 60, 18);
+        bg.fillRoundedRect(-180, -25, 360, 50, 16);
         bg.lineStyle(2, 0xfca5a5, 1);
-        bg.strokeRoundedRect(-220, -30, 440, 60, 18);
+        bg.strokeRoundedRect(-180, -25, 360, 50, 16);
 
         const txt = this.add.text(0, 0, msg, {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
+            fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0.5);
 
         this.chatErrBanner.add([bg, txt]);
@@ -749,7 +740,7 @@ Object.assign(MenuScene.prototype, {
 
         this.tweens.add({
             targets: this.chatErrBanner,
-            y: yPos - 25,
+            y: yPos - 20,
             alpha: 0,
             delay: 2500,
             duration: 500,
@@ -768,7 +759,7 @@ Object.assign(MenuScene.prototype, {
 
         const shadow = this.add.graphics();
         shadow.fillStyle(0x000000, 0.4);
-        shadow.fillRoundedRect(-40, -40, 200, 90, 25); 
+        shadow.fillRoundedRect(-35, -35, 160, 70, 20); 
 
         const bg = this.add.graphics();
         const drawBase = (isHovered) => {
@@ -780,18 +771,18 @@ Object.assign(MenuScene.prototype, {
                 bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 1); 
                 bg.lineStyle(2, 0x334155, 1);
             }
-            bg.fillRoundedRect(-45, -45, 200, 90, 25);
-            bg.strokeRoundedRect(-45, -45, 200, 90, 25);
+            bg.fillRoundedRect(-35, -35, 160, 70, 20);
+            bg.strokeRoundedRect(-35, -35, 160, 70, 20);
         };
         drawBase(false);
 
-        const icon = this.add.text(2, 3, "💬", { 
-            fontSize: "60px", 
+        const icon = this.add.text(5, 0, "💬", { 
+            fontSize: "48px", 
             fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif' 
-        }).setOrigin(0.5) .setAlpha(0.90);
+        }).setOrigin(0.5).setAlpha(0.90);
         icon.clearTint();
 
-        const hitArea = this.add.rectangle(0, 0, 90, 90, 0, 0).setInteractive({ useHandCursor: true });
+        const hitArea = this.add.rectangle(45, 0, 160, 70, 0, 0).setInteractive({ useHandCursor: true });
 
         hitArea.on('pointerover', () => {
             drawBase(true);
@@ -819,12 +810,12 @@ Object.assign(MenuScene.prototype, {
 
         this.unreadBadgeBg = this.add.graphics();
         this.unreadBadgeBg.fillStyle(0xef4444, 1); 
-        this.unreadBadgeBg.fillCircle(38, -38, 22); 
+        this.unreadBadgeBg.fillCircle(25, -25, 18); 
         this.unreadBadgeBg.lineStyle(2.5, 0x0f172a, 1); 
-        this.unreadBadgeBg.strokeCircle(38, -38, 22);
+        this.unreadBadgeBg.strokeCircle(25, -25, 18);
         
-        this.unreadBadgeTxt = this.add.text(38, -38, "0", {
-            fontSize: "28px", 
+        this.unreadBadgeTxt = this.add.text(25, -25, "0", {
+            fontSize: "22px", 
             fontFamily: "Arial", 
             color: "#ffffff", 
             fontStyle: "bold"
@@ -879,7 +870,7 @@ Object.assign(MenuScene.prototype, {
             this.unreadBadgeBg.setVisible(false);
             this.unreadBadgeTxt.setVisible(false);
             
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let dynamicTopOffset = 90 + this.currentPinnedHeight;
             this.msgListContainer.y = dynamicTopOffset - this.chatMaxScroll;
             this.updateChatScrollbar();
             
@@ -1001,9 +992,9 @@ Object.assign(MenuScene.prototype, {
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const isAdmin = GameState.profile && GameState.profile.role === 'admin';
         
-        const menuW = 420; 
-        let menuH = isConnected ? 180 : 120;
-        if (isConnected && isAdmin) menuH = 240; 
+        const menuW = 380; 
+        let menuH = isConnected ? 150 : 100;
+        if (isConnected && isAdmin) menuH = 210; 
         
         const halfW = menuW / 2;
         const halfH = menuH / 2;
@@ -1017,42 +1008,42 @@ Object.assign(MenuScene.prototype, {
 
         const shadow = this.add.graphics();
         shadow.fillStyle(0x000000, 0.4);
-        shadow.fillRoundedRect(-halfW + 4, -halfH + 8, menuW, menuH, 18);
+        shadow.fillRoundedRect(-halfW + 4, -halfH + 8, menuW, menuH, 16);
 
         const bg = this.add.graphics();
         bg.fillGradientStyle(0x0f172a, 0x0f172a, 0x1e293b, 0x1e293b, 0.98); 
-        bg.fillRoundedRect(-halfW, -halfH, menuW, menuH, 18);
+        bg.fillRoundedRect(-halfW, -halfH, menuW, menuH, 16);
         bg.lineStyle(1.5, 0x334155, 1);
-        bg.strokeRoundedRect(-halfW, -halfH, menuW, menuH, 18);
+        bg.strokeRoundedRect(-halfW, -halfH, menuW, menuH, 16);
 
         this.chatActionPopup.add([shadow, bg]);
         
         if (!isConnected) {
             const warnTxt = this.add.text(0, 0, "লগইন করে চ্যাট করুন", { 
-                fontSize: "30px", fontFamily: "'Anek Bangla'", color: "#fca5a5" 
+                fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#fca5a5" 
             }).setOrigin(0.5);
             this.chatActionPopup.add(warnTxt);
 
         } else {
-            const emojiY = -halfH + 50;
-            const divider1Y = -halfH + 100;
-            const row1BtnY = -halfH + 135;
-            const divider2Y = -halfH + 175;
-            const row2BtnY = -halfH + 205;
+            const emojiY = -halfH + 40;
+            const divider1Y = -halfH + 80;
+            const row1BtnY = -halfH + 110;
+            const divider2Y = -halfH + 145;
+            const row2BtnY = -halfH + 175;
 
             const emojis = ['👍', '❤️', '😂', '😮', '😢'];
-            const startX = -155;
-            const spacing = 78;
+            const startX = -134;
+            const spacing = 67;
 
             emojis.forEach((emoji, i) => {
                 const emTxt = this.add.text(startX + (i * spacing), emojiY, emoji, { 
-                    fontSize: "50px", 
+                    fontSize: "40px", 
                     fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif'
                 }).setOrigin(0.5).setInteractive({useHandCursor: true});
                 
                 emTxt.clearTint(); 
                 
-                emTxt.on('pointerover', () => this.tweens.add({ targets: emTxt, scale: 1.25, y: emojiY - 10, duration: 250, ease: 'Back.out' }));
+                emTxt.on('pointerover', () => this.tweens.add({ targets: emTxt, scale: 1.2, y: emojiY - 6, duration: 250, ease: 'Back.out' }));
                 emTxt.on('pointerout', () => this.tweens.add({ targets: emTxt, scale: 1, y: emojiY, duration: 200, ease: 'Power2' }));
                 
                 emTxt.on('pointerdown', () => {
@@ -1063,7 +1054,7 @@ Object.assign(MenuScene.prototype, {
                 this.chatActionPopup.add(emTxt);
             });
 
-            const divider = this.add.rectangle(0, divider1Y, menuW - 40, 1, 0xffffff, 0.08);
+            const divider = this.add.rectangle(0, divider1Y, menuW - 30, 1, 0xffffff, 0.08);
             this.chatActionPopup.add(divider);
 
             const repBg = this.add.graphics();
@@ -1071,15 +1062,15 @@ Object.assign(MenuScene.prototype, {
                 repBg.clear();
                 if (hover) {
                     repBg.fillStyle(0x334155, 0.8);
-                    repBg.fillRoundedRect(-195, row1BtnY - 26, 185, 52, 14); 
+                    repBg.fillRoundedRect(-175, row1BtnY - 22, 160, 44, 12); 
                 }
             };
             drawRepBg(false);
 
-            const repIcon = this.add.text(-145, row1BtnY, "↩️", { fontSize: "28px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+            const repIcon = this.add.text(-135, row1BtnY, "↩️", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
             repIcon.clearTint();
-            const repTxt = this.add.text(-115, row1BtnY, "Reply", { fontSize: "24px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
-            const repHit = this.add.rectangle(-105, row1BtnY, 185, 52, 0, 0).setInteractive({useHandCursor: true});
+            const repTxt = this.add.text(-110, row1BtnY, "Reply", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
+            const repHit = this.add.rectangle(-95, row1BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
 
             repHit.on('pointerover', () => { drawRepBg(true); repTxt.setColor('#ffffff'); });
             repHit.on('pointerout', () => { drawRepBg(false); repTxt.setColor('#cbd5e1'); });
@@ -1093,15 +1084,15 @@ Object.assign(MenuScene.prototype, {
                 copyBg.clear();
                 if (hover) {
                     copyBg.fillStyle(0x334155, 0.8);
-                    copyBg.fillRoundedRect(10, row1BtnY - 26, 185, 52, 14); 
+                    copyBg.fillRoundedRect(15, row1BtnY - 22, 160, 44, 12); 
                 }
             };
             drawCopyBg(false);
 
-            const copyIcon = this.add.text(50, row1BtnY, "📋", { fontSize: "28px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+            const copyIcon = this.add.text(45, row1BtnY, "📋", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
             copyIcon.clearTint();
-            const copyTxt = this.add.text(80, row1BtnY, "Copy", { fontSize: "24px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
-            const copyHit = this.add.rectangle(100, row1BtnY, 185, 52, 0, 0).setInteractive({useHandCursor: true});
+            const copyTxt = this.add.text(70, row1BtnY, "Copy", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
+            const copyHit = this.add.rectangle(95, row1BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
 
             copyHit.on('pointerover', () => { drawCopyBg(true); copyTxt.setColor('#ffffff'); });
             copyHit.on('pointerout', () => { drawCopyBg(false); copyTxt.setColor('#cbd5e1'); });
@@ -1128,7 +1119,7 @@ Object.assign(MenuScene.prototype, {
             this.chatActionPopup.add([repBg, repIcon, repTxt, repHit, copyBg, copyIcon, copyTxt, copyHit]);
 
             if (isAdmin) {
-                const divider2 = this.add.rectangle(0, divider2Y, menuW - 40, 1, 0xffffff, 0.08);
+                const divider2 = this.add.rectangle(0, divider2Y, menuW - 30, 1, 0xffffff, 0.08);
                 this.chatActionPopup.add(divider2);
 
                 const pinBg = this.add.graphics();
@@ -1136,16 +1127,16 @@ Object.assign(MenuScene.prototype, {
                     pinBg.clear();
                     if (hover) {
                         pinBg.fillStyle(0x334155, 0.8);
-                        pinBg.fillRoundedRect(-195, row2BtnY - 26, 185, 52, 14);
+                        pinBg.fillRoundedRect(-175, row2BtnY - 22, 160, 44, 12);
                     }
                 };
                 drawPinBg(false);
 
                 const isPinned = msg.pinned;
-                const pinIcon = this.add.text(-145, row2BtnY, isPinned ? "❌" : "📌", { fontSize: "28px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+                const pinIcon = this.add.text(-135, row2BtnY, isPinned ? "❌" : "📌", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
                 pinIcon.clearTint();
-                const pinTxt = this.add.text(-115, row2BtnY, isPinned ? "Unpin" : "Pin", { fontSize: "24px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
-                const pinHit = this.add.rectangle(-105, row2BtnY, 185, 52, 0, 0).setInteractive({useHandCursor: true});
+                const pinTxt = this.add.text(-110, row2BtnY, isPinned ? "Unpin" : "Pin", { fontSize: "20px", fontFamily: 'sans-serif', color: '#cbd5e1' }).setOrigin(0, 0.5);
+                const pinHit = this.add.rectangle(-95, row2BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
 
                 pinHit.on('pointerover', () => { drawPinBg(true); pinTxt.setColor('#ffffff'); });
                 pinHit.on('pointerout', () => { drawPinBg(false); pinTxt.setColor('#cbd5e1'); });
@@ -1166,15 +1157,15 @@ Object.assign(MenuScene.prototype, {
                     delBg.clear();
                     if (hover) {
                         delBg.fillStyle(0xef4444, 0.2);
-                        delBg.fillRoundedRect(10, row2BtnY - 26, 185, 52, 14);
+                        delBg.fillRoundedRect(15, row2BtnY - 22, 160, 44, 12);
                     }
                 };
                 drawDelBg(false);
 
-                const delIcon = this.add.text(50, row2BtnY, "🗑️", { fontSize: "28px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
+                const delIcon = this.add.text(45, row2BtnY, "🗑️", { fontSize: "24px", fontFamily: '"Segoe UI Emoji", sans-serif' }).setOrigin(0.5);
                 delIcon.clearTint();
-                const delTxt = this.add.text(80, row2BtnY, "Delete", { fontSize: "24px", fontFamily: 'sans-serif', color: '#f87171' }).setOrigin(0, 0.5);
-                const delHit = this.add.rectangle(100, row2BtnY, 185, 52, 0, 0).setInteractive({useHandCursor: true});
+                const delTxt = this.add.text(70, row2BtnY, "Delete", { fontSize: "20px", fontFamily: 'sans-serif', color: '#f87171' }).setOrigin(0, 0.5);
+                const delHit = this.add.rectangle(95, row2BtnY, 160, 44, 0, 0).setInteractive({useHandCursor: true});
 
                 delHit.on('pointerover', () => { drawDelBg(true); delTxt.setColor('#ef4444'); });
                 delHit.on('pointerout', () => { drawDelBg(false); delTxt.setColor('#f87171'); });
@@ -1231,7 +1222,7 @@ Object.assign(MenuScene.prototype, {
             if (!this.msgYMap || !this.msgYMap[msgId]) return;
             if (this.playSound) this.playSound('sfx_click');
             
-            let dynamicTopOffset = 125 + this.currentPinnedHeight;
+            let dynamicTopOffset = 90 + this.currentPinnedHeight;
             let topY = dynamicTopOffset - this.chatKeyboardOffset;
             let bottomY = topY - this.chatMaxScroll;
             
@@ -1268,7 +1259,7 @@ Object.assign(MenuScene.prototype, {
         };
 
         this.refreshChatUI = () => {
-            const dynamicPrevTopOffset = 125 + this.currentPinnedHeight;
+            const dynamicPrevTopOffset = 90 + this.currentPinnedHeight;
             const prevTopY = dynamicPrevTopOffset - this.chatKeyboardOffset;
             const prevBottomY = prevTopY - (this.chatMaxScroll || 0);
             const isAtBottom = this.msgListContainer.y <= prevBottomY + 50;
@@ -1276,7 +1267,7 @@ Object.assign(MenuScene.prototype, {
             this.msgListContainer.removeAll(true);
             this.pinnedContainer.removeAll(true);
             
-            let currentY = 20;
+            let currentY = 15;
             let pinnedY = 0;
             let unreadCalc = 0;
             this.dividerRendered = false; 
@@ -1315,9 +1306,8 @@ Object.assign(MenuScene.prototype, {
             let lastMessageWasPinned = false;
             let lastMessageDateString = null; 
 
-            // Render Pinned
             pinnedMessages.forEach(msg => {
-                const bannerHeight = 80;
+                const bannerHeight = 65;
                 const currentYPos = pinnedY; 
                 const yCenter = currentYPos + bannerHeight / 2;
                 
@@ -1325,18 +1315,18 @@ Object.assign(MenuScene.prototype, {
                 const drawPinnedBg = (isHovered) => {
                     pBg.clear();
                     pBg.fillStyle(isHovered ? 0x1E293B : 0x0F172A, 0.95); 
-                    pBg.fillRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 14);
+                    pBg.fillRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 12);
                     pBg.lineStyle(1.5, isHovered ? 0x475569 : 0x334155, 1);
-                    pBg.strokeRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 14);
+                    pBg.strokeRoundedRect(10, currentYPos, this.chatW - 20, bannerHeight, 12);
                     pBg.fillStyle(0x38bdf8, 1);
-                    pBg.fillRoundedRect(10, currentYPos, 6, bannerHeight, { tl: 14, bl: 14, tr: 0, br: 0 });
+                    pBg.fillRoundedRect(10, currentYPos, 5, bannerHeight, { tl: 12, bl: 12, tr: 0, br: 0 });
                 };
                 drawPinnedBg(false);
                 
-                const shortText = msg.text.length > 35 ? msg.text.substring(0, 35) + "..." : msg.text;
+                const shortText = msg.text.length > 30 ? msg.text.substring(0, 30) + "..." : msg.text;
                 
-                const pTxt = this.add.text(32, yCenter, `📌 ${msg.n}: ${shortText}`, {
-                    fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", color: "#F8FAFC", fontStyle: "bold"
+                const pTxt = this.add.text(30, yCenter, `📌 ${msg.n}: ${shortText}`, {
+                    fontSize: "22px", fontFamily: "'Anek Bangla', sans-serif", color: "#F8FAFC", fontStyle: "bold"
                 }).setOrigin(0, 0.5);
                 
                 const pHit = this.add.rectangle(this.chatW/2, yCenter, this.chatW - 20, bannerHeight, 0, 0)
@@ -1350,11 +1340,11 @@ Object.assign(MenuScene.prototype, {
                 });
                 
                 this.pinnedContainer.add([pBg, pTxt, pHit]);
-                pinnedY += bannerHeight + 10; 
+                pinnedY += bannerHeight + 8; 
             });            
             
-            this.currentPinnedHeight = pinnedY > 0 ? pinnedY + 10 : 0;
-            let dynamicTopOffset = 100 + this.currentPinnedHeight;
+            this.currentPinnedHeight = pinnedY > 0 ? pinnedY + 8 : 0;
+            let dynamicTopOffset = 90 + this.currentPinnedHeight;
             let dynamicScrollZoneHeight = Math.max(50, this.chatScrollZoneHeight - this.currentPinnedHeight);
 
             this.chatMaskShape.clear();
@@ -1395,42 +1385,42 @@ Object.assign(MenuScene.prototype, {
                     lastMessageDateString = msgDateString;
                     lastSenderUid = null;
                     
-                    const divCont = this.add.container(this.chatW / 2, startY + 18);
+                    const divCont = this.add.container(this.chatW / 2, startY + 14);
                     const divBg = this.add.graphics();
                     divBg.fillStyle(0x1e293b, 0.85);
-                    divBg.fillRoundedRect(-80, -20, 160, 40, 20);
+                    divBg.fillRoundedRect(-70, -18, 140, 36, 18);
                     
                     const divTxt = this.add.text(0, 0, msgDateString, { 
-                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#94a3b8", fontStyle: 'bold'
+                        fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#94a3b8", fontStyle: 'bold'
                     }).setOrigin(0.5);
                     
                     divCont.add([divBg, divTxt]);
-                    divCont.trueY = startY + 18; 
+                    divCont.trueY = startY + 14; 
                     targetContainer.add(divCont);
-                    startY += 55;
+                    startY += 45;
                 }
 
                 if (msgTime > this.lastSeenTime && !this.dividerRendered && !msg.isLocalOnly) {
                     this.dividerRendered = true;
                     lastSenderUid = null; 
                     
-                    const divCont = this.add.container(this.chatW / 2, startY + 18);
-                    const divLine = this.add.rectangle(0, 0, this.chatW - 60, 2, 0xef4444, 0.6);
+                    const divCont = this.add.container(this.chatW / 2, startY + 14);
+                    const divLine = this.add.rectangle(0, 0, this.chatW - 50, 2, 0xef4444, 0.6);
                     const divTxt = this.add.text(0, 0, "New Messages", { 
-                        fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ef4444", backgroundColor: "#020617", padding: {x: 12} 
+                        fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ef4444", backgroundColor: "#020617", padding: {x: 10} 
                     }).setOrigin(0.5);
                     divCont.add([divLine, divTxt]);
                     
-                    divCont.trueY = startY + 18; 
+                    divCont.trueY = startY + 14; 
                     targetContainer.add(divCont);
-                    startY += 55;
+                    startY += 45;
                 }
 
                 const isConsecutive = (lastSenderUid === msg.uid) && (lastMessageWasPinned === isPinned);
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
 
-                let topPadding = isConsecutive ? 8 : 45; 
+                let topPadding = isConsecutive ? 6 : 38; 
                 const bubY = startY + topPadding; 
 
                 const addItems = (items) => {
@@ -1478,38 +1468,41 @@ Object.assign(MenuScene.prototype, {
                 }
 
                 const hasAvatar = !isConsecutive;
-                const avatarSize = 52; 
+                const avatarSize = 44; 
                 let avatarIcon = msg.avatar || "👤"; 
-                let avatarX = isMe ? this.chatW - 35 : 35; 
+                let avatarX = isMe ? this.chatW - 32 : 32; 
 
-                const bubbleMaxWidth = this.chatW * 0.85; 
-                let extraHeight = (msg.replyTo && !msg.isDeleted) ? 46 : 0;
+                const bubbleMaxWidth = this.chatW - 100; 
+                let extraHeight = (msg.replyTo && !msg.isDeleted) ? 38 : 0;
                 let replyTxtObj = null;
                 
                 if (msg.replyTo && !msg.isDeleted) {
                     let replySnippet = msg.replyTo.text.length > 25 ? msg.replyTo.text.substring(0, 25) + "..." : msg.replyTo.text;
                     replyTxtObj = this.add.text(0, 0, `➥ ${msg.replyTo.n}: ${replySnippet}`, { 
-                        fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#7dd3fc", fontStyle: "italic", 
-                        backgroundColor: "#00000044", padding: {x: 12, y: 8}
+                        fontSize: "20px", fontFamily: "'Anek Bangla'", color: "#7dd3fc", fontStyle: "italic", 
+                        backgroundColor: "#00000044", padding: {x: 10, y: 6}
                     });
                 }
 
                 const msgTxt = this.add.text(0, 0, displayMsgText, { 
-                    fontSize: "34px", fontFamily: "'Anek Bangla', sans-serif", color: displayMsgColor, wordWrap: { width: bubbleMaxWidth - 35, useAdvancedWrap: true }, fontStyle: msg.isDeleted ? "italic" : "normal", lineSpacing: 8
+                    fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", color: displayMsgColor, wordWrap: { width: bubbleMaxWidth - 30 }, fontStyle: msg.isDeleted ? "italic" : "normal", lineSpacing: 6
                 });
 
                 const timeStr = formatTime(msgTime);
                 const timeTxt = this.add.text(0, 0, timeStr, { 
-                    fontSize: "20px", fontFamily: "Arial", color: "#94a3b8" 
+                    fontSize: "16px", fontFamily: "Arial", color: "#94a3b8" 
                 });
 
                 if (hasAvatar) {
-                    const avatarBg = this.add.circle(avatarX, bubY + avatarSize/2 - 10, avatarSize/2, 0x0f172a);
-                    avatarBg.setStrokeStyle(2, Phaser.Display.Color.HexStringToColor(nameColorHexStr).color, 0.8);
-                    const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 10, avatarIcon, { fontSize: "38px" }).setOrigin(0.5);
+                    const avatarBg = this.add.graphics();
+                    avatarBg.fillStyle(0x0f172a, 1);
+                    avatarBg.fillRoundedRect(avatarX - avatarSize/2, bubY - 10, avatarSize, avatarSize, 12);
+                    avatarBg.lineStyle(2, Phaser.Display.Color.HexStringToColor(nameColorHexStr).color, 0.9);
+                    avatarBg.strokeRoundedRect(avatarX - avatarSize/2, bubY - 10, avatarSize, avatarSize, 12);
+                    
+                    const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 10, avatarIcon, { fontSize: "30px" }).setOrigin(0.5);
                     addItems([avatarBg, avTxt]);
 
-                    // --- NEW MULTI-BADGE LOGIC INJECTION ---
                     let currentBadges = msg.badges || [];
                     if (msg.badge && currentBadges.length === 0) currentBadges = [msg.badge];
 
@@ -1522,48 +1515,47 @@ Object.assign(MenuScene.prototype, {
                     const safeName = msg.n || "Guest"; 
                     const nameTextStr = (isPinned ? "📌 " : "") + safeName;
                     
-                    const nameTxt = this.add.text(0, bubY - 30, nameTextStr, { 
-                        fontSize: "24px", 
+                    const nameTxt = this.add.text(0, bubY - 26, nameTextStr, { 
+                        fontSize: "20px", 
                         fontFamily: "'Anek Bangla'", color: overrideNameColor, fontStyle: "bold"
                     }).setOrigin(0, 0.5);
 
-                    let nameX = isMe ? this.chatW - avatarSize - 25 - nameTxt.width : 15 + avatarSize + 15;
+                    let nameX = isMe ? this.chatW - avatarSize - 20 - nameTxt.width : 15 + avatarSize + 15;
                     nameTxt.x = nameX;
                     addItems(nameTxt); 
 
-                    let nextLabelX = isMe ? nameX - 12 : nameX + nameTxt.width + 12;
-                    const labelY = bubY - 30 + 1;
+                    let nextLabelX = isMe ? nameX - 10 : nameX + nameTxt.width + 10;
+                    const labelY = bubY - 26 + 1;
 
                     if (msg.lvl) {
                         const lvlTxt = this.add.text(0, 0, `Lvl ${msg.lvl}`, {
-                            fontSize: "16px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold"
+                            fontSize: "14px", fontFamily: "Arial", color: "#e2e8f0", fontStyle: "bold"
                         }).setOrigin(0.5);
                         
-                        const lvlW = lvlTxt.width + 16;
-                        const lvlH = 26;
+                        const lvlW = lvlTxt.width + 12;
+                        const lvlH = 22;
                         
                         const lvlCenterX = isMe ? nextLabelX - lvlW/2 : nextLabelX + lvlW/2;
         
                         const lvlBg = this.add.graphics();
                         lvlBg.fillStyle(0x334155, 0.9);
-                        lvlBg.fillRoundedRect(lvlCenterX - lvlW/2, labelY - lvlH/2, lvlW, lvlH, 6);
+                        lvlBg.fillRoundedRect(lvlCenterX - lvlW/2, labelY - lvlH/2, lvlW, lvlH, 5);
                         
                         lvlTxt.setPosition(lvlCenterX, labelY);
                         addItems([lvlBg, lvlTxt]); 
                         
-                        nextLabelX = isMe ? nextLabelX - lvlW - 8 : nextLabelX + lvlW + 8;
+                        nextLabelX = isMe ? nextLabelX - lvlW - 6 : nextLabelX + lvlW + 6;
                     }
 
                     if (currentBadges.length > 0) {
-                        let badgeRes = window.drawPlayerBadges(this, currentBadges, nextLabelX, labelY, '15px', isMe ? -1 : 1);
+                        let badgeRes = window.drawPlayerBadges(this, currentBadges, nextLabelX, labelY, '14px', isMe ? -1 : 1);
                         addItems(badgeRes.objects);
                         nextLabelX = badgeRes.nextX;
                     }
-                    // --- END MULTI-BADGE LOGIC INJECTION ---
                 }
 
                 const timeWidth = timeTxt.width;
-                const bubbleW = Math.max(msgTxt.width + 45, (replyTxtObj ? replyTxtObj.width + 45 : 120), timeWidth + 30);
+                const bubbleW = Math.max(msgTxt.width + 30, (replyTxtObj ? replyTxtObj.width + 30 : 90), timeWidth + 24);
                 
                 let hasReactions = false;
                 let extraReactionPadding = 0;
@@ -1575,12 +1567,12 @@ Object.assign(MenuScene.prototype, {
                     });
                     if (Object.keys(reactionCounts).length > 0) {
                         hasReactions = true;
-                        extraReactionPadding = 30;
+                        extraReactionPadding = 26;
                     }
                 }
 
-                let bubbleH = msgTxt.height + 45 + extraHeight + extraReactionPadding;
-                let startX = isMe ? (this.chatW - bubbleW - avatarSize - 25) : (10 + avatarSize + 15);
+                let bubbleH = msgTxt.height + 34 + extraHeight + extraReactionPadding;
+                let startX = isMe ? (this.chatW - bubbleW - avatarSize - 16) : (16 + avatarSize + 16);
 
                 const bubbleBg = this.add.graphics();
                 bubbleBg.fillStyle(bubBgHex, bubAlpha);
@@ -1588,8 +1580,8 @@ Object.assign(MenuScene.prototype, {
                 const strokeColor = Phaser.Display.Color.GetColor(baseCol.r * 0.5, baseCol.g * 0.5, baseCol.b * 0.5);
                 bubbleBg.lineStyle(isMentioned ? 2 : 1.5, isMentioned ? 0xf59e0b : strokeColor, 0.8);
 
-                const bRad = 20;
-                const sRad = 6;
+                const bRad = 16;
+                const sRad = 4;
                 if (isMe) {
                     bubbleBg.fillRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: bRad, tr: bRad, bl: bRad, br: isConsecutive ? bRad : sRad });
                     bubbleBg.strokeRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: bRad, tr: bRad, bl: bRad, br: isConsecutive ? bRad : sRad });
@@ -1598,10 +1590,10 @@ Object.assign(MenuScene.prototype, {
                     bubbleBg.strokeRoundedRect(startX, bubY, bubbleW, bubbleH, { tl: bRad, tr: bRad, bl: isConsecutive ? bRad : sRad, br: bRad });
                 }
 
-                if (replyTxtObj) replyTxtObj.setPosition(startX + 20, bubY + 12);
-                msgTxt.setPosition(startX + 20, bubY + 12 + extraHeight);
+                if (replyTxtObj) replyTxtObj.setPosition(startX + 15, bubY + 10);
+                msgTxt.setPosition(startX + 15, bubY + 10 + extraHeight);
 
-                timeTxt.setPosition(startX + bubbleW - timeWidth - 14, bubY + bubbleH - 24 - extraReactionPadding);
+                timeTxt.setPosition(startX + bubbleW - timeWidth - 12, bubY + bubbleH - 20 - extraReactionPadding);
 
                 let msgVisuals = [bubbleBg, msgTxt, timeTxt];
                 if (replyTxtObj) msgVisuals.push(replyTxtObj);
@@ -1617,15 +1609,15 @@ Object.assign(MenuScene.prototype, {
                 let finalBubbleH = bubbleH;
 
                 if (isError) {
-                    const errTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 6, "⚠️ Failed to send. Tap to retry.", {
-                        fontSize: "20px", fontFamily: "'Anek Bangla', Arial", color: "#f87171", fontStyle: "bold"
+                    const errTxt = this.add.text(startX + bubbleW - 8, bubY + finalBubbleH + 4, "⚠️ Failed to send. Tap to retry.", {
+                        fontSize: "16px", fontFamily: "'Anek Bangla', Arial", color: "#f87171", fontStyle: "bold"
                     }).setOrigin(1, 0);
-                    addItems(errTxt); finalBubbleH += 30; 
+                    addItems(errTxt); finalBubbleH += 24; 
                 } else if (isSending) {
-                    const sendTxt = this.add.text(startX + bubbleW - 10, bubY + finalBubbleH + 6, "Sending...", {
-                        fontSize: "18px", fontFamily: "'Anek Bangla', Arial", color: "#64748b", fontStyle: "italic"
+                    const sendTxt = this.add.text(startX + bubbleW - 8, bubY + finalBubbleH + 4, "Sending...", {
+                        fontSize: "14px", fontFamily: "'Anek Bangla', Arial", color: "#64748b", fontStyle: "italic"
                     }).setOrigin(1, 0);
-                    addItems(sendTxt); finalBubbleH += 30;
+                    addItems(sendTxt); finalBubbleH += 24;
                 }
 
                 let interactHit = null;
@@ -1640,32 +1632,32 @@ Object.assign(MenuScene.prototype, {
 
                 let reactionSpace = 0;
                 if (hasReactions) {
-                    let rxX = startX + 18; 
-                    let rxY = bubY + bubbleH - 15; 
+                    let rxX = startX + 14; 
+                    let rxY = bubY + bubbleH - 12; 
                     
                     const sortedReactions = Object.keys(reactionCounts);
                     sortedReactions.forEach((e) => {
                         const badgeBg = this.add.graphics();
                         badgeBg.fillStyle(0x1e293b, 1);
-                        badgeBg.fillRoundedRect(rxX, rxY, 95, 45, 22);
+                        badgeBg.fillRoundedRect(rxX, rxY, 80, 36, 18);
                         badgeBg.lineStyle(1.5, 0x38bdf8, 1);
-                        badgeBg.strokeRoundedRect(rxX, rxY, 95, 45, 22);
+                        badgeBg.strokeRoundedRect(rxX, rxY, 80, 36, 18);
                         
-                        const badgeTxt = this.add.text(rxX + 47.5, rxY + 22.5, `${e} ${reactionCounts[e]}`, { 
-                            fontSize: "28px", fontFamily: '"Apple Color Emoji", sans-serif', color: "#ffffff" 
+                        const badgeTxt = this.add.text(rxX + 40, rxY + 18, `${e} ${reactionCounts[e]}`, { 
+                            fontSize: "24px", fontFamily: '"Apple Color Emoji", sans-serif', color: "#ffffff" 
                         }).setOrigin(0.5);
 
                         msgVisuals.push(badgeBg, badgeTxt);
                         addItems([badgeBg, badgeTxt]); 
-                        rxX += 105; 
+                        rxX += 88; 
                     });
-                    reactionSpace = 50; 
+                    reactionSpace = 40; 
                 }
 
                 if (interactHit) interactHit.visuals = msgVisuals; 
 
                 this.msgYMap[msg.id] = { y: bubY, h: finalBubbleH };
-                return bubY + finalBubbleH + reactionSpace + 16; 
+                return bubY + finalBubbleH + reactionSpace + 12; 
             };
 
             lastSenderUid = null;
@@ -1714,7 +1706,7 @@ Object.assign(MenuScene.prototype, {
             let anchorScreenY = null;
             
             if (wasLoading && this.msgListContainer.list.length > 0) {
-                const dynamicTopOffset = 125 + this.currentPinnedHeight;
+                const dynamicTopOffset = 90 + this.currentPinnedHeight;
                 const visibleTop = dynamicTopOffset - this.msgListContainer.y;
                 
                 for (let i = 0; i < this.msgListContainer.list.length; i++) {
@@ -1751,7 +1743,7 @@ Object.assign(MenuScene.prototype, {
             if (wasLoading) {
                 this.tweens.killTweensOf(this.msgListContainer);
                 
-                let dynamicTopOffset = 125 + this.currentPinnedHeight;
+                let dynamicTopOffset = 90 + this.currentPinnedHeight;
                 let topY = dynamicTopOffset - this.chatKeyboardOffset;
                 let bottomY = topY - this.chatMaxScroll;
 
@@ -1781,7 +1773,7 @@ Object.assign(MenuScene.prototype, {
             if (this.isLoadingHistory || this.chatDataCache.length === 0) return;
             this.isLoadingHistory = true;
 
-            const loaderText = this.add.text(this.chatW / 2, 145, "Loading...", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#38bdf8" }).setOrigin(0.5).setDepth(9999);
+            const loaderText = this.add.text(this.chatW / 2, 110, "Loading...", { fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#38bdf8" }).setOrigin(0.5).setDepth(9999);
             this.chatContainer.add(loaderText);
 
             let dotCount = 0;
@@ -1842,7 +1834,6 @@ Object.assign(MenuScene.prototype, {
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
         const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
         
-        // --- MULTI-BADGE LOGIC INJECTION FOR SENDING ---
         let baseBadges = GameState.profile.badges || [];
         if (GameState.profile.badge && baseBadges.length === 0) {
             baseBadges = [GameState.profile.badge];

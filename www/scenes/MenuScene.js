@@ -647,6 +647,7 @@ class MenuScene extends Phaser.Scene {
         }).setOrigin(0, 0.5);
 
         // --- FIXED: Text-Based Big Badge Render & Opposite Side Alignment ---
+    // --- FIXED: Text-Based Big Badge Render & Opposite Side Alignment ---
         let baseBadges = (GameState.profile && GameState.profile.badges) || [];
         if (GameState.profile && GameState.profile.badge && baseBadges.length === 0) baseBadges = [GameState.profile.badge];
         let tempBadges = (GameState.profile && GameState.profile.tempBadges) || [];
@@ -660,21 +661,59 @@ class MenuScene extends Phaser.Scene {
             if (badgeData && badgeData.icon) {
                 // Aligns badge completely opposite to the information panel texts on the far right
                 const badgeX = boxX + boxW - 35; 
-                const badgeY = boxY + boxH / 2 +5;
+                const badgeY = boxY + boxH / 2 + 5;
                 
                 const badgeTxt = this.add.text(badgeX, badgeY, badgeData.icon, {
                     fontSize: '40px',
                     shadow: { offsetX: 0, offsetY: 2, color: 'rgba(0,0,0,0.6)', blur: 4 }
                 }).setOrigin(0.5);
 
-                // Elegant floating visual movement animation matching the sleek aesthetic
+                // 1. ORGANIC FLOATING: Mismatched X, Y, and Angle tweens
+                // Y-axis bobbing
                 this.tweens.add({
                     targets: badgeTxt,
-                    y: badgeY - 3,
-                    duration: 1600,
+                    y: badgeY - 4,
+                    duration: 1800,
                     yoyo: true,
                     repeat: -1,
                     ease: 'Sine.easeInOut'
+                });
+
+                // X-axis drifting (different duration breaks the robotic loop)
+                this.tweens.add({
+                    targets: badgeTxt,
+                    x: badgeX - 3,
+                    duration: 2300,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+
+                // Subtle rotation tilting
+                this.tweens.add({
+                    targets: badgeTxt,
+                    angle:{ from: -4, to: 4 }, // Tilts a few degrees
+                    duration: 3100, // A longer, odd duration for maximum randomness
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+
+                // 2. NEW: TV Channel Logo Effect using modern Phaser's 'chain' method
+                this.tweens.chain({
+                    targets: badgeTxt,
+                    loop: -1,               // Loop indefinitely
+                    loopDelay: 15500,        // "Stay for a bit" (9.5 second pause between cycles)
+                    tweens: [
+                        // Step A: A bit of zoom in
+                        { scaleX: 1.2, scaleY: 1.2, duration: 170, ease: 'Sine.easeOut' },
+                        
+                        // Step B: Rapid 3D horizontal flip (scaling X to negatives fakes 3D)
+                        { scaleX: -1.2, duration: 300, ease: 'Linear', yoyo: true, repeat: 1 },
+                        
+                        // Step C: Zoom out back to normal
+                        { scaleX: 1, scaleY: 1, duration: 170, ease: 'Sine.easeIn' }
+                    ]
                 });
             }
         }
