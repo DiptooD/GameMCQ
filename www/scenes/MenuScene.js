@@ -619,12 +619,19 @@ class MenuScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
 
-        const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, rankData.avatar, {fontSize: '50px'}).setOrigin(0.5);
+        // --- FIXED: Avatar Sync matching PlayerProfileScene ---
+        let currentAvatarToDisplay = rankData.avatar; 
+        if (GameState.equippedAvatar && GameState.equippedAvatar !== "default") {
+            const specialDef = window.SpecialItemsData && window.SpecialItemsData.find(i => i.id === GameState.equippedAvatar);
+            if (specialDef && specialDef.value) currentAvatarToDisplay = specialDef.value;
+        }
+
+        const avatarTxt = this.add.text(boxX + 40, boxY + boxH/2, currentAvatarToDisplay, {fontSize: '50px'}).setOrigin(0.5);
 
         const isConnected = window.FirebaseAuth && window.FirebaseAuth.currentUser;
         const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "GUEST";
         const nameTxt = this.add.text(boxX + 85, boxY + boxH/2 - 11, playerName, {
-            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold',padding: { y: 10 },
+            fontSize: '26px', fontFamily: "'Anek Bangla', sans-serif", color: '#ffffff', fontStyle: 'bold', padding: { y: 10 },
             shadow: { offsetX: 2, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0, 0.5);
 
@@ -635,38 +642,42 @@ class MenuScene extends Phaser.Scene {
 
         const tagShort = rankData.tag.split(" (")[0];
         const lvlTxt = this.add.text(boxX + 85, boxY + boxH/2 + 16.5, `লেভেল ${lvlData.level} • ${tagShort}`, {
-            fontSize: '20px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold',padding: { y: 10 },
+            fontSize: '20px', fontFamily: "'Anek Bangla', sans-serif", color: '#00ffff', fontStyle: 'bold', padding: { y: 10 },
             shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
 
-        // --- NEW: BIG BADGE ICON LOGIC ---
-        // Checks if the player has a badge assigned either in their profile or rank data
-        const badgeKey = (GameState.profile && GameState.profile.badge) ? GameState.profile.badge : (rankData.badge || null);
+        // --- FIXED: Text-Based Big Badge Render & Opposite Side Alignment ---
+        let baseBadges = (GameState.profile && GameState.profile.badges) || [];
+        if (GameState.profile && GameState.profile.badge && baseBadges.length === 0) baseBadges = [GameState.profile.badge];
+        let tempBadges = (GameState.profile && GameState.profile.tempBadges) || [];
         
-        // Ensure the texture actually exists in cache before attempting to display it
-        if (badgeKey && this.textures.exists(badgeKey)) {
-            // Position on the far right (opposite side of the name box)
-            const badgeX = boxX + boxW - 35; 
-            const badgeY = boxY + boxH / 2;
+        let currentBadges = [...new Set([...tempBadges, ...baseBadges])].filter(Boolean);
+
+        if (currentBadges.length > 0) {
+            const primaryBadgeKey = currentBadges[0];
+            const badgeData = window.getBadgeData ? window.getBadgeData(primaryBadgeKey) : null;
             
-            const badgeIcon = this.add.image(badgeX, badgeY, badgeKey);
-            
-            // Make it big and fit into the boxH (60px) leaving a small margin (50px max size)
-            const maxBadgeSize = 50; 
-            const scaleFactor = maxBadgeSize / Math.max(badgeIcon.width, badgeIcon.height);
-            badgeIcon.setScale(scaleFactor);
-            
-            // Added a subtle floating animation so it pops visually!
-            this.tweens.add({
-                targets: badgeIcon,
-                y: badgeY - 3,
-                duration: 1800,
-                yoyo: true,
-                repeat: -1,
-                ease: 'Sine.easeInOut'
-            });
+            if (badgeData && badgeData.icon) {
+                // Aligns badge completely opposite to the information panel texts on the far right
+                const badgeX = boxX + boxW - 35; 
+                const badgeY = boxY + boxH / 2 +5;
+                
+                const badgeTxt = this.add.text(badgeX, badgeY, badgeData.icon, {
+                    fontSize: '40px',
+                    shadow: { offsetX: 0, offsetY: 2, color: 'rgba(0,0,0,0.6)', blur: 4 }
+                }).setOrigin(0.5);
+
+                // Elegant floating visual movement animation matching the sleek aesthetic
+                this.tweens.add({
+                    targets: badgeTxt,
+                    y: badgeY - 3,
+                    duration: 1600,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'Sine.easeInOut'
+                });
+            }
         }
-        // ----------------------------------
 
         hitArea.on('pointerover', () => { 
             profBg.lineStyle(3, 0xffffff, 1); 
@@ -699,7 +710,7 @@ class MenuScene extends Phaser.Scene {
         drawSettings(false);
 
         const setText = this.add.text(boxX + setW/2, setY + setH/2, "⚙️ সেটিংস", {
-            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif",padding: { y: 5 }, color: '#b3d4ff', fontStyle: 'bold' 
+            fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#b3d4ff', fontStyle: 'bold' 
         }).setOrigin(0.5);
 
         const setHitArea = this.add.rectangle(boxX + setW/2, setY + setH/2, setW, setH, 0x000000, 0).setInteractive({useHandCursor: true});
