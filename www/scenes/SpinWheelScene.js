@@ -65,7 +65,7 @@ class SpinWheelScene extends Phaser.Scene {
         this.spinCost = 20; 
         
         this.segments = [
-            { id: 'mystery_box', type: 'mystery', color: 0xff00ff, icon: 'ui_heart', prob: 0.02, label: "MYSTERY" },
+            { id: 'mystery_box', type: 'mystery', color: 0xff00ff, icon: 'ui_heart', prob: 0.902, label: "MYSTERY" },
             { id: 'jackpot', type: 'keys', amount: 10, color: 0xff0055, icon: 'ui_key', prob: 0.03, label: "10 KEYS" },
             { id: 'debris_stash', type: 'debris', amount: 50, color: 0x00ffff, icon: 'ui_debris_icon', prob: 0.20, label: "50 DEBRIS" },
             { id: 'extra_skips', type: 'skips', amount: 5, color: 0x00ff00, icon: 'ui_bolt', prob: 0.15, label: "5 SKIPS" },
