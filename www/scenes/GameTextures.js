@@ -983,6 +983,31 @@ class GameTextures {
     g.generateTexture("ui_debris_icon", 40, 40);
     g.clear();
     
+    // Main Body (Dark Magical Purple)
+    g.fillStyle(0x330066, 1); 
+    g.fillRoundedRect(10, 25, 60, 50, 8);
+    
+    // Gold borders for the body
+    g.lineStyle(4, 0xffaa00, 1); 
+    g.strokeRoundedRect(10, 25, 60, 50, 8);
+    
+    // Lid (Lighter Purple)
+    g.fillStyle(0x5500aa, 1); 
+    g.fillRoundedRect(5, 10, 70, 20, 6);
+    g.strokeRoundedRect(5, 10, 70, 20, 6);
+    
+    // Center glowing gem / lock
+    g.fillStyle(0xff00ff, 1); 
+    g.fillCircle(40, 35, 12);
+    g.fillStyle(0xffffff, 0.9);
+    g.fillCircle(40, 35, 5);
+    
+    // Mystical top glow
+    g.fillStyle(0x00ffff, 0.4); 
+    g.fillEllipse(40, 10, 40, 10);
+    
+    g.generateTexture("ui_mystery_box", 80, 80);
+    g.clear();
     // ==========================================================
     // --- PROFESSIONAL UPDATED TEXTURES ---
     // ==========================================================

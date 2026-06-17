@@ -70,18 +70,40 @@ class MysteryBoxScene extends Phaser.Scene {
         const itemHeight = 250; 
         const cardW = 460;      
         const cardH = 220;      
-        const totalItemsInSpin = 65; 
-        const winningIndex = 55;
 
-        // Optimization: Pre-generate textures to prevent massive lag from drawing vectors inside masks
         this.generateCardTextures(cardW, cardH, rarityConfig);
 
+        // --- UNIQUE ITEM SELECTION LOGIC ---
+        const winningItem = getWeightedRandomItem();
+        
+        let otherSkins = weightedItems.filter(s => s.id !== winningItem.id);
+        Phaser.Utils.Array.Shuffle(otherSkins);
+        
+        // Show actual number of available skins, max 65
+        let totalItems = Math.min(65, weightedItems.length);
+        let itemsAfterWinner = totalItems > 3 ? 2 : 0;
+        let winIdx = totalItems - 1 - itemsAfterWinner;
+        if (winIdx < 0) winIdx = 0;
+        
         this.spinSequence = [];
-        for (let i = 0; i < totalItemsInSpin; i++) {
-            this.spinSequence.push(getWeightedRandomItem());
+        
+        // Add unique skins before winner
+        for(let i=0; i<winIdx; i++) {
+            if(otherSkins.length > 0) this.spinSequence.push(otherSkins.pop());
+            else this.spinSequence.push(weightedItems[0]); 
         }
         
-        const winningItem = this.spinSequence[winningIndex];
+        // Add winner
+        this.spinSequence.push(winningItem);
+        
+        // Add remaining items after winner
+        while(this.spinSequence.length < totalItems) {
+            if(otherSkins.length > 0) this.spinSequence.push(otherSkins.pop());
+            else this.spinSequence.push(weightedItems[0]); 
+        }
+
+        const totalItemsInSpin = this.spinSequence.length;
+        const winningIndex = winIdx;
 
         this.stripContainer = this.add.container(cx, cy);
 
@@ -98,7 +120,6 @@ class MysteryBoxScene extends Phaser.Scene {
         for (let i = 0; i < totalItemsInSpin; i++) {
             let item = this.spinSequence[i];
             let yPos = (i * itemHeight);
-            
             let card = this.createItemCard(0, yPos, cardW, cardH, item);
             this.stripContainer.add(card);
         }
@@ -145,25 +166,14 @@ class MysteryBoxScene extends Phaser.Scene {
             },
             onComplete: () => {
                 this.playSound('sfx_jackpot', 1.0);
-                
-                this.tweens.add({
-                    targets: selectorBox,
-                    alpha: 0,
-                    duration: 100,
-                    yoyo: true,
-                    repeat: 5
-                });
-
+                this.tweens.add({ targets: selectorBox, alpha: 0, duration: 100, yoyo: true, repeat: 5 });
                 this.time.delayedCall(1200, () => this.showRewardPopup(winningItem));
             }
         });
     }
 
     update() {
-        if (this.scrollingBg) {
-            this.scrollingBg.tilePositionY -= 0.6;
-        }
-
+        if (this.scrollingBg) this.scrollingBg.tilePositionY -= 0.6;
         if (this.backgroundLayers) {
             this.backgroundLayers.forEach(layer => {
                 layer.group.children.iterate(star => {
@@ -240,28 +250,19 @@ class MysteryBoxScene extends Phaser.Scene {
         }).setOrigin(0, 0.5);
     }
 
-    // Optimization: Pre-generate the intensive card vector graphics once to prevent lag
     generateCardTextures(w, h, rarityConfig) {
         for (const [rarityName, config] of Object.entries(rarityConfig)) {
             const key = `card_bg_${rarityName}`;
             if (!this.textures.exists(key)) {
                 const bg = this.make.graphics({ x: 0, y: 0 });
-                
                 bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
                 bg.fillRoundedRect(0, 0, w, h, 20);
-                
                 bg.lineStyle(4, config.color, 0.9);
                 bg.strokeRoundedRect(0, 0, w, h, 20);
-                
                 bg.fillStyle(config.color, 0.25);
                 bg.fillRoundedRect(0, 0, w, 45, { tl: 20, tr: 20, bl: 0, br: 0 });
-                
                 bg.lineStyle(2, config.color, 0.5);
-                bg.beginPath(); 
-                bg.moveTo(0, 45); 
-                bg.lineTo(w, 45); 
-                bg.strokePath();
-
+                bg.beginPath(); bg.moveTo(0, 45); bg.lineTo(w, 45); bg.strokePath();
                 bg.generateTexture(key, w, h);
                 bg.destroy();
             }
@@ -270,8 +271,6 @@ class MysteryBoxScene extends Phaser.Scene {
 
     createItemCard(x, y, w, h, item) {
         const card = this.add.container(x, y);
-
-        // Optimization: Use pre-generated texture image instead of creating vectors per card
         const bg = this.add.image(0, 0, `card_bg_${item.rarity}`);
 
         const rarityText = this.add.text(0, -h/2 + 22.5, item.rarity.toUpperCase(), { 
@@ -315,7 +314,6 @@ class MysteryBoxScene extends Phaser.Scene {
         else if (item.type === "dash") targetArray = GameState.ownedDashAuras;
         else if (item.type === "hud") targetArray = GameState.ownedHuds;
         else if (item.type === "battery") targetArray = GameState.ownedBatteries;
-        
         return targetArray ? targetArray.includes(item.id) : false;
     }
 
@@ -331,17 +329,13 @@ class MysteryBoxScene extends Phaser.Scene {
         overlay.setDepth(999);
 
         const popup = this.add.container(cx, cy).setDepth(1000).setScale(0);
-
         const boxBarrier = this.add.rectangle(0, 0, 600, 600, 0x000000, 0).setInteractive();
         popup.add(boxBarrier);
         
         const burst = this.add.graphics();
         burst.fillStyle(item.colorNum, 0.3);
-        for(let i=0; i<12; i++) {
-            burst.slice(0, 0, 700, Phaser.Math.DegToRad(i*30), Phaser.Math.DegToRad(i*30+15));
-        }
+        for(let i=0; i<12; i++) { burst.slice(0, 0, 700, Phaser.Math.DegToRad(i*30), Phaser.Math.DegToRad(i*30+15)); }
         burst.fillPath();
-        
         this.tweens.add({ targets: burst, rotation: Math.PI * 2, duration: 10000, repeat: -1 });
 
         const box = this.add.graphics();
@@ -354,18 +348,25 @@ class MysteryBoxScene extends Phaser.Scene {
         boxGlow.fillStyle(item.colorNum, 0.2);
         boxGlow.fillCircle(0, 0, 220); 
         
-        const title = this.add.text(0, -180, "Congratulations!", { 
+        const title = this.add.text(0, -210, "Congratulations!", { 
             fontSize: "60px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, color: "#ffffff", 
             shadow: { color: "#000000", blur: 6, stroke: true, fill: true }
         }).setOrigin(0.5);
 
-        // Update Subtitle conditionally based on duplicate status
-        const subtitleText = isDuplicate ? "DUPLICATE ITEM" : "YOU WON";
-        const subtitleColor = isDuplicate ? "#ffaa00" : "#aaccff";
+        // --- ENHANCED DUPLICATE TEXT ---
+        const subtitleText = isDuplicate ? "⚠️ DUPLICATE ITEM ⚠️" : "YOU WON";
+        const subtitleColor = isDuplicate ? "#ff3333" : "#aaccff";
         
-        const subtitle = this.add.text(0, -130, subtitleText, {
-            fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: subtitleColor, letterSpacing: 3 
+        const subtitle = this.add.text(0, -135, subtitleText, {
+            fontSize: isDuplicate ? "36px" : "28px", 
+            fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, 
+            color: subtitleColor, letterSpacing: 2,
+            stroke: isDuplicate ? "#000000" : "", strokeThickness: isDuplicate ? 6 : 0
         }).setOrigin(0.5);
+
+        if (isDuplicate) {
+            this.tweens.add({ targets: subtitle, scale: 1.1, duration: 500, yoyo: true, repeat: -1 });
+        }
 
         let preview;
         if (item.type === "ship") {
@@ -381,46 +382,75 @@ class MysteryBoxScene extends Phaser.Scene {
             else preview.setScale(3.5);
         }
         
-        const label = this.add.text(0, 110, this.sanitizeBanglaText(item.name), {
+        const label = this.add.text(0, 100, this.sanitizeBanglaText(item.name), {
             fontSize: "46px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, color: "#ffffff",
             shadow: { color: Phaser.Display.Color.IntegerToColor(item.colorNum).rgba, blur: 20, fill: true }
         }).setOrigin(0.5);
 
         popup.add([burst, boxGlow, box, title, subtitle, preview, label]);
 
-        // Show Debris conversion info if it's a duplicate
+        // --- ENHANCED DEBRIS CONVERSION ---
         if (isDuplicate) {
-            const dupLabel = this.add.text(0, 160, "(Converted to 100 Debris)", {
-                fontSize: "22px", fontFamily: "Arial", fontWeight: "bold", color: "#ff5555"
+            const dupBg = this.add.graphics();
+            //dupBg.fillStyle(0xff0000, 0.25);
+           // dupBg.fillRoundedRect(-180, 140, 360, 44, 22);
+            //dupBg.lineStyle(3, 0xff4444, 1);
+           // dupBg.strokeRoundedRect(-180, 140, 360, 44, 22);
+
+            const dupLabel = this.add.text(0, 155, "CONVERTED TO 100 DEBRIS!", {
+                fontSize: "22px", fontFamily: "Arial", fontWeight: "bold", color: "#ff3333",
+                stroke: "#220000", strokeThickness: 4
             }).setOrigin(0.5);
-            popup.add(dupLabel);
+            
+            popup.add([dupBg, dupLabel]);
+            this.tweens.add({ targets: [dupBg, dupLabel], scale: 1.05, duration: 500, yoyo: true, repeat: -1 });
         }
 
-        const btnContainer = this.add.container(0, 220);
-        const btnW = 380; 
-        const btnH = 90; 
-        const btnR = btnH / 2;
+// --- CLAIM AND EQUIP BUTTONS ---
+const btnContainer = this.add.container(0, 230);
+const btnW = 260; 
+const btnH = 80; 
+const btnR = btnH / 2;
+const claimX = 140;  // Swapped to Right
+const equipX = -140; // Swapped to Left
 
-        const btnBg = this.add.graphics();
+        // CLAIM BUTTON
+        const claimBg = this.add.graphics();
         const drawClaimBtn = (hover) => {
-            btnBg.clear();
-            btnBg.fillGradientStyle(
+            claimBg.clear();
+            claimBg.fillGradientStyle(
                 hover ? 0x002266 : 0x001133, hover ? 0x002266 : 0x001133, 
                 hover ? 0x0088ff : 0x004488, hover ? 0x0088ff : 0x004488, 1
             );
-            btnBg.fillRoundedRect(-btnW/2, -btnH/2, btnW, btnH, btnR);
-            btnBg.lineStyle(hover ? 4 : 3, hover ? 0xffffff : 0x00ffff, 0.8);
-            btnBg.strokeRoundedRect(-btnW/2, -btnH/2, btnW, btnH, btnR);
+            claimBg.fillRoundedRect(claimX - btnW/2, -btnH/2, btnW, btnH, btnR);
+            claimBg.lineStyle(hover ? 4 : 3, hover ? 0xffffff : 0x00ffff, 0.8);
+            claimBg.strokeRoundedRect(claimX - btnW/2, -btnH/2, btnW, btnH, btnR);
         };
         drawClaimBtn(false);
-
-        const btnHitArea = this.add.rectangle(0, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
-        
-        const btnTxt = this.add.text(0, 0, "সংগ্রহ করুন (CLAIM)", {
-            fontSize: "36px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
+        const claimHitArea = this.add.rectangle(claimX, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const claimTxt = this.add.text(claimX, 0, "সংগ্রহ (CLAIM)", {
+            fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
         }).setOrigin(0.5);
 
-        btnContainer.add([btnBg, btnTxt, btnHitArea]);
+        // EQUIP BUTTON
+        const equipBg = this.add.graphics();
+        const drawEquipBtn = (hover) => {
+            equipBg.clear();
+            equipBg.fillGradientStyle(
+                hover ? 0x004400 : 0x002200, hover ? 0x004400 : 0x002200, 
+                hover ? 0x00cc00 : 0x008800, hover ? 0x00cc00 : 0x008800, 1
+            );
+            equipBg.fillRoundedRect(equipX - btnW/2, -btnH/2, btnW, btnH, btnR);
+            equipBg.lineStyle(hover ? 4 : 3, hover ? 0xffffff : 0x00ff00, 0.8);
+            equipBg.strokeRoundedRect(equipX - btnW/2, -btnH/2, btnW, btnH, btnR);
+        };
+        drawEquipBtn(false);
+        const equipHitArea = this.add.rectangle(equipX, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const equipTxt = this.add.text(equipX, 0, "পরিধান (EQUIP)", {
+            fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
+        }).setOrigin(0.5);
+
+        btnContainer.add([claimBg, claimTxt, claimHitArea, equipBg, equipTxt, equipHitArea]);
         popup.add(btnContainer);
 
         this.tweens.add({ targets: popup, scale: 1, duration: 600, ease: 'Back.out' });
@@ -429,13 +459,26 @@ class MysteryBoxScene extends Phaser.Scene {
             this.playSound('sfx_coin');
             this.tweens.add({ targets: popup, scale: 0.9, duration: 100, yoyo: true, onComplete: () => {
                 this.awardItemToPlayer(item);
+                this.scene.start("SpinWheelScene"); 
             }});
         };
 
-        btnHitArea.on('pointerdown', autoClaimAction);
-        overlay.on('pointerdown', autoClaimAction);
-        btnHitArea.on('pointerover', () => drawClaimBtn(true));
-        btnHitArea.on('pointerout', () => drawClaimBtn(false));
+        const autoEquipAction = () => {
+            this.playSound('sfx_powerup');
+            this.tweens.add({ targets: popup, scale: 0.9, duration: 100, yoyo: true, onComplete: () => {
+                this.awardItemToPlayer(item);
+                // Passing parameters to ShopScene for auto scroll and selection
+                this.scene.start("ShopScene", { autoEquipTarget: item.id, targetType: item.type });
+            }});
+        };
+
+        claimHitArea.on('pointerdown', autoClaimAction);
+        claimHitArea.on('pointerover', () => drawClaimBtn(true));
+        claimHitArea.on('pointerout', () => drawClaimBtn(false));
+
+        equipHitArea.on('pointerdown', autoEquipAction);
+        equipHitArea.on('pointerover', () => drawEquipBtn(true));
+        equipHitArea.on('pointerout', () => drawEquipBtn(false));
     }
 
     awardItemToPlayer(item) {
@@ -451,15 +494,13 @@ class MysteryBoxScene extends Phaser.Scene {
         else if (item.type === "battery") targetArray = GameState.ownedBatteries = GameState.ownedBatteries || [];
 
         if (this.hasItem(item)) {
-            GameState.debris = (GameState.debris || 0) + 100; // Handled smoothly in the popup UI
+            GameState.debris = (GameState.debris || 0) + 100;
         } else {
             if (targetArray) targetArray.push(item.id);
         }
         
         if (window.saveGame) window.saveGame();
         if (window.saveCurrency) window.saveCurrency();
-        
-        this.scene.start("SpinWheelScene"); 
     }
 
     playSound(key, baseVolume = 1.0) {

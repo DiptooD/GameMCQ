@@ -3,16 +3,34 @@ class ShopScene extends Phaser.Scene {
         super("ShopScene");
     }
 
-    init() {
-        this.currentTab = "ships";
+    init(data) {
+        // Handle incoming data from Mystery Box auto-equip
+        this.currentTab = (data && data.autoEquipTarget) ? "special" : "ships";
+        this.autoEquipTarget = data ? data.autoEquipTarget : null;
+        this.targetType = data ? data.targetType : null;
+        
         this.scrollVelocity = 0;
         this.backgroundLayers = [];
         this.contentHeight = 0;
         this.listStartY = 310; 
         this.containerY = this.listStartY; 
+        this.cardPositions = {}; // Stores Y positions to allow auto-scrolling
     }
 
     create() {
+        // --- AUTO EQUIP LOGIC ---
+        if (this.autoEquipTarget && window.GameState) {
+            const valToSet = this.autoEquipTarget;
+            if (this.targetType === "ship") GameState.equippedShip = valToSet;
+            else if (this.targetType === "avatar") GameState.equippedAvatar = valToSet;
+            else if (this.targetType === "shield") GameState.equippedShield = valToSet;
+            else if (this.targetType === "trail") GameState.equippedTrail = valToSet;
+            else if (this.targetType === "dash") GameState.equippedDashAura = valToSet;
+            else if (this.targetType === "hud") GameState.equippedHud = valToSet;
+            else if (this.targetType === "battery") GameState.equippedBattery = valToSet;
+            if (window.saveGame) window.saveGame();
+        }
+
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
         const w = this.cameras.main.width;
@@ -22,7 +40,6 @@ class ShopScene extends Phaser.Scene {
         if (typeof GameTextures !== 'undefined') GameTextures.init(this);
         if (typeof PlayerShipTextures !== 'undefined') PlayerShipTextures.init(this);
 
-        // --- DYNAMIC TEXTURE LOADING ---
         if (window.SpecialItemsRegistry && window.SpecialItemsRegistry.textureInits) {
             window.SpecialItemsRegistry.textureInits.forEach(initFn => initFn(this));
         }
@@ -77,6 +94,20 @@ class ShopScene extends Phaser.Scene {
         this.containerY = topMargin; 
 
         this.refreshContent();
+
+        // --- AUTO SCROLL LOGIC ---
+        if (this.autoEquipTarget && this.cardPositions[this.autoEquipTarget]) {
+            const cardY = this.cardPositions[this.autoEquipTarget];
+            const visibleCenter = this.visibleHeight / 2;
+            let targetY = this.listStartY - cardY + visibleCenter;
+            
+            const minScroll = Math.min(0, this.visibleHeight - this.contentHeight - 50);
+            if (targetY > this.listStartY) targetY = this.listStartY;
+            if (targetY < this.listStartY + minScroll) targetY = this.listStartY + minScroll;
+            
+            this.container.y = targetY;
+            this.autoEquipTarget = null; // reset
+        }
 
         this.scrollState = { isDragging: false, velocityY: 0 };
         let startY = 0, lastY = 0, containerStartY = 0, lastTime = 0;
@@ -183,7 +214,7 @@ class ShopScene extends Phaser.Scene {
 
     createTopUI() {
         const backContainer = this.add.container(100, 65);
-        backContainer.setDepth(100); // <--- ADD THIS LINE HERE
+        backContainer.setDepth(100);
         const backBg = this.add.graphics();
         backBg.fillStyle(0x001122, 0.8);
         backBg.fillRoundedRect(-70, -30, 140, 60, 30);
@@ -253,7 +284,7 @@ class ShopScene extends Phaser.Scene {
         const height = 60;
         const btnWidth = totalWidth / 4;
         const container = this.add.container(cx, y);
-        container.setDepth(100); // <--- ADD THIS LINE HERE
+        container.setDepth(100);
 
         const baseBg = this.add.graphics();
         baseBg.fillStyle(0x041022, 0.9);
@@ -265,15 +296,21 @@ class ShopScene extends Phaser.Scene {
         this.tabHighlight = this.add.graphics();
         this.tabHighlight.fillStyle(0xffffff, 0.15);
         this.tabHighlight.fillRoundedRect(-btnWidth / 2 + 4, -height / 2 + 4, btnWidth - 8, height - 8, (height - 8) / 2);
-        this.tabHighlight.x = -btnWidth * 1.5; 
+        
+        let initialX = -btnWidth * 1.5;
+        if (this.currentTab === "boosters") initialX = -btnWidth * 0.5;
+        else if (this.currentTab === "themes") initialX = btnWidth * 0.5;
+        else if (this.currentTab === "special") initialX = btnWidth * 1.5;
+        
+        this.tabHighlight.x = initialX; 
         container.add(this.tabHighlight);
 
         const tabFont = { fontSize: "22px", fontFamily: "'Anek Bangla'", fontWeight: 700 };
         
-        this.shipTabTxt = this.add.text(-btnWidth * 1.5, 0, "🚀 পাখি", { ...tabFont, color: "#ffffff" }).setOrigin(0.5);
-        this.boosterTabTxt = this.add.text(-btnWidth * 0.5, 0, "⚡ বুস্টার", { ...tabFont, color: "#88bbdd" }).setOrigin(0.5);
-        this.themeTabTxt = this.add.text(btnWidth * 0.5, 0, "🌌 থিম", { ...tabFont, color: "#88bbdd" }).setOrigin(0.5);
-        this.specialTabTxt = this.add.text(btnWidth * 1.5, 0, "🎁 স্পেশাল", { ...tabFont, color: "#88bbdd" }).setOrigin(0.5);
+        this.shipTabTxt = this.add.text(-btnWidth * 1.5, 0, "🚀 পাখি", { ...tabFont, color: this.currentTab === "ships" ? "#ffffff" : "#88bbdd" }).setOrigin(0.5);
+        this.boosterTabTxt = this.add.text(-btnWidth * 0.5, 0, "⚡ বুস্টার", { ...tabFont, color: this.currentTab === "boosters" ? "#ffffff" : "#88bbdd" }).setOrigin(0.5);
+        this.themeTabTxt = this.add.text(btnWidth * 0.5, 0, "🌌 থিম", { ...tabFont, color: this.currentTab === "themes" ? "#ffffff" : "#88bbdd" }).setOrigin(0.5);
+        this.specialTabTxt = this.add.text(btnWidth * 1.5, 0, "🎁 স্পেশাল", { ...tabFont, color: this.currentTab === "special" ? "#ffffff" : "#88bbdd" }).setOrigin(0.5);
 
         const shipHitArea = this.add.rectangle(-btnWidth * 1.5, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
         const boosterHitArea = this.add.rectangle(-btnWidth * 0.5, 0, btnWidth, height, 0x000000, 0).setInteractive({ useHandCursor: true });
@@ -349,11 +386,9 @@ class ShopScene extends Phaser.Scene {
         const ownedHuds = new Set(GameState.ownedHuds || []);
         const ownedBatteries = new Set(GameState.ownedBatteries || []);
 
-        // --- READ FROM DYNAMIC REGISTRY ---
         const specials = window.SpecialItemsRegistry.items || [];
         const categories = { ship: [], avatar: [], shield: [], trail: [], dash: [], hud: [], battery: [] };
 
-        // Keep the defaults always visible
         categories.ship.push({ id: "default", type: "ship", rarity: "Common", name: "ডিফল্ট স্কিন", desc: "মূল স্পেসশিপ" });
         categories.avatar.push({ id: "default", type: "avatar", rarity: "Common", name: "ডিফল্ট অ্যাভাটার", desc: "সাধারণ প্রোফাইল", value: "👤" });
         categories.shield.push({ id: "default", type: "shield", rarity: "Common", name: "ডিফল্ট শিল্ড", desc: "সাধারণ শিল্ড এনার্জি" });
@@ -401,7 +436,6 @@ class ShopScene extends Phaser.Scene {
         const renderCategory = (type, items) => {
             if (items.length <= 1) return; 
 
-            // Category Header
             const headerBg = this.add.graphics();
             headerBg.fillStyle(0x002244, 0.8);
             headerBg.fillRoundedRect(160, currentY, 400, 50, 25);
@@ -456,6 +490,8 @@ class ShopScene extends Phaser.Scene {
     createSpecialCard(item, isEquipped, x, y) {
         if (this.currentTab !== "special") return;
 
+        this.cardPositions[item.id] = y; // save the coordinate for auto-scrolling
+
         const cardContainer = this.add.container(x, y);
 
         let rarityColor = 0xffffff;
@@ -495,7 +531,7 @@ class ShopScene extends Phaser.Scene {
             if (item.type === "dash") preview.setScale(1.5);
             else if (item.type === "shield") preview.setScale(0.9);
             else if (item.type === "hud" || item.type === "battery") preview.setScale(0.9);
-            else preview.setScale(2.5); // trails or spark
+            else preview.setScale(2.5);
         }
 
         const name = this.add.text(0, 30, this.sanitizeBanglaText(item.name), { 
@@ -538,11 +574,9 @@ class ShopScene extends Phaser.Scene {
                 if (this.scrollState) this.scrollState.velocityY = 0; 
                 this.playSound('sfx_powerup');
                 
-                // If the item is already equipped, do nothing when clicked
                 if (isEquipped) return; 
 
                 let valToSet = item.id;
-                
                 if (item.type === "ship") GameState.equippedShip = valToSet;
                 else if (item.type === "avatar") GameState.equippedAvatar = valToSet;
                 else if (item.type === "shield") GameState.equippedShield = valToSet;

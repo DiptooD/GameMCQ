@@ -71,7 +71,7 @@ class SpinWheelScene extends Phaser.Scene {
         this.spinCost = 20; 
         
         this.segments = [
-            { id: 'mystery_box', type: 'mystery', color: 0xff00ff, icon: 'ui_heart', prob: 0.02, label: "MYSTERY" },
+            { id: 'mystery_box', type: 'mystery', color: 0xff00ff, icon: 'ui_mystery_box', prob: 0.02, label: "MYSTERY" },
             { id: 'jackpot', type: 'keys', amount: 10, color: 0xff0055, icon: 'ui_key', prob: 0.03, label: "10 KEYS" },
             { id: 'debris_stash', type: 'debris', amount: 50, color: 0x00ffff, icon: 'ui_debris_icon', prob: 0.20, label: "50 DEBRIS" },
             { id: 'extra_skips', type: 'skips', amount: 5, color: 0x00ff00, icon: 'ui_bolt', prob: 0.15, label: "5 SKIPS" },
@@ -260,13 +260,15 @@ class SpinWheelScene extends Phaser.Scene {
             const dist = radius - 80; 
             
             const itemContainer = this.add.container(
-                Math.cos(midRad) * dist,
-                Math.sin(midRad) * dist
-            );
-            
-            const icon = this.add.image(0, -15, seg.icon).setScale(1.6); 
-            
-            const label = this.add.text(0, 40, seg.label, {
+    Math.cos(midRad) * dist,
+    Math.sin(midRad) * dist
+);
+
+// Scale the mystery box down to 0.85 so it visually matches the 1.6 scale of the smaller icons
+const iconScale = seg.icon === 'ui_mystery_box' ? 0.95 : 1.6;
+const icon = this.add.image(0, -15, seg.icon).setScale(iconScale); 
+
+const label = this.add.text(0, 40, seg.label, {
                 fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff", 
                 stroke: "#000000", strokeThickness: 5
             }).setOrigin(0.5);
@@ -453,9 +455,8 @@ class SpinWheelScene extends Phaser.Scene {
                 this.pointer.y = this.pointer.originalY; 
                 
                 if (winner.type === 'mystery') {
-                    this.time.delayedCall(1000, () => {
-                        this.scene.start("MysteryBoxScene");
-                    });
+                    // We remove the delayed call and call our new animation method
+                    this.showMysteryBoxAnimation();
                 } else {
                     this.showReward(winner);
                 }
@@ -531,12 +532,12 @@ class SpinWheelScene extends Phaser.Scene {
         boxGlow.fillStyle(winner.color, 0.2);
         boxGlow.fillCircle(0, 0, 220); 
         
-        const title = this.add.text(0, -180, "Congratulations!", { 
+        const title = this.add.text(0, -210, "Congratulations!", { 
             fontSize: "60px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, color: "#ffffff", 
             shadow: { color: "#000000", blur: 6, stroke: true, fill: true }
         }).setOrigin(0.5);
 
-        const subtitle = this.add.text(0, -130, "YOU WON", {
+        const subtitle = this.add.text(0, -135, "YOU WON", {
             fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#aaccff", letterSpacing: 3 
         }).setOrigin(0.5);
 
@@ -652,4 +653,76 @@ class SpinWheelScene extends Phaser.Scene {
         if(this.kText) this.kText.setText((state.keys || 0).toString());
         if(this.dText) this.dText.setText((state.debris || 0).toString());
     }
+
+
+    showMysteryBoxAnimation() {
+    this.playSound('sfx_powerup'); // Play an engaging intro sound
+    
+    const cx = this.cameras.main.centerX;
+    const cy = this.cameras.main.centerY;
+    
+    // 1. Create a dark interactive overlay to block user input
+    const overlay = this.add.rectangle(cx, cy, 720, 1480, 0x000000, 0).setInteractive();
+    overlay.setDepth(999);
+    
+    this.tweens.add({
+        targets: overlay,
+        fillAlpha: 0.85,
+        duration: 500
+    });
+    
+    // 2. Draw a massive rotating light burst behind the box
+    const burst = this.add.graphics({ x: cx, y: cy }).setDepth(1000);
+    burst.fillStyle(0xff00ff, 0.4); // Matches mystery segment color
+    for (let i = 0; i < 12; i++) {
+        burst.slice(0, 0, 800, Phaser.Math.DegToRad(i * 30), Phaser.Math.DegToRad(i * 30 + 15));
+    }
+    burst.fillPath();
+    burst.setScale(0); // Start hidden
+    
+    // 3. Create the Box Sprite
+    const boxSprite = this.add.image(cx, cy, 'ui_mystery_box').setDepth(1001).setScale(0);
+    
+    // 4. Animation Sequence
+    this.tweens.add({
+        targets: [boxSprite, burst],
+        scale: 3.5, // Pop in nicely
+        duration: 600,
+        ease: 'Back.out',
+        onComplete: () => {
+            // Spin the background burst endlessly
+            this.tweens.add({
+                targets: burst,
+                rotation: Math.PI * 2,
+                duration: 6000,
+                repeat: -1
+            });
+            
+            // Make the box "rumble" and shake
+            this.tweens.add({
+                targets: boxSprite,
+                angle: { from: -12, to: 12 },
+                yoyo: true,
+                repeat: 5,
+                duration: 100, // Very fast shake
+                onComplete: () => {
+                    // Screen flash & explode out into the MysteryBoxScene
+                    this.cameras.main.flash(400, 255, 255, 255);
+                    this.playSound('sfx_jackpot'); 
+                    
+                    this.tweens.add({
+                        targets: boxSprite,
+                        scale: 6, // Explode toward camera
+                        alpha: 0,
+                        duration: 300,
+                        ease: 'Power2',
+                        onComplete: () => {
+                            this.scene.start("MysteryBoxScene");
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
 }
