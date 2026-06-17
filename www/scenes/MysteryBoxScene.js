@@ -12,10 +12,8 @@ class MysteryBoxScene extends Phaser.Scene {
 
         if (typeof GameSFX !== 'undefined') GameSFX.init(this);
 
-        // --- NEW: Add Dynamic Space Background ---
         this.createBackground();
 
-        // --- NEW: Background Music Management ---
         let menuMusic = this.sound.get('menubgm');
         const targetMusicVol = (window.GameState && window.GameState.musicVolume !== undefined) ? window.GameState.musicVolume : 0.5;
 
@@ -29,14 +27,14 @@ class MysteryBoxScene extends Phaser.Scene {
             }
         }
 
-        // --- NEW: Top Right Currency Display ---
         this.createCurrencyUI();
 
-        const title = this.add.text(cx, cy - 350, "মিস্টি বক্স (MYSTERY BOX)", {
+        const titleY = 130; 
+        const title = this.add.text(cx, titleY, "মিস্টি বক্স (MYSTERY BOX)", {
             fontSize: "48px", fontFamily: "'Anek Bangla'", color: "#00e1ff", fontStyle: "bold",
             stroke: "#000000", strokeThickness: 6,
             shadow: { offsetX: 0, offsetY: 4, color: "#0044aa", blur: 10, fill: true, stroke: true }
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(20);
 
         this.tweens.add({ targets: title, scale: 1.05, duration: 800, yoyo: true, repeat: -1 });
 
@@ -69,12 +67,14 @@ class MysteryBoxScene extends Phaser.Scene {
             return weightedItems[0];
         };
 
-        // --- VERTICAL SCROLLING CONSTANTS ---
-        const itemHeight = 180;
-        const cardW = 260;
-        const cardH = 160;
+        const itemHeight = 250; 
+        const cardW = 460;      
+        const cardH = 220;      
         const totalItemsInSpin = 65; 
         const winningIndex = 55;
+
+        // Optimization: Pre-generate textures to prevent massive lag from drawing vectors inside masks
+        this.generateCardTextures(cardW, cardH, rarityConfig);
 
         this.spinSequence = [];
         for (let i = 0; i < totalItemsInSpin; i++) {
@@ -85,14 +85,16 @@ class MysteryBoxScene extends Phaser.Scene {
 
         this.stripContainer = this.add.container(cx, cy);
 
-        // Vertical Clipping Mask
+        const maskTop = 200;
+        const maskBottom = h - 60;
+        const maskHeight = maskBottom - maskTop;
+
         const maskShape = this.make.graphics();
         maskShape.fillStyle(0xffffff);
-        maskShape.fillRect(cx - (cardW * 0.8), cy - (itemHeight * 1.8), cardW * 1.6, itemHeight * 3.6);
+        maskShape.fillRect(0, maskTop, w, maskHeight);
         const mask = maskShape.createGeometryMask();
         this.stripContainer.setMask(mask);
 
-        // Add Vertical Elements
         for (let i = 0; i < totalItemsInSpin; i++) {
             let item = this.spinSequence[i];
             let yPos = (i * itemHeight);
@@ -101,25 +103,37 @@ class MysteryBoxScene extends Phaser.Scene {
             this.stripContainer.add(card);
         }
 
-        // Center Selection Guidelines
-        this.add.rectangle(cx, cy, cardW + 40, 6, 0xffffff, 0.8).setDepth(10); 
-        this.add.triangle(cx - (cardW / 2) - 25, cy, 0, 0, 0, 30, 20, 15, 0xff0000, 1).setOrigin(0.5).setDepth(10);
-        this.add.triangle(cx + (cardW / 2) + 25, cy, 20, 0, 20, 30, 0, 15, 0xff0000, 1).setOrigin(0.5).setDepth(10);
-
-        const randomOffset = Phaser.Math.Between(-itemHeight * 0.4, itemHeight * 0.4);
+        const shadowOverlay = this.add.graphics().setDepth(5);
+        const fadeHeight = 180;
         
-        // Target Y to bring winning item up to the center (cy)
+        shadowOverlay.fillGradientStyle(0x020510, 0x020510, 0x020510, 0x020510, 1, 1, 0, 0);
+        shadowOverlay.fillRect(0, maskTop, w, fadeHeight);
+        shadowOverlay.fillGradientStyle(0x020510, 0x020510, 0x020510, 0x020510, 0, 0, 1, 1);
+        shadowOverlay.fillRect(0, maskBottom - fadeHeight, w, fadeHeight);
+
+        const selectorW = cardW + 40;
+        const selectorH = cardH + 20;
+
+        const selectorBox = this.add.graphics().setDepth(10);
+        selectorBox.lineStyle(6, 0x00ffff, 0.9);
+        selectorBox.strokeRoundedRect(cx - selectorW/2, cy - selectorH/2, selectorW, selectorH, 24);
+        
+        this.add.rectangle(cx, cy, selectorW, selectorH, 0x00ffff, 0.05).setDepth(10).setMask(mask);
+        
+        this.add.triangle(cx - selectorW/2 - 20, cy, 0, -25, 0, 25, 30, 0, 0x00ffff, 1).setDepth(10);
+        this.add.triangle(cx + selectorW/2 + 20, cy, 0, 0, -30, -25, -30, 25, 0x00ffff, 1).setDepth(10);
+
+        const randomOffset = Phaser.Math.Between(-itemHeight * 0.15, itemHeight * 0.15);
         const targetY = cy - (winningIndex * itemHeight) - randomOffset;
 
         this.playSound('sfx_powerup', 0.5);
 
         let lastPassedIndex = 0;
 
-        // Vertical Tween
         this.tweens.add({
             targets: this.stripContainer,
             y: targetY,
-            duration: 7500,
+            duration: 8000, 
             ease: 'Cubic.easeOut', 
             onUpdate: () => {
                 let currentDistY = Math.abs(this.stripContainer.y - cy);
@@ -131,7 +145,16 @@ class MysteryBoxScene extends Phaser.Scene {
             },
             onComplete: () => {
                 this.playSound('sfx_jackpot', 1.0);
-                this.time.delayedCall(800, () => this.showRewardPopup(winningItem));
+                
+                this.tweens.add({
+                    targets: selectorBox,
+                    alpha: 0,
+                    duration: 100,
+                    yoyo: true,
+                    repeat: 5
+                });
+
+                this.time.delayedCall(1200, () => this.showRewardPopup(winningItem));
             }
         });
     }
@@ -217,38 +240,63 @@ class MysteryBoxScene extends Phaser.Scene {
         }).setOrigin(0, 0.5);
     }
 
+    // Optimization: Pre-generate the intensive card vector graphics once to prevent lag
+    generateCardTextures(w, h, rarityConfig) {
+        for (const [rarityName, config] of Object.entries(rarityConfig)) {
+            const key = `card_bg_${rarityName}`;
+            if (!this.textures.exists(key)) {
+                const bg = this.make.graphics({ x: 0, y: 0 });
+                
+                bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
+                bg.fillRoundedRect(0, 0, w, h, 20);
+                
+                bg.lineStyle(4, config.color, 0.9);
+                bg.strokeRoundedRect(0, 0, w, h, 20);
+                
+                bg.fillStyle(config.color, 0.25);
+                bg.fillRoundedRect(0, 0, w, 45, { tl: 20, tr: 20, bl: 0, br: 0 });
+                
+                bg.lineStyle(2, config.color, 0.5);
+                bg.beginPath(); 
+                bg.moveTo(0, 45); 
+                bg.lineTo(w, 45); 
+                bg.strokePath();
+
+                bg.generateTexture(key, w, h);
+                bg.destroy();
+            }
+        }
+    }
+
     createItemCard(x, y, w, h, item) {
         const card = this.add.container(x, y);
 
-        // --- NEW: Glassmorphism Item Background ---
-        const bg = this.add.graphics();
-        bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.95);
-        bg.fillRoundedRect(-w/2, -h/2, w, h, 16);
-        
-        bg.lineStyle(4, item.colorNum, 0.9);
-        bg.strokeRoundedRect(-w/2, -h/2, w, h, 16);
-        
-        bg.fillStyle(item.colorNum, 0.2);
-        bg.fillRoundedRect(-w/2, h/2 - 35, w, 35, { tl: 0, tr: 0, bl: 16, br: 16 });
+        // Optimization: Use pre-generated texture image instead of creating vectors per card
+        const bg = this.add.image(0, 0, `card_bg_${item.rarity}`);
+
+        const rarityText = this.add.text(0, -h/2 + 22.5, item.rarity.toUpperCase(), { 
+            fontSize: "22px", fontFamily: "Arial", color: item.colorHex, fontStyle: "bold", letterSpacing: 3 
+        }).setOrigin(0.5);
 
         let preview;
         if (item.type === "ship") {
             const previewKey = this.textures.exists(`${item.id}_lv1`) ? `${item.id}_lv1` : "player_lv1";
-            preview = this.add.image(0, -20, previewKey).setScale(0.65);
+            preview = this.add.image(0, 10, previewKey).setScale(1.1);
         } else if (item.type === "avatar") {
-            preview = this.add.text(0, -20, item.value || "👤", { fontSize: "60px" }).setOrigin(0.5);
+            preview = this.add.text(0, 10, item.value || "👤", { fontSize: "85px" }).setOrigin(0.5);
         } else {
             const previewKey = this.textures.exists(`${item.id}_img`) ? `${item.id}_img` : "spark";
-            preview = this.add.image(0, -20, previewKey);
-            if (item.type === "dash") preview.setScale(1.2);
-            else if (item.type === "shield" || item.type === "hud" || item.type === "battery") preview.setScale(0.7);
-            else preview.setScale(1.5);
+            preview = this.add.image(0, 10, previewKey);
+            if (item.type === "dash") preview.setScale(1.8);
+            else if (item.type === "shield" || item.type === "hud" || item.type === "battery") preview.setScale(1.3);
+            else preview.setScale(2.2);
         }
 
-        const nameText = this.add.text(0, 30, this.sanitizeBanglaText(item.name), { fontSize: "18px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold", align: "center", wordWrap: { width: w - 10 } }).setOrigin(0.5);
-        const rarityText = this.add.text(0, 62.5, item.rarity, { fontSize: "18px", color: item.colorHex, fontStyle: "bold", letterSpacing: 1 }).setOrigin(0.5);
+        const nameText = this.add.text(0, h/2 - 25, this.sanitizeBanglaText(item.name), { 
+            fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold", align: "center", wordWrap: { width: w - 20 } 
+        }).setOrigin(0.5);
 
-        card.add([bg, preview, nameText, rarityText]);
+        card.add([bg, rarityText, preview, nameText]);
         return card;
     }
 
@@ -257,99 +305,137 @@ class MysteryBoxScene extends Phaser.Scene {
         return text.replace(/\s*\([A-Za-z0-9\s-]+\)/g, '').trim();
     }
 
-    // --- NEW: Upgraded UI Style for Reward Popup ---
+    hasItem(item) {
+        if (!window.GameState) return false;
+        let targetArray;
+        if (item.type === "ship") targetArray = GameState.ownedShips;
+        else if (item.type === "avatar") targetArray = GameState.ownedAvatars;
+        else if (item.type === "shield") targetArray = GameState.ownedShields;
+        else if (item.type === "trail") targetArray = GameState.ownedTrails;
+        else if (item.type === "dash") targetArray = GameState.ownedDashAuras;
+        else if (item.type === "hud") targetArray = GameState.ownedHuds;
+        else if (item.type === "battery") targetArray = GameState.ownedBatteries;
+        
+        return targetArray ? targetArray.includes(item.id) : false;
+    }
+
     showRewardPopup(item) {
+        this.cameras.main.flash(400, 255, 255, 255);
+        this.playSound('sfx_victory', 0.8);
+
         const cx = this.cameras.main.width / 2;
         const cy = this.cameras.main.height / 2;
+        const isDuplicate = this.hasItem(item);
         
         const overlay = this.add.rectangle(cx, cy, 720, 1480, 0x000000, 0.85).setInteractive({ useHandCursor: true });
         overlay.setDepth(999);
 
-        const popup = this.add.container(cx, cy).setDepth(1000);
+        const popup = this.add.container(cx, cy).setDepth(1000).setScale(0);
+
+        const boxBarrier = this.add.rectangle(0, 0, 600, 600, 0x000000, 0).setInteractive();
+        popup.add(boxBarrier);
         
-        // SpinWheelScene style dynamic burst
         const burst = this.add.graphics();
         burst.fillStyle(item.colorNum, 0.3);
         for(let i=0; i<12; i++) {
             burst.slice(0, 0, 700, Phaser.Math.DegToRad(i*30), Phaser.Math.DegToRad(i*30+15));
         }
         burst.fillPath();
+        
+        this.tweens.add({ targets: burst, rotation: Math.PI * 2, duration: 10000, repeat: -1 });
 
-        this.tweens.add({
-            targets: burst,
-            rotation: Math.PI * 2,
-            duration: 10000,
-            repeat: -1
-        });
-
-        const bg = this.add.graphics();
-        bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
-        bg.fillRoundedRect(-240, -180, 480, 380, 20);
-        bg.lineStyle(5, item.colorNum, 1);
-        bg.strokeRoundedRect(-240, -180, 480, 380, 20);
-
+        const box = this.add.graphics();
+        box.fillStyle(0x000c22, 0.95);
+        box.fillRoundedRect(-300, -300, 600, 600, 24);
+        box.lineStyle(5, item.colorNum, 1);
+        box.strokeRoundedRect(-300, -300, 600, 600, 24);
+        
         const boxGlow = this.add.graphics();
         boxGlow.fillStyle(item.colorNum, 0.2);
-        boxGlow.fillCircle(0, -30, 140);
-
-        const title = this.add.text(0, -130, "YOU WON!", { fontSize: "40px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold", shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true } }).setOrigin(0.5);
+        boxGlow.fillCircle(0, 0, 220); 
         
+        const title = this.add.text(0, -180, "Congratulations!", { 
+            fontSize: "60px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, color: "#ffffff", 
+            shadow: { color: "#000000", blur: 6, stroke: true, fill: true }
+        }).setOrigin(0.5);
+
+        // Update Subtitle conditionally based on duplicate status
+        const subtitleText = isDuplicate ? "DUPLICATE ITEM" : "YOU WON";
+        const subtitleColor = isDuplicate ? "#ffaa00" : "#aaccff";
+        
+        const subtitle = this.add.text(0, -130, subtitleText, {
+            fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: subtitleColor, letterSpacing: 3 
+        }).setOrigin(0.5);
+
         let preview;
         if (item.type === "ship") {
             const previewKey = this.textures.exists(`${item.id}_lv1`) ? `${item.id}_lv1` : "player_lv1";
-            preview = this.add.image(0, -30, previewKey).setScale(0.8);
+            preview = this.add.image(0, -10, previewKey).setScale(1.4);
         } else if (item.type === "avatar") {
-            preview = this.add.text(0, -30, item.value || "👤", { fontSize: "80px" }).setOrigin(0.5);
+            preview = this.add.text(0, -10, item.value || "👤", { fontSize: "120px" }).setOrigin(0.5);
         } else {
             const previewKey = this.textures.exists(`${item.id}_img`) ? `${item.id}_img` : "spark";
-            preview = this.add.image(0, -30, previewKey);
-            if (item.type === "dash") preview.setScale(1.5);
-            else if (item.type === "shield" || item.type === "hud" || item.type === "battery") preview.setScale(0.9);
-            else preview.setScale(2);
+            preview = this.add.image(0, -10, previewKey);
+            if (item.type === "dash") preview.setScale(2.5);
+            else if (item.type === "shield" || item.type === "hud" || item.type === "battery") preview.setScale(1.8);
+            else preview.setScale(3.5);
+        }
+        
+        const label = this.add.text(0, 110, this.sanitizeBanglaText(item.name), {
+            fontSize: "46px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 900, color: "#ffffff",
+            shadow: { color: Phaser.Display.Color.IntegerToColor(item.colorNum).rgba, blur: 20, fill: true }
+        }).setOrigin(0.5);
+
+        popup.add([burst, boxGlow, box, title, subtitle, preview, label]);
+
+        // Show Debris conversion info if it's a duplicate
+        if (isDuplicate) {
+            const dupLabel = this.add.text(0, 160, "(Converted to 100 Debris)", {
+                fontSize: "22px", fontFamily: "Arial", fontWeight: "bold", color: "#ff5555"
+            }).setOrigin(0.5);
+            popup.add(dupLabel);
         }
 
-        const rewardName = this.add.text(0, 70, this.sanitizeBanglaText(item.name), { fontSize: "28px", fontFamily: "'Anek Bangla'", color: item.colorHex, fontStyle: "bold", shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true } }).setOrigin(0.5);
-        
-        // SettingsScene style action button
-        const btnContainer = this.add.container(0, 140);
-        const btnW = 320;
-        const btnH = 65;
-        const btnBg = this.add.graphics();
+        const btnContainer = this.add.container(0, 220);
+        const btnW = 380; 
+        const btnH = 90; 
+        const btnR = btnH / 2;
 
+        const btnBg = this.add.graphics();
         const drawClaimBtn = (hover) => {
             btnBg.clear();
             btnBg.fillGradientStyle(
-                hover ? 0x004422 : 0x008844, hover ? 0x004422 : 0x008844,
-                hover ? 0x00aa55 : 0x00cc66, hover ? 0x00aa55 : 0x00cc66, 1
+                hover ? 0x002266 : 0x001133, hover ? 0x002266 : 0x001133, 
+                hover ? 0x0088ff : 0x004488, hover ? 0x0088ff : 0x004488, 1
             );
-            btnBg.fillRoundedRect(-btnW/2, -btnH/2, btnW, btnH, btnH/2);
-            btnBg.lineStyle(hover ? 4 : 3, hover ? 0xffffff : 0x00ffaa, 0.8);
-            btnBg.strokeRoundedRect(-btnW/2, -btnH/2, btnW, btnH, btnH/2);
+            btnBg.fillRoundedRect(-btnW/2, -btnH/2, btnW, btnH, btnR);
+            btnBg.lineStyle(hover ? 4 : 3, hover ? 0xffffff : 0x00ffff, 0.8);
+            btnBg.strokeRoundedRect(-btnW/2, -btnH/2, btnW, btnH, btnR);
         };
         drawClaimBtn(false);
 
-        const claimBtnHit = this.add.rectangle(0, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
-        const claimBtnTxt = this.add.text(0, 0, "সংগ্রহ করুন (CLAIM)", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const btnHitArea = this.add.rectangle(0, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
+        
+        const btnTxt = this.add.text(0, 0, "সংগ্রহ করুন (CLAIM)", {
+            fontSize: "36px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
+        }).setOrigin(0.5);
 
-        btnContainer.add([btnBg, claimBtnTxt, claimBtnHit]);
+        btnContainer.add([btnBg, btnTxt, btnHitArea]);
+        popup.add(btnContainer);
 
-        popup.add([burst, boxGlow, bg, title, preview, rewardName, btnContainer]);
-        popup.setScale(0);
+        this.tweens.add({ targets: popup, scale: 1, duration: 600, ease: 'Back.out' });
 
-        this.tweens.add({ targets: popup, scale: 1, duration: 500, ease: 'Back.easeOut' });
-
-        const handleClaim = () => {
+        const autoClaimAction = () => {
             this.playSound('sfx_coin');
             this.tweens.add({ targets: popup, scale: 0.9, duration: 100, yoyo: true, onComplete: () => {
                 this.awardItemToPlayer(item);
             }});
         };
 
-        claimBtnHit.on('pointerdown', handleClaim);
-        overlay.on('pointerdown', handleClaim);
-
-        claimBtnHit.on('pointerover', () => drawClaimBtn(true));
-        claimBtnHit.on('pointerout', () => drawClaimBtn(false));
+        btnHitArea.on('pointerdown', autoClaimAction);
+        overlay.on('pointerdown', autoClaimAction);
+        btnHitArea.on('pointerover', () => drawClaimBtn(true));
+        btnHitArea.on('pointerout', () => drawClaimBtn(false));
     }
 
     awardItemToPlayer(item) {
@@ -364,13 +450,10 @@ class MysteryBoxScene extends Phaser.Scene {
         else if (item.type === "hud") targetArray = GameState.ownedHuds = GameState.ownedHuds || [];
         else if (item.type === "battery") targetArray = GameState.ownedBatteries = GameState.ownedBatteries || [];
 
-        if (targetArray && targetArray.includes(item.id)) {
-            const duplicateReward = 500;
-            GameState.debris = (GameState.debris || 0) + duplicateReward;
-            alert(`Duplicate Item! You already own ${this.sanitizeBanglaText(item.name)}.\nConverted to +${duplicateReward} Debris instead.`);
+        if (this.hasItem(item)) {
+            GameState.debris = (GameState.debris || 0) + 100; // Handled smoothly in the popup UI
         } else {
             if (targetArray) targetArray.push(item.id);
-            alert(`New Item Unlocked: ${this.sanitizeBanglaText(item.name)}!`);
         }
         
         if (window.saveGame) window.saveGame();
@@ -379,7 +462,6 @@ class MysteryBoxScene extends Phaser.Scene {
         this.scene.start("SpinWheelScene"); 
     }
 
-    // --- NEW: Global Settings Volume Override ---
     playSound(key, baseVolume = 1.0) {
         if (!this.sound || !this.cache.audio.exists(key)) return;
         const globalSfxVol = (window.GameState && window.GameState.sfxVolume !== undefined) ? window.GameState.sfxVolume : 1.0;
