@@ -14,11 +14,16 @@ class SettingsScene extends Phaser.Scene {
 
         const cx = this.cameras.main.centerX;
         const cy = this.cameras.main.centerY;
+        
+        // Use dynamic dimensions to completely fix background bleeding on different screens
+        const w = this.cameras.main.width;
+        const h = this.cameras.main.height;
 
         this.container = this.add.container(0, 0);
 
         // --- 1. OVERLAY (Click Outside to Close) ---
-        this.overlay = this.add.rectangle(0, 0, 720, 1280, 0x000000, 0.85).setOrigin(0).setInteractive();
+        // Now dynamically covers the entire screen regardless of aspect ratio
+        this.overlay = this.add.rectangle(0, 0, w, h, 0x000000, 0.85).setOrigin(0).setInteractive();
         
         const closeUI = () => {
             this.playSound('sfx_back');
@@ -32,7 +37,7 @@ class SettingsScene extends Phaser.Scene {
 
         // --- 2. MAIN SETTINGS PANEL (Glassmorphism) ---
         const panelW = 580;
-        const panelH = 820;
+        const panelH = 880; // Increased from 820 to fix bottom element bleeding
 
         this.bg = this.add.graphics();
         this.bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
@@ -44,16 +49,17 @@ class SettingsScene extends Phaser.Scene {
         this.bg.setInteractive(new Phaser.Geom.Rectangle(cx - panelW/2, cy - panelH/2, panelW, panelH), Phaser.Geom.Rectangle.Contains);
 
         // --- 3. TITLE & DIVIDER ---
-        this.title = this.add.text(cx, cy - 355, "সেটিংস", { 
-            fontSize: '46px', fontFamily: "'Anek Bangla'", color: '#38bdf8', padding: { y: 4 }, fontStyle: 'bold',
+        // Shifted upwards to balance the newly increased panel height
+        this.title = this.add.text(cx, cy - 382, "সেটিংস", { 
+            fontSize: '48px', fontFamily: "'Anek Bangla'", color: '#38bdf8', padding: { y: 8 }, fontStyle: 'bold',
             shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0.5);
 
-        const headerDiv = this.add.rectangle(cx, cy - 310, panelW - 40, 2, 0x334155, 1);
+        const headerDiv = this.add.rectangle(cx, cy - 335, panelW - 40, 2, 0x334155, 1);
 
         // --- 4. CLOSE BUTTON (Chat Style) ---
         const closeX = cx + panelW/2 - 45;
-        const closeY = cy - panelH/2 + 45;
+        const closeY = cy - panelH/2 + 52;
         
         const closeBg = this.add.graphics();
         closeBg.fillStyle(0xef4444, 0.15);
@@ -73,7 +79,7 @@ class SettingsScene extends Phaser.Scene {
         // --- Spaced Out UI Elements ---
         let musicVol = Math.round((GameState.musicVolume !== undefined ? GameState.musicVolume : 0.5) * 10);
         if (musicVol < 0) musicVol = 0; 
-        this.musicAdj = this.createSlider(-220, "মিউজিক ভলিউম:", 0, 10, 1, musicVol, (v) => v, (val) => {
+        this.musicAdj = this.createSlider(-260, "মিউজিক ভলিউম:", 0, 10, 1, musicVol, (v) => v, (val) => {
             GameState.musicVolume = val / 10;
             localStorage.setItem('settings_musicVol', GameState.musicVolume);
             this.updateLiveGameUI();
@@ -82,13 +88,13 @@ class SettingsScene extends Phaser.Scene {
         let sfxVol = Math.round((GameState.sfxVolume !== undefined ? GameState.sfxVolume : 1.0) * 5);
         if (sfxVol < 0) sfxVol = 0;
         if (sfxVol > 10) sfxVol = 10;
-        this.sfxAdj = this.createSlider(-140, "সাউন্ড ইফেক্ট:", 0, 10, 1, sfxVol, (v) => v, (val) => {
+        this.sfxAdj = this.createSlider(-165, "সাউন্ড ইফেক্ট:", 0, 10, 1, sfxVol, (v) => v, (val) => {
             GameState.sfxVolume = val / 5;
             localStorage.setItem('settings_sfxVol', GameState.sfxVolume);
         });
         
         let qDelayLevel = GameState.qDelayLevel !== undefined ? GameState.qDelayLevel : 15;
-        this.qDelayAdj = this.createSlider(-60, "মধ্যবর্তী বিলম্ব: (Inter-Question Delay):", 5, 40, 5, qDelayLevel, (v) => (v / 10).toFixed(1) + "s", (val) => {
+        this.qDelayAdj = this.createSlider(-70, "মধ্যবর্তী বিলম্ব: (Inter-Question Delay):", 5, 40, 5, qDelayLevel, (v) => (v / 10).toFixed(1) + "s", (val) => {
             GameState.qDelayLevel = val;
             localStorage.setItem('settings_qDelay', GameState.qDelayLevel);
         });
