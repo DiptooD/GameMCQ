@@ -13,11 +13,13 @@ class LoadingScene extends Phaser.Scene {
         const themeColors = (window.getThemeColors) ? window.getThemeColors() : { bgTop: 0x020510, bgBot: 0x0a1535 };
 
         // --- 1. DEEP SPACE BACKGROUND ---
-        const gradBg = this.make.graphics({x: 0, y: 0});
-        gradBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
-        gradBg.fillRect(0, 0, 720, 1280);
-        gradBg.generateTexture('loading_bg_grad', 720, 1280);
-        gradBg.destroy();
+        if (!this.textures.exists('loading_bg_grad')) {
+            const gradBg = this.make.graphics({x: 0, y: 0});
+            gradBg.fillGradientStyle(themeColors.bgTop, themeColors.bgTop, themeColors.bgBot, themeColors.bgBot, 1);
+            gradBg.fillRect(0, 0, w, h); // Use dynamic width/height instead of hardcoded 720/1280
+            gradBg.generateTexture('loading_bg_grad', w, h);
+            gradBg.destroy();
+        }
         this.add.image(cx, cy, 'loading_bg_grad');
 
         this.stars = [];
@@ -46,17 +48,19 @@ class LoadingScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // --- 3. HIGH-TECH REACTOR ---
-        const ringGraphics = this.make.graphics();
-        ringGraphics.lineStyle(3, 0x005588, 0.5);
-        ringGraphics.strokeCircle(100, 100, 80); 
-        ringGraphics.lineStyle(6, 0x00e1ff, 1);
-        for(let i=0; i<4; i++) {
-            ringGraphics.beginPath();
-            ringGraphics.arc(100, 100, 95, i * (Math.PI/2) + 0.1, (i+1) * (Math.PI/2) - 0.1);
-            ringGraphics.strokePath();
+        if (!this.textures.exists("loading_tech_ring")) {
+            const ringGraphics = this.make.graphics();
+            ringGraphics.lineStyle(3, 0x005588, 0.5);
+            ringGraphics.strokeCircle(100, 100, 80); 
+            ringGraphics.lineStyle(6, 0x00e1ff, 1);
+            for(let i = 0; i < 4; i++) {
+                ringGraphics.beginPath();
+                ringGraphics.arc(100, 100, 95, i * (Math.PI/2) + 0.1, (i+1) * (Math.PI/2) - 0.1);
+                ringGraphics.strokePath();
+            }
+            ringGraphics.generateTexture("loading_tech_ring", 200, 200);
+            ringGraphics.destroy();
         }
-        ringGraphics.generateTexture("loading_tech_ring", 200, 200);
-        ringGraphics.destroy();
 
         this.reactorRing = this.add.image(cx, cy - 60, "loading_tech_ring");
         this.tweens.add({
@@ -115,7 +119,8 @@ class LoadingScene extends Phaser.Scene {
         // --- 5. CYCLING TIPS BOX ---
         const tipsW = 560;
         const tipsH = 100;
-        const tipsY = panelY + panelH + 70; // Placed perfectly below the loading panel
+        // FIX: Anchored the tips box to the bottom of the screen instead of linking to the panel
+        const tipsY = h - 120; 
 
         const tipsBg = this.add.graphics();
         tipsBg.fillStyle(0x000815, 0.6); 
@@ -139,7 +144,7 @@ class LoadingScene extends Phaser.Scene {
             "ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।"
         ];
         
-        let currentTipIndex = 0;
+        let currentTipIndex = Phaser.Math.Between(0, loadingTips.length - 1);
         
         this.loadingTipTextObj = this.add.text(cx, tipsY + 10, loadingTips[currentTipIndex], {
             fontSize: "22px", 
@@ -150,7 +155,8 @@ class LoadingScene extends Phaser.Scene {
             shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0.5);
 
-        this.time.addEvent({
+        // FIX: Assigned the timer to this.tipTimerEvent so the cleanup in finishLoading() actually works
+        this.tipTimerEvent = this.time.addEvent({
             delay: 4000,
             loop: true,
             callback: () => {
@@ -170,9 +176,9 @@ class LoadingScene extends Phaser.Scene {
             }
         });
 
-        // --- 6. LOAD PROCESS ---
+        // --- 6. LOAD PROCESS (Phase 1) ---
         this.load.on('progress', (value) => {
-            this.updateBar(value * 0.5);
+            this.updateBar(value * 0.5); // Phase 1 is the first 50%
         });
 
         this.load.json('bank_directory', 'bank_directory.json');
@@ -181,6 +187,9 @@ class LoadingScene extends Phaser.Scene {
     }
 
     updateBar(value) {
+        // FIX: Ensure the value doesn't cause graphics errors if floating point math is off
+        value = Phaser.Math.Clamp(value, 0, 1);
+        
         this.fillBar.clear();
         this.fillBar.fillGradientStyle(0x0066aa, 0x00e1ff, 0x0066aa, 0x00e1ff, 1);
         this.fillBar.fillRoundedRect(this.barX, this.barY, this.barWidth * value, this.barHeight, this.barHeight/2);
@@ -201,8 +210,12 @@ class LoadingScene extends Phaser.Scene {
             });
 
             if (needsLoad) {
+                // FIX: Remove Phase 1 progress listener so they don't clash and make the bar flicker
+                this.load.removeAllListeners('progress'); 
+                
+                // Phase 2 Load (50% to 100%)
                 this.load.on('progress', (value) => {
-                    this.updateBar(0.5 + (value * 0.5));
+                    this.updateBar(0.5 + (value * 0.5)); 
                 });
                 
                 this.load.once('complete', () => this.finishLoading());
@@ -237,7 +250,7 @@ class LoadingScene extends Phaser.Scene {
 
     finishLoading() {
         this.loadText.setText("প্রস্তুত (Ready)");
-        this.percentText.setText("100%");
+        this.updateBar(1); // Force the bar to be fully full at the very end visually
         
         this.tweens.add({
             targets: this.coreGlow,
@@ -253,7 +266,8 @@ class LoadingScene extends Phaser.Scene {
             duration: 500,
             delay: 400, 
             onComplete: () => {
-                if (this.tipTimerEvent) this.tipTimerEvent.remove(); // Cleanup timer
+                // Because we fixed the assignment above, this will now properly destroy the timer event!
+                if (this.tipTimerEvent) this.tipTimerEvent.remove(); 
                 this.scene.start("MenuScene");
             }
         });
