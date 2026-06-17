@@ -112,7 +112,65 @@ class LoadingScene extends Phaser.Scene {
             fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#b3d4ff", fontWeight: 700, fontStyle: "bold"
         }).setOrigin(0.5);
 
-        // --- 5. LOAD PROCESS ---
+        // --- 5. CYCLING TIPS BOX ---
+        const tipsW = 560;
+        const tipsH = 100;
+        const tipsY = panelY + panelH + 70; // Placed perfectly below the loading panel
+
+        const tipsBg = this.add.graphics();
+        tipsBg.fillStyle(0x000815, 0.6); 
+        tipsBg.fillRoundedRect(cx - tipsW/2, tipsY - tipsH/2, tipsW, tipsH, 16);
+        tipsBg.lineStyle(1.5, 0x003355, 0.5);
+        tipsBg.strokeRoundedRect(cx - tipsW/2, tipsY - tipsH/2, tipsW, tipsH, 16);
+
+        this.add.text(cx, tipsY - 30, "💡 টিপস", {
+            fontSize: "20px", fontFamily: "'Anek Bangla', sans-serif", color: "#00e1ff", fontStyle: "bold"
+        }).setOrigin(0.5);
+
+        const loadingTips = [
+            "বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
+            "বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
+            "কঠিন প্রশ্নের ক্ষেত্রে 'স্কিপ' (Skip) ব্যবহার করতে ভুলবেন না।",
+            "স্পিন হুইল ঘুরিয়ে দারুণ সব পুরস্কার জিতে নিন!",
+            "গেমের স্পিড বুস্টার ব্যবহার করে দ্রুত লেভেল পার করুন।",
+            "গেমের মাঝপথে বিরতি নিতে ওপরের ডানদিকের পজ বাটনে ক্লিক করুন।",
+            "'Fire Shield' বুস্টার ব্যবহার করলে আপনি যেকোনো সংঘর্ষ থেকে রক্ষা পাবেন।",
+            "সঠিক উত্তর দিলে আপনার জাহাজের অস্ত্রের ক্ষমতা বা লেভেল বেড়ে যায়!",
+            "ভুল উত্তর দিলে আপনার অস্ত্রের লেভেল কমে যাবে, তাই সাবধানে উত্তর দিন।"
+        ];
+        
+        let currentTipIndex = 0;
+        
+        this.loadingTipTextObj = this.add.text(cx, tipsY + 10, loadingTips[currentTipIndex], {
+            fontSize: "22px", 
+            fontFamily: "'Anek Bangla', sans-serif", 
+            color: "#e0f0ff", 
+            align: "center", 
+            wordWrap: { width: tipsW - 40 },
+            shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }
+        }).setOrigin(0.5);
+
+        this.time.addEvent({
+            delay: 4000,
+            loop: true,
+            callback: () => {
+                currentTipIndex = (currentTipIndex + 1) % loadingTips.length;
+                
+                this.tweens.add({
+                    targets: this.loadingTipTextObj, alpha: 0, y: tipsY, duration: 250, ease: 'Cubic.easeIn',
+                    onComplete: () => {
+                        this.loadingTipTextObj.setText(loadingTips[currentTipIndex]);
+                        this.loadingTipTextObj.y = tipsY + 20; 
+                        
+                        this.tweens.add({ 
+                            targets: this.loadingTipTextObj, alpha: 1, y: tipsY + 10, duration: 350, ease: 'Cubic.easeOut' 
+                        });
+                    }
+                });
+            }
+        });
+
+        // --- 6. LOAD PROCESS ---
         this.load.on('progress', (value) => {
             this.updateBar(value * 0.5);
         });
@@ -194,7 +252,10 @@ class LoadingScene extends Phaser.Scene {
             alpha: 0,
             duration: 500,
             delay: 400, 
-            onComplete: () => this.scene.start("MenuScene")
+            onComplete: () => {
+                if (this.tipTimerEvent) this.tipTimerEvent.remove(); // Cleanup timer
+                this.scene.start("MenuScene");
+            }
         });
     }
 }

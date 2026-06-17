@@ -262,9 +262,12 @@ Object.assign(MenuScene.prototype, {
                             let top = child.y - child.height/2, bottom = child.y + child.height/2;
                             
                             if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
-                                hitMessage = true;
-                                if (child.isError) this.retrySendMessage(child.msgData.id);
-                                else this.showChatActionMenu(child.msgData, pointer.x, pointer.y);
+                                // FIXED: Long press only opens action menu on valid messages. 
+                                // Errors are now exclusively handled by single-tap below.
+                                if (!child.isError) {
+                                    hitMessage = true;
+                                    this.showChatActionMenu(child.msgData, pointer.x, pointer.y);
+                                }
                                 break; 
                             }
                         }
@@ -345,6 +348,35 @@ Object.assign(MenuScene.prototype, {
         const stopChatDrag = (pointer) => {
             if (longPressTimer) { longPressTimer.remove(); longPressTimer = null; }
             if (hasLongPressed) { hasLongPressed = false; return; }
+
+            // --- FIXED: Tap-to-Retry Logic ---
+            let dist = Phaser.Math.Distance.Between(hitStartX, hitStartY, pointer.x, pointer.y);
+            let timeElapsed = this.time.now - hitStartTime;
+
+            // If it's a quick tap without dragging
+            if (dist < 15 && timeElapsed < 400 && !this.swipeMode && !this.scrollMode) {
+                let localX = pointer.x - this.chatContainer.x;
+                let localY = pointer.y - this.chatContainer.y - this.msgListContainer.y;
+
+                for (let i = this.msgListContainer.list.length - 1; i >= 0; i--) {
+                    let child = this.msgListContainer.list[i];
+                    
+                    // Check if it's an interactable hit area and specifically an error
+                    if (child.isInteractHit && child.isError) {
+                        let left = child.x - child.width/2, right = child.x + child.width/2;
+                        let top = child.y - child.height/2, bottom = child.y + child.height/2;
+                        
+                        if (localX >= left && localX <= right && localY >= top && localY <= bottom) {
+                            this.retrySendMessage(child.msgData.id);
+                            
+                            // Cleanup state and abort the rest of the function
+                            isDraggingChat = false; this.swipeMode = false; this.scrollMode = false; this.activeSwipeHit = null;
+                            return; 
+                        }
+                    }
+                }
+            }
+            // --- END NEW TAP LOGIC ---
 
             if (this.swipeMode && this.activeSwipeHit) {
                 let hit = this.activeSwipeHit;
@@ -652,16 +684,14 @@ Object.assign(MenuScene.prototype, {
                 this.chatToggleContainer.setScale(1);
             }
         };
-                    // Add this near the end of createGlobalChat()
-            this.events.once('shutdown', () => {
-                if (this.chatOnlineListener) window.removeEventListener('online', this.chatOnlineListener);
-                if (this.chatOfflineListener) window.removeEventListener('offline', this.chatOfflineListener);
-                // Make sure to extract and remove keyboard listeners as well!
-                
-                // Unsubscribe from Firebase listeners to save reads/bandwidth
-                if (this.chatUnsubscribe) this.chatUnsubscribe();
-                if (this.typingUnsubscribe) this.typingUnsubscribe();
-            });
+
+        this.events.once('shutdown', () => {
+            if (this.chatOnlineListener) window.removeEventListener('online', this.chatOnlineListener);
+            if (this.chatOfflineListener) window.removeEventListener('offline', this.chatOfflineListener);
+            
+            if (this.chatUnsubscribe) this.chatUnsubscribe();
+            if (this.typingUnsubscribe) this.typingUnsubscribe();
+        });
 
         if (this.chatOnlineListener) window.removeEventListener('online', this.chatOnlineListener);
         if (this.chatOfflineListener) window.removeEventListener('offline', this.chatOfflineListener);
