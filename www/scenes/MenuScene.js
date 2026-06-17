@@ -164,18 +164,14 @@ class MenuScene extends Phaser.Scene {
         const lastCheck = localStorage.getItem('last_update_check');
         const today = new Date().toDateString();
 
-        // Only check once a day to save bandwidth and prevent spamming
         if (lastCheck === today) return; 
 
-        // Add a timestamp query parameter to bypass cache
         const versionUrl = `https://raw.githubusercontent.com/DiptooD/GameMCQ/main/version.json?t=${new Date().getTime()}`;
 
         fetch(versionUrl)
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem('last_update_check', today);
-                
-                // Compare versions. If server version is different, prompt the user
                 if (data.latest_version && data.latest_version !== CURRENT_VERSION) {
                     this.showUpdatePopup(cx, cy, data.latest_version, data.release_notes);
                 }
@@ -185,57 +181,77 @@ class MenuScene extends Phaser.Scene {
             });
     }
 
-    // --- NEW: Show Update UI Popup ---
+    // --- REFACTORED: Show Update UI Popup ---
     showUpdatePopup(cx, cy, newVersion, notes) {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
+        const panelW = 540;
+        const panelH = 400;
+
         const overlay = this.add.rectangle(w/2, h/2, w, h, 0x000000, 0.8).setInteractive().setDepth(10001);
         const container = this.add.container(cx, cy).setDepth(10002);
 
+        // Click outside to close
+        overlay.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            overlay.destroy();
+            container.destroy();
+        });
+
         const bg = this.add.graphics();
-        bg.fillStyle(0x001122, 1);
-        bg.fillRoundedRect(-250, -170, 500, 340, 20);
-        bg.lineStyle(4, 0x00ff88, 1);
-        bg.strokeRoundedRect(-250, -170, 500, 340, 20);
-
-        const title = this.add.text(0, -120, "নতুন আপডেট এসেছে!", {
-            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#00ff88", fontStyle: "bold"
-        }).setOrigin(0.5);
-
-        const desc = this.add.text(0, -30, `ভার্সন: ${newVersion}\n\n${notes || "নতুন ফিচার উপভোগ করুন।"}\nগেমটি আপডেট করতে নিচে ক্লিক করুন।`, {
-            fontSize: "22px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 8
-        }).setOrigin(0.5);
-
-        // Close button (Not mandatory to update) with rounded square styling
-        const closeBg = this.add.graphics();
-        closeBg.fillStyle(0xff3333, 1);
-        closeBg.fillRoundedRect(210 - 25, -130 - 25, 50, 50, 15);
+        bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
+        bg.fillRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.lineStyle(2, 0x334155, 1);
+        bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
         
-        const closeIcon = this.add.text(210, -130, "✖", { fontSize: "30px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        const closeHit = this.add.rectangle(210, -130, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
+        // Prevent clicks from passing through to overlay
+        bg.setInteractive(new Phaser.Geom.Rectangle(-panelW/2, -panelH/2, panelW, panelH), Phaser.Geom.Rectangle.Contains);
+
+        const title = this.add.text(0, -panelH/2 + 45, "নতুন আপডেট এসেছে!", {
+            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
+            shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
+        }).setOrigin(0.5);
+        
+        const headerDiv = this.add.rectangle(0, -panelH/2 + 90, panelW - 40, 2, 0x334155, 1);
+
+        // Chat Close Button
+        const closeX = panelW/2 - 45;
+        const closeY = -panelH/2 + 45;
+        const closeBtnBg = this.add.graphics();
+        closeBtnBg.fillStyle(0xef4444, 0.15);
+        closeBtnBg.fillRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        closeBtnBg.lineStyle(2, 0xef4444, 0.8);
+        closeBtnBg.strokeRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        
+        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: "34px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(closeX, closeY, 80, 80, 0, 0).setInteractive({useHandCursor:true});
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             overlay.destroy();
             container.destroy();
         });
+        closeHit.on('pointerover', () => closeIcon.setScale(1.1));
+        closeHit.on('pointerout', () => closeIcon.setScale(1));
+
+        const desc = this.add.text(0, 0, `ভার্সন: ${newVersion}\n\n${notes || "নতুন ফিচার উপভোগ করুন।"}\nগেমটি আপডেট করতে নিচে ক্লিক করুন।`, {
+            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#e2e8f0", align: "center", lineSpacing: 8
+        }).setOrigin(0.5);
 
         // Download Button
         const btnBg = this.add.graphics();
-        btnBg.fillStyle(0x00aa44, 1);
-        btnBg.fillRoundedRect(-140, 80, 280, 60, 30);
-        const downloadBtnTxt = this.add.text(0, 110, "ডাউনলোড করুন", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        const downloadHit = this.add.rectangle(0, 110, 280, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        btnBg.fillStyle(0x0ea5e9, 1);
+        btnBg.fillRoundedRect(-140, 100, 280, 60, 30);
+        const downloadBtnTxt = this.add.text(0, 130, "ডাউনলোড করুন", { fontSize: "26px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const downloadHit = this.add.rectangle(0, 130, 280, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         downloadHit.on('pointerdown', () => {
             this.playSound('sfx_click');
-            // _system tells Cordova to use the native device browser (Safari/Chrome), _blank as fallback for pure web
             window.open("https://sites.google.com/view/gamemcq", "_system");
         });
 
-        container.add([bg, title, desc, closeBg, closeIcon, closeHit, btnBg, downloadBtnTxt, downloadHit]);
+        container.add([bg, title, headerDiv, closeBtnBg, closeIcon, closeHit, desc, btnBg, downloadBtnTxt, downloadHit]);
         
-        // Pop-in animation
         container.setScale(0.8);
         container.setAlpha(0);
         this.tweens.add({ targets: container, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
@@ -308,36 +324,47 @@ class MenuScene extends Phaser.Scene {
         });
     }
 
+    // --- REFACTORED: Show Google Auth Prompt UI ---
     showGoogleAuthPrompt(cx, cy) {
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
+        const panelW = 580;
+        const panelH = 440;
+
         const overlay = this.add.rectangle(w/2, h/2, w, h, 0x000000, 0.8).setInteractive().setDepth(9999);
         const container = this.add.container(cx, cy).setDepth(10000);
 
+        overlay.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            localStorage.setItem('google_prompt_seen', 'true');
+            overlay.destroy();
+            container.destroy();
+        });
+
         const bg = this.add.graphics();
-        bg.fillStyle(0x001122, 1);
-        // Increased box size: 560x380 (was 500x320)
-        bg.fillRoundedRect(-280, -190, 560, 380, 24);
-        bg.lineStyle(4, 0x00ffff, 1);
-        bg.strokeRoundedRect(-280, -190, 560, 380, 24);
+        bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
+        bg.fillRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.lineStyle(2, 0x334155, 1);
+        bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.setInteractive(new Phaser.Geom.Rectangle(-panelW/2, -panelH/2, panelW, panelH), Phaser.Geom.Rectangle.Contains);
 
-        // Larger Title Text (48px)
-        const title = this.add.text(0, -130, "Cloud Save", {
-            fontSize: "48px", fontFamily: "'Anek Bangla'", color: "#00ffff", fontStyle: "bold"
+        const title = this.add.text(0, -panelH/2 + 45, "Cloud Save", {
+            fontSize: "46px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
+            shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
         }).setOrigin(0.5);
+        
+        const headerDiv = this.add.rectangle(0, -panelH/2 + 90, panelW - 40, 2, 0x334155, 1);
 
-        // Larger Description Text (26px) with slightly more line spacing
-        const desc = this.add.text(0, -10, "আপনার Google অ্যাকাউন্টের সাহায্যে গেমের\nপ্রোফাইল কানেক্ট করুন। এতে আপনার গেমের\nসব প্রগ্রেস ক্লাউডে নিরাপদে সেভ থাকবে!", {
-            fontSize: "27px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center", lineSpacing: 12
-        }).setOrigin(0.5);
+        const closeX = panelW/2 - 45;
+        const closeY = -panelH/2 + 45;
+        const closeBtnBg = this.add.graphics();
+        closeBtnBg.fillStyle(0xef4444, 0.15);
+        closeBtnBg.fillRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        closeBtnBg.lineStyle(2, 0xef4444, 0.8);
+        closeBtnBg.strokeRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
 
-        // Much larger and easier to tap Close Button (65x65)
-        const closeBg = this.add.graphics();
-        closeBg.fillStyle(0xff3333, 1);
-        closeBg.fillRoundedRect(235 - 32.5, -145 - 32.5, 65, 65, 18);
-
-        const closeIcon = this.add.text(235, -142, "✖", { fontSize: "38px", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        const closeHit = this.add.rectangle(235, -130, 65, 65, 0x000000, 0).setInteractive({ useHandCursor: true });
+        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: "34px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(closeX, closeY, 80, 80, 0, 0).setInteractive({ useHandCursor: true });
         
         closeHit.on('pointerdown', () => {
             this.playSound('sfx_back');
@@ -345,22 +372,25 @@ class MenuScene extends Phaser.Scene {
             overlay.destroy();
             container.destroy();
         });
+        closeHit.on('pointerover', () => closeIcon.setScale(1.1));
+        closeHit.on('pointerout', () => closeIcon.setScale(1));
 
-        // Larger Connect Button (280x70)
+        const desc = this.add.text(0, 0, "আপনার Google অ্যাকাউন্টের সাহায্যে গেমের\nপ্রোফাইল কানেক্ট করুন। এতে আপনার গেমের\nসব প্রগ্রেস ক্লাউডে নিরাপদে সেভ থাকবে!", {
+            fontSize: "27px", fontFamily: "'Anek Bangla'", color: "#e2e8f0", align: "center", lineSpacing: 12
+        }).setOrigin(0.5);
+
         const btnBg = this.add.graphics();
-        btnBg.fillStyle(0x0066aa, 1);
-        btnBg.fillRoundedRect(-140, 85, 280, 70, 35);
-        const connectBtnTxt = this.add.text(0, 120, "Connect Google", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
-        const connectHit = this.add.rectangle(0, 120, 280, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
+        btnBg.fillStyle(0x0ea5e9, 1);
+        btnBg.fillRoundedRect(-140, 110, 280, 70, 35);
+        const connectBtnTxt = this.add.text(0, 145, "Connect Google", { fontSize: "32px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const connectHit = this.add.rectangle(0, 145, 280, 70, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         connectHit.on('pointerdown', () => {
-            // --- SPAM PROOF CHECK ---
             if (window.isAuthenticating) return;
             window.isAuthenticating = true;
 
             this.playSound('sfx_click');
 
-            // --- 3-DOTS LOADER ANIMATION ---
             let dotCount = 0;
             connectBtnTxt.setText("Connecting.");
             let dotTimer = this.time.addEvent({
@@ -388,8 +418,6 @@ class MenuScene extends Phaser.Scene {
                         window.isAuthenticating = false;
                         if (dotTimer) dotTimer.remove();
                         connectBtnTxt.setText("Connect Google");
-                        
-                        console.error("Sign in failed:", error);
                         this.showNotification("Sign-in Failed!\nPlease check your connection.", "error");
                     });
                 } else {
@@ -404,13 +432,12 @@ class MenuScene extends Phaser.Scene {
             }
         });
 
-        container.add([bg, title, desc, closeBg, closeIcon, closeHit, btnBg, connectBtnTxt, connectHit]);
+        container.add([bg, title, headerDiv, closeBtnBg, closeIcon, closeHit, desc, btnBg, connectBtnTxt, connectHit]);
     }
 
     update(time, delta) {
         const safeTimeScale = Phaser.Math.Clamp(delta / 16.66, 0.1, 2.5);
 
-        // 🚀 THE CPU FIX: Only calculate background movement if chat is CLOSED
         if (!this.isChatOpen) {
             if (this.scrollingBg) {
                 this.scrollingBg.tilePositionY -= 0.6 * safeTimeScale;
@@ -435,7 +462,6 @@ class MenuScene extends Phaser.Scene {
             }
         }
 
-        // Leave history scroll and other essential logic outside the check so it always works!
         if (this.historyScrollData && this.historyScrollState) {
             let { contentContainer, listStartY, minScroll } = this.historyScrollData;
             
@@ -619,7 +645,6 @@ class MenuScene extends Phaser.Scene {
 
         const hitArea = this.add.rectangle(boxX + boxW/2, boxY + boxH/2, boxW, boxH, 0x000000, 0).setInteractive({useHandCursor: true});
 
-        // --- FIXED: Avatar Sync matching PlayerProfileScene ---
         let currentAvatarToDisplay = rankData.avatar; 
         if (GameState.equippedAvatar && GameState.equippedAvatar !== "default") {
             const specialDef = window.SpecialItemsData && window.SpecialItemsData.find(i => i.id === GameState.equippedAvatar);
@@ -646,12 +671,9 @@ class MenuScene extends Phaser.Scene {
             shadow: { offsetX: 1, offsetY: 1, color: "#000000", blur: 2, fill: true }
         }).setOrigin(0, 0.5);
 
-        // --- FIXED: Text-Based Big Badge Render & Opposite Side Alignment ---
-    // --- FIXED: Text-Based Big Badge Render & Opposite Side Alignment ---
         let baseBadges = (GameState.profile && GameState.profile.badges) || [];
         if (GameState.profile && GameState.profile.badge && baseBadges.length === 0) baseBadges = [GameState.profile.badge];
         let tempBadges = (GameState.profile && GameState.profile.tempBadges) || [];
-        
         let currentBadges = [...new Set([...tempBadges, ...baseBadges])].filter(Boolean);
 
         if (currentBadges.length > 0) {
@@ -659,7 +681,6 @@ class MenuScene extends Phaser.Scene {
             const badgeData = window.getBadgeData ? window.getBadgeData(primaryBadgeKey) : null;
             
             if (badgeData && badgeData.icon) {
-                // Aligns badge completely opposite to the information panel texts on the far right
                 const badgeX = boxX + boxW - 35; 
                 const badgeY = boxY + boxH / 2 + 5;
                 
@@ -668,50 +689,17 @@ class MenuScene extends Phaser.Scene {
                     shadow: { offsetX: 0, offsetY: 2, color: 'rgba(0,0,0,0.6)', blur: 4 }
                 }).setOrigin(0.5);
 
-                // 1. ORGANIC FLOATING: Mismatched X, Y, and Angle tweens
-                // Y-axis bobbing
-                this.tweens.add({
-                    targets: badgeTxt,
-                    y: badgeY - 4,
-                    duration: 1800,
-                    yoyo: true,
-                    repeat: -1,
-                    ease: 'Sine.easeInOut'
-                });
+                this.tweens.add({ targets: badgeTxt, y: badgeY - 4, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: badgeTxt, x: badgeX - 3, duration: 2300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: badgeTxt, angle:{ from: -7, to: 7 }, duration: 3100, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
-                // X-axis drifting (different duration breaks the robotic loop)
-                this.tweens.add({
-                    targets: badgeTxt,
-                    x: badgeX - 3,
-                    duration: 2300,
-                    yoyo: true,
-                    repeat: -1,
-                    ease: 'Sine.easeInOut'
-                });
-
-                // Subtle rotation tilting
-                this.tweens.add({
-                    targets: badgeTxt,
-                    angle:{ from: -7, to: 7 }, // Tilts a few degrees
-                    duration: 3100, // A longer, odd duration for maximum randomness
-                    yoyo: true,
-                    repeat: -1,
-                    ease: 'Sine.easeInOut'
-                });
-
-                // 2. NEW: TV Channel Logo Effect using modern Phaser's 'chain' method
                 this.tweens.chain({
                     targets: badgeTxt,
-                    loop: -1,               // Loop indefinitely
-                    loopDelay: 15500,        // "Stay for a bit" (9.5 second pause between cycles)
+                    loop: -1, 
+                    loopDelay: 15500,
                     tweens: [
-                        // Step A: A bit of zoom in
                         { scaleX: 1.2, scaleY: 1.2, duration: 170, ease: 'Sine.easeOut' },
-                        
-                        // Step B: Rapid 3D horizontal flip (scaling X to negatives fakes 3D)
                         { scaleX: -1.2, duration: 300, ease: 'Linear', yoyo: true, repeat: 1 },
-                        
-                        // Step C: Zoom out back to normal
                         { scaleX: 1, scaleY: 1, duration: 170, ease: 'Sine.easeIn' }
                     ]
                 });
@@ -772,7 +760,6 @@ class MenuScene extends Phaser.Scene {
         const boxW = 270;
         const boxH = 60; 
 
-        // --- CURRENCY BOX ---
         const bg = this.add.graphics();
         bg.fillStyle(0x001122, 0.8);
         bg.fillRoundedRect(startX, startY, boxW, boxH, 30); 
@@ -791,7 +778,6 @@ class MenuScene extends Phaser.Scene {
             fontSize: "26px", color: "#aaccff", fontFamily: "Arial", fontStyle: "bold" 
         }).setOrigin(0, 0.5);
 
-        // --- COMBINED SHARE & EXIT CONTAINER ---
         const combW = 260; 
         const combH = 65; 
         const combX = startX + boxW - combW; 
@@ -811,7 +797,6 @@ class MenuScene extends Phaser.Scene {
 
         this.add.rectangle(combX + 80, combY + combH/2, 2, 40, 0x334455, 0.6);
 
-        // --- 1. PREMIUM SHARE SECTION (Left 80px) ---
         const shareIcon = this.add.graphics();
         shareIcon.setPosition(combX + 40, combY + combH/2);
 
@@ -855,55 +840,47 @@ class MenuScene extends Phaser.Scene {
             this.tweens.add({ targets: shareIcon, scale: 1, duration: 100, overwrite: true });
         });
         
-        // FIX: Must use 'pointerup' instead of 'pointerdown' for native browser APIs
         shareHit.on('pointerup', async () => {
-    if (!canShare) return;
-    canShare = false;
+            if (!canShare) return;
+            canShare = false;
 
-    const shareData = {
-        title: 'গেইম MCQ',
-        text: 'খেলতে খেলতে সাধারণ জ্ঞান যাচাই করুন গেইম MCQ-তে!',
-        url: 'https://sites.google.com/view/gamemcq'
-    };
+            const shareData = {
+                title: 'গেইম MCQ',
+                text: 'খেলতে খেলতে সাধারণ জ্ঞান যাচাই করুন গেইম MCQ-তে!',
+                url: 'https://sites.google.com/view/gamemcq'
+            };
 
-    // 1. FIRE SHARE API IMMEDIATELY to preserve the User Gesture token
-    try {
-        if (window.plugins && window.plugins.socialsharing) {
-            // Cordova Native Share
-            window.plugins.socialsharing.shareWithOptions(
-                { message: shareData.text, subject: shareData.title, url: shareData.url },
-                (result) => { console.log("Share success", result); },
-                (err) => { console.log("Share failed", err); }
-            );
-        } 
-        else if (navigator.share) {
-            // Modern Web Share API (Must happen before Audio context changes)
-            await navigator.share(shareData);
-        } 
-        else {
-            // Desktop / Unsupported Fallback
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(shareData.url).then(() => {
-                    this.showNotification("লিংক কপি করা হয়েছে!", "success");
-                }).catch(() => {
-                    window.open(shareData.url, '_blank');
-                });
-            } else {
-                window.prompt("কপি করতে নিচের লিংকটি সিলেক্ট করুন:", shareData.url);
+            try {
+                if (window.plugins && window.plugins.socialsharing) {
+                    window.plugins.socialsharing.shareWithOptions(
+                        { message: shareData.text, subject: shareData.title, url: shareData.url },
+                        (result) => { console.log("Share success", result); },
+                        (err) => { console.log("Share failed", err); }
+                    );
+                } 
+                else if (navigator.share) {
+                    await navigator.share(shareData);
+                } 
+                else {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(shareData.url).then(() => {
+                            this.showNotification("লিংক কপি করা হয়েছে!", "success");
+                        }).catch(() => {
+                            window.open(shareData.url, '_blank');
+                        });
+                    } else {
+                        window.prompt("কপি করতে নিচের লিংকটি সিলেক্ট করুন:", shareData.url);
+                    }
+                }
+            } catch (err) {
+                console.log("Share cancelled or failed", err);
             }
-        }
-    } catch (err) {
-        console.log("Share cancelled or failed", err);
-    }
 
-    // 2. PLAY SOUND & TWEEN AFTER the share menu is requested
-    this.playSound('sfx_click');
-    this.tweens.add({ targets: shareIcon, scale: 0.85, duration: 50, yoyo: true });
+            this.playSound('sfx_click');
+            this.tweens.add({ targets: shareIcon, scale: 0.85, duration: 50, yoyo: true });
+            this.time.delayedCall(2500, () => { canShare = true; });
+        });
 
-    this.time.delayedCall(2500, () => { canShare = true; });
-});
-
-        // --- 2. EXIT SECTION (Right 180px) ---
         const exitText = this.add.text(combX + 80 + 90, combY + combH/2, "✖ বাহির", {
             fontSize: '28px', fontFamily: "'Anek Bangla', sans-serif", padding: { y: 5 }, color: '#fd3a3a', fontStyle: 'bold' 
         }).setOrigin(0.5);
@@ -923,46 +900,71 @@ class MenuScene extends Phaser.Scene {
         exitHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             this.tweens.add({ targets: [exitText], scale: 0.95, duration: 50, yoyo: true });
-            
-            // Call the confirmation popup instead of exiting directly
             this.showExitConfirmation();
         });
     }
-    // --- NEW: Exit Confirmation Popup ---
+
+    // --- REFACTORED: Exit Confirmation Popup ---
     showExitConfirmation() {
         const cx = this.cameras.main.width / 2;
         const cy = this.cameras.main.height / 2;
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
+        const panelW = 460;
+        const panelH = 280;
 
-        // Dark overlay blocking background clicks
-        const overlay = this.add.rectangle(cx, cy, w, h, 0x000000, 0.85).setInteractive().setDepth(10001);
+        const overlay = this.add.rectangle(cx, cy, w, h, 0x000000, 0.8).setInteractive().setDepth(10001);
         const container = this.add.container(cx, cy).setDepth(10002);
 
-        // Popup Background
+        overlay.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            overlay.destroy();
+            container.destroy();
+        });
+
         const bg = this.add.graphics();
-        bg.fillStyle(0x001122, 1);
-        bg.fillRoundedRect(-220, -140, 440, 280, 20);
-        bg.lineStyle(4, 0x00ffff, 1);
-        bg.strokeRoundedRect(-220, -140, 440, 280, 20);
+        bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
+        bg.fillRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.lineStyle(2, 0x334155, 1);
+        bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.setInteractive(new Phaser.Geom.Rectangle(-panelW/2, -panelH/2, panelW, panelH), Phaser.Geom.Rectangle.Contains);
 
-        // Title & Description
-        const title = this.add.text(0, -80, "গেম থেকে বাহির?", {
-            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#00ffff", fontStyle: "bold"
+        const title = this.add.text(0, -panelH/2 + 45, "গেম থেকে বাহির?", {
+            fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
+            shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
+        }).setOrigin(0.5);
+        
+        const headerDiv = this.add.rectangle(0, -panelH/2 + 90, panelW - 40, 2, 0x334155, 1);
+
+        const closeX = panelW/2 - 45;
+        const closeY = -panelH/2 + 45;
+        const closeBtnBg = this.add.graphics();
+        closeBtnBg.fillStyle(0xef4444, 0.15);
+        closeBtnBg.fillRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        closeBtnBg.lineStyle(2, 0xef4444, 0.8);
+        closeBtnBg.strokeRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        
+        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: "34px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(closeX, closeY, 80, 80, 0, 0).setInteractive({useHandCursor:true});
+        
+        closeHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            overlay.destroy();
+            container.destroy();
+        });
+        closeHit.on('pointerover', () => closeIcon.setScale(1.1));
+        closeHit.on('pointerout', () => closeIcon.setScale(1));
+
+        const desc = this.add.text(0, 0, "আপনি কি গেম থেকে বের হতে চান?", {
+            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#e2e8f0", align: "center"
         }).setOrigin(0.5);
 
-        const desc = this.add.text(0, -20, "আপনি কি গেম থেকে বের হতে চান?", {
-            fontSize: "24px", fontFamily: "'Anek Bangla'", color: "#ffffff", align: "center"
-        }).setOrigin(0.5);
-
-        // --- 'NO' Button (Cancel) ---
+        // 'NO' Button
         const noBg = this.add.graphics();
-        noBg.fillStyle(0x0066aa, 1);
-        noBg.fillRoundedRect(-180, 50, 160, 60, 25);
-        const noTxt = this.add.text(-100, 80, "না", { 
-            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" 
-        }).setOrigin(0.5);
-        const noHit = this.add.rectangle(-100, 80, 160, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        noBg.fillStyle(0x0ea5e9, 1);
+        noBg.fillRoundedRect(-180, 60, 160, 60, 25);
+        const noTxt = this.add.text(-100, 90, "না", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const noHit = this.add.rectangle(-100, 90, 160, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         noHit.on('pointerdown', () => {
             this.playSound('sfx_click');
@@ -970,31 +972,26 @@ class MenuScene extends Phaser.Scene {
             container.destroy();
         });
 
-        // --- 'YES' Button (Confirm Exit) ---
+        // 'YES' Button
         const yesBg = this.add.graphics();
-        yesBg.fillStyle(0xff3333, 1);
-        yesBg.fillRoundedRect(20, 50, 160, 60, 25);
-        const yesTxt = this.add.text(100, 80, "হ্যাঁ", { 
-            fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" 
-        }).setOrigin(0.5);
-        const yesHit = this.add.rectangle(100, 80, 160, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
+        yesBg.fillStyle(0xef4444, 1);
+        yesBg.fillRoundedRect(20, 60, 160, 60, 25);
+        const yesTxt = this.add.text(100, 90, "হ্যাঁ", { fontSize: "28px", fontFamily: "'Anek Bangla'", color: "#ffffff", fontStyle: "bold" }).setOrigin(0.5);
+        const yesHit = this.add.rectangle(100, 90, 160, 60, 0x000000, 0).setInteractive({ useHandCursor: true });
 
         yesHit.on('pointerdown', () => {
             this.playSound('sfx_back');
             if (navigator.app && navigator.app.exitApp) {
                 navigator.app.exitApp();
             } else {
-                // Fallback behavior if testing in a desktop browser
                 console.log("App exit triggered (Native exit only works on Cordova/Mobile)");
                 overlay.destroy();
                 container.destroy();
             }
         });
 
-        // Add everything to container
-        container.add([bg, title, desc, noBg, noTxt, noHit, yesBg, yesTxt, yesHit]);
+        container.add([bg, title, headerDiv, closeBtnBg, closeIcon, closeHit, desc, noBg, noTxt, noHit, yesBg, yesTxt, yesHit]);
 
-        // Pop-in animation
         container.setScale(0.8);
         container.setAlpha(0);
         this.tweens.add({ targets: container, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
@@ -1591,20 +1588,16 @@ class MenuScene extends Phaser.Scene {
         const div = this.add.rectangle(0, -height/2 + 50, width - 40, 1.5, 0x004488, 0.3);
         container.add(div);
 
-        // --- UPDATED: Cycle tabs on load ---
         let currentTab = localStorage.getItem('cycle_info_tab') || "tips";
         
-        // Determine the next tab to save for the NEXT time the game loads
         let nextTab = "mission"; 
         if (currentTab === "mission") nextTab = "top";
         else if (currentTab === "top") nextTab = "tips";
         
         localStorage.setItem('cycle_info_tab', nextTab);
 
-        // Set the initial highlight position based on the dynamic currentTab
         let activeTabObj = tabs.find(t => t.id === currentTab);
         highlightBg.x = activeTabObj ? activeTabObj.xOffset : 0;
-        // -----------------------------------
 
         tabs.forEach(tab => {
             const btnHit = this.add.rectangle(tab.xOffset, tabY, tabW, 45, 0x000000, 0).setInteractive({ useHandCursor: true });
@@ -1641,7 +1634,6 @@ class MenuScene extends Phaser.Scene {
             this.infoContainers[k].setVisible(k === currentTab);
         });
 
-        // --- CONTENT 1: TIPS ---
         this.normalTips = [
             "বস ফাইটে প্রশ্নের উত্তর দেওয়ার প্রয়োজন নেই, শুধু আক্রমণ করুন!",
             "বেশি ভাঙ্গারী (Debris) সংগ্রহ করে নতুন রকেট আনলক করুন।",
@@ -1671,7 +1663,6 @@ class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.infoContainers.tips.add(this.tipTextObj);
 
-        // --- CONTENT 2: MISSION ---
         let currentMissionIndex = 0;
         this.missionTextObj = this.add.text(0, 0, "", {
             fontSize: "25px", 
@@ -1684,13 +1675,11 @@ class MenuScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.infoContainers.mission.add(this.missionTextObj);
 
-        // --- CONTENT 3: TOP (Leaderboard) ---
         if (typeof Leaderboard !== 'undefined') {
             const lb = new Leaderboard(this, 0, 0, width - 20, 110);
             this.infoContainers.top.add(lb);
         }
 
-        // --- TIMER & CYCLE LOGIC ---
         this.cycleTip = () => {
             if (currentTab === "tips") {
                 const activeTips = this.selectedMode === "revision" ? this.revisionTips : this.normalTips;
@@ -1819,6 +1808,7 @@ class MenuScene extends Phaser.Scene {
         ]);
     }
 
+    // --- REFACTORED: Show Match History UI Popup ---
     showMatchHistoryPopup() {
         if (this.isHistoryPopupOpen) return;
         this.isHistoryPopupOpen = true;
@@ -1827,48 +1817,60 @@ class MenuScene extends Phaser.Scene {
         const cy = this.cameras.main.centerY;
         const w = this.cameras.main.width;
         const h = this.cameras.main.height;
-
-        const popup = this.add.container(cx, cy).setDepth(2000);
-        const overlay = this.add.rectangle(0, 0, w, h, 0x000000, 0.85).setInteractive();
-        
         const panelW = 620;
         const panelH = 900;
-        
-        const bg = this.add.graphics();
-        bg.fillStyle(0x000c22, 0.95);
-        bg.fillRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
-        bg.lineStyle(4, 0x0066aa, 1);
-        bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 20);
 
-        const title = this.add.text(0, -panelH/2 + 50, "ম্যাচ হিস্ট্রি", { 
-            fontSize: '40px', fontFamily: "'Anek Bangla'",padding: { y: 5 }, color: '#00e1ff', fontStyle: 'bold' 
-        }).setOrigin(0.5);
+        const overlay = this.add.rectangle(0, 0, w, h, 0x000000, 0.8).setOrigin(0).setInteractive().setDepth(2000);
+        const popup = this.add.container(cx, cy).setDepth(2001);
 
-        const closeX = panelW/2 - 40;
-        const closeY = -panelH/2 + 50;
-        
-        const closeBg = this.add.graphics();
-        closeBg.fillStyle(0xff3333, 1);
-        closeBg.fillRoundedRect(closeX - 25, closeY - 25, 50, 50, 15);
-        
-        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: '32px', color: '#ffffff', fontStyle: "bold" }).setOrigin(0.5);
-        const closeHit = this.add.rectangle(closeX, closeY, 50, 50, 0x000000, 0).setInteractive({ useHandCursor: true });
-        
         let cleanup = () => {
             this.isHistoryPopupOpen = false;
             if (popup) popup.destroy();
+            if (overlay) overlay.destroy();
             this.historyScrollData = null; 
             this.historyScrollState = null;
         };
 
-        closeHit.on('pointerdown', () => {
+        overlay.on('pointerdown', () => {
             this.playSound('sfx_back');
             cleanup();
         });
 
-        popup.add([overlay, bg, title, closeBg, closeIcon, closeHit]);
+        const bg = this.add.graphics();
+        bg.fillGradientStyle(0x020617, 0x020617, 0x0f172a, 0x0f172a, 0.98);
+        bg.fillRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.lineStyle(2, 0x334155, 1);
+        bg.strokeRoundedRect(-panelW/2, -panelH/2, panelW, panelH, 22);
+        bg.setInteractive(new Phaser.Geom.Rectangle(-panelW/2, -panelH/2, panelW, panelH), Phaser.Geom.Rectangle.Contains);
 
-        const listStartY = -panelH/2 + 100;
+        const title = this.add.text(0, -panelH/2 + 45, "ম্যাচ হিস্ট্রি", { 
+            fontSize: "46px", fontFamily: "'Anek Bangla'", color: "#38bdf8", padding: { y: 4 }, fontStyle: "bold",
+            shadow: { offsetX: 0, offsetY: 2, color: "#000000", blur: 4, fill: true }
+        }).setOrigin(0.5);
+        
+        const headerDiv = this.add.rectangle(0, -panelH/2 + 90, panelW - 40, 2, 0x334155, 1);
+
+        const closeX = panelW/2 - 45;
+        const closeY = -panelH/2 + 45;
+        const closeBtnBg = this.add.graphics();
+        closeBtnBg.fillStyle(0xef4444, 0.15);
+        closeBtnBg.fillRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        closeBtnBg.lineStyle(2, 0xef4444, 0.8);
+        closeBtnBg.strokeRoundedRect(closeX - 30, closeY - 30, 60, 60, 16);
+        
+        const closeIcon = this.add.text(closeX, closeY, "✖", { fontSize: "34px", color: "#f87171", fontStyle: "bold" }).setOrigin(0.5);
+        const closeHit = this.add.rectangle(closeX, closeY, 80, 80, 0, 0).setInteractive({useHandCursor:true});
+        
+        closeHit.on('pointerdown', () => {
+            this.playSound('sfx_back');
+            cleanup();
+        });
+        closeHit.on('pointerover', () => closeIcon.setScale(1.1));
+        closeHit.on('pointerout', () => closeIcon.setScale(1));
+
+        popup.add([bg, title, headerDiv, closeBtnBg, closeIcon, closeHit]);
+
+        const listStartY = -panelH/2 + 100; // Starts right below the divider line
         const listHeight = panelH - 120;
         const listWidth = panelW - 40;
 
