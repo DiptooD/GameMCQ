@@ -51,7 +51,6 @@ class SpinWheelScene extends Phaser.Scene {
             shadow: { offsetX: 0, offsetY: 4, color: "#0044aa", blur: 15, fill: true, stroke: true }
         }).setOrigin(0.5);
 
-        // UI SCALING
         this.add.text(cx, 265, "LUCKY WHEEL", {
             fontSize: "28px",
             fontFamily: "'Anek Bangla', sans-serif",
@@ -66,9 +65,10 @@ class SpinWheelScene extends Phaser.Scene {
         this.spinCost = 20; 
         
         this.segments = [
-            { id: 'jackpot', type: 'keys', amount: 10, color: 0xff0055, icon: 'ui_key', prob: 0.05, label: "10 KEYS" },
-            { id: 'debris_stash', type: 'debris', amount: 50, color: 0x00ffff, icon: 'ui_debris_icon', prob: 0.15, label: "50 DEBRIS" },
-            { id: 'extra_skips', type: 'skips', amount: 5, color: 0x00ff00, icon: 'ui_bolt', prob: 0.10, label: "5 SKIPS" },
+            { id: 'mystery_box', type: 'mystery', color: 0xff00ff, icon: 'ui_heart', prob: 0.02, label: "MYSTERY" },
+            { id: 'jackpot', type: 'keys', amount: 10, color: 0xff0055, icon: 'ui_key', prob: 0.03, label: "10 KEYS" },
+            { id: 'debris_stash', type: 'debris', amount: 50, color: 0x00ffff, icon: 'ui_debris_icon', prob: 0.20, label: "50 DEBRIS" },
+            { id: 'extra_skips', type: 'skips', amount: 5, color: 0x00ff00, icon: 'ui_bolt', prob: 0.15, label: "5 SKIPS" },
             { id: 'fire', type: 'booster', key: 'fireShield', amount: 2, color: 0x6600ff, icon: 'icon_booster_fire', prob: 0.20, label: "2x SHIELD" },
             { id: 'speed', type: 'booster', key: 'speedBoost', amount: 2, color: 0x0088ff, icon: 'icon_booster_speed', prob: 0.20, label: "2x SPEED" },
             { id: 'battery', type: 'booster', key: 'batteryEff', amount: 2, color: 0x00cc44, icon: 'icon_booster_battery', prob: 0.20, label: "2x BATTERY" }
@@ -260,7 +260,6 @@ class SpinWheelScene extends Phaser.Scene {
             
             const icon = this.add.image(0, -15, seg.icon).setScale(1.6); 
             
-            // UI SCALING
             const label = this.add.text(0, 40, seg.label, {
                 fontSize: "26px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff", 
                 stroke: "#000000", strokeThickness: 5
@@ -349,7 +348,6 @@ class SpinWheelScene extends Phaser.Scene {
             shadow: { offsetX: 1, offsetY: 2, color: "#000000", blur: 4, fill: true }, padding: { top: 20, bottom: 20 }
         }).setOrigin(0.5);
         
-        // UI SCALING
         const costText = this.add.text(0, 28, `Cost: ${this.spinCost} ভাঙ্গারী`, {
             fontSize: "28px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 700, color: "#aaccff" 
         }).setOrigin(0.5);
@@ -447,7 +445,14 @@ class SpinWheelScene extends Phaser.Scene {
                 this.wheelContainer.angle %= 360;
                 if(this.pointerBounce) this.pointerBounce.stop();
                 this.pointer.y = this.pointer.originalY; 
-                this.showReward(winner);
+                
+                if (winner.type === 'mystery') {
+                    this.time.delayedCall(1000, () => {
+                        this.scene.start("MysteryBoxScene");
+                    });
+                } else {
+                    this.showReward(winner);
+                }
             }
         });
 
@@ -537,8 +542,8 @@ class SpinWheelScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         const btnContainer = this.add.container(0, 220);
-        const btnW = 380; // SCALED
-        const btnH = 90; // SCALED
+        const btnW = 380; 
+        const btnH = 90; 
         const btnR = btnH / 2;
 
         const btnBg = this.add.graphics();
@@ -556,7 +561,6 @@ class SpinWheelScene extends Phaser.Scene {
 
         const btnHitArea = this.add.rectangle(0, 0, btnW, btnH, 0x000000, 0).setInteractive({ useHandCursor: true });
         
-        // UI SCALING
         const btnTxt = this.add.text(0, 0, "সংগ্রহ করুন (CLAIM)", {
             fontSize: "36px", fontFamily: "'Anek Bangla', sans-serif", fontWeight: 800, color: "#ffffff" 
         }).setOrigin(0.5);

@@ -496,21 +496,21 @@ window.resetGameState = function () {
 };
 
 window.ShipData = [
-    { id: "ship_k1", name: "দোয়েল (Magpie Robin)", costType: "keys", cost: 2, desc: "নির্ভরযোগ্য এবং পরিচিত। (Reliable and standard.)" },
-    { id: "ship_k2", name: "চিল (Kite)",  costType: "keys", cost: 5, desc: "Majestic brown predator of the Bengal sky." },
-    { id: "ship_k3", name: "কোকিল (Cuckoo)",  costType: "keys", cost: 8, desc: "Dark feathers, red eyes, and a striking aura." },
-    { id: "ship_k4", name: "শকুন (Vulture)",   costType: "keys", cost: 12, desc: "Broad wingspan. Built for incredible endurance." },
-    { id: "ship_k5", name: "সাদা বক (Egret)",   costType: "keys", cost: 20, desc: "Elegant, pure white, serene, and deadly." },
-    { id: "ship_k6", name: "কুটুম পেঁচা (Owl)", costType: "keys", cost: 150, desc: "Silent night hunter of the mystical dark." },
-    { id: "ship_k7", name: "টিয়া (Parrot)", costType: "keys", cost: 250, desc: "Vibrant plumage radiating solar energy." },
-    { id: "ship_k8", name: "সোনালী ঈগল (Golden Eagle)", costType: "keys", cost: 500, desc: "The supreme apex predator of the heavens." },
-    { id: "ship_d1", name: "চড়ুই (Sparrow)",  costType: "debris", cost: 50,  time: 2 * 60 * 60 * 1000, desc: "Small, scrappy, and extremely agile." }, 
-    { id: "ship_d2", name: "শালিক (Myna)",   costType: "debris", cost: 100, time: 3 * 60 * 60 * 1000, desc: "A common but very reliable companion." }, 
-    { id: "ship_d3", name: "কাক (Crow)",costType: "debris", cost: 200, time: 4 * 60 * 60 * 1000, desc: "Highly intelligent and adaptable scavenger." }, 
-    { id: "ship_d4", name: "বাদুড় (Fruit Bat)",     costType: "debris", cost: 350, time: 6 * 60 * 60 * 1000, desc: "Leathery wings, nocturnal beast." }, 
-    { id: "ship_d5", name: "গাংচিল (Seagull)",   costType: "debris", cost: 500, time: 7 * 60 * 60 * 1000, desc: "Master rider of the coastal winds." }, 
-    { id: "ship_d6", name: "হাড়গিলা (Stork)", costType: "debris", cost: 3000, time: 24 * 60 * 60 * 1000, desc: "Massive, tough, and highly intimidating." },
-    { id: "ship_d7", name: "রাজহাঁস (Swan)", costType: "debris", cost: 5000, time: 48 * 60 * 60 * 1000, desc: "A territorial behemoth of the wetlands." }
+    { id: "ship_k1", name: "দোয়েল (Magpie Robin)", costType: "keys", cost: 4, desc: "নির্ভরযোগ্য এবং পরিচিত। (Reliable and standard.)" },
+    { id: "ship_k2", name: "চিল (Kite)",  costType: "keys", cost: 10, desc: "Majestic brown predator of the Bengal sky." },
+    { id: "ship_k3", name: "কোকিল (Cuckoo)",  costType: "keys", cost: 16, desc: "Dark feathers, red eyes, and a striking aura." },
+    { id: "ship_k4", name: "শকুন (Vulture)",   costType: "keys", cost: 24, desc: "Broad wingspan. Built for incredible endurance." },
+    { id: "ship_k5", name: "সাদা বক (Egret)",   costType: "keys", cost: 40, desc: "Elegant, pure white, serene, and deadly." },
+    { id: "ship_k6", name: "কুটুম পেঁচা (Owl)", costType: "keys", cost: 300, desc: "Silent night hunter of the mystical dark." },
+    { id: "ship_k7", name: "টিয়া (Parrot)", costType: "keys", cost: 500, desc: "Vibrant plumage radiating solar energy." },
+    { id: "ship_k8", name: "সোনালী ঈগল (Golden Eagle)", costType: "keys", cost: 1000, desc: "The supreme apex predator of the heavens." },
+    { id: "ship_d1", name: "চড়ুই (Sparrow)",  costType: "debris", cost: 100,  time: 2 * 60 * 60 * 1000, desc: "Small, scrappy, and extremely agile." }, 
+    { id: "ship_d2", name: "শালিক (Myna)",   costType: "debris", cost: 200, time: 3 * 60 * 60 * 1000, desc: "A common but very reliable companion." }, 
+    { id: "ship_d3", name: "কাক (Crow)",costType: "debris", cost: 400, time: 4 * 60 * 60 * 1000, desc: "Highly intelligent and adaptable scavenger." }, 
+    { id: "ship_d4", name: "বাদুড় (Fruit Bat)",     costType: "debris", cost: 700, time: 6 * 60 * 60 * 1000, desc: "Leathery wings, nocturnal beast." }, 
+    { id: "ship_d5", name: "গাংচিল (Seagull)",   costType: "debris", cost: 1000, time: 7 * 60 * 60 * 1000, desc: "Master rider of the coastal winds." }, 
+    { id: "ship_d6", name: "হাড়গিলা (Stork)", costType: "debris", cost: 6000, time: 24 * 60 * 60 * 1000, desc: "Massive, tough, and highly intimidating." },
+    { id: "ship_d7", name: "রাজহাঁস (Swan)", costType: "debris", cost: 10000, time: 48 * 60 * 60 * 1000, desc: "A territorial behemoth of the wetlands." }
 ];
 
 window.BoosterData = [
