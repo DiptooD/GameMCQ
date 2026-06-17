@@ -787,17 +787,17 @@ class QuestionScene extends Phaser.Scene {
             this.qBankTag.setText(bankName); 
             
             this.optionBtns.forEach((btn, i) => {
-            const optionsArray = q.options || [];
-            const cleanOpt = cleanStr(optionsArray[i]) || ""; 
+                const optionsArray = q.options || [];
+                const cleanOpt = cleanStr(optionsArray[i]) || ""; 
 
-            // UI SCALING
-            if (cleanOpt.length > 40) {
-                btn.txt.setFontSize("24px");
-            } else {
-                btn.txt.setFontSize("32px");
-            }
-            btn.txt.setText(cleanOpt);
-        });
+                // UI SCALING
+                if (cleanOpt.length > 40) {
+                    btn.txt.setFontSize("24px");
+                } else {
+                    btn.txt.setFontSize("32px");
+                }
+                btn.txt.setText(cleanOpt);
+            });
 
             this.markQuestionAsSeen(q.question);
             this.tweens.add({ targets: elements, alpha: { from: 0, to: 1 }, duration: skipAnim ? 0 : 400 });
@@ -807,6 +807,13 @@ class QuestionScene extends Phaser.Scene {
             this.updateReadyState(isReady);
             this.manageMeteorTimer(isReady);
             this.wasReady = isReady;
+
+            // FIX: Apply the 50/50 if collected during boss transitions
+            if (GameState.hasFiftyFifty) {
+                this.time.delayedCall(skipAnim ? 0 : 400, () => {
+                    this.applyFiftyFifty();
+                });
+            }
 
             return;
         }
@@ -954,6 +961,10 @@ class QuestionScene extends Phaser.Scene {
                             if (isReady && !GameState.bossActive) {
                                 this.playSFX('sfx_q_ready', 0.6, false);
                             }
+                            // FIX: Safely apply the preserved 50/50 after processing is strictly false
+                            if (GameState.hasFiftyFifty) {
+                                this.applyFiftyFifty();
+                            }
                         }
                     });
                     
@@ -962,12 +973,6 @@ class QuestionScene extends Phaser.Scene {
                     });
                 }
             });
-
-            if (GameState.hasFiftyFifty) {
-                this.time.delayedCall(500, () => {
-                    this.applyFiftyFifty();
-                });
-            }
         }
     }
 
@@ -1018,6 +1023,41 @@ class QuestionScene extends Phaser.Scene {
             }
 
             GameState.correctCount++;
+            
+            this.tweens.killTweensOf(this.correctLabel);
+            //this.correctLabel.setScale(1.6);
+            this.correctLabel.setTint(0x00ff00); // Flash green
+
+            this.tweens.add({
+                targets: this.correctLabel,
+                scaleX: 1.2,
+                scaleY: 1.2,
+                duration: 200,
+                yoyo: true,
+                ease: 'Back.easeOut',
+                onComplete: () => {
+                    if (this.correctLabel && this.correctLabel.active) {
+                        this.correctLabel.clearTint();
+                    }
+                }
+            });
+
+            // 2. Spawn a floating "+১" right above the text
+            let floatingText = this.add.text(this.correctLabel.x, this.correctLabel.y - 40, "+1", {
+                fontSize: "36px", fontFamily: "'Anek Bangla'", color: "#00ff00", fontStyle: "bold", stroke: "#000000", strokeThickness: 4
+            }).setOrigin(1, 0.5);
+
+            // 3. Float it upwards and fade it out
+            this.tweens.add({
+                targets: floatingText,
+                y: this.correctLabel.y - 120,
+                alpha: 0,
+                duration: 1200,
+                ease: 'Cubic.easeOut',
+                onComplete: () => floatingText.destroy()
+            });
+            // ----------------------------------------------------------------
+
             if (GameState.weaponLevel < 4) GameState.weaponLevel++;
             
             GameState.currentCombo++;

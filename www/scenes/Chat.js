@@ -1433,7 +1433,7 @@ Object.assign(MenuScene.prototype, {
                 lastSenderUid = msg.uid;
                 lastMessageWasPinned = isPinned;
 
-                let topPadding = isConsecutive ? 8 : 42; 
+                let topPadding = isConsecutive ? 8 : 54;
                 const bubY = startY + topPadding; 
 
                 const addItems = (items) => {
@@ -1515,13 +1515,17 @@ Object.assign(MenuScene.prototype, {
                 });
 
                 if (hasAvatar) {
+                    // Align center of avatar with the name and badges (which sit at bubY - 30)
+                    const avatarCenterY = bubY - 28; 
+                    const avatarTopY = avatarCenterY - avatarSize / 2;
+
                     const avatarBg = this.add.graphics();
                     avatarBg.fillStyle(0x0f172a, 1);
-                    avatarBg.fillRoundedRect(avatarX - avatarSize/2, bubY - 12, avatarSize, avatarSize, 14);
+                    avatarBg.fillRoundedRect(avatarX - avatarSize/2, avatarTopY, avatarSize, avatarSize, 14);
                     avatarBg.lineStyle(2, Phaser.Display.Color.HexStringToColor(nameColorHexStr).color, 0.9);
-                    avatarBg.strokeRoundedRect(avatarX - avatarSize/2, bubY - 12, avatarSize, avatarSize, 14);
+                    avatarBg.strokeRoundedRect(avatarX - avatarSize/2, avatarTopY, avatarSize, avatarSize, 14);
                     
-                    const avTxt = this.add.text(avatarX, bubY + avatarSize/2 - 12, avatarIcon, { fontSize: "32px" }).setOrigin(0.5);
+                    const avTxt = this.add.text(avatarX, avatarCenterY, avatarIcon, { fontSize: "32px" }).setOrigin(0.5);
                     addItems([avatarBg, avTxt]);
 
                     let currentBadges = msg.badges || [];

@@ -538,7 +538,10 @@ class ShopScene extends Phaser.Scene {
                 if (this.scrollState) this.scrollState.velocityY = 0; 
                 this.playSound('sfx_powerup');
                 
-                let valToSet = isEquipped ? "default" : item.id;
+                // If the item is already equipped, do nothing when clicked
+                if (isEquipped) return; 
+
+                let valToSet = item.id;
                 
                 if (item.type === "ship") GameState.equippedShip = valToSet;
                 else if (item.type === "avatar") GameState.equippedAvatar = valToSet;

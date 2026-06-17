@@ -302,6 +302,27 @@ class DeathScene extends Phaser.Scene {
             const playerName = (GameState.profile && GameState.profile.n) ? GameState.profile.n : "Guest";
             const playerLvl = window.getLevelData ? window.getLevelData().level : ((GameState.profile && GameState.profile.level) ? GameState.profile.level : 1);
 
+            // --- FETCH CURRENT BADGES ---
+            let baseBadges = (GameState.profile && GameState.profile.badges) || [];
+            if (GameState.profile && GameState.profile.badge && baseBadges.length === 0) {
+                baseBadges = [GameState.profile.badge];
+            }
+            let tempBadges = (GameState.profile && GameState.profile.tempBadges) || [];
+            let currentBadges = [...new Set([...tempBadges, ...baseBadges])].filter(Boolean);
+
+            // --- FETCH CURRENT AVATAR ---
+            let currentAvatar = "👨‍🚀";
+            if (window.getRankData && window.getLevelData) {
+                currentAvatar = window.getRankData(window.getLevelData().level).avatar || "👨‍🚀";
+            }
+            if (GameState.equippedAvatar && GameState.equippedAvatar !== "default") {
+                let registry = window.SpecialItemsRegistry;
+                if (registry && registry.items) {
+                    let av = registry.items.find(i => i.id === GameState.equippedAvatar);
+                    if (av && av.value) currentAvatar = av.value;
+                }
+            }
+
             if (window.FirebaseTools && window.FirebaseDB) {
                 const chatRef = window.FirebaseTools.collection(window.FirebaseDB, "global_chat");
                 
@@ -309,6 +330,8 @@ class DeathScene extends Phaser.Scene {
                     uid: window.FirebaseAuth.currentUser.uid,
                     n: playerName,
                     lvl: playerLvl,
+                    avatar: currentAvatar,    // Injects the avatar emoji into the chat data
+                    badges: currentBadges,    // Injects the badge array into the chat data
                     text: shareText,
                     timestamp: window.FirebaseTools.serverTimestamp(),
                     pinned: false

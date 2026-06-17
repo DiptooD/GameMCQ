@@ -1236,7 +1236,7 @@ class GameScene extends GameBase {
 
     fireWeapon() {
         if (this.isJammed) return;
-        if (this.isResuming || this.isAnimating) return;
+        if (this.isResuming || this.isAnimating || this.isShootingDisabled) return;
 
         const x = this.player.x;
         const y = this.player.y - 60;
@@ -1947,7 +1947,8 @@ class GameScene extends GameBase {
         });
 
         this.isInvulnerable = true; 
-        this.isAnimating = true;
+        this.isShootingDisabled = true;
+        //this.isAnimating = true;
 
         this.playSFX('sfx_boss_overload', 1.0, false);
         this.cameras.main.shake(1500, 0.02);
@@ -2019,7 +2020,8 @@ class GameScene extends GameBase {
                 this.tweens.add({ targets: remnant, scale: { from: 0.1, to: 0.8 }, duration: 500, ease: 'Back.out' });
             }
             
-            this.isAnimating = false;
+            //this.isAnimating = false;
+            this.isShootingDisabled = false;
             this.isInvulnerable = false; 
         });
     }
@@ -3056,44 +3058,44 @@ class GameScene extends GameBase {
     }
 
     startCountdown() {
-        if (this.isResuming || this.isAnimating) return;
-        this.isResuming = true;
-        this.physics.pause();
+      if (this.isResuming || this.isAnimating) return;
+      this.isResuming = true;
+      this.physics.pause();
 
-        let count = 3;
-        const cx = this.cameras.main.width / 2;
-        const cy = this.cameras.main.height / 2;
+      let count = 2; // CHANGED: Started count at 2 instead of 3
+      const cx = this.cameras.main.width / 2;
+      const cy = this.cameras.main.height / 2;
 
-        const countText = this.add.text(cx, cy, "3", {
-            fontSize: '100px', fontFamily: "'Anek Bangla'", color: '#04ddcb', fontStyle: 'bold',
-            stroke: '#000000', strokeThickness: 10, padding: { top: 20, bottom: 20 }
-        }).setOrigin(0.5).setDepth(30000);
+      const countText = this.add.text(cx, cy, "2", { // CHANGED: Initial text is "2"
+          fontSize: '100px', fontFamily: "'Anek Bangla'", color: '#04ddcb', fontStyle: 'bold',
+          stroke: '#000000', strokeThickness: 10, padding: { top: 20, bottom: 20 }
+      }).setOrigin(0.5).setDepth(30000);
 
-        this.time.addEvent({
-            delay: 1000,
-            repeat: 2,
-            callback: () => {
-                count--;
-                this.playSFX('sfx_tick', 0.5, false);
+      this.time.addEvent({
+          delay: 1000,
+          repeat: 1, // CHANGED: Reduced repeat from 2 to 1 for a 2-second timer
+          callback: () => {
+              count--;
+              this.playSFX('sfx_tick', 0.5, false);
 
-                if (count > 0) {
-                    countText.setText(count);
-                    countText.setScale(0.5);
-                    this.tweens.add({ targets: countText, scale: 1, duration: 400, ease: 'Back.out' });
-                } else if (count === 0) {
-                    countText.setText("শুরু!");
-                    countText.setColor("#04d604");
-                    countText.setFontSize('80px');
-                    this.isResuming = false;
-                    
-                    this.physics.resume();
-                    
-                    this.tweens.add({ targets: countText, alpha: 0, scale: 1.5, duration: 500, onComplete: () => countText.destroy() });
-                }
-            },
-            callbackScope: this
-        });
-    }
+              if (count > 0) {
+                  countText.setText(count);
+                  countText.setScale(0.5);
+                  this.tweens.add({ targets: countText, scale: 1, duration: 400, ease: 'Back.out' });
+              } else if (count === 0) {
+                  countText.setText("শুরু!");
+                  countText.setColor("#04d604");
+                  countText.setFontSize('80px');
+                  this.isResuming = false;
+                  
+                  this.physics.resume();
+                  
+                  this.tweens.add({ targets: countText, alpha: 0, scale: 1.5, duration: 500, onComplete: () => countText.destroy() });
+              }
+          },
+          callbackScope: this
+      });
+  }
 
     spawnMeteors() {
         this.playSFX('sfx_warning', 0.8, false);
