@@ -424,7 +424,7 @@ class SettingsScene extends Phaser.Scene {
         this.tweens.add({ targets: warningBox, scale: 1, alpha: 1, duration: 250, ease: 'Back.out' });
     }
 
-    // --- Updated Notification UI (Match MenuScene Glow style) ---
+    // --- Updated Notification UI (Box Resized, Padding Added, Word-wrapped to Prevent Bleeding) ---
     showNotification(msg, type = 'info') {
         if (this.activeNotification) {
             this.activeNotification.destroy();
@@ -441,20 +441,24 @@ class SettingsScene extends Phaser.Scene {
         };
         let style = colors[type] || colors.info;
 
+        // Expanded bounds from 480x90 to 540x100 to stop content overflow
         const bg = this.add.graphics();
         bg.fillGradientStyle(style.bg, 0x000000, 0x000000, 0x000000, 0.95);
-        bg.fillRoundedRect(-240, -45, 480, 90, 20);
+        bg.fillRoundedRect(-270, -50, 540, 100, 22);
         bg.lineStyle(3, style.border, 1);
-        bg.strokeRoundedRect(-240, -45, 480, 90, 20);
+        bg.strokeRoundedRect(-270, -50, 540, 100, 22);
 
         const glow = this.add.graphics();
         glow.fillStyle(style.glow, 0.15);
-        glow.fillRoundedRect(-245, -50, 490, 100, 25);
+        glow.fillRoundedRect(-275, -55, 550, 110, 26);
         
-        const icon = this.add.text(-190, 0, style.icon, { fontSize: '40px' }).setOrigin(0.5);
-        const text = this.add.text(-150, 0, msg, {
+        const icon = this.add.text(-220, 0, style.icon, { fontSize: '40px' }).setOrigin(0.5);
+        
+        // Added wordWrap width constraint of 410px to fit inside the new box bounds perfectly
+        const text = this.add.text(-170, 0, msg, {
             fontSize: '22px', fontFamily: "'Anek Bangla'", color: '#ffffff', 
-            align: 'left', fontStyle: 'bold', lineSpacing: 5
+            align: 'left', fontStyle: 'bold', lineSpacing: 5,
+            wordWrap: { width: 410 }
         }).setOrigin(0, 0.5);
 
         notificationContainer.add([glow, bg, icon, text]);
